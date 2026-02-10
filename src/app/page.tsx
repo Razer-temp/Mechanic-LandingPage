@@ -9,13 +9,17 @@ import { Wrench, CheckCircle, Zap, Shield, Clock, MapPin, MessageCircle, Chevron
 import clsx from 'clsx';
 import Link from 'next/link';
 
-export default function Home() {
+export default function LandingPage() {
   const { user } = useAuth();
-  const [diagnosisInput, setDiagnosisInput] = useState('');
-  const [diagnosisResult, setDiagnosisResult] = useState<DiagnosisResult | null>(null);
+  const [diagnosisText, setDiagnosisText] = useState('');
+  const [activeDiagnosis, setActiveDiagnosis] = useState<DiagnosisResult | null>(null);
   const [isDiagnosing, setIsDiagnosing] = useState(false);
-  const [estimateInput, setEstimateInput] = useState({ bike: '', service: '' });
-  const [estimateResult, setEstimateResult] = useState<CostEstimate | null>(null);
+  const [model, setModel] = useState('');
+
+  // Estimator State
+  const [bikeType, setBikeType] = useState('');
+  const [serviceType, setServiceType] = useState('');
+  const [estimate, setEstimate] = useState<CostEstimate | null>(null);
 
   // Chatbot State
   const [chatOpen, setChatOpen] = useState(false);
@@ -26,97 +30,125 @@ export default function Home() {
   const [chatInput, setChatInput] = useState('');
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Parallax / Scroll State
-  const [offset, setOffset] = useState(0);
+  // Scroll Reveal Logic
   useEffect(() => {
-    const handleScroll = () => requestAnimationFrame(() => setOffset(window.scrollY));
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.animate-reveal').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
   // Diagnosis Handler
-  const handleDiagnose = () => {
-    if (!diagnosisInput.trim()) return;
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleDiagnosis = () => {
+    if (!diagnosisText.trim()) return;
     setIsDiagnosing(true);
+    setActiveDiagnosis(null);
+
     setTimeout(() => {
-      const result = diagnose(diagnosisInput);
-      setDiagnosisResult(result);
+      const result = diagnose(diagnosisText);
+      setActiveDiagnosis(result);
       setIsDiagnosing(false);
     }, 1500);
   };
 
   // Cost Estimation Handler
   const handleEstimate = () => {
-    if (!estimateInput.bike || !estimateInput.service) return;
-    const result = estimateCost(estimateInput.bike, estimateInput.service);
-    setEstimateResult(result);
+    if (!bikeType || !serviceType) return;
+    const result = estimateCost(bikeType, serviceType);
+    setEstimate(result);
   };
 
   // Chat Handler
-  const handleChatSend = () => {
+  const handleChatSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     if (!chatInput.trim()) return;
+
     const userMsg = chatInput;
     setChatMessages(prev => [...prev, { type: 'user', text: userMsg }]);
     setChatInput('');
 
     setTimeout(() => {
-      const diagnosis = diagnose(userMsg);
-      let reply;
-      if (diagnosis) {
-        reply = (
-          <span>
-            <strong>{diagnosis.title}</strong><br />
-            Possible causes: {diagnosis.causes.join(', ')}.<br />
-            <span className="text-accent-green font-bold block mt-1">Est. Cost: {diagnosis.cost}</span>
-          </span>
+      const result = diagnose(userMsg);
+      let botResponse: React.ReactNode;
+
+      if (result) {
+        botResponse = (
+          <div className="space-y-2">
+            <p><strong>{result.title}</strong></p>
+            <p className="text-sm opacity-90">{result.causes[0]}. Estimated cost: <span className="text-accent-green font-bold">{result.cost}</span></p>
+            <button
+              onClick={() => scrollTo('booking')}
+              className="text-xs text-accent-base underline font-bold"
+            >
+              Book Repair Now
+            </button>
+          </div>
         );
       } else {
-        reply = "I couldn't identify the specific issue. I recommend a full checkup at our center!";
+        botResponse = "I'm not exactly sure, but one of our experts can check it for you. Would you like to schedule a diagnostic visit?";
       }
-      setChatMessages(prev => [...prev, { type: 'bot', text: reply }]);
-      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+
+      setChatMessages(prev => [...prev, { type: 'bot', text: botResponse }]);
     }, 1000);
   };
 
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessages]);
+
   return (
-    <main className="min-h-screen bg-bg-void selection:bg-accent-base/30">
+    <div className="min-h-screen bg-bg-void selection:bg-accent-base/20 selection:text-white">
       <Navbar />
 
-      {/* ===== HERO ===== */}
-      <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-accent-base/20 rounded-full blur-[120px] animate-pulse-glow" style={{ transform: `translateY(${offset * 0.2}px)` }} />
-          <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-accent-red/15 rounded-full blur-[100px] animate-pulse-glow delay-1000" style={{ transform: `translateY(${offset * -0.1}px)` }} />
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-[length:60px_60px] opacity-[0.03]" />
-        </div>
+      {/* Hero Section */}
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20">
+        {/* Cinematic Background */}
+        <div className="hero-orb hero-orb--blue w-[600px] h-[600px] -top-[10%] -right-[10%] bg-accent-base/30" />
+        <div className="hero-orb hero-orb--red w-[450px] h-[450px] -bottom-[10%] -left-[10%] bg-accent-red/20 [animation-delay:-8s]" />
+        <div className="absolute inset-0 hero-grid pointer-events-none" />
 
         <div className="container relative z-10 text-center px-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-base/10 border border-accent-base/20 text-accent-base text-xs font-semibold mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="animate-reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-base/5 border border-accent-base/10 text-accent-base text-xs font-bold uppercase tracking-widest mb-8">
             <span className="w-2 h-2 rounded-full bg-accent-base animate-pulse" />
             AI-Powered Workshop
           </div>
 
-          <h1 className="font-heading font-black text-5xl md:text-7xl lg:text-8xl tracking-tight mb-6 leading-[1.1] animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-100">
+          <h1 className="animate-reveal [transition-delay:100ms] text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-[0.9] tracking-tighter">
             Smart Bike Care.<br />
             <span className="gradient-text">Faster. Better.</span>
           </h1>
 
-          <p className="text-text-secondary text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-light animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-            AI-Powered diagnostics & expert repair for your two-wheeler. <br className="hidden md:block" />
-            Accepting bookings for <span className="text-text-primary font-medium">Honda, Royal Enfield, Yamaha, KTM & more.</span>
+          <p className="animate-reveal [transition-delay:200ms] text-text-secondary text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+            Next-generation diagnostics and precision repairs for your two-wheeler — powered by AI, delivered by experts.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
-            <Link href={user ? "/dashboard" : "/signup"} className="btn-primary px-8 py-4 rounded-xl text-white font-bold text-lg shadow-lg shadow-accent-base/25 hover:shadow-accent-base/40 transition-all hover:-translate-y-1 w-full sm:w-auto bg-grad-blue">
-              <span className="flex items-center gap-2 justify-center">
-                <Wrench className="w-5 h-5" /> {user ? "Go to Dashboard" : "Book Service"}
-              </span>
-            </Link>
-            <Link href="#diagnosis" className="px-8 py-4 rounded-xl border border-border-light text-text-primary font-semibold hover:border-accent-base hover:text-accent-base transition-all w-full sm:w-auto flex items-center justify-center gap-2 bg-white/5 backdrop-blur-sm">
+          <div className="animate-reveal [transition-delay:300ms] flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button
+              onClick={() => scrollTo('booking')}
+              className="btn-primary px-10 py-4 rounded-2xl text-bg-void font-bold text-lg shadow-2xl shadow-accent-base/30 hover:shadow-accent-base/50 transition-all hover:-translate-y-1 w-full sm:w-auto bg-accent-base flex items-center gap-2 justify-center group"
+            >
+              <Wrench className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+              Book Service
+            </button>
+            <button
+              onClick={() => scrollTo('diagnosis')}
+              className="px-8 py-4 rounded-2xl border border-white/10 text-text-primary font-bold hover:border-accent-base/50 hover:bg-white/5 transition-all w-full sm:w-auto flex items-center justify-center gap-2 backdrop-blur-md"
+            >
               <Bot className="w-5 h-5" /> AI Checkup
-            </Link>
+            </button>
           </div>
+
 
           <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto text-center animate-in fade-in duration-1000 delay-500">
             {[['15k+', 'Bikes Serviced'], ['98%', 'Happy Riders'], ['50+', 'Daily AI Scans'], ['4.9', 'Avg Rating']].map(([num, label]) => (
@@ -132,31 +164,32 @@ export default function Home() {
       {/* ===== AI DIAGNOSIS ===== */}
       <section id="diagnosis" className="py-24 relative">
         <div className="container">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 animate-reveal">
             <span className="text-accent-base font-bold tracking-widest text-xs uppercase mb-2 block">Powered by AI</span>
             <h2 className="text-4xl md:text-5xl font-black text-text-primary mb-4">Instant <span className="gradient-text">Diagnosis</span></h2>
             <p className="text-text-secondary max-w-xl mx-auto">Describe your bike's symptoms and our AI engine will analyze potential issues in seconds.</p>
           </div>
 
+
           <div className="grid md:grid-cols-2 gap-8 items-start">
-            <div className="glass-card p-8 md:p-10">
+            <div className="glass-card p-8 md:p-10 animate-reveal">
               <h3 className="font-heading font-bold text-xl text-text-primary mb-6">What's the issue?</h3>
               <textarea
-                value={diagnosisInput}
-                onChange={(e) => setDiagnosisInput(e.target.value)}
+                value={diagnosisText}
+                onChange={(e) => setDiagnosisText(e.target.value)}
                 placeholder="e.g. Engine making rattling noise at high speed, hard to start in morning..."
                 className="w-full bg-bg-void/50 border border-border-subtle rounded-xl p-4 text-text-primary placeholder:text-text-muted focus:border-accent-base focus:ring-1 focus:ring-accent-base outline-none min-h-[140px] mb-6 transition-all resize-none"
               />
               <div className="flex flex-wrap gap-2 mb-8">
                 {['Engine noise', 'Brake squeaking', 'Starting trouble', 'Low mileage', 'Oil leak'].map((tag) => (
-                  <button key={tag} onClick={() => setDiagnosisInput(tag)} className="px-3 py-1.5 rounded-full bg-accent-base/10 text-accent-base text-xs font-medium hover:bg-accent-base/20 transition-colors border border-accent-base/10">
+                  <button key={tag} onClick={() => setDiagnosisText(tag)} className="px-3 py-1.5 rounded-full bg-accent-base/10 text-accent-base text-xs font-medium hover:bg-accent-base/20 transition-colors border border-accent-base/10">
                     {tag}
                   </button>
                 ))}
               </div>
               <button
-                onClick={handleDiagnose}
-                disabled={isDiagnosing || !diagnosisInput}
+                onClick={handleDiagnosis}
+                disabled={isDiagnosing || !diagnosisText}
                 className="w-full py-4 rounded-xl bg-accent-base text-white font-bold hover:bg-accent-dim transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-accent-base/20"
               >
                 {isDiagnosing ? <span className="animate-spin text-xl">◌</span> : <Zap className="w-5 h-5 fill-current" />}
@@ -164,19 +197,19 @@ export default function Home() {
               </button>
             </div>
 
-            <div className="glass-card p-8 md:p-10 min-h-[400px] flex flex-col justify-center items-center relative overflow-hidden">
-              {diagnosisResult ? (
+            <div className="glass-card p-8 md:p-10 min-h-[400px] flex flex-col justify-center items-center relative overflow-hidden animate-reveal [transition-delay:200ms]">
+              {activeDiagnosis ? (
                 <div className="w-full text-left animate-in fade-in slide-in-from-bottom-4 duration-500">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="w-12 h-12 rounded-xl bg-accent-base/20 flex items-center justify-center text-2xl">🚨</div>
                     <div>
-                      <h3 className="font-bold text-xl text-text-primary">{diagnosisResult.title}</h3>
+                      <h3 className="font-bold text-xl text-text-primary">{activeDiagnosis.title}</h3>
                       <span className={clsx("text-xs font-bold px-2 py-0.5 rounded uppercase mt-1 inline-block",
-                        diagnosisResult.urgency === 'high' ? 'bg-accent-red/20 text-accent-red' :
-                          diagnosisResult.urgency === 'medium' ? 'bg-accent-amber/20 text-accent-amber' :
+                        activeDiagnosis.urgency === 'high' ? 'bg-accent-red/20 text-accent-red' :
+                          activeDiagnosis.urgency === 'medium' ? 'bg-accent-amber/20 text-accent-amber' :
                             'bg-accent-green/20 text-accent-green'
                       )}>
-                        {diagnosisResult.urgency} Urgency
+                        {activeDiagnosis.urgency} Urgency
                       </span>
                     </div>
                   </div>
@@ -185,15 +218,15 @@ export default function Home() {
                     <div>
                       <h4 className="text-xs uppercase font-bold text-text-secondary mb-2 tracking-wider">Possible Causes</h4>
                       <ul className="list-disc list-inside text-text-primary space-y-1 text-sm">
-                        {diagnosisResult.causes.map((c, i) => <li key={i}>{c}</li>)}
+                        {activeDiagnosis.causes.map((c, i) => <li key={i}>{c}</li>)}
                       </ul>
                     </div>
                     <div>
                       <h4 className="text-xs uppercase font-bold text-text-secondary mb-2 tracking-wider">Est. Repair Cost</h4>
-                      <p className="text-accent-green font-bold text-2xl">{diagnosisResult.cost}</p>
+                      <p className="text-accent-green font-bold text-2xl">{activeDiagnosis.cost}</p>
                     </div>
                     <div className="bg-bg-void/50 p-4 rounded-lg border border-border-subtle">
-                      <p className="text-sm text-text-secondary">💡 <strong>Pro Tip:</strong> {diagnosisResult.tip}</p>
+                      <p className="text-sm text-text-secondary">💡 <strong>Pro Tip:</strong> {activeDiagnosis.tip}</p>
                     </div>
                   </div>
 
@@ -201,6 +234,7 @@ export default function Home() {
                     Book Repair Now <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
+
               ) : (
                 <div className="text-center text-text-muted">
                   <Bot className="w-16 h-16 mx-auto mb-4 text-border-glow opacity-50" />
@@ -215,10 +249,11 @@ export default function Home() {
       {/* ===== SERVICES ===== */}
       <section id="services" className="py-24 bg-bg-surface/50 border-y border-border-subtle">
         <div className="container">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 animate-reveal">
             <span className="text-accent-violet font-bold tracking-widest text-xs uppercase mb-2 block">What We Do</span>
             <h2 className="text-4xl md:text-5xl font-black text-text-primary mb-4">Expert <span className="gradient-text">Services</span></h2>
           </div>
+
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
@@ -247,11 +282,12 @@ export default function Home() {
       <section id="estimator" className="py-24 bg-bg-void relative overflow-hidden">
         <div className="container relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
+            <div className="animate-reveal">
               <h2 className="text-4xl md:text-5xl font-black text-text-primary mb-6">Smart <span className="gradient-text">Cost Estimator</span></h2>
               <p className="text-text-secondary text-lg mb-8 leading-relaxed">
                 Price transparency is our promise. Select your bike type and service needed to get an instant cost range before you even book.
               </p>
+
               <div className="space-y-6">
                 {['No hidden labor charges', 'Genuine spare parts pricing', 'Digital invoice provided'].map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
@@ -264,7 +300,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="glass-card p-10 relative">
+            <div className="glass-card p-10 relative animate-reveal [transition-delay:200ms]">
               <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
                 <Wrench className="w-40 h-40" />
               </div>
@@ -274,8 +310,9 @@ export default function Home() {
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-text-muted uppercase tracking-wide">Bike Type</label>
                     <select
+                      value={bikeType}
                       className="w-full bg-bg-void border border-border-subtle rounded-xl p-3 text-text-primary outline-none focus:border-accent-base"
-                      onChange={(e) => setEstimateInput(prev => ({ ...prev, bike: e.target.value }))}
+                      onChange={(e) => setBikeType(e.target.value)}
                     >
                       <option value="">Select...</option>
                       <option value="scooter">Scooter</option>
@@ -288,8 +325,9 @@ export default function Home() {
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-text-muted uppercase tracking-wide">Service</label>
                     <select
+                      value={serviceType}
                       className="w-full bg-bg-void border border-border-subtle rounded-xl p-3 text-text-primary outline-none focus:border-accent-base"
-                      onChange={(e) => setEstimateInput(prev => ({ ...prev, service: e.target.value }))}
+                      onChange={(e) => setServiceType(e.target.value)}
                     >
                       <option value="">Select...</option>
                       <option value="general">General Service</option>
@@ -308,17 +346,18 @@ export default function Home() {
                   Calculate Estimate
                 </button>
 
-                {estimateResult && (
+                {estimate && (
                   <div className="bg-bg-void/60 border border-border-accent rounded-xl p-6 text-center animate-in zoom-in-95 duration-300">
                     <span className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1 block">Estimated Cost</span>
                     <div className="text-3xl font-black gradient-text mb-2">
-                      ₹{estimateResult.min} – ₹{estimateResult.max}
+                      ₹{estimate.min} – ₹{estimate.max}
                     </div>
-                    <p className="text-xs text-text-secondary">{estimateResult.note}</p>
+                    <p className="text-xs text-text-secondary">{estimate.note}</p>
                   </div>
                 )}
               </div>
             </div>
+
           </div>
         </div>
       </section>
@@ -373,22 +412,25 @@ export default function Home() {
                 <input
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleChatSend()}
+                  onKeyDown={(e) => e.key === 'Enter' && handleChatSubmit(e)}
                   placeholder="Type a message..."
                   className="w-full bg-bg-void border border-border-subtle rounded-xl py-3 pl-4 pr-12 text-sm text-text-primary outline-none focus:border-accent-base"
                 />
                 <button
-                  onClick={handleChatSend}
+                  onClick={handleChatSubmit}
                   className="absolute right-2 top-2 p-1.5 bg-accent-base text-white rounded-lg hover:bg-accent-dim transition-colors"
                 >
                   <Send className="w-4 h-4" />
                 </button>
+
               </div>
             </div>
           </div>
         )}
       </div>
-
-    </main>
+    </div>
   );
 }
+
+
+

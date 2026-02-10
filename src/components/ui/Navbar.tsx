@@ -22,48 +22,49 @@ export function Navbar() {
     return (
         <nav
             className={clsx(
-                'fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4',
+                'fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-4',
                 scrolled
-                    ? 'bg-bg-void/80 backdrop-blur-md border-b border-border-subtle py-3'
+                    ? 'bg-bg-void/60 backdrop-blur-xl border-b border-white/5 py-3 shadow-2xl shadow-black/50'
                     : 'bg-transparent'
             )}
         >
             <div className="container flex items-center justify-between">
-                <Link href="/" className="flex items-center gap-2 text-text-primary font-heading font-extrabold text-xl tracking-tight group">
-                    <Wrench className="w-6 h-6 text-accent-base group-hover:rotate-12 transition-transform" />
+                <Link href="/" className="flex items-center gap-2 text-text-primary font-heading font-extrabold text-2xl tracking-tighter group">
+                    <Wrench className="w-7 h-7 text-accent-base group-hover:rotate-12 transition-transform duration-500" />
                     <span>Smart<span className="text-accent-base">Bike</span> Pro</span>
                 </Link>
 
                 {/* Desktop Nav */}
-                <div className="hidden md:flex items-center gap-8">
-                    <Link href="#services" className="nav-link text-sm font-medium text-text-secondary hover:text-text-primary transition-colors">Services</Link>
-                    <Link href="#diagnosis" className="nav-link text-sm font-medium text-text-secondary hover:text-text-primary transition-colors">AI Diagnosis</Link>
-                    <Link href="#how-it-works" className="nav-link text-sm font-medium text-text-secondary hover:text-text-primary transition-colors">How It Works</Link>
+                <div className="hidden md:flex items-center gap-10">
+                    <Link href="#services" className="text-sm font-bold text-text-muted hover:text-text-primary transition-colors tracking-wide uppercase">Services</Link>
+                    <Link href="#diagnosis" className="text-sm font-bold text-text-muted hover:text-text-primary transition-colors tracking-wide uppercase">AI Diagnosis</Link>
+                    <Link href="#how-it-works" className="text-sm font-bold text-text-muted hover:text-text-primary transition-colors tracking-wide uppercase">Process</Link>
 
                     {user ? (
-                        <div className="flex items-center gap-4">
-                            <Link href="/dashboard" className="text-sm font-medium text-text-primary hover:text-accent-base transition-colors flex items-center gap-2">
+                        <div className="flex items-center gap-6">
+                            <Link href="/dashboard" className="text-sm font-bold text-text-primary hover:text-accent-base transition-colors flex items-center gap-2 uppercase tracking-wide">
                                 <UserIcon className="w-4 h-4" /> Dashboard
                             </Link>
                             <button
                                 onClick={() => signOut()}
-                                className="text-sm font-medium text-text-muted hover:text-text-primary transition-colors flex items-center gap-2"
+                                className="text-sm font-bold text-text-muted hover:text-accent-red transition-colors flex items-center gap-2 uppercase tracking-wide"
                             >
                                 <LogOut className="w-4 h-4" /> Sign Out
                             </button>
                         </div>
                     ) : (
-                        <div className="flex items-center gap-4">
-                            <Link href="/login" className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors">Log In</Link>
+                        <div className="flex items-center gap-6">
+                            <Link href="/login" className="text-sm font-bold text-text-muted hover:text-text-primary transition-colors uppercase tracking-wide">Log In</Link>
                             <Link
                                 href="/signup"
-                                className="px-5 py-2 rounded-xl bg-accent-base text-white text-sm font-semibold hover:bg-accent-dim transition-all shadow-lg shadow-accent-base/20 hover:shadow-accent-base/35 hover:-translate-y-0.5"
+                                className="px-6 py-2.5 rounded-xl bg-accent-base text-bg-void text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-accent-base/20 hover:shadow-accent-base/40 active:scale-95"
                             >
                                 Book Service
                             </Link>
                         </div>
                     )}
                 </div>
+
 
                 {/* Mobile Toggle */}
                 <button
