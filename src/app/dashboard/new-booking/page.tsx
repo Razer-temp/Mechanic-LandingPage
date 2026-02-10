@@ -6,15 +6,18 @@ import { createClient } from '@/lib/supabase/client';
 import { useAuth } from '@/context/AuthContext';
 import { ChevronLeft, Calendar, Clock, Wrench, Bike, Tag, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
+import type { Service } from '@/types/database';
+
 
 // Mock services if DB is empty
-const MOCK_SERVICES = [
-    { id: '1', name: 'Engine Repair', price: 1500, icon: '🔩' },
-    { id: '2', name: 'Full Servicing', price: 799, icon: '⚙️' },
-    { id: '3', name: 'Brake Fix', price: 500, icon: '🛑' },
-    { id: '4', name: 'Oil Change', price: 350, icon: '🛢️' },
-    { id: '5', name: 'Electrical Work', price: 400, icon: '⚡' },
+const MOCK_SERVICES: Partial<Service>[] = [
+    { id: '1', name: 'Engine Repair', base_price: 1500, icon: '🔩', description: 'Engine work' },
+    { id: '2', name: 'Full Servicing', base_price: 799, icon: '⚙️', description: 'Oil & filters' },
+    { id: '3', name: 'Brake Fix', base_price: 500, icon: '🛑', description: 'Brake pads' },
+    { id: '4', name: 'Oil Change', base_price: 350, icon: '🛢️', description: 'Oil service' },
+    { id: '5', name: 'Electrical Work', base_price: 400, icon: '⚡', description: 'Wiring check' },
 ];
+
 
 export default function NewBookingPage() {
     const router = useRouter();
@@ -22,8 +25,9 @@ export default function NewBookingPage() {
     const supabase = createClient();
 
     const [step, setStep] = useState(1);
-    const [services, setServices] = useState<any[]>([]);
+    const [services, setServices] = useState<Partial<Service>[]>([]);
     const [loading, setLoading] = useState(false);
+
 
     const [formData, setFormData] = useState({
         bikeModel: '',
@@ -54,14 +58,15 @@ export default function NewBookingPage() {
 
             const { error } = await supabase.from('bookings').insert({
                 user_id: user.id,
-                service_id: selectedService?.id, // If mock, this might fail foreign key, handled in catch
+                service_id: selectedService?.id || null,
                 bike_model: formData.bikeModel,
                 status: 'pending',
                 scheduled_at: new Date(`${formData.date}T${formData.timeSlot}`).toISOString(),
                 time_slot: formData.timeSlot,
                 notes: formData.notes,
-                estimated_cost: selectedService?.price || 0
+                estimated_cost: selectedService?.base_price || 0
             });
+
 
             if (error) throw error;
 
@@ -141,11 +146,11 @@ export default function NewBookingPage() {
                     <div className="grid gap-3 animate-in fade-in slide-in-from-right-8 duration-300">
                         {services.map((service) => (
                             <button
-                                key={service.id}
-                                onClick={() => setFormData({ ...formData, serviceId: service.id })}
+                                key={service.id as string}
+                                onClick={() => setFormData({ ...formData, serviceId: service.id as string })}
                                 className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all ${formData.serviceId === service.id
-                                        ? 'bg-accent-base/10 border-accent-base ring-1 ring-accent-base'
-                                        : 'bg-bg-void border-border-subtle hover:border-border-accent'
+                                    ? 'bg-accent-base/10 border-accent-base ring-1 ring-accent-base'
+                                    : 'bg-bg-void border-border-subtle hover:border-border-accent'
                                     }`}
                             >
                                 <div className="w-10 h-10 rounded-lg bg-bg-elevated flex items-center justify-center text-xl shrink-0">
@@ -155,8 +160,9 @@ export default function NewBookingPage() {
                                     <h3 className="font-bold text-text-primary text-sm">{service.name}</h3>
                                     <p className="text-xs text-text-secondary">{service.description || 'Professional service'}</p>
                                 </div>
-                                <div className="text-accent-base font-bold text-sm">₹{service.base_price || service.price}</div>
+                                <div className="text-accent-base font-bold text-sm">₹{service.base_price}</div>
                             </button>
+
                         ))}
                     </div>
                 )}
