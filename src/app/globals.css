@@ -1,26 +1,183 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Colors */
+  --bg-void: #050508;
+  --bg-dark: #08080e;
+  --bg-surface: #0c0c16;
+  --bg-elevated: #10101e;
+  --bg-glass: rgba(12, 12, 24, 0.55);
+  --bg-glass-hover: rgba(16, 16, 32, 0.7);
+  --bg-glass-strong: rgba(12, 12, 28, 0.8);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-light: rgba(255, 255, 255, 0.07);
+  --border-accent: rgba(0, 200, 255, 0.15);
+  --border-glow: rgba(0, 200, 255, 0.3);
+
+  /* Refined Accent Colors */
+  --accent-base: #00c8ff;
+  --accent-dim: #0090c0;
+  --accent-glow: rgba(0, 200, 255, 0.12);
+  --accent-red: #ff2d55;
+  --accent-violet: #a78bfa;
+  --accent-green: #34d399;
+  --accent-amber: #fbbf24;
+
+  /* Premium Gradients */
+  --grad-hero: linear-gradient(135deg, #00c8ff 0%, #a78bfa 50%, #ff2d55 100%);
+  --grad-blue: linear-gradient(135deg, #00c8ff 0%, #0090c0 100%);
+  --grad-card: linear-gradient(160deg, rgba(0, 200, 255, 0.06) 0%, rgba(167, 139, 250, 0.04) 50%, transparent 100%);
+  --grad-shimmer: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.03) 50%, transparent 100%);
+  --grad-glow-bg: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 200, 255, 0.04), transparent 40%);
+
+  /* Text */
+  --text-primary: #eeeef2;
+  --text-secondary: #8888a0;
+  --text-muted: #55556a;
+  --text-bright: #ffffff;
+
+  /* Typography */
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Spacing */
+  --section-gap: 120px;
+  --max-w: 1160px;
+
+  /* Radius */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-xl: 30px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 40px rgba(0, 200, 255, 0.08);
+  --shadow-glow-strong: 0 0 60px rgba(0, 200, 255, 0.15);
+
+  /* Motion */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur: 0.35s;
+  --dur-slow: 0.6s;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-bg-void: var(--bg-void);
+  --color-bg-dark: var(--bg-dark);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-glass: var(--bg-glass);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-accent: var(--accent-base);
+  --color-accent-dim: var(--accent-dim);
+  --color-accent-red: var(--accent-red);
+  --color-accent-violet: var(--accent-violet);
+  --color-accent-green: var(--accent-green);
+  --color-accent-amber: var(--accent-amber);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-bright: var(--text-bright);
+
+  --shadow-glow: var(--shadow-glow);
+  --shadow-glow-strong: var(--shadow-glow-strong);
+
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  --radius-xl: var(--radius-xl);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-void);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.65;
+  overflow-x: hidden;
+  font-size: 15px;
+}
+
+/* Glassmorphism Utilities */
+.glass-card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--dur) var(--ease);
+}
+
+.glass-card:hover {
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+  transform: translateY(-6px);
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: var(--grad-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animations */
+@keyframes orbDrift {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate(40px, -30px) scale(1.04);
+  }
+
+  50% {
+    transform: translate(-20px, 20px) scale(0.97);
+  }
+
+  75% {
+    transform: translate(30px, 10px) scale(1.02);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(0, 200, 255, 0.4);
+  }
+
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 0 8px rgba(0, 200, 255, 0);
+  }
+}
+
+@keyframes floatGen {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-float {
+  animation: floatGen 5s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse 2.5s ease-in-out infinite;
 }

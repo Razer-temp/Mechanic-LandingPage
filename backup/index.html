@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartBike Pro — AI-Powered Two-Wheeler Service Center</title>
+  <meta name="description" content="Smart Bike Care. Faster. Better. AI-powered two-wheeler diagnostics, expert mechanics, and affordable pricing. Book your service now!" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="#" class="nav-logo">
+        <span class="logo-icon">⚙️</span>
+        <span class="logo-text">Smart<span class="accent">Bike</span> Pro</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#diagnosis">AI Diagnosis</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#booking" class="nav-cta">Book Service</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <header class="hero" id="hero">
+    <div class="hero-bg-effects">
+      <div class="hero-orb hero-orb--blue"></div>
+      <div class="hero-orb hero-orb--red"></div>
+      <div class="hero-grid-overlay"></div>
+      <div class="hero-particles" id="heroParticles"></div>
+    </div>
+    <div class="container hero-content">
+      <div class="hero-badge animate-on-scroll">
+        <span class="pulse-dot"></span> AI-Powered Workshop
+      </div>
+      <h1 class="hero-title animate-on-scroll">
+        Smart Bike Care.<br />
+        <span class="gradient-text">Faster. Better.</span>
+      </h1>
+      <p class="hero-subtitle animate-on-scroll">
+        AI-Powered Two-Wheeler Diagnostics &amp; Repair — Expert mechanics, instant diagnosis, and transparent pricing for your ride.
+      </p>
+      <div class="hero-ctas animate-on-scroll">
+        <a href="#booking" class="btn btn-primary btn-glow">
+          <span>🔧</span> Book Service
+        </a>
+        <a href="#diagnosis" class="btn btn-secondary">
+          <span>🤖</span> AI Bike Check
+        </a>
+        <a href="tel:+919876543210" class="btn btn-outline">
+          <span>📞</span> Call Now
+        </a>
+      </div>
+      <div class="hero-stats animate-on-scroll">
+        <div class="stat-item">
+          <span class="stat-number" data-target="15000">0</span>+
+          <span class="stat-label">Bikes Serviced</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="98">0</span>%
+          <span class="stat-label">Happy Customers</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="50">0</span>+
+          <span class="stat-label">AI Diagnoses Daily</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll-indicator">
+      <div class="scroll-arrow"></div>
+    </div>
+  </header>
+
+  <!-- ===== AI DIAGNOSIS ===== -->
+  <section class="section section-diagnosis" id="diagnosis">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag">🤖 AI-Powered</span>
+        <h2 class="section-title">Instant AI <span class="gradient-text">Bike Diagnosis</span></h2>
+        <p class="section-desc">Describe your bike's problem and our AI will analyze it in seconds — giving you potential causes, urgency level, and estimated costs.</p>
+      </div>
+      <div class="diagnosis-grid">
+        <div class="diagnosis-input-card glass-card animate-on-scroll">
+          <h3>Describe Your Bike Issue</h3>
+          <div class="diagnosis-form">
+            <div class="form-group">
+              <label for="bikeModel">Bike Model</label>
+              <input type="text" id="bikeModel" placeholder="e.g., Honda Activa 6G, Royal Enfield Classic 350" />
+            </div>
+            <div class="form-group">
+              <label for="bikeIssue">What's the problem?</label>
+              <textarea id="bikeIssue" rows="4" placeholder="e.g., Engine makes rattling noise at high speed, hard to start in morning, brake squeaking..."></textarea>
+            </div>
+            <div class="quick-issues">
+              <span class="quick-chip" data-issue="Engine won't start">Engine won't start</span>
+              <span class="quick-chip" data-issue="Strange noise from engine">Strange noise</span>
+              <span class="quick-chip" data-issue="Brakes not working properly">Brake issues</span>
+              <span class="quick-chip" data-issue="Oil leaking">Oil leak</span>
+              <span class="quick-chip" data-issue="Battery draining fast">Battery drain</span>
+              <span class="quick-chip" data-issue="Low mileage / poor fuel efficiency">Low mileage</span>
+            </div>
+            <button class="btn btn-primary btn-glow btn-full" id="diagnosisBtn">
+              <span>🔍</span> Analyze with AI
+            </button>
+          </div>
+        </div>
+        <div class="diagnosis-result-card glass-card animate-on-scroll" id="diagnosisResult">
+          <div class="result-placeholder">
+            <div class="ai-brain-icon">🧠</div>
+            <p>Enter your bike issue and click <strong>Analyze</strong> to get AI-powered diagnosis</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section class="section section-services" id="services">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag">🔧 What We Do</span>
+        <h2 class="section-title">Our <span class="gradient-text">Services</span></h2>
+        <p class="section-desc">From routine servicing to complex engine repairs — we handle every two-wheeler need with precision and care.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card glass-card animate-on-scroll">
+          <div class="service-icon">🔩</div>
+          <h3>Engine Repair</h3>
+          <p>Complete engine overhaul, timing chain, piston repair, and head gasket replacement.</p>
+          <span class="service-price">From ₹1,500</span>
+        </div>
+        <div class="service-card glass-card animate-on-scroll">
+          <div class="service-icon">⚙️</div>
+          <h3>Full Servicing</h3>
+          <p>Oil change, filter replacement, chain adjustment, spark plug — complete care package.</p>
+          <span class="service-price">From ₹799</span>
+        </div>
+        <div class="service-card glass-card animate-on-scroll">
+          <div class="service-icon">🛑</div>
+          <h3>Brake Fix</h3>
+          <p>Disc & drum brake pads, brake fluid change, ABS diagnostics, and caliper servicing.</p>
+          <span class="service-price">From ₹500</span>
+        </div>
+        <div class="service-card glass-card animate-on-scroll">
+          <div class="service-icon">🛢️</div>
+          <h3>Oil Change</h3>
+          <p>Premium synthetic & semi-synthetic engine oil with filter replacement.</p>
+          <span class="service-price">From ₹350</span>
+        </div>
+        <div class="service-card glass-card animate-on-scroll">
+          <div class="service-icon">🚨</div>
+          <h3>Emergency Repair</h3>
+          <p>Roadside assistance, flat tire, towing service, and emergency breakdown support.</p>
+          <span class="service-price">From ₹299</span>
+        </div>
+        <div class="service-card glass-card animate-on-scroll">
+          <div class="service-icon">⚡</div>
+          <h3>Electrical Work</h3>
+          <p>Wiring repair, headlight upgrade, battery replacement, ECU diagnostics.</p>
+          <span class="service-price">From ₹400</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WHY CHOOSE US ===== -->
+  <section class="section section-why" id="why-us">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag">💎 Why Us</span>
+        <h2 class="section-title">Why Choose <span class="gradient-text">SmartBike Pro</span>?</h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-card animate-on-scroll">
+          <div class="why-icon-wrap"><span>🤖</span></div>
+          <h3>AI Diagnostics</h3>
+          <p>Our AI engine analyzes 1000+ bike symptoms to pinpoint issues before you even visit.</p>
+        </div>
+        <div class="why-card animate-on-scroll">
+          <div class="why-icon-wrap"><span>👨‍🔧</span></div>
+          <h3>Expert Mechanics</h3>
+          <p>Certified technicians with 10+ years experience across all bike brands.</p>
+        </div>
+        <div class="why-card animate-on-scroll">
+          <div class="why-icon-wrap"><span>⚡</span></div>
+          <h3>Fast Turnaround</h3>
+          <p>Most services completed within 2-4 hours. Same-day delivery guaranteed.</p>
+        </div>
+        <div class="why-card animate-on-scroll">
+          <div class="why-icon-wrap"><span>💰</span></div>
+          <h3>Transparent Pricing</h3>
+          <p>No hidden charges. AI-powered cost estimation before you commit to any repair.</p>
+        </div>
+        <div class="why-card animate-on-scroll">
+          <div class="why-icon-wrap"><span>🛡️</span></div>
+          <h3>Warranty Assured</h3>
+          <p>6-month warranty on all repairs. Genuine parts with quality guarantee.</p>
+        </div>
+        <div class="why-card animate-on-scroll">
+          <div class="why-icon-wrap"><span>📍</span></div>
+          <h3>Pickup & Drop</h3>
+          <p>Free pick-up and delivery within 10km radius. Hassle-free doorstep service.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="section section-how" id="how-it-works">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag">📋 Process</span>
+        <h2 class="section-title">How It <span class="gradient-text">Works</span></h2>
+        <p class="section-desc">From diagnosis to repair — seamless, smart, and stress-free.</p>
+      </div>
+      <div class="steps-timeline">
+        <div class="step-card animate-on-scroll">
+          <div class="step-number">01</div>
+          <div class="step-content">
+            <h3>Describe Your Problem</h3>
+            <p>Use our AI chatbot or form to describe your bike's issue in plain language.</p>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-card animate-on-scroll">
+          <div class="step-number">02</div>
+          <div class="step-content">
+            <h3>AI Analysis</h3>
+            <p>Our AI engine analyzes symptoms, estimates costs, and suggests the best repair plan.</p>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-card animate-on-scroll">
+          <div class="step-number">03</div>
+          <div class="step-content">
+            <h3>Visit Workshop</h3>
+            <p>Bring your bike in — or we'll pick it up. Our mechanics verify and start repair.</p>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-card animate-on-scroll">
+          <div class="step-number">04</div>
+          <div class="step-content">
+            <h3>Ride Happy</h3>
+            <p>Quality-checked repair with warranty. Pay only what was estimated — no surprises.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== AI COST ESTIMATOR ===== -->
+  <section class="section section-estimator" id="estimator">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag">💡 Smart Tool</span>
+        <h2 class="section-title">AI <span class="gradient-text">Cost Estimator</span></h2>
+        <p class="section-desc">Get an instant price range for your service — no obligation, no surprises.</p>
+      </div>
+      <div class="estimator-card glass-card animate-on-scroll">
+        <div class="estimator-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="estBikeType">Bike Type</label>
+              <select id="estBikeType">
+                <option value="">Select type...</option>
+                <option value="scooter">Scooter (Activa, Jupiter, etc.)</option>
+                <option value="commuter">Commuter (Splendor, Shine, etc.)</option>
+                <option value="sport">Sport (R15, KTM, etc.)</option>
+                <option value="cruiser">Cruiser (Bullet, Thunderbird, etc.)</option>
+                <option value="electric">Electric (Ather, Ola, etc.)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="estService">Service Type</label>
+              <select id="estService">
+                <option value="">Select service...</option>
+                <option value="general">General Servicing</option>
+                <option value="engine">Engine Repair</option>
+                <option value="brake">Brake Fix</option>
+                <option value="oil">Oil Change</option>
+                <option value="electrical">Electrical Work</option>
+                <option value="emergency">Emergency Repair</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-glow btn-full" id="estimateBtn">
+            <span>💰</span> Get Estimate
+          </button>
+        </div>
+        <div class="estimate-result" id="estimateResult"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== REVIEWS ===== -->
+  <section class="section section-reviews" id="reviews">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag">⭐ Testimonials</span>
+        <h2 class="section-title">What Our <span class="gradient-text">Customers Say</span></h2>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card glass-card animate-on-scroll">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"The AI diagnosis was spot-on! It told me my bike had a carburetor issue before I even visited. The repair was done in 3 hours. Incredibly impressed!"</p>
+          <div class="review-author">
+            <div class="author-avatar">RK</div>
+            <div>
+              <strong>Rajesh Kumar</strong>
+              <span>Honda Activa 6G Owner</span>
+            </div>
+          </div>
+        </div>
+        <div class="review-card glass-card animate-on-scroll">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Best mechanic service in town! The cost estimator was accurate, no hidden charges. My Royal Enfield runs like new. Highly recommended!"</p>
+          <div class="review-author">
+            <div class="author-avatar">PS</div>
+            <div>
+              <strong>Priya Sharma</strong>
+              <span>RE Classic 350 Owner</span>
+            </div>
+          </div>
+        </div>
+        <div class="review-card glass-card animate-on-scroll">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Emergency breakdown at midnight — they picked up my bike and had it ready by morning. The WhatsApp updates kept me informed. Lifesavers!"</p>
+          <div class="review-author">
+            <div class="author-avatar">AV</div>
+            <div>
+              <strong>Amit Verma</strong>
+              <span>KTM Duke 200 Owner</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BOOKING FORM ===== -->
+  <section class="section section-booking" id="booking">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag">📅 Book Now</span>
+        <h2 class="section-title">Schedule Your <span class="gradient-text">Service</span></h2>
+        <p class="section-desc">Fill in the form and we'll confirm your slot within minutes.</p>
+      </div>
+      <div class="booking-card glass-card animate-on-scroll">
+        <form class="booking-form" id="bookingForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bookName">Full Name *</label>
+              <input type="text" id="bookName" placeholder="Your name" required />
+            </div>
+            <div class="form-group">
+              <label for="bookPhone">Phone Number *</label>
+              <input type="tel" id="bookPhone" placeholder="+91 98765 43210" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bookBike">Bike Model *</label>
+              <input type="text" id="bookBike" placeholder="e.g., Honda Activa 6G" required />
+            </div>
+            <div class="form-group">
+              <label for="bookService">Service Needed *</label>
+              <select id="bookService" required>
+                <option value="">Select service...</option>
+                <option value="General Servicing">General Servicing</option>
+                <option value="Engine Repair">Engine Repair</option>
+                <option value="Brake Fix">Brake Fix</option>
+                <option value="Oil Change">Oil Change</option>
+                <option value="Electrical Work">Electrical Work</option>
+                <option value="Emergency Repair">Emergency Repair</option>
+                <option value="Full Checkup">Full Checkup</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bookDate">Preferred Date *</label>
+              <input type="date" id="bookDate" required />
+            </div>
+            <div class="form-group">
+              <label for="bookTime">Preferred Time</label>
+              <select id="bookTime">
+                <option value="morning">Morning (9 AM - 12 PM)</option>
+                <option value="afternoon">Afternoon (12 PM - 4 PM)</option>
+                <option value="evening">Evening (4 PM - 7 PM)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="bookNotes">Additional Notes</label>
+            <textarea id="bookNotes" rows="3" placeholder="Any specific issue or request..."></textarea>
+          </div>
+          <div class="form-row form-actions">
+            <button type="submit" class="btn btn-primary btn-glow btn-full">
+              <span>✅</span> Confirm Booking
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT & MAP ===== -->
+  <section class="section section-contact" id="contact">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag">📍 Visit Us</span>
+        <h2 class="section-title">Location & <span class="gradient-text">Contact</span></h2>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info glass-card animate-on-scroll">
+          <div class="contact-item">
+            <span class="contact-icon">📍</span>
+            <div>
+              <strong>Workshop Address</strong>
+              <p>42, MG Road, Near City Mall, Koramangala<br/>Bangalore, Karnataka — 560034</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span class="contact-icon">📞</span>
+            <div>
+              <strong>Phone</strong>
+              <p><a href="tel:+919876543210">+91 98765 43210</a></p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span class="contact-icon">⏰</span>
+            <div>
+              <strong>Working Hours</strong>
+              <p>Mon–Sat: 9:00 AM – 7:00 PM<br/>Sunday: 10:00 AM – 4:00 PM</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span class="contact-icon">✉️</span>
+            <div>
+              <strong>Email</strong>
+              <p><a href="mailto:hello@smartbikepro.in">hello@smartbikepro.in</a></p>
+            </div>
+          </div>
+          <div class="contact-buttons">
+            <a href="https://wa.me/919876543210?text=Hi!%20I%20need%20bike%20service." class="btn btn-whatsapp" target="_blank">
+              <span>💬</span> WhatsApp Us
+            </a>
+            <a href="tel:+919876543210" class="btn btn-outline">
+              <span>📞</span> Call Now
+            </a>
+          </div>
+        </div>
+        <div class="contact-map glass-card animate-on-scroll">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.5965516653787!2d77.6145!3d12.9352!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDU2JzA2LjciTiA3N8KwMzYnNTIuMiJF!5e0!3m2!1sen!2sin!4v1600000000000!5m2!1sen!2sin"
+            width="100%" height="100%" style="border:0;border-radius:16px;" allowfullscreen loading="lazy">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo">
+            <span class="logo-icon">⚙️</span>
+            <span class="logo-text">Smart<span class="accent">Bike</span> Pro</span>
+          </a>
+          <p>AI-powered two-wheeler service center trusted by 15,000+ riders. Fast diagnostics, expert repairs, transparent pricing.</p>
+          <div class="footer-socials">
+            <a href="#" aria-label="Facebook" class="social-link">FB</a>
+            <a href="#" aria-label="Instagram" class="social-link">IG</a>
+            <a href="#" aria-label="YouTube" class="social-link">YT</a>
+            <a href="#" aria-label="Twitter" class="social-link">X</a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#diagnosis">AI Diagnosis</a></li>
+            <li><a href="#booking">Book Service</a></li>
+            <li><a href="#estimator">Cost Estimator</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="#">Engine Repair</a></li>
+            <li><a href="#">Full Servicing</a></li>
+            <li><a href="#">Brake Fix</a></li>
+            <li><a href="#">Oil Change</a></li>
+            <li><a href="#">Emergency Repair</a></li>
+          </ul>
+        </div>
+        <div class="footer-hours">
+          <h4>Workshop Hours</h4>
+          <ul>
+            <li><span>Mon – Fri</span> <span>9 AM – 7 PM</span></li>
+            <li><span>Saturday</span> <span>9 AM – 7 PM</span></li>
+            <li><span>Sunday</span> <span>10 AM – 4 PM</span></li>
+          </ul>
+          <div class="trust-badges">
+            <span class="badge">✅ Verified Business</span>
+            <span class="badge">🛡️ 6-Month Warranty</span>
+            <span class="badge">🏆 4.9★ Rated</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 SmartBike Pro. All rights reserved.</p>
+        <p>Powered by AI for smarter bike care.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== FLOATING AI CHAT BUTTON ===== -->
+  <div class="floating-chat" id="floatingChat">
+    <button class="chat-toggle" id="chatToggle" aria-label="Open AI Mechanic Chat">
+      <span class="chat-icon">🤖</span>
+      <span class="chat-label">AI Mechanic</span>
+      <span class="chat-close">✕</span>
+    </button>
+    <div class="chat-window glass-card" id="chatWindow">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <span class="chat-avatar">🤖</span>
+          <div>
+            <strong>AI Mechanic</strong>
+            <span class="chat-status"><span class="pulse-dot pulse-dot--green"></span> Online</span>
+          </div>
+        </div>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg chat-msg--bot">
+          <span class="msg-avatar">🤖</span>
+          <div class="msg-bubble">
+            Hi! I'm your AI Mechanic assistant. 🏍️<br/>Tell me about your bike problem and I'll help diagnose it!
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <input type="text" id="chatInput" placeholder="Describe your bike issue..." />
+        <button class="chat-send" id="chatSend" aria-label="Send message">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== WHATSAPP FLOAT ===== -->
+  <a href="https://wa.me/919876543210?text=Hi!%20I%20need%20bike%20service." class="whatsapp-float" target="_blank" aria-label="Chat on WhatsApp">
+    💬
+  </a>
+
+  <script src="app.js"></script>
+</body>
+</html>
