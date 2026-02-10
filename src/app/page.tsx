@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Navbar } from '@/components/ui/Navbar';
 import { Footer } from '@/components/ui/Footer';
 import { diagnose, estimateCost, type DiagnosisResult, type CostEstimate } from '@/lib/ai-engine';
@@ -19,9 +19,10 @@ export default function Home() {
 
   // Chatbot State
   const [chatOpen, setChatOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState<{ type: 'user' | 'bot'; text: string | JSX.Element }[]>([
+  const [chatMessages, setChatMessages] = useState<{ type: 'user' | 'bot'; text: string | React.ReactNode }[]>([
     { type: 'bot', text: "Hi! I'm your AI Mechanic assistant. 🏍️ Tell me about your bike problem and I'll help diagnose it!" }
   ]);
+
   const [chatInput, setChatInput] = useState('');
   const chatEndRef = useRef<HTMLDivElement>(null);
 
