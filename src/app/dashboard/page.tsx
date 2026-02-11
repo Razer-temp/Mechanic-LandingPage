@@ -13,6 +13,7 @@ export default function DashboardPage() {
     const { user, loading: authLoading } = useAuth();
     const [bookings, setBookings] = useState<(Booking & { services: Service | null })[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const router = useRouter();
     const supabase = createClient();
 
@@ -20,16 +21,17 @@ export default function DashboardPage() {
         async function fetchData() {
             if (!user) return;
             try {
-                const { data, error } = await supabase
+                const { data, error: fetchError } = await supabase
                     .from('bookings')
                     .select(`*, services (*)`)
                     .eq('user_id', user.id)
                     .order('scheduled_at', { ascending: false });
 
-                if (error) throw error;
+                if (fetchError) throw fetchError;
                 setBookings(data as (Booking & { services: Service | null })[]);
-            } catch (error) {
-                console.error('Error fetching bookings:', error);
+            } catch (err: any) {
+                console.error('Error fetching bookings:', err);
+                setError(err.message || 'Unable to load your dashboard data.');
             } finally {
                 setLoading(false);
             }
@@ -44,8 +46,31 @@ export default function DashboardPage() {
 
     if (loading || authLoading) {
         return (
-            <div className="flex items-center justify-center h-full">
-                <div className="w-8 h-8 rounded-full border-2 border-accent-base border-t-transparent animate-spin" />
+            <div className="flex flex-col items-center justify-center h-[60vh] animate-in fade-in duration-700">
+                <div className="relative w-12 h-12">
+                    <div className="absolute inset-0 rounded-full border-2 border-white/5"></div>
+                    <div className="absolute inset-0 rounded-full border-2 border-t-accent animate-spin shadow-[0_0_15px_rgba(0,200,255,0.4)]"></div>
+                </div>
+                <p className="mt-6 text-text-muted text-sm font-medium tracking-wide animate-pulse">Syncing your workshop data...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex flex-col items-center justify-center h-[60vh] text-center px-4 animate-in fade-in slide-in-from-bottom-4">
+                <div className="w-16 h-16 rounded-2xl bg-accent-red/10 flex items-center justify-center mb-6">
+                    <AlertCircle className="w-8 h-8 text-accent-red" />
+                </div>
+                <h2 className="text-text-primary font-black text-xl mb-2">Something went wrong</h2>
+                <p className="text-text-secondary text-sm max-w-xs mb-8">{error}</p>
+                <button
+                    onClick={() => window.location.reload()}
+                    className="btn btn-primary"
+                    style={{ padding: '12px 24px' }}
+                >
+                    Try Refreshing
+                </button>
             </div>
         );
     }

@@ -38,22 +38,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         const getSession = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            setUser(session?.user ?? null);
-            if (session?.user) await fetchProfile(session.user.id);
-            setLoading(false);
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                setUser(session?.user ?? null);
+                if (session?.user) {
+                    await fetchProfile(session.user.id);
+                }
+            } catch (error) {
+                console.error('Auth error in getSession:', error);
+            } finally {
+                setLoading(false);
+            }
         };
         getSession();
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
             async (_event, session) => {
-                setUser(session?.user ?? null);
-                if (session?.user) {
-                    await fetchProfile(session.user.id);
-                } else {
-                    setProfile(null);
+                try {
+                    setUser(session?.user ?? null);
+                    if (session?.user) {
+                        await fetchProfile(session.user.id);
+                    } else {
+                        setProfile(null);
+                    }
+                } catch (error) {
+                    console.error('Auth error in onAuthStateChange:', error);
+                } finally {
+                    setLoading(false);
                 }
-                setLoading(false);
             }
         );
 
