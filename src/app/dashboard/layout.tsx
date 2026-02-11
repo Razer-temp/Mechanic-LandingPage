@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Wrench, LayoutDashboard, Calendar, Settings, LogOut, Menu, X, User } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -14,7 +14,21 @@ export default function DashboardLayout({
 }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const pathname = usePathname();
+    const router = useRouter();
     const { user, profile, loading, signOut } = useAuth();
+
+    // Redirect to login if not authenticated
+    useEffect(() => {
+        if (!loading && !user) {
+            router.push('/login');
+        }
+    }, [loading, user, router]);
+
+    const navItems = useMemo(() => [
+        { label: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
+        { label: 'Bookings', icon: Calendar, href: '/dashboard/bookings' },
+        { label: 'Settings', icon: Settings, href: '/dashboard/settings' },
+    ], []);
 
     if (loading) {
         return (
@@ -30,12 +44,6 @@ export default function DashboardLayout({
 
     // Protection logic is also handled by middleware, but this ensures a clean UI transition
     if (!user) return null;
-
-    const navItems = [
-        { label: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
-        { label: 'Bookings', icon: Calendar, href: '/dashboard/bookings' },
-        { label: 'Settings', icon: Settings, href: '/dashboard/settings' },
-    ];
 
     return (
         <div className="min-h-screen bg-bg-void flex flex-col md:flex-row">

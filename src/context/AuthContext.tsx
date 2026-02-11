@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, useMemo, type ReactNode } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 import type { Profile } from '@/types/database';
@@ -21,15 +21,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [profile, setProfile] = useState<Profile | null>(null);
     const [loading, setLoading] = useState(true);
-    const supabase = createClient();
+
+    // Memoize supabase client to prevent unnecessary re-renders
+    const supabase = useMemo(() => createClient(), []);
 
     const fetchProfile = useCallback(async (userId: string) => {
-        const { data } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', userId)
-            .single();
-        setProfile(data);
+        try {
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', userId)
+                .single();
+
+            if (error) {
+                console.error('Error fetching profile:', error);
+                return;
+            }
+            setProfile(data);
+        } catch (err) {
+            console.error('Unexpected error fetching profile:', err);
+        }
     }, [supabase]);
 
     const refreshProfile = useCallback(async () => {
@@ -37,39 +48,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, [user, fetchProfile]);
 
     useEffect(() => {
+        let mounted = true;
+
         const getSession = async () => {
             try {
                 const { data: { session } } = await supabase.auth.getSession();
-                setUser(session?.user ?? null);
-                if (session?.user) {
-                    await fetchProfile(session.user.id);
+                if (mounted) {
+                    setUser(session?.user ?? null);
+                    if (session?.user) {
+                        await fetchProfile(session.user.id);
+                    }
                 }
             } catch (error) {
                 console.error('Auth error in getSession:', error);
             } finally {
-                setLoading(false);
+                if (mounted) setLoading(false);
             }
         };
         getSession();
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
             async (_event, session) => {
-                try {
+                if (mounted) {
                     setUser(session?.user ?? null);
                     if (session?.user) {
                         await fetchProfile(session.user.id);
                     } else {
                         setProfile(null);
                     }
-                } catch (error) {
-                    console.error('Auth error in onAuthStateChange:', error);
-                } finally {
                     setLoading(false);
                 }
             }
         );
 
-        return () => subscription.unsubscribe();
+        return () => {
+            mounted = false;
+            subscription.unsubscribe();
+        };
     }, [supabase, fetchProfile]);
 
     const signUp = async (email: string, password: string, fullName: string) => {
@@ -87,9 +102,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     const signOut = async () => {
-        await supabase.auth.signOut();
-        setUser(null);
-        setProfile(null);
+        try {
+            await supabase.auth.signOut();
+            setUser(null);
+            setProfile(null);
+            // Force a hard redirect to the landing page to clear all states
+            window.location.href = '/';
+        } catch (error) {
+            console.error('Error signing out:', error);
+            window.location.href = '/';
+        }
     };
 
     return (
