@@ -50,10 +50,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         let mounted = true;
 
-        // Fallback: Ensure loading screen eventually disappears even if Supabase hangs
+        // Fallback: Ensure loading screen disappears quickly (3 seconds max)
         const loadingFallback = setTimeout(() => {
-            if (mounted) setLoading(false);
-        }, 5000);
+            if (mounted) {
+                console.log('Auth loading fallback triggered');
+                setLoading(false);
+            }
+        }, 3000);
 
         const getSession = async () => {
             try {
@@ -78,8 +81,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         getSession();
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
-            async (_event, session) => {
+            async (event, session) => {
                 if (!mounted) return;
+
+                console.log('Auth state change:', event);
 
                 try {
                     setUser(session?.user ?? null);
@@ -89,7 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                         setProfile(null);
                     }
                 } catch (error) {
-                    console.error('Auth check in onAuthStateChange failed:', error);
+                    console.error('Auth handler failed:', error);
                 } finally {
                     setLoading(false);
                     clearTimeout(loadingFallback);
@@ -120,14 +125,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const signOut = async () => {
         try {
-            await supabase.auth.signOut();
+            // 1. Trigger Supabase sign out (don't wait for network)
+            supabase.auth.signOut().catch(err => console.error('Sign out error:', err));
+
+            // 2. Clear local state immediately
             setUser(null);
             setProfile(null);
-            // Force a hard redirect to the landing page to clear all states
-            window.location.href = '/';
+
+            // 3. Force hard redirect to landing page
+            window.location.replace('/');
         } catch (error) {
-            console.error('Error signing out:', error);
-            window.location.href = '/';
+            console.error('Sign out logic failed:', error);
+            window.location.replace('/');
         }
     };
 
