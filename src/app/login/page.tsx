@@ -33,7 +33,7 @@ export default function LoginPage() {
         <div className="landing-page-wrapper min-h-screen flex flex-col">
             <Navbar />
             <div className="flex-1 flex items-center justify-center p-6 mt-20">
-                <div className="booking-card glass-card animate-on-scroll">
+                <div className="booking-card glass-card">
                     <div className="section-header" style={{ marginBottom: '32px' }}>
                         <span className="section-tag">Welcome Back</span>
                         <h1 className="section-title" style={{ fontSize: '2.4rem' }}>User <span className="gradient-text">Login</span></h1>

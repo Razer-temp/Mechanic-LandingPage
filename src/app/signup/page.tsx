@@ -34,7 +34,7 @@ export default function SignupPage() {
         <div className="landing-page-wrapper min-h-screen flex flex-col">
             <Navbar />
             <div className="flex-1 flex items-center justify-center p-6 mt-20">
-                <div className="booking-card glass-card animate-on-scroll">
+                <div className="booking-card glass-card">
                     <div className="section-header" style={{ marginBottom: '32px' }}>
                         <span className="section-tag">Start Your Journey</span>
                         <h1 className="section-title" style={{ fontSize: '2.4rem' }}>Create <span className="gradient-text">Account</span></h1>
