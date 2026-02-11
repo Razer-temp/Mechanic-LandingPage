@@ -14,7 +14,22 @@ export default function DashboardLayout({
 }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const pathname = usePathname();
-    const { user, profile, signOut } = useAuth();
+    const { user, profile, loading, signOut } = useAuth();
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-bg-void flex flex-col items-center justify-center animate-in fade-in duration-700">
+                <div className="relative w-16 h-16 mb-6">
+                    <div className="absolute inset-0 rounded-full border-2 border-white/5"></div>
+                    <div className="absolute inset-0 rounded-full border-2 border-t-accent animate-spin shadow-[0_0_20px_rgba(0,200,255,0.4)]"></div>
+                </div>
+                <p className="text-text-muted text-sm font-black tracking-[0.2em] uppercase animate-pulse">Establishing Secure Session...</p>
+            </div>
+        );
+    }
+
+    // Protection logic is also handled by middleware, but this ensures a clean UI transition
+    if (!user) return null;
 
     const navItems = [
         { label: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },

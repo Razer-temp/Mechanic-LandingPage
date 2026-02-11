@@ -53,7 +53,7 @@ export function Navbar() {
                     {user ? (
                         <li className="user-menu-li"><UserMenu /></li>
                     ) : (
-                        <li><Link href="/signup" className="nav-cta" onClick={closeMenu}>Book Service</Link></li>
+                        <li><Link href="/login" className="nav-cta" onClick={closeMenu}>Account</Link></li>
                     )}
                 </ul>
             </div>
