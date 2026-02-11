@@ -50,9 +50,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         let mounted = true;
 
+        // Fallback: Ensure loading screen eventually disappears even if Supabase hangs
+        const loadingFallback = setTimeout(() => {
+            if (mounted) setLoading(false);
+        }, 5000);
+
         const getSession = async () => {
             try {
-                const { data: { session } } = await supabase.auth.getSession();
+                const { data: { session }, error } = await supabase.auth.getSession();
+                if (error) throw error;
+
                 if (mounted) {
                     setUser(session?.user ?? null);
                     if (session?.user) {
@@ -62,27 +69,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             } catch (error) {
                 console.error('Auth error in getSession:', error);
             } finally {
-                if (mounted) setLoading(false);
+                if (mounted) {
+                    setLoading(false);
+                    clearTimeout(loadingFallback);
+                }
             }
         };
         getSession();
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
             async (_event, session) => {
-                if (mounted) {
+                if (!mounted) return;
+
+                try {
                     setUser(session?.user ?? null);
                     if (session?.user) {
                         await fetchProfile(session.user.id);
                     } else {
                         setProfile(null);
                     }
+                } catch (error) {
+                    console.error('Auth check in onAuthStateChange failed:', error);
+                } finally {
                     setLoading(false);
+                    clearTimeout(loadingFallback);
                 }
             }
         );
 
         return () => {
             mounted = false;
+            clearTimeout(loadingFallback);
             subscription.unsubscribe();
         };
     }, [supabase, fetchProfile]);
