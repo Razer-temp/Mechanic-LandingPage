@@ -42,8 +42,32 @@ export default function LoginPage() {
 
                     <form onSubmit={handleSubmit} className="booking-form">
                         {error && (
-                            <div className="p-4 rounded-xl mb-6 bg-accent-red/10 border border-accent-red/20 text-accent-red text-sm flex items-center gap-2">
-                                <AlertTriangle className="w-4 h-4" /> {error}
+                            <div className="glass-card animate-in fade-in slide-in-from-top-4 duration-300"
+                                style={{
+                                    padding: '16px',
+                                    marginBottom: '24px',
+                                    background: 'rgba(255, 45, 85, 0.08)',
+                                    border: '1px solid rgba(255, 45, 85, 0.2)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '12px'
+                                }}>
+                                <div style={{
+                                    width: '32px',
+                                    height: '32px',
+                                    borderRadius: '50%',
+                                    background: 'rgba(255, 45, 85, 0.15)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexShrink: 0
+                                }}>
+                                    <AlertTriangle className="w-5 h-5" style={{ color: 'var(--accent-red)' }} />
+                                </div>
+                                <div>
+                                    <strong style={{ display: 'block', fontSize: '0.85rem', color: 'var(--accent-red)', marginBottom: '2px' }}>Authentication Error</strong>
+                                    <p style={{ margin: 0, fontSize: '0.8rem', color: 'rgba(255, 255, 255, 0.7)', lineHeight: '1.4' }}>{error}</p>
+                                </div>
                             </div>
                         )}
 

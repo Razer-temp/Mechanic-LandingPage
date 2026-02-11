@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
+import { UserMenu } from './UserMenu';
 import clsx from 'clsx';
 
 export function Navbar() {
@@ -48,11 +49,9 @@ export function Navbar() {
                     <li><a href="#reviews" onClick={closeMenu}>Reviews</a></li>
                     <li><a href="#contact" onClick={closeMenu}>Contact</a></li>
 
+
                     {user ? (
-                        <>
-                            <li><Link href="/dashboard" onClick={closeMenu}>Dashboard</Link></li>
-                            <li><button onClick={() => { signOut(); closeMenu(); }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, font: 'inherit', color: 'inherit' }}>Sign Out</button></li>
-                        </>
+                        <li className="user-menu-li"><UserMenu /></li>
                     ) : (
                         <li><Link href="/signup" className="nav-cta" onClick={closeMenu}>Book Service</Link></li>
                     )}
