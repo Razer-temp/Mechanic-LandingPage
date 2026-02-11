@@ -176,7 +176,7 @@ export default function LandingPage() {
           <>
             I couldn't identify the exact issue from your description. 🤔<br /><br />
             I'd recommend a <strong>Full Diagnostic Checkup (₹199)</strong> where our experts will inspect your bike thoroughly.<br /><br />
-            👉 <a href="#booking" style={{ color: '#00d4ff' }}>Book a checkup</a> or call us at <a href="tel:+919876543210" style={{ color: '#00d4ff' }}>+91 98765 43210</a>
+            👉 <a href="#booking" style={{ color: '#00d4ff' }}>Book a checkup</a> or call us at <a href="tel:+919811530780" style={{ color: '#00d4ff' }}>+91 98115 30780</a>
           </>
         );
       }
@@ -220,7 +220,7 @@ export default function LandingPage() {
             <a href="#diagnosis" className="btn btn-secondary">
               <span>🤖</span> AI Bike Check
             </a>
-            <a href="tel:+919876543210" className="btn btn-outline">
+            <a href="tel:+919811530780" className="btn btn-outline">
               <span>📞</span> Call Now
             </a>
           </div>
@@ -514,7 +514,7 @@ export default function LandingPage() {
                 <p>Thank you, <strong>{bookingData.name}</strong>! We've received your booking for <strong>{bookingData.service}</strong>.</p>
                 <p style={{ marginTop: '8px', color: 'var(--text-muted)' }}>We'll call you at <strong>{bookingData.phone}</strong> to confirm your slot shortly.</p>
                 <a
-                  href={`https://wa.me/919876543210?text=Hi!%20I%20just%20booked%20${encodeURIComponent(bookingData.service)}%20for%20my%20${encodeURIComponent(bookingData.bike)}.%20Name:%20${encodeURIComponent(bookingData.name)}`}
+                  href={`https://wa.me/919811530780?text=Hi!%20I%20just%20booked%20${encodeURIComponent(bookingData.service)}%20for%20my%20${encodeURIComponent(bookingData.bike)}.%20Name:%20${encodeURIComponent(bookingData.name)}`}
                   className="btn btn-whatsapp"
                   style={{ marginTop: '24px' }}
                   target="_blank"
@@ -596,14 +596,14 @@ export default function LandingPage() {
                 <span className="contact-icon">📍</span>
                 <div>
                   <strong>Workshop Address</strong>
-                  <p>42, MG Road, Near City Mall, Koramangala<br />Bangalore, Karnataka — 560034</p>
+                  <p>D-1C, Shah Alam Bandh Marg, near sai Baba Mandir<br />Block D, Adarsh Nagar Extension, Adarsh Nagar, Delhi, 110033</p>
                 </div>
               </div>
               <div className="contact-item">
                 <span className="contact-icon">📞</span>
                 <div>
                   <strong>Phone</strong>
-                  <p><a href="tel:+919876543210">+91 98765 43210</a></p>
+                  <p><a href="tel:+919811530780">+91 98115 30780</a></p>
                 </div>
               </div>
               <div className="contact-item">
@@ -621,17 +621,17 @@ export default function LandingPage() {
                 </div>
               </div>
               <div className="contact-buttons">
-                <a href="https://wa.me/919876543210?text=Hi!%20I%20need%20bike%20service." className="btn btn-whatsapp" target="_blank" rel="noopener noreferrer">
+                <a href="https://wa.me/919811530780?text=Hi!%20I%20need%20bike%20service." className="btn btn-whatsapp" target="_blank" rel="noopener noreferrer">
                   <span>💬</span> WhatsApp Us
                 </a>
-                <a href="tel:+919876543210" className="btn btn-outline">
+                <a href="tel:+919811530780" className="btn btn-outline">
                   <span>📞</span> Call Now
                 </a>
               </div>
             </div>
             <div className="contact-map glass-card animate-on-scroll">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.5965516653787!2d77.6145!3d12.9352!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDU2JzA2LjciTiA3N8KwMzYnNTIuMiJF!5e0!3m2!1sen!2sin!4v1600000000000!5m2!1sen!2sin"
+                src="https://www.google.com/maps?q=D-1C+Shah+Alam+Bandh+Marg+near+sai+Baba+Mandir+Block+D+Adarsh+Nagar+Extension+Adarsh+Nagar+Delhi+110033&output=embed"
                 width="100%" height="100%" style={{ border: 0, borderRadius: '16px' }} allowFullScreen loading="lazy">
               </iframe>
             </div>
@@ -683,7 +683,7 @@ export default function LandingPage() {
       </div>
 
       {/* ===== WHATSAPP FLOAT ===== */}
-      <a href="https://wa.me/919876543210?text=Hi!%20I%20need%20bike%20service." className="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+      <a href="https://wa.me/919811530780?text=Hi!%20I%20need%20bike%20service." className="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
         💬
       </a>
     </div>
