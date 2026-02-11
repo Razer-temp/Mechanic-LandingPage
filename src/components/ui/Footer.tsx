@@ -29,7 +29,7 @@ export function Footer() {
                         <ul>
                             <li><a href="#services">Services</a></li>
                             <li><a href="#diagnosis">AI Diagnosis</a></li>
-                            <li><a href="#booking">Book Service</a></li>
+                            <li><Link href="/login">Account</Link></li>
                             <li><a href="#estimator">Cost Estimator</a></li>
                             <li><a href="#contact">Contact Us</a></li>
                         </ul>
