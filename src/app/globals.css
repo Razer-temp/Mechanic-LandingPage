@@ -3,6 +3,7 @@
 /* =========================================
    SMARTBIKE PRO — Premium Design System
    Minimal · Modern · Gorgeous
+   [Reverted to Pre-Master Class Version]
    ========================================= */
 
 /* ===== CSS VARIABLES ===== */
@@ -1918,6 +1919,7 @@ ul {
     font-size: 1.4rem;
   }
 }
+
 /* ===== USER MENU & DROPDOWN ===== */
 .user-menu-container {
   position: relative;
@@ -2068,7 +2070,7 @@ ul {
     display: none;
   }
 
-  .user-menu-trigger.active + .user-dropdown {
+  .user-menu-trigger.active+.user-dropdown {
     display: block;
   }
 }
