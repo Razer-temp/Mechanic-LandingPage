@@ -124,18 +124,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     const signOut = async () => {
+        console.log('Initiating aggressive sign out...');
         try {
-            // 1. Trigger Supabase sign out (don't wait for network)
-            supabase.auth.signOut().catch(err => console.error('Sign out error:', err));
+            // 1. Trigger Supabase sign out (background)
+            supabase.auth.signOut().catch(err => console.error('Supabase signOut request failed:', err));
 
-            // 2. Clear local state immediately
+            // 2. Clear React state immediately
             setUser(null);
             setProfile(null);
 
-            // 3. Force hard redirect to landing page
-            window.location.replace('/');
+            // 3. Aggressively scrub browser storage
+            if (typeof window !== 'undefined') {
+                const scrubStorage = (storage: Storage) => {
+                    try {
+                        for (let i = 0; i < storage.length; i++) {
+                            const key = storage.key(i);
+                            if (key && (key.includes('supabase') || key.includes('sb-'))) {
+                                storage.removeItem(key);
+                                i--; // Adjust index after removal
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Storage scrub failed:', e);
+                    }
+                };
+                scrubStorage(localStorage);
+                scrubStorage(sessionStorage);
+            }
+
+            // 4. Force a tiny buffer (500ms) to ensure storage writes are committed
+            // then hard redirect to clear everything
+            setTimeout(() => {
+                console.log('Redirecting to clean landing page...');
+                window.location.href = '/?logout=' + Date.now();
+            }, 500);
+
         } catch (error) {
-            console.error('Sign out logic failed:', error);
+            console.error('Aggressive sign out failed:', error);
             window.location.replace('/');
         }
     };
