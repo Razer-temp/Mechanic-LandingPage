@@ -18,6 +18,16 @@ export default function DashboardPage() {
     const supabase = createClient();
 
     useEffect(() => {
+        let mounted = true;
+
+        // Fallback: Ensure loading resolves even if database is slow
+        const fallback = setTimeout(() => {
+            if (mounted) {
+                console.log('Dashboard data fallback triggered');
+                setLoading(false);
+            }
+        }, 5000);
+
         async function fetchData() {
             if (!user) return;
             try {
@@ -28,12 +38,15 @@ export default function DashboardPage() {
                     .order('scheduled_at', { ascending: false });
 
                 if (fetchError) throw fetchError;
-                setBookings(data as (Booking & { services: Service | null })[]);
+                if (mounted) setBookings(data as (Booking & { services: Service | null })[]);
             } catch (err: any) {
                 console.error('Error fetching bookings:', err);
-                setError(err.message || 'Unable to load your dashboard data.');
+                if (mounted) setError(err.message || 'Unable to load your dashboard data.');
             } finally {
-                setLoading(false);
+                if (mounted) {
+                    setLoading(false);
+                    clearTimeout(fallback);
+                }
             }
         }
 
@@ -42,6 +55,11 @@ export default function DashboardPage() {
         } else if (!authLoading && !user) {
             router.push('/login');
         }
+
+        return () => {
+            mounted = false;
+            clearTimeout(fallback);
+        };
     }, [user, authLoading, supabase, router]);
 
     if (loading || authLoading) {
