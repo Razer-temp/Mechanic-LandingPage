@@ -368,8 +368,26 @@ ul {
   color: var(--text-primary);
 }
 
+.logo-svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px rgba(0, 200, 255, 0.4));
+  transition: transform var(--dur) var(--ease);
+}
+
+.logo-svg path {
+  fill: var(--accent);
+}
+
+.nav-logo:hover .logo-svg {
+  transform: rotate(30deg) scale(1.1);
+}
+
 .logo-icon {
-  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .accent {
