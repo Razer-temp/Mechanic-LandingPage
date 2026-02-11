@@ -39,14 +39,14 @@ const diagnosisKB: Record<string, DiagnosisResult> = {
     },
     battery: {
         title: 'Battery / Electrical Problem',
-        causes: ['Battery past lifespan', 'Faulty charging system', 'Corroded terminals', 'Parasitic drain'],
+        causes: ['Battery past lifespan', 'Faulty charging system (rectifier/regulator)', 'Corroded terminals', 'Parasitic drain from aftermarket accessories'],
         urgency: 'medium',
         cost: '₹500 – ₹2,500',
         tip: 'A healthy battery should read 12.4V+ when the engine is off.',
     },
     mileage: {
         title: 'Poor Fuel Efficiency',
-        causes: ['Dirty air filter', 'Incorrect tire pressure', 'Old spark plug', 'Rich fuel mixture'],
+        causes: ['Dirty air filter', 'Incorrect tire pressure', 'Old spark plug', 'Rich fuel mixture / carburetor issue'],
         urgency: 'low',
         cost: '₹200 – ₹1,500',
         tip: 'Regular servicing every 3,000 km keeps your mileage optimal.',
@@ -60,7 +60,7 @@ const diagnosisKB: Record<string, DiagnosisResult> = {
     },
     overheat: {
         title: 'Engine Overheating',
-        causes: ['Low coolant (liquid-cooled)', 'Clogged radiator fins', 'Faulty thermostat', 'Wrong grade engine oil'],
+        causes: ['Low coolant (liquid-cooled)', 'Clogged radiator fins', 'Faulty thermostat', 'Old / wrong grade engine oil'],
         urgency: 'high',
         cost: '₹400 – ₹3,500',
         tip: 'Stop riding immediately if the engine is overheating to avoid seizure.',
@@ -68,14 +68,14 @@ const diagnosisKB: Record<string, DiagnosisResult> = {
 };
 
 const keywordMap: Record<string, string[]> = {
-    start: ['start', 'crank', 'ignition', "won't start", 'dead', 'kick', 'self start'],
-    noise: ['noise', 'sound', 'rattle', 'knock', 'tick', 'clunk', 'grind', 'tapping'],
-    brake: ['brake', 'stop', 'squeak', 'squeal', 'disc', 'pad', 'braking'],
-    oil: ['oil', 'leak', 'drip', 'smoke', 'burning smell', 'oil leak'],
-    battery: ['battery', 'charge', 'electric', 'light dim', 'drain', 'voltage', 'horn weak'],
-    mileage: ['mileage', 'fuel', 'petrol', 'efficiency', 'consumption', 'average', 'kmpl'],
-    vibration: ['vibrat', 'shake', 'wobble', 'shudder', 'shaking'],
-    overheat: ['heat', 'hot', 'overheat', 'temperature', 'coolant', 'boiling'],
+    start: ['start', 'crank', 'ignition', "won't start", 'dead', 'kick'],
+    noise: ['noise', 'sound', 'rattle', 'knock', 'tick', 'clunk', 'grind'],
+    brake: ['brake', 'stop', 'squeak', 'squeal', 'disc', 'pad'],
+    oil: ['oil', 'leak', 'drip', 'smoke', 'burning smell'],
+    battery: ['battery', 'charge', 'electric', 'light dim', 'drain', 'voltage'],
+    mileage: ['mileage', 'fuel', 'petrol', 'efficiency', 'consumption', 'average'],
+    vibration: ['vibrat', 'shake', 'wobble', 'shudder'],
+    overheat: ['heat', 'hot', 'overheat', 'temperature', 'coolant'],
 };
 
 export function diagnose(text: string): DiagnosisResult | null {
