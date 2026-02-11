@@ -1,5 +1,7 @@
 'use client';
 
+// Force rebuild 2.0
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
