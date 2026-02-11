@@ -631,7 +631,7 @@ export default function LandingPage() {
             </div>
             <div className="contact-map glass-card animate-on-scroll">
               <iframe
-                src="https://www.google.com/maps?q=D-1C+Shah+Alam+Bandh+Marg+near+sai+Baba+Mandir+Block+D+Adarsh+Nagar+Extension+Adarsh+Nagar+Delhi+110033&output=embed"
+                src="https://www.google.com/maps?q=D-1C%2C+Shah+Alam+Bandh+Marg%2C+near+sai+Baba+Mandir%2C+Block+D%2C+Adarsh+Nagar+Extension%2C+Adarsh+Nagar%2C+Delhi%2C+110033&z=17&output=embed"
                 width="100%" height="100%" style={{ border: 0, borderRadius: '16px' }} allowFullScreen loading="lazy">
               </iframe>
             </div>
