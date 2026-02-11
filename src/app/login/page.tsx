@@ -30,76 +30,85 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen bg-bg-void flex flex-col">
+        <div className="landing-page-wrapper min-h-screen flex flex-col">
             <Navbar />
-            <div className="flex-1 flex items-center justify-center p-4">
-                <div className="w-full max-w-md bg-bg-surface/50 border border-border-subtle rounded-2xl p-8 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-500">
-                    <div className="text-center mb-8">
-                        <h1 className="font-heading font-bold text-3xl text-text-primary mb-2">Welcome Back</h1>
-                        <p className="text-text-secondary">Sign in to manage your bookings and profile</p>
+            <div className="flex-1 flex items-center justify-center p-6 mt-20">
+                <div className="booking-card glass-card animate-on-scroll">
+                    <div className="section-header" style={{ marginBottom: '32px' }}>
+                        <span className="section-tag">Welcome Back</span>
+                        <h1 className="section-title" style={{ fontSize: '2.4rem' }}>User <span className="gradient-text">Login</span></h1>
+                        <p className="section-desc">Sign in to manage your bookings and profile</p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    <form onSubmit={handleSubmit} className="booking-form">
                         {error && (
-                            <div className="p-3 rounded-lg bg-accent-red/10 border border-accent-red/20 text-accent-red text-sm flex items-center gap-2">
+                            <div className="p-4 rounded-xl mb-6 bg-accent-red/10 border border-accent-red/20 text-accent-red text-sm flex items-center gap-2">
                                 <AlertTriangle className="w-4 h-4" /> {error}
                             </div>
                         )}
 
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-text-primary">Email</label>
+                        <div className="form-group">
+                            <label>Email Address</label>
                             <div className="relative">
-                                <Mail className="absolute left-3 top-3 w-5 h-5 text-text-muted" />
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
                                 <input
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-bg-void border border-border-subtle rounded-xl py-2.5 pl-10 text-text-primary outline-none focus:border-accent-base"
                                     placeholder="name@example.com"
                                     required
+                                    style={{ paddingLeft: '44px' }}
                                 />
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <div className="flex justify-between">
-                                <label className="text-sm font-medium text-text-primary">Password</label>
-                                <a href="#" className="text-xs text-accent-base hover:text-accent-dim">Forgot password?</a>
+                        <div className="form-group">
+                            <div className="flex justify-between items-center mb-1">
+                                <label style={{ marginBottom: 0 }}>Password</label>
+                                <a href="#" className="gradient-text text-xs font-bold hover:underline">Forgot password?</a>
                             </div>
                             <div className="relative">
-                                <Lock className="absolute left-3 top-3 w-5 h-5 text-text-muted" />
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
                                 <input
                                     type="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-bg-void border border-border-subtle rounded-xl py-2.5 pl-10 text-text-primary outline-none focus:border-accent-base"
                                     placeholder="••••••••"
                                     required
+                                    style={{ paddingLeft: '44px' }}
                                 />
                             </div>
                         </div>
 
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full py-3 rounded-xl bg-accent-base text-white font-bold hover:bg-accent-dim transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                        >
-                            {loading ? (
-                                <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            ) : (
-                                <>Sign In <ArrowRight className="w-4 h-4" /></>
-                            )}
-                        </button>
+                        <div className="form-actions" style={{ marginTop: '24px' }}>
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="btn btn-primary btn-glow btn-full"
+                            >
+                                {loading ? (
+                                    <span style={{ width: '20px', height: '20px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                                ) : (
+                                    <><span>🔑</span> Sign In</>
+                                )}
+                            </button>
+                        </div>
                     </form>
 
-                    <p className="mt-6 text-center text-sm text-text-secondary">
+                    <p className="mt-8 text-center text-sm" style={{ color: 'var(--text-secondary)' }}>
                         Don't have an account?{' '}
-                        <Link href="/signup" className="text-accent-base font-semibold hover:text-accent-dim">
+                        <Link href="/signup" className="gradient-text font-bold hover:underline">
                             Sign up
                         </Link>
                     </p>
                 </div>
             </div>
+
+            <style jsx>{`
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
+                }
+            `}</style>
         </div>
     );
 }

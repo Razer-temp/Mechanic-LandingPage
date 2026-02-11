@@ -31,89 +31,98 @@ export default function SignupPage() {
     };
 
     return (
-        <div className="min-h-screen bg-bg-void flex flex-col">
+        <div className="landing-page-wrapper min-h-screen flex flex-col">
             <Navbar />
-            <div className="flex-1 flex items-center justify-center p-4">
-                <div className="w-full max-w-md bg-bg-surface/50 border border-border-subtle rounded-2xl p-8 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-500">
-                    <div className="text-center mb-8">
-                        <h1 className="font-heading font-bold text-3xl text-text-primary mb-2">Create Account</h1>
-                        <p className="text-text-secondary">Join SmartBike Pro for easy service booking</p>
+            <div className="flex-1 flex items-center justify-center p-6 mt-20">
+                <div className="booking-card glass-card animate-on-scroll">
+                    <div className="section-header" style={{ marginBottom: '32px' }}>
+                        <span className="section-tag">Start Your Journey</span>
+                        <h1 className="section-title" style={{ fontSize: '2.4rem' }}>Create <span className="gradient-text">Account</span></h1>
+                        <p className="section-desc">Join SmartBike Pro for AI-powered care</p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    <form onSubmit={handleSubmit} className="booking-form">
                         {error && (
-                            <div className="p-3 rounded-lg bg-accent-red/10 border border-accent-red/20 text-accent-red text-sm flex items-center gap-2">
+                            <div className="p-4 rounded-xl mb-6 bg-accent-red/10 border border-accent-red/20 text-accent-red text-sm flex items-center gap-2">
                                 <AlertTriangle className="w-4 h-4" /> {error}
                             </div>
                         )}
 
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-text-primary">Full Name</label>
+                        <div className="form-group">
+                            <label>Full Name</label>
                             <div className="relative">
-                                <User className="absolute left-3 top-3 w-5 h-5 text-text-muted" />
+                                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
                                 <input
                                     type="text"
                                     value={fullName}
                                     onChange={(e) => setFullName(e.target.value)}
-                                    className="w-full bg-bg-void border border-border-subtle rounded-xl py-2.5 pl-10 text-text-primary outline-none focus:border-accent-base"
                                     placeholder="John Doe"
                                     required
+                                    style={{ paddingLeft: '44px' }}
                                 />
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-text-primary">Email</label>
+                        <div className="form-group">
+                            <label>Email Address</label>
                             <div className="relative">
-                                <Mail className="absolute left-3 top-3 w-5 h-5 text-text-muted" />
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
                                 <input
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-bg-void border border-border-subtle rounded-xl py-2.5 pl-10 text-text-primary outline-none focus:border-accent-base"
                                     placeholder="name@example.com"
                                     required
+                                    style={{ paddingLeft: '44px' }}
                                 />
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-text-primary">Password</label>
+                        <div className="form-group">
+                            <label>Password</label>
                             <div className="relative">
-                                <Lock className="absolute left-3 top-3 w-5 h-5 text-text-muted" />
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
                                 <input
                                     type="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-bg-void border border-border-subtle rounded-xl py-2.5 pl-10 text-text-primary outline-none focus:border-accent-base"
                                     placeholder="••••••••"
                                     required
                                     minLength={6}
+                                    style={{ paddingLeft: '44px' }}
                                 />
                             </div>
                         </div>
 
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full py-3 rounded-xl bg-accent-base text-white font-bold hover:bg-accent-dim transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                        >
-                            {loading ? (
-                                <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            ) : (
-                                <>Create Account <ArrowRight className="w-4 h-4" /></>
-                            )}
-                        </button>
+                        <div className="form-actions" style={{ marginTop: '24px' }}>
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="btn btn-primary btn-glow btn-full"
+                            >
+                                {loading ? (
+                                    <span style={{ width: '20px', height: '20px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                                ) : (
+                                    <><span>✅</span> Create Account</>
+                                )}
+                            </button>
+                        </div>
                     </form>
 
-                    <p className="mt-6 text-center text-sm text-text-secondary">
+                    <p className="mt-8 text-center text-sm" style={{ color: 'var(--text-secondary)' }}>
                         Already have an account?{' '}
-                        <Link href="/login" className="text-accent-base font-semibold hover:text-accent-dim">
+                        <Link href="/login" className="gradient-text font-bold hover:underline">
                             Sign in
                         </Link>
                     </p>
                 </div>
             </div>
+
+            <style jsx>{`
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
+                }
+            `}</style>
         </div>
     );
 }
