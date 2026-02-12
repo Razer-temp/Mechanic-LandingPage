@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Navbar } from '@/components/ui/Navbar';
+import { BrandMarquee } from '@/components/ui/BrandMarquee';
 import { Footer } from '@/components/ui/Footer';
 import { diagnose, estimateCost, type DiagnosisResult, type CostEstimate } from '@/lib/ai-engine';
 import clsx from 'clsx';
@@ -239,10 +240,10 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
-        <div className="hero-scroll-indicator">
-          <div className="scroll-arrow"></div>
-        </div>
+
       </header>
+
+      <BrandMarquee />
 
       {/* ===== AI DIAGNOSIS ===== */}
       <section className="section section-diagnosis" id="diagnosis">
