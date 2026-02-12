@@ -39,6 +39,12 @@ export function Navbar() {
                     <span></span><span></span><span></span>
                 </button>
 
+                <div
+                    className={clsx('nav-overlay', mobileMenuOpen && 'active')}
+                    onClick={() => setMobileMenuOpen(false)}
+                    aria-hidden="true"
+                />
+
                 <ul className={clsx('nav-links', mobileMenuOpen && 'active')} id="navLinks">
                     <li><a href="#services" onClick={closeMenu}>Services</a></li>
                     <li><a href="#diagnosis" onClick={closeMenu}>AI Diagnosis</a></li>
