@@ -691,21 +691,24 @@ ul {
 
 
 /* ===== BRAND MARQUEE ===== */
+/* ===== BRAND MARQUEE ===== */
 .brand-marquee {
   width: 100%;
   overflow: hidden;
-  background: rgba(5, 5, 8, 0.6);
-  backdrop-filter: blur(10px);
+  /* Light silver/platinum background for visibility of black logos */
+  background: linear-gradient(to right, #eef2f3, #8e9eab);
   padding: 24px 0;
   border-bottom: 1px solid var(--border-subtle);
   position: relative;
   z-index: 2;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
 .marquee-track {
   display: flex;
   gap: 60px;
   width: max-content;
+  /* Animate -25% because we use 4 sets of items. 1/4 = 25% */
   animation: marquee 30s linear infinite;
 }
 
@@ -720,30 +723,25 @@ ul {
 }
 
 .brand-logo-img {
-  height: 50px;
+  height: 60px;
+  /* Slightly larger for better visibility */
   width: auto;
   object-fit: contain;
-  max-width: 140px;
+  max-width: 160px;
   transition: transform 0.4s ease;
 }
 
 /* Default: Mobile - Full Color */
 .brand-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   /* Mobile: No filter, full color */
   filter: grayscale(0%) opacity(1);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  cursor: pointer;
-  padding: 0 10px;
 }
 
 /* Desktop Hover Styles */
 @media (min-width: 768px) {
   .brand-item {
-    /* Desktop default: Grayscale */
-    filter: grayscale(100%) opacity(0.6);
+    /* Desktop default: Grayscale but full opacity to see black logos clearly */
+    filter: grayscale(100%) opacity(0.7);
   }
 
   .brand-item:hover {
@@ -757,13 +755,13 @@ ul {
   font-family: var(--font-heading);
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--text-muted);
+  color: #333;
+  /* Dark text for light background */
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .brand-item.text-fallback:hover {
-  color: var(--hover-color);
   text-shadow: 0 0 20px var(--hover-color);
 }
 
@@ -773,7 +771,8 @@ ul {
   }
 
   100% {
-    transform: translateX(-50%);
+    transform: translateX(-25%);
+    /* Moves exactly one set width (if 4 sets used) */
   }
 }
 

@@ -19,8 +19,8 @@ export function BrandMarquee() {
     return (
         <div className="brand-marquee">
             <div className="marquee-track">
-                {/* Tripled list for seamless scrolling */}
-                {[...brands, ...brands, ...brands].map((brand, index) => (
+                {/* Quadruple list for seamless scrolling with -25% animation */}
+                {[...brands, ...brands, ...brands, ...brands].map((brand, index) => (
                     <div
                         key={`${brand.name}-${index}`}
                         className="brand-item"
