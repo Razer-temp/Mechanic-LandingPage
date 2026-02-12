@@ -68,24 +68,179 @@ const diagnosisKB: Record<string, DiagnosisResult> = {
 };
 
 const keywordMap: Record<string, string[]> = {
-    start: ['start', 'crank', 'ignition', "won't start", 'dead', 'kick'],
-    noise: ['noise', 'sound', 'rattle', 'knock', 'tick', 'clunk', 'grind'],
-    brake: ['brake', 'stop', 'squeak', 'squeal', 'disc', 'pad'],
-    oil: ['oil', 'leak', 'drip', 'smoke', 'burning smell'],
-    battery: ['battery', 'charge', 'electric', 'light dim', 'drain', 'voltage'],
-    mileage: ['mileage', 'fuel', 'petrol', 'efficiency', 'consumption', 'average'],
-    vibration: ['vibrat', 'shake', 'wobble', 'shudder'],
-    overheat: ['heat', 'hot', 'overheat', 'temperature', 'coolant'],
+    start: [
+        'start', 'crank', 'ignition', "won't start", "doesn't start", 'dead', 'kick',
+        'self not working', 'kickstart hard', 'morning problem', 'cold start',
+        'choke', 'battery down', 'pick nahi', 'starting issue', 'starter motor',
+        'engine not starting', 'no start', 'difficult to start'
+    ],
+    noise: [
+        'noise', 'sound', 'rattle', 'knock', 'tick', 'clunk', 'grind',
+        'dhak dhak', 'tak tak', 'metallic sound', 'chain noise', 'loud',
+        'exhaust loud', 'tappet', 'valve noise', 'weird sound', 'strange noise',
+        'knocking', 'clicking', 'grinding', 'abnormal sound'
+    ],
+    brake: [
+        'brake', 'stop', 'squeak', 'squeal', 'disc', 'pad',
+        'braking', 'stopping', 'brake not working', 'soft brake', 'hard brake',
+        'brake fade', 'spongy', 'brake pedal', 'brake lever', 'no brakes'
+    ],
+    oil: [
+        'oil', 'leak', 'drip', 'smoke', 'burning smell',
+        'oil leak', 'engine oil', 'leaking', 'oil dripping', 'black smoke',
+        'white smoke', 'blue smoke', 'oil consumption', 'low oil'
+    ],
+    battery: [
+        'battery', 'charge', 'electric', 'light dim', 'drain', 'voltage',
+        'battery dead', 'charging issue', 'battery not charging', 'weak battery',
+        'battery problem', 'electrical problem', 'lights not working', 'horn weak'
+    ],
+    mileage: [
+        'mileage', 'fuel', 'petrol', 'efficiency', 'consumption', 'average',
+        'low mileage', 'poor mileage', 'fuel consumption', 'average low',
+        'eating fuel', 'too much petrol', 'bad average', 'kmpl'
+    ],
+    vibration: [
+        'vibrat', 'shake', 'wobble', 'shudder',
+        'vibration', 'shaking', 'wobbling', 'unstable', 'handlebar shake',
+        'seat vibration', 'engine vibration', 'excessive vibration'
+    ],
+    overheat: [
+        'heat', 'hot', 'overheat', 'temperature', 'coolant',
+        'overheating', 'too hot', 'engine hot', 'temperature high', 'heating',
+        'radiator', 'cooling', 'boiling'
+    ],
+};
+
+// Brand-specific tips
+const brandSpecificIssues: Record<string, Record<string, string>> = {
+    'royal enfield': {
+        start: 'Classic/Bullet models often face carburetor issues in winter. Try warming it up first.',
+        oil: 'RE bikes can leak oil from pushrod tubes—common on older models.',
+        noise: 'Tappet noise is normal on older RE models, but get it checked if it\'s excessive.',
+    },
+    'hero': {
+        mileage: 'Hero bikes are known for excellent mileage—check air filter and tire pressure first.',
+        start: 'Hero Splendor/Passion: Check the CDI unit if starting is intermittent.',
+    },
+    'bajaj': {
+        noise: 'Pulsar models: Check timing chain tensioner if you hear rattling from the engine.',
+        start: 'Bajaj bikes: Ensure the fuel petcock is in the ON position, not RESERVE.',
+    },
+    'tvs': {
+        mileage: 'TVS Apache models: Use manufacturer-recommended octane fuel for best mileage.',
+        brake: 'TVS scooters: Check brake shoes if you feel reduced braking power.',
+    },
+    'honda': {
+        start: 'Honda Activa: If self-start isn\'t working, check the fuse near the battery.',
+        oil: 'Honda bikes rarely leak oil—if yours does, get it checked immediately.',
+    },
+    'yamaha': {
+        noise: 'Yamaha FZ/R15: Chain noise is common. Lubricate and adjust chain tension.',
+    },
+    'ktm': {
+        overheat: 'KTM Duke models run hot naturally. Ensure you\'re using synthetic engine oil.',
+    },
 };
 
 export function diagnose(text: string): DiagnosisResult | null {
     const lower = text.toLowerCase();
+    const matches: string[] = [];
+
+    // Find ALL matching categories
     for (const [key, words] of Object.entries(keywordMap)) {
         for (const word of words) {
-            if (lower.includes(word)) return diagnosisKB[key];
+            if (lower.includes(word)) {
+                matches.push(key);
+                break; // Move to next category
+            }
         }
     }
-    return null;
+
+    let result: DiagnosisResult | null = null;
+
+    // If multiple matches, prioritize by urgency
+    if (matches.length > 1) {
+        const sorted = matches.sort((a, b) => {
+            const urgencyOrder: Record<string, number> = { high: 3, medium: 2, low: 1 };
+            return urgencyOrder[diagnosisKB[b].urgency] - urgencyOrder[diagnosisKB[a].urgency];
+        });
+        result = { ...diagnosisKB[sorted[0]] }; // Clone to avoid mutation
+    } else if (matches.length === 1) {
+        result = { ...diagnosisKB[matches[0]] };
+    }
+
+    // Apply brand-specific tips if brand mentioned
+    if (result) {
+        const brandMentioned = Object.keys(brandSpecificIssues).find(brand =>
+            lower.includes(brand.replace(' ', ''))
+        );
+        if (brandMentioned) {
+            const specificTip = brandSpecificIssues[brandMentioned][matches[0]];
+            if (specificTip) result.tip = `🏍️ ${specificTip}`;
+        }
+
+        // Apply seasonal/weather context
+        if (lower.includes('rain') || lower.includes('monsoon')) {
+            if (matches[0] === 'start') {
+                result.tip = '🌧️ Monsoon tip: Moisture in spark plug is common. Let it dry or replace it.';
+            }
+            if (matches[0] === 'brake') {
+                result.tip = '🌧️ Wet brakes reduce stopping power. Pump brakes gently to dry them out.';
+            }
+        }
+
+        if (lower.includes('winter') || lower.includes('cold') || lower.includes('morning')) {
+            if (matches[0] === 'start') {
+                result.tip = '❄️ Cold start issues: Use choke and give 2-3 kicks before trying self-start.';
+            }
+        }
+
+        // Severity detection - upgrade urgency
+        const criticalWords = ['can\'t ride', 'dangerous', 'accident', 'stopped suddenly', 'completely stopped'];
+        if (criticalWords.some(word => lower.includes(word))) {
+            result.urgency = 'high';
+            result.tip = '🚨 URGENT: This sounds serious. Stop riding and get it checked immediately!';
+        }
+    }
+
+    // Smarter fallback - extract hints even when no exact match
+    if (!result) {
+        // Cold/morning issues
+        if (lower.includes('morning') || lower.includes('cold')) {
+            return {
+                title: 'Possible Cold Start Issue',
+                causes: ['Battery weak in cold weather', 'Choke needed', 'Old/thick engine oil'],
+                urgency: 'medium',
+                cost: '₹300 – ₹1,500',
+                tip: '❄️ Cold weather affects batteries and fuel mix. Try using choke and warm up the engine.',
+            };
+        }
+
+        // Performance issues
+        if (lower.includes('slow') || lower.includes('pickup') || lower.includes('power')) {
+            return {
+                title: 'Performance/Pickup Issue',
+                causes: ['Air filter clogged', 'Carburetor needs tuning', 'Clutch slipping', 'Old spark plug'],
+                urgency: 'low',
+                cost: '₹200 – ₹2,000',
+                tip: '⚡ Performance drops are usually maintenance-related. Service your bike regularly.',
+            };
+        }
+
+        // Smoking issues
+        if (lower.includes('smok') || lower.includes('fume')) {
+            return {
+                title: 'Engine Smoking Issue',
+                causes: ['Oil leak into combustion chamber', 'Worn piston rings', 'Valve seal damage'],
+                urgency: 'high',
+                cost: '₹1,500 – ₹8,000',
+                tip: 'Smoking is a sign of internal engine wear. Get it diagnosed before major damage occurs.',
+            };
+        }
+    }
+
+    return result;
 }
 
 // AI Cost Estimator
