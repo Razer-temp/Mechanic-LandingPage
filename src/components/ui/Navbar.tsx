@@ -1,17 +1,12 @@
 'use client';
 
-// Force rebuild 2.0
+import clsx from 'clsx';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useAuth } from '@/context/AuthContext';
-import { UserMenu } from './UserMenu';
-import clsx from 'clsx';
-
 export function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const { user, signOut } = useAuth();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -52,11 +47,7 @@ export function Navbar() {
                     <li><a href="#contact" onClick={closeMenu}>Contact</a></li>
 
 
-                    {user ? (
-                        <li className="user-menu-li"><UserMenu /></li>
-                    ) : (
-                        <li><Link href="/login" className="nav-cta" onClick={closeMenu}>Account</Link></li>
-                    )}
+                    <li><a href="#booking" className="nav-cta" onClick={closeMenu}>Book Service</a></li>
                 </ul>
             </div>
         </nav>

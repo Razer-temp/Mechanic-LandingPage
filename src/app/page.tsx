@@ -22,7 +22,7 @@ export default function LandingPage() {
 
   const [chatOpen, setChatOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState<{ type: 'bot' | 'user'; html: React.ReactNode }[]>([
-    { type: 'bot', html: <>Hi! I'm your AI Mechanic assistant. 🏍️<br />Tell me about your bike problem and I'll help diagnose it!</> }
+    { type: 'bot', html: <>Hi! I&apos;m your AI Mechanic assistant. 🏍️<br />Tell me about your bike problem and I&apos;ll help diagnose it!</> }
   ]);
   const [chatInput, setChatInput] = useState('');
   const chatMessagesRef = useRef<HTMLDivElement>(null);
@@ -174,8 +174,8 @@ export default function LandingPage() {
       } else {
         reply = (
           <>
-            I couldn't identify the exact issue from your description. 🤔<br /><br />
-            I'd recommend a <strong>Full Diagnostic Checkup (₹199)</strong> where our experts will inspect your bike thoroughly.<br /><br />
+            I couldn&apos;t identify the exact issue from your description. 🤔<br /><br />
+            I&apos;d recommend a <strong>Full Diagnostic Checkup (₹199)</strong> where our experts will inspect your bike thoroughly.<br /><br />
             👉 <a href="#booking" style={{ color: '#00d4ff' }}>Book a checkup</a> or call us at <a href="tel:+919811530780" style={{ color: '#00d4ff' }}>+91 98115 30780</a>
           </>
         );
@@ -250,7 +250,7 @@ export default function LandingPage() {
           <div className="section-header animate-on-scroll">
             <span className="section-tag">🤖 AI-Powered</span>
             <h2 className="section-title">Instant AI <span className="gradient-text">Bike Diagnosis</span></h2>
-            <p className="section-desc">Describe your bike's problem and our AI will analyze it in seconds — giving you potential causes, urgency level, and estimated costs.</p>
+            <p className="section-desc">Describe your bike&apos;s problem and our AI will analyze it in seconds — giving you potential causes, urgency level, and estimated costs.</p>
           </div>
           <div className="diagnosis-grid">
             <div className="diagnosis-input-card glass-card animate-on-scroll">
@@ -267,7 +267,7 @@ export default function LandingPage() {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="bikeIssue">What's the problem?</label>
+                  <label htmlFor="bikeIssue">What&apos;s the problem?</label>
                   <textarea
                     id="bikeIssue"
                     rows={4}
@@ -504,15 +504,15 @@ export default function LandingPage() {
           <div className="section-header animate-on-scroll">
             <span className="section-tag">📅 Book Now</span>
             <h2 className="section-title">Schedule Your <span className="gradient-text">Service</span></h2>
-            <p className="section-desc">Fill in the form and we'll confirm your slot within minutes.</p>
+            <p className="section-desc">Fill in the form and we&apos;ll confirm your slot within minutes.</p>
           </div>
           <div className="booking-card glass-card animate-on-scroll">
             {bookingSuccess ? (
               <div className="booking-success" style={{ animation: 'fadeInUp 0.5s ease' }}>
                 <div className="success-icon">✅</div>
                 <h3>Booking Confirmed!</h3>
-                <p>Thank you, <strong>{bookingData.name}</strong>! We've received your booking for <strong>{bookingData.service}</strong>.</p>
-                <p style={{ marginTop: '8px', color: 'var(--text-muted)' }}>We'll call you at <strong>{bookingData.phone}</strong> to confirm your slot shortly.</p>
+                <p>Thank you, <strong>{bookingData.name}</strong>! We&apos;ve received your booking for <strong>{bookingData.service}</strong>.</p>
+                <p style={{ marginTop: '8px', color: 'var(--text-muted)' }}>We&apos;ll call you at <strong>{bookingData.phone}</strong> to confirm your slot shortly.</p>
                 <a
                   href={`https://wa.me/919811530780?text=Hi!%20I%20just%20booked%20${encodeURIComponent(bookingData.service)}%20for%20my%20${encodeURIComponent(bookingData.bike)}.%20Name:%20${encodeURIComponent(bookingData.name)}`}
                   className="btn btn-whatsapp"
