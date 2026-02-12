@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Navbar } from '@/components/ui/Navbar';
 import { BrandMarquee } from '@/components/ui/BrandMarquee';
 import { Footer } from '@/components/ui/Footer';
-import { diagnose, estimateCost, type DiagnosisResult, type CostEstimate } from '@/lib/ai-engine';
+import { diagnose, estimateCost, handleConversation, type DiagnosisResult, type CostEstimate, type ConversationResult } from '@/lib/ai-engine';
 import clsx from 'clsx';
 
 export default function LandingPage() {
@@ -159,6 +159,20 @@ export default function LandingPage() {
 
     // Typing indicator delay
     setTimeout(() => {
+      // Check for conversational responses first
+      const conversation = handleConversation(text);
+      if (conversation) {
+        const reply = conversation.reply.split('\n').map((line, i) => (
+          <React.Fragment key={i}>
+            {line}
+            {i < conversation.reply.split('\n').length - 1 && <br />}
+          </React.Fragment>
+        ));
+        setChatMessages(prev => [...prev, { type: 'bot', html: reply }]);
+        return;
+      }
+
+      // Otherwise, try diagnostic logic
       const result = diagnose(text);
       let reply: React.ReactNode;
       if (result) {

@@ -8,6 +8,11 @@ export interface DiagnosisResult {
     tip: string;
 }
 
+export interface ConversationResult {
+    reply: string;
+    isConversational: true;
+}
+
 const diagnosisKB: Record<string, DiagnosisResult> = {
     start: {
         title: 'Starting Problem Detected',
@@ -142,6 +147,68 @@ const brandSpecificIssues: Record<string, Record<string, string>> = {
         overheat: 'KTM Duke models run hot naturally. Ensure you\'re using synthetic engine oil.',
     },
 };
+
+// Conversational response handling
+export function handleConversation(text: string): ConversationResult | null {
+    const lower = text.trim().toLowerCase();
+
+    // Greetings
+    if (/^(hi|hello|hey|hii|helo|namaste|namaskar|good morning|good evening|greetings)\b/.test(lower)) {
+        return {
+            reply: "Hey there! 👋 I'm your SmartBike Pro AI assistant. I can help diagnose bike issues, suggest repairs, and provide cost estimates. Tell me what's troubling your bike!",
+            isConversational: true
+        };
+    }
+
+    // Identity/About questions
+    if (lower.includes('who are you') || lower.includes('what are you') || lower.includes('your name')) {
+        return {
+            reply: "I'm the SmartBike Pro AI Mechanic! 🤖🏍️ I specialize in diagnosing two-wheeler issues for all major Indian brands. Just describe your bike's problem and I'll help identify the cause, urgency level, and estimated repair cost.",
+            isConversational: true
+        };
+    }
+
+    if (lower.includes('what can you do') || lower.includes('how can you help') || lower.includes('how do you work')) {
+        return {
+            reply: "I can help you with:\n• Diagnosing bike issues (engine, brakes, battery, etc.)\n• Estimating repair costs in ₹\n• Providing maintenance tips\n• Brand-specific advice (Hero, Honda, Bajaj, RE, TVS, etc.)\n• Seasonal tips (monsoon, winter)\n\nJust tell me what's wrong with your bike and I'll guide you! 💡",
+            isConversational: true
+        };
+    }
+
+    // Thanks/appreciation
+    if (/(thank|thanks|thx|thanku|appreciated|helpful|great|awesome|nice|good)/.test(lower) && lower.length < 30) {
+        return {
+            reply: "You're welcome! 😊 If you have any other bike issues or need help booking a service, just let me know. Stay safe on the road! 🏍️",
+            isConversational: true
+        };
+    }
+
+    // Service/pricing inquiries
+    if ((lower.includes('service') || lower.includes('servicing')) && (lower.includes('cost') || lower.includes('price') || lower.includes('charge'))) {
+        return {
+            reply: "Our service packages start from ₹699 for basic servicing! We offer:\n• General Service: ₹699-₹1,699\n• Engine Work: ₹1,500-₹5,500\n• Brake Service: ₹400-₹1,500\n• Full Diagnostic: ₹199\n\nExact pricing depends on your bike type and issue. Want to book a service? Just scroll up to the booking section! 📅",
+            isConversational: true
+        };
+    }
+
+    if (lower.includes('book') || lower.includes('appointment') || lower.includes('schedule')) {
+        return {
+            reply: "To book a service, just scroll up to the 'Book Service' section on this page! 📅 You can also call us directly at +91 98115 30780. We're here 9 AM - 7 PM daily!",
+            isConversational: true
+        };
+    }
+
+    // General advice
+    if (lower.includes('maintenance') || lower.includes('care') || (lower.includes('keep') && lower.includes('good'))) {
+        return {
+            reply: "🔧 Top maintenance tips:\n• Service every 3,000 km or 3 months\n• Check tire pressure weekly (maintain 28-32 PSI)\n• Change engine oil every 3,000-5,000 km\n• Clean air filter monthly\n• Lubricate chain every 500 km\n• Check brake pads every service\n\nRegular care = Better mileage + Longer life! 💪",
+            isConversational: true
+        };
+    }
+
+    // Default - not a conversation, might be diagnostic
+    return null;
+}
 
 export function diagnose(text: string): DiagnosisResult | null {
     const lower = text.toLowerCase();
