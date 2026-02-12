@@ -713,7 +713,7 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: grayscale(100%) opacity(0.6);
+  /* Base style - reset by media query */
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   cursor: pointer;
   padding: 0 10px;
@@ -727,11 +727,30 @@ ul {
   transition: transform 0.4s ease;
 }
 
-.brand-item:hover {
+/* Default: Mobile - Full Color */
+.brand-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Mobile: No filter, full color */
   filter: grayscale(0%) opacity(1);
-  transform: scale(1.15);
-  /* The drop-shadow uses the CSS variable set inline in the React component */
-  filter: drop-shadow(0 0 10px var(--hover-color)) grayscale(0%);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  padding: 0 10px;
+}
+
+/* Desktop Hover Styles */
+@media (min-width: 768px) {
+  .brand-item {
+    /* Desktop default: Grayscale */
+    filter: grayscale(100%) opacity(0.6);
+  }
+
+  .brand-item:hover {
+    filter: grayscale(0%) opacity(1);
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 10px var(--hover-color)) grayscale(0%);
+  }
 }
 
 .brand-item.text-fallback {
