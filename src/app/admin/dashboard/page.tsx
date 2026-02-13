@@ -141,12 +141,12 @@ export default function AdminDashboard() {
                     </div>
 
                     <div className="flex items-center gap-4 lg:gap-8">
-                        <div className="relative group hidden md:block">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#55556a] group-focus-within:text-[#00c8ff] transition-colors" size={18} />
+                        <div className="relative group hidden lg:block">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8888a0] group-focus-within:text-[#00c8ff] transition-colors" size={18} />
                             <input
                                 type="text"
-                                placeholder={`Search ${activeTab}...`}
-                                className="bg-[#0c0c16] border border-white/5 rounded-2xl py-3 pl-12 pr-6 focus:border-[#00c8ff33] focus:ring-4 focus:ring-[#00c8ff05] outline-none transition-all text-sm w-64 lg:w-96 text-white font-medium"
+                                placeholder={`Find ${activeTab === 'bookings' ? 'customers, bikes...' : 'message content...'}`}
+                                className="bg-[#10101e] border border-white/10 rounded-2xl py-3 pl-12 pr-6 focus:border-[#00c8ff33] focus:ring-4 focus:ring-[#00c8ff05] outline-none transition-all text-sm w-64 lg:w-96 text-[#eeeef2] font-semibold placeholder:text-[#55556a]"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
@@ -155,15 +155,15 @@ export default function AdminDashboard() {
                         <button
                             onClick={fetchData}
                             disabled={loading}
-                            className="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all active:scale-95 text-[#8888a0]"
-                            title="Refresh Data"
+                            className="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all active:scale-95 text-[#eeeef2] border border-white/5"
+                            title="Sync Data"
                         >
                             <RefreshCcw size={20} className={clsx(loading && "animate-spin")} />
                         </button>
 
-                        <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-[#ff2d55] cursor-pointer hover:bg-white/10 transition-colors relative">
+                        <div className="w-10 h-10 bg-[#ff2d551a] border border-[#ff2d5533] rounded-xl flex items-center justify-center text-[#ff2d55] cursor-pointer hover:bg-[#ff2d5533] transition-colors relative">
                             <Bell size={20} />
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-[#ff2d55] rounded-full ring-4 ring-[#050508]"></span>
+                            <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-[#ff2d55] rounded-full ring-4 ring-[#050508]"></span>
                         </div>
                     </div>
                 </header>

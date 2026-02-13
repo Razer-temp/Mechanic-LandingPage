@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageSquare, User, Bot, Calendar, ChevronRight } from 'lucide-react';
+import { MessageSquare, User, Bot, Calendar, ChevronRight, Hash } from 'lucide-react';
 import clsx from 'clsx';
 
 interface ChatLogsProps {
@@ -9,77 +9,88 @@ interface ChatLogsProps {
 export default function ChatLogs({ sessions }: ChatLogsProps) {
     if (sessions.length === 0) {
         return (
-            <div className="text-center py-20 bg-[#0c0c16]/30 rounded-[2rem] border border-dashed border-white/5 animate-admin-in">
-                <div className="text-4xl mb-4">💬</div>
-                <p className="text-[#8888a0] font-medium">No chat conversations recorded yet.</p>
+            <div className="text-center py-32 bg-[#10101e] rounded-[2.5rem] border border-dashed border-white/10 animate-admin-in shadow-inner">
+                <div className="text-6xl mb-6">💬</div>
+                <p className="text-[#eeeef2] text-lg font-bold">No intelligence logs recorded yet.</p>
+                <p className="text-[#55556a] mt-2">AI interactions will appear here once users start diagnostic chats.</p>
             </div>
         );
     }
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-admin-in">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 animate-admin-in">
             {sessions.map((session) => (
                 <div
                     key={session.id}
-                    className="bg-[#0c0c16]/50 backdrop-blur-md border border-white/5 rounded-[2.5rem] overflow-hidden flex flex-col h-[600px] hover:border-white/10 transition-all p-1"
+                    className="bg-[#10101e] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col h-[650px] shadow-2xl hover:border-[#a78bfa]/30 transition-all p-1"
                 >
                     {/* Header */}
-                    <div className="p-8 border-b border-white/5 bg-white/[0.01]">
-                        <div className="flex justify-between items-start mb-2">
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-[#ff2d55]">
-                                    <MessageSquare size={24} />
+                    <div className="p-10 border-b border-white/5 bg-white/[0.02]">
+                        <div className="flex justify-between items-start">
+                            <div className="flex items-center gap-5">
+                                <div className="w-14 h-14 bg-[#ff2d551a] border border-[#ff2d5533] rounded-2xl flex items-center justify-center text-[#ff2d55] shadow-lg">
+                                    <MessageSquare size={28} />
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-black text-white">Session Log</h3>
-                                    <p className="text-[10px] text-[#8888a0] font-bold uppercase tracking-widest">{session.id.slice(0, 13)}</p>
+                                    <h3 className="text-xl font-black text-white tracking-tight">Intelligence Audit</h3>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <Hash size={12} className="text-[#a78bfa]" />
+                                        <p className="text-[10px] text-[#8888a0] font-black uppercase tracking-widest">{session.id.slice(0, 16)}</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="text-right">
-                                <div className="flex items-center gap-2 text-white font-bold text-sm">
+                            <div className="text-right space-y-1">
+                                <div className="flex items-center gap-2 text-[#eeeef2] font-black text-sm justify-end">
                                     <Calendar size={14} className="text-[#00c8ff]" />
                                     {new Date(session.created_at).toLocaleDateString()}
                                 </div>
-                                <p className="text-xs text-[#55556a] mt-1">{new Date(session.created_at).toLocaleTimeString()}</p>
+                                <p className="text-[10px] text-[#55556a] font-black uppercase tracking-widest">{new Date(session.created_at).toLocaleTimeString()}</p>
                             </div>
                         </div>
                     </div>
 
-                    {/* Messages */}
-                    <div className="flex-1 overflow-y-auto p-8 space-y-6 custom-scrollbar-minimal">
+                    {/* Messages Container */}
+                    <div className="flex-1 overflow-y-auto p-10 space-y-8 custom-scrollbar-minimal bg-[#050508]/20 shadow-inner">
                         {session.chat_messages?.length > 0 ? (
                             session.chat_messages.map((msg: any) => (
                                 <div
                                     key={msg.id}
                                     className={clsx(
-                                        "flex gap-4 max-w-[90%]",
+                                        "flex gap-5 max-w-[85%]",
                                         msg.role === 'user' ? "ml-auto flex-row-reverse" : "mr-auto"
                                     )}
                                 >
                                     <div className={clsx(
-                                        "w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center border",
-                                        msg.role === 'user' ? "bg-[#00c8ff1a] border-[#00c8ff33] text-[#00c8ff]" : "bg-white/5 border-white/5 text-[#a78bfa]"
+                                        "w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center border shadow-lg transition-transform hover:scale-110",
+                                        msg.role === 'user'
+                                            ? "bg-[#00c8ff1a] border-[#00c8ff33] text-[#00c8ff]"
+                                            : "bg-[#a78bfa1a] border-[#a78bfa33] text-[#a78bfa]"
                                     )}>
-                                        {msg.role === 'user' ? <User size={14} /> : <Bot size={14} />}
+                                        {msg.role === 'user' ? <User size={18} /> : <Bot size={18} />}
                                     </div>
                                     <div className={clsx(
-                                        "p-4 rounded-3xl text-sm font-medium leading-relaxed",
+                                        "p-6 rounded-[1.8rem] text-sm font-bold leading-relaxed shadow-sm",
                                         msg.role === 'user'
                                             ? "bg-[#00c8ff1a] text-white rounded-tr-none border border-[#00c8ff22]"
-                                            : "bg-white/5 text-[#d1d1e0] rounded-tl-none border border-white/5"
+                                            : "bg-[#10101e] text-[#eeeef2] rounded-tl-none border border-white/5"
                                     )}>
                                         {msg.content}
                                     </div>
                                 </div>
                             ))
                         ) : (
-                            <p className="text-center text-[#55556a] text-xs pt-20">Session started but no messages exchanged</p>
+                            <div className="flex flex-col items-center justify-center h-full text-center space-y-4 opacity-50">
+                                <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center">
+                                    <RotateCcw size={20} className="text-[#55556a]" />
+                                </div>
+                                <p className="text-[#55556a] text-[10px] font-black uppercase tracking-widest">Awaiting Transmission...</p>
+                            </div>
                         )}
                     </div>
 
                     {/* Footer Info */}
-                    <div className="p-6 bg-white/[0.01] border-t border-white/5 text-[10px] text-[#55556a] font-black uppercase tracking-widest text-center">
-                        Active Conversation Audit • ID {session.id.slice(-8)}
+                    <div className="p-6 bg-white/[0.01] border-t border-white/5 text-[9px] text-[#55556a] font-black uppercase tracking-[0.3em] text-center">
+                        Cryptographic Audit Trail • SEC_ID_{session.id.slice(-6).toUpperCase()}
                     </div>
                 </div>
             ))}

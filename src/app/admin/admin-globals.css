@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+/* Minimal Admin-Specific Resets and Variables */
+:root {
+  --admin-accent: #00c8ff;
+  --admin-accent-glow: rgba(0, 200, 255, 0.15);
+  --admin-bg-void: #050508;
+  --admin-bg-surface: #0c0c16;
+  --admin-border: rgba(255, 255, 255, 0.05);
+  --admin-text-primary: #eeeef2;
+  --admin-text-secondary: #8888a0;
+  --admin-text-muted: #55556a;
+}
+
+body {
+  background-color: var(--admin-bg-void);
+  color: var(--admin-text-primary);
+  margin: 0;
+  padding: 0;
+}
+
+/* Scrollbar Fixes */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Animations */
+@keyframes adminFadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-admin-in {
+  animation: adminFadeInUp 0.4s ease forwards;
+}
