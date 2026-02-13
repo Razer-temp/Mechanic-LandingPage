@@ -565,13 +565,25 @@ export default function LandingPage() {
                     <label htmlFor="bookService">Service Needed *</label>
                     <select name="bookService" id="bookService" required>
                       <option value="">Select service...</option>
-                      <option value="General Servicing">General Servicing</option>
-                      <option value="Engine Repair">Engine Repair</option>
-                      <option value="Brake Fix">Brake Fix</option>
-                      <option value="Oil Change">Oil Change</option>
-                      <option value="Electrical Work">Electrical Work</option>
-                      <option value="Emergency Repair">Emergency Repair</option>
-                      <option value="Full Checkup">Full Checkup</option>
+                      {serviceLocation === 'workshop' ? (
+                        <>
+                          <option value="General Servicing">General Servicing</option>
+                          <option value="Basic Service">Basic Service</option>
+                          <option value="Vehicle Inspection">Vehicle Inspection</option>
+                          <option value="Engine Repair">Engine Repair</option>
+                          <option value="Brake Fix">Brake Fix</option>
+                          <option value="Oil Change">Oil Change</option>
+                          <option value="Electrical Work">Electrical Work</option>
+                          <option value="Emergency Repair">Emergency Repair</option>
+                          <option value="Full Checkup">Full Checkup</option>
+                        </>
+                      ) : (
+                        <>
+                          <option value="General Servicing">General Servicing</option>
+                          <option value="Basic Service">Basic Service</option>
+                          <option value="Vehicle Inspection">Vehicle Inspection</option>
+                        </>
+                      )}
                     </select>
                   </div>
                 </div>
