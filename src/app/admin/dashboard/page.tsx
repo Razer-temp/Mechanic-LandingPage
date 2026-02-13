@@ -15,7 +15,7 @@ import {
     X,
     Settings,
     Users,
-    Truck,
+    Bike,
     BarChart3,
     ChevronRight
 } from 'lucide-react';
@@ -205,8 +205,8 @@ export default function AdminDashboard() {
                         activeTab === 'fleet' ? "bg-[#fbbf241a] text-[#fbbf24] shadow-sm" : "text-[#55556a] hover:text-white hover:bg-white/5"
                     )}
                 >
-                    <Truck size={20} className={activeTab === 'fleet' ? "text-[#fbbf24]" : ""} />
-                    <span>Fleet Ops</span>
+                    <Bike size={20} className={activeTab === 'fleet' ? "text-[#fbbf24]" : ""} />
+                    <span>Garage Hub</span>
                 </button>
 
                 <div className="h-4"></div>

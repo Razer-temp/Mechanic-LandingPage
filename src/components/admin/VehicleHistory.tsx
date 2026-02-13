@@ -169,7 +169,7 @@ export default function VehicleHistory({ bookings, serviceHistory, onHistoryChan
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                 <h3 className="text-xl font-black text-white uppercase tracking-[0.3em] flex items-center gap-4">
                     <div className="w-2 h-8 bg-[#fbbf24] rounded-full shadow-[0_0_20px_rgba(251,191,36,0.4)]"></div>
-                    Fleet Registry
+                    Garage Hub
                 </h3>
                 <button
                     onClick={() => setShowAddEntry(!showAddEntry)}
