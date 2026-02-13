@@ -42,6 +42,19 @@ export default function AdminDashboard() {
     const [bookingFilter, setBookingFilter] = useState<'all' | 'pending' | 'confirmed' | 'completed' | 'cancelled'>('all');
     const [accentColor, setAccentColor] = useState('#00c8ff');
 
+    // Debug State
+    const [debugInfo, setDebugInfo] = useState<{
+        envUrl: boolean;
+        envKey: boolean;
+        fetchError: string | null;
+        totalBookings: number | null;
+    }>({
+        envUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+        envKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+        fetchError: null,
+        totalBookings: null
+    });
+
     const notificationRef = useRef<HTMLDivElement>(null);
     const supabase = createClient();
 
@@ -90,10 +103,20 @@ export default function AdminDashboard() {
 
             if (bData) setBookings(bData);
             if (cData) setChats(cData);
-        } catch (err) {
+
+            setDebugInfo(prev => ({
+                ...prev,
+                fetchError: null,
+                totalBookings: bData ? bData.length : 0
+            }));
+
+        } catch (err: any) {
             console.error('Error fetching data:', err);
-            // Optional: Add a toast notification here if you have a toast component
-            // alert('Failed to fetch data. Database might be offline or empty.');
+            setDebugInfo(prev => ({
+                ...prev,
+                fetchError: err?.message || 'Unknown network error',
+                totalBookings: 0
+            }));
         } finally {
             setLoading(false);
         }
@@ -406,12 +429,25 @@ export default function AdminDashboard() {
                                     </div>
                                 </div>
 
-                                {loading ? (
-                                    <div className="flex items-center justify-center py-40">
-                                        <div className="w-16 h-16 border-4 border-[#00c8ff1a] border-t-[#00c8ff] rounded-full animate-spin shadow-2xl"></div>
+                                <div className="flex items-center justify-center py-40">
+                                    <div className="w-16 h-16 border-4 border-[#00c8ff1a] border-t-[#00c8ff] rounded-full animate-spin shadow-2xl"></div>
+                                </div>
+                                ) : bookings.length === 0 ? (
+                                <div className="p-8 bg-[#ff2d551a] border border-[#ff2d5533] rounded-3xl space-y-4">
+                                    <h4 className="text-xl font-black text-[#ff2d55] uppercase tracking-widest flex items-center gap-3">
+                                        <ShieldCheck size={24} />
+                                        System Diagnostics
+                                    </h4>
+                                    <div className="space-y-2 font-mono text-sm text-[#eeeef2]">
+                                        <p className={debugInfo.envUrl ? "text-[#34d399]" : "text-[#ff2d55]"}>• Supabase URL: {debugInfo.envUrl ? "CONNECTED" : "MISSING (Check Vercel Env Vars)"}</p>
+                                        <p className={debugInfo.envKey ? "text-[#34d399]" : "text-[#ff2d55]"}>• Supabase Key: {debugInfo.envKey ? "CONNECTED" : "MISSING (Check Vercel Env Vars)"}</p>
+                                        <p className={debugInfo.fetchError ? "text-[#ff2d55]" : "text-[#34d399]"}>• Connection Status: {debugInfo.fetchError ? `FAILED: ${debugInfo.fetchError}` : "ONLINE"}</p>
+                                        <p className="text-[#8888a0]">• Records Retrieved: {debugInfo.totalBookings ?? "Loading..."}</p>
                                     </div>
+                                    <p className="text-xs text-[#8888a0] font-bold">If connection is ONLINE but records are 0, please run the SUPABASE_MASTER_SETUP.sql script.</p>
+                                </div>
                                 ) : (
-                                    <BookingsList bookings={filteredBookings} onUpdate={fetchData} />
+                                <BookingsList bookings={filteredBookings} onUpdate={fetchData} />
                                 )}
                             </div>
                         </>
@@ -444,25 +480,20 @@ export default function AdminDashboard() {
                     {activeTab === 'settings' && <SettingsPanel />}
 
                     {(activeTab === 'fleet' || activeTab === 'reports') && (
-                        <div className="flex-1 flex flex-col items-center justify-center py-40 space-y-8 animate-admin-in opacity-50 grayscale">
-                            <div className="w-24 h-24 bg-white/[0.03] border-4 border-dashed border-white/5 rounded-full flex items-center justify-center">
-                                {activeTab === 'fleet' ? <Truck size={40} className="text-[#55556a]" /> : <BarChart3 size={40} className="text-[#55556a]" />}
+                        <p className="text-[10px] text-[#55556a] font-black uppercase tracking-widest italic">Node deployment in progress • Available in rDX v1.5</p>
                             </div>
-                            <div className="text-center space-y-2">
-                                <h4 className="text-xl font-black text-white uppercase tracking-[0.4em]">Protocol Locked</h4>
-                                <p className="text-[10px] text-[#55556a] font-black uppercase tracking-widest italic">Node deployment in progress • Available in rDX v1.5</p>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </main>
+        </div>
+    )
+}
+                </div >
+            </main >
 
-            <style jsx global>{`
+    <style jsx global>{`
         .custom-scrollbar-minimal::-webkit-scrollbar { width: 5px; height: 5px; }
         .custom-scrollbar-minimal::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar-minimal::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.03); border-radius: 20px; }
         .custom-scrollbar-minimal::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.08); }
       `}</style>
-        </div>
+        </div >
     );
 }
