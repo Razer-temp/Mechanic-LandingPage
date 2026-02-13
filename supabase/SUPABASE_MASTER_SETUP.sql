@@ -1,15 +1,15 @@
 -- ======================================
--- SMARTBIKE PRO: MASTER DATABASE SETUP
+-- SMARTBIKE PRO: NUCLEAR RESET SCRIPT
 -- RUN THIS IN SUPABASE SQL EDITOR
 -- ======================================
 
 -- 1. CLEANUP (Drop existing tables to prevent conflicts)
-DROP TABLE IF EXISTS public.chat_messages;
-DROP TABLE IF EXISTS public.chat_sessions;
-DROP TABLE IF EXISTS public.bookings;
-DROP TABLE IF EXISTS public.services;
-DROP TABLE IF EXISTS public.admin_settings;
-DROP TABLE IF EXISTS public.profiles;
+DROP TABLE IF EXISTS public.chat_messages CASCADE;
+DROP TABLE IF EXISTS public.chat_sessions CASCADE;
+DROP TABLE IF EXISTS public.bookings CASCADE;
+DROP TABLE IF EXISTS public.services CASCADE;
+DROP TABLE IF EXISTS public.admin_settings CASCADE;
+DROP TABLE IF EXISTS public.profiles CASCADE;
 
 -- 2. TABLES
 CREATE TABLE public.profiles (
@@ -71,7 +71,7 @@ CREATE TABLE public.admin_settings (
     updated_at timestamptz default now()
 );
 
--- 3. RLS
+-- 3. RLS (Row Level Security)
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.services ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.bookings ENABLE ROW LEVEL SECURITY;
@@ -79,17 +79,22 @@ ALTER TABLE public.chat_sessions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.chat_messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.admin_settings ENABLE ROW LEVEL SECURITY;
 
--- 4. POLICIES
--- Public access for prototype (Landing Page & Admin Dashboard)
-CREATE POLICY "Public full access" ON public.bookings FOR ALL USING (true);
-CREATE POLICY "Public full access" ON public.chat_sessions FOR ALL USING (true);
-CREATE POLICY "Public full access" ON public.chat_messages FOR ALL USING (true);
-CREATE POLICY "Public full access" ON public.admin_settings FOR ALL USING (true);
-CREATE POLICY "Public read services" ON public.services FOR SELECT USING (true);
-CREATE POLICY "Admin manage services" ON public.services FOR ALL USING (true);
-CREATE POLICY "Anyone can view profiles" ON public.profiles FOR SELECT USING (true);
+-- 4. POLICIES (PERMISSIVE FOR PROTOTYPE)
+-- Allow mostly everything for anon/authenticated users to ensure dashboard works
+CREATE POLICY "Public full access" ON public.bookings FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Public full access" ON public.chat_sessions FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Public full access" ON public.chat_messages FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Public full access" ON public.admin_settings FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Public full access" ON public.services FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Public full access" ON public.profiles FOR ALL USING (true) WITH CHECK (true);
 
--- 5. SEED DATA
+-- 5. GRANTS (CRITICAL FOR "PERMISSION DENIED" ERRORS)
+GRANT USAGE ON SCHEMA public TO postgres, anon, authenticated, service_role;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+GRANT ALL ON ALL ROUTINES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+
+-- 6. SEED DATA (FORCE INSERT)
 -- Initialize Admin Settings
 INSERT INTO public.admin_settings (key, value) VALUES
 ('passcode', '"8888"'),
@@ -100,9 +105,10 @@ INSERT INTO public.admin_settings (key, value) VALUES
     "reminder": "Hello {name}, just a reminder about your appointment today for {bike}.",
     "cancellation": "Hello {name}, we have received your request to cancel the booking for {bike}. We hope to see you again soon!"
 }')
-ON CONFLICT (key) DO NOTHING;
+ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
 
 -- Seed Services
+DELETE FROM public.services; -- Clear first
 INSERT INTO public.services (name, description, base_price, category, icon) VALUES
 ('Engine Repair', 'Complete engine overhaul, timing chain, piston repair.', 1500, 'repair', '🔩'),
 ('Full Servicing', 'Oil change, filter replacement, chain adjustment.', 799, 'servicing', '⚙️'),
@@ -111,13 +117,14 @@ INSERT INTO public.services (name, description, base_price, category, icon) VALU
 ('Emergency Repair', 'Roadside assistance and breakdown support.', 299, 'emergency', '🚨'),
 ('Electrical Work', 'Wiring, headlight, battery, ECU diagnostics.', 400, 'repair', '⚡');
 
--- Seed 3 Test Bookings (So dashboard isn't empty)
+-- Seed Test Bookings
+DELETE FROM public.bookings; -- Clear first
 INSERT INTO public.bookings (name, phone, bike_model, service_type, service_location, preferred_date, preferred_time, status, metadata) VALUES
 ('Arjun Sharma', '9811530701', 'Royal Enfield Classic 350', 'Engine Repair', 'workshop', CURRENT_DATE, 'morning', 'confirmed', '{"device": "Desktop"}'),
 ('Sneha Reddy', '9811530702', 'Honda Activa 6G', 'Full Servicing', 'doorstep', CURRENT_DATE, 'afternoon', 'pending', '{"device": "Mobile"}'),
 ('Rahul Verma', '9811530703', 'KTM Duke 200', 'Brake Fix', 'workshop', CURRENT_DATE, 'evening', 'completed', '{"device": "Desktop"}');
 
--- 6. TRIGGERS (Auto-update updated_at)
+-- 7. TRIGGERS (Auto-update updated_at)
 CREATE OR REPLACE FUNCTION public.handle_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -126,10 +133,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS set_updated_at_admin_settings ON public.admin_settings;
 CREATE TRIGGER set_updated_at_admin_settings BEFORE UPDATE ON public.admin_settings FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
 
--- 7. EXPLICIT GRANTS (Fix for "No Data" issues)
-GRANT USAGE ON SCHEMA public TO postgres, anon, authenticated, service_role;
-GRANT ALL ON ALL TABLES IN SCHEMA public TO postgres, anon, authenticated, service_role;
-GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO postgres, anon, authenticated, service_role;
-GRANT ALL ON ALL ROUTINES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+-- Verification Output
+SELECT count(*) as service_count FROM public.services;
+SELECT count(*) as booking_count FROM public.bookings;
