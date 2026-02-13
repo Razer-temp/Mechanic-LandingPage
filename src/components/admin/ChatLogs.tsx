@@ -36,6 +36,11 @@ export default function ChatLogs({ sessions }: ChatLogsProps) {
                                     <div className="flex items-center gap-2 mt-1">
                                         <Hash size={12} className="text-[var(--admin-accent)]" />
                                         <p className="text-[10px] text-[#8888a0] font-black uppercase tracking-widest">{session.id.slice(0, 16)}</p>
+                                        {session.metadata?.device && (
+                                            <span className="text-[8px] bg-white/5 px-2 py-0.5 rounded text-[#55556a]">
+                                                {session.metadata.device}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +74,7 @@ export default function ChatLogs({ sessions }: ChatLogsProps) {
                                         {msg.role === 'user' ? <User size={18} /> : <Bot size={18} />}
                                     </div>
                                     <div className={clsx(
-                                        "p-6 rounded-[1.8rem] text-sm font-bold leading-relaxed shadow-sm",
+                                        "p-6 rounded-[1.8rem] text-sm font-bold leading-relaxed shadow-sm whitespace-pre-wrap break-words",
                                         msg.role === 'user'
                                             ? "bg-[rgba(var(--admin-accent-rgb),0.05)] text-white rounded-tr-none border border-[rgba(var(--admin-accent-rgb),0.1)]"
                                             : "bg-[#10101e] text-[#eeeef2] rounded-tl-none border border-white/5"

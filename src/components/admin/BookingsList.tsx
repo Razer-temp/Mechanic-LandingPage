@@ -153,11 +153,20 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
                                 </div>
                                 <div>
                                     <h4 className="text-xl xl:text-2xl font-black text-white tracking-tight">{b.name}</h4>
-                                    <div className="flex items-center gap-3 text-[#8888a0] mt-1 font-bold text-sm">
-                                        <Phone size={14} className="text-[var(--admin-accent)]" />
-                                        {b.phone}
+                                    <div className="flex flex-wrap items-center gap-3 text-[#8888a0] mt-1 font-bold text-sm">
+                                        <div className="flex items-center gap-1.5">
+                                            <Phone size={14} className="text-[var(--admin-accent)]" />
+                                            {b.phone}
+                                        </div>
                                         <span className="text-[#333] hidden sm:inline">•</span>
-                                        <span className="hidden sm:inline text-[10px] bg-white/5 px-2 py-0.5 rounded border border-white/5 uppercase tracking-tighter">ID: {b.id.slice(0, 8)}</span>
+                                        <div className="flex items-center gap-1.5 text-[10px] bg-white/5 px-2 py-0.5 rounded border border-white/5 uppercase tracking-tighter">
+                                            <span>ID: {b.id.slice(0, 8)}</span>
+                                        </div>
+                                        {b.metadata?.device && (
+                                            <div className="flex items-center gap-1.5 text-[9px] bg-[var(--admin-accent)] bg-opacity-5 text-[var(--admin-accent)] px-2 py-0.5 rounded border border-[var(--admin-accent)] border-opacity-10 uppercase font-black tracking-widest">
+                                                {b.metadata.device === 'Mobile' ? '📱 Mobile' : '💻 Desktop'}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

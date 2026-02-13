@@ -155,6 +155,13 @@ export default function LandingPage() {
     // Save to Supabase
     const saveBooking = async () => {
       try {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const deviceInfo = {
+          device: isMobile ? 'Mobile' : 'Desktop',
+          os: navigator.platform,
+          userAgent: navigator.userAgent
+        };
+
         await supabase.from('bookings').insert({
           name,
           phone,
@@ -165,7 +172,8 @@ export default function LandingPage() {
           preferred_date: (formData.get('bookDate') as string),
           preferred_time: (formData.get('bookTime') as string),
           notes: (formData.get('bookNotes') as string),
-          status: 'pending'
+          status: 'pending',
+          metadata: deviceInfo
         });
       } catch (err) {
         console.error('Error saving booking:', err);
@@ -201,7 +209,17 @@ export default function LandingPage() {
     // Create session if it doesn't exist
     if (!currentSessionId) {
       try {
-        const { data, error } = await supabase.from('chat_sessions').insert({ customer_name: 'Guest' }).select().single();
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const deviceInfo = {
+          device: isMobile ? 'Mobile' : 'Desktop',
+          userAgent: navigator.userAgent
+        };
+
+        const { data, error } = await supabase.from('chat_sessions').insert({
+          customer_name: 'Guest',
+          metadata: deviceInfo
+        }).select().single();
+
         if (data && !error) {
           currentSessionId = data.id;
           setChatSessionId(data.id);
@@ -238,7 +256,12 @@ export default function LandingPage() {
           reply = (
             <>
               <strong>{result.title}</strong><br /><br />
-              Possible causes:<br />• {result.causes.join('<br/>• ')}<br /><br />
+              Possible causes:<br />
+              {result.causes.map((c, i) => (
+                <React.Fragment key={i}>
+                  • {c}<br />
+                </React.Fragment>
+              ))}<br />
               ⚠️ Urgency: <strong>{result.urgency.toUpperCase()}</strong><br />
               💰 Est. Cost: <strong>{result.cost}</strong><br /><br />
               💡 {result.tip}<br /><br />
