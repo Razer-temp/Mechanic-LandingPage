@@ -13,7 +13,8 @@ import {
     ChevronDown,
     Clock,
     User,
-    MapPin
+    MapPin,
+    Trash2
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import clsx from 'clsx';
@@ -150,6 +151,18 @@ export default function VehicleHistory({ bookings, serviceHistory, onHistoryChan
         setSaving(false);
     };
 
+    const handleDeleteEntry = async (id: string) => {
+        if (!confirm('Are you sure you want to delete this history record?')) return;
+        try {
+            const { error } = await supabase.from('service_history').delete().eq('id', id);
+            if (error) throw error;
+            onHistoryChange();
+        } catch (err) {
+            console.error('Error deleting entry:', err);
+            alert('Failed to delete entry');
+        }
+    };
+
     return (
         <div className="space-y-10 animate-admin-in">
             {/* Header */}
@@ -272,7 +285,18 @@ export default function VehicleHistory({ bookings, serviceHistory, onHistoryChan
                                             <div className="flex-1 pb-6">
                                                 <div className="flex items-center justify-between mb-1">
                                                     <p className="text-sm font-black text-white">{entry.service_type}</p>
-                                                    <span className="text-[#34d399] text-sm font-black">₹{(entry.cost || 0).toLocaleString('en-IN')}</span>
+                                                    <div className="flex items-center gap-3">
+                                                        <span className="text-[#34d399] text-sm font-black">₹{(entry.cost || 0).toLocaleString('en-IN')}</span>
+                                                        {entry.type === 'history' && (
+                                                            <button
+                                                                onClick={() => handleDeleteEntry(entry.id)}
+                                                                className="text-[#55556a] hover:text-[#ff2d55] transition-colors"
+                                                                title="Delete Entry"
+                                                            >
+                                                                <Trash2 size={14} />
+                                                            </button>
+                                                        )}
+                                                    </div>
                                                 </div>
                                                 <div className="flex flex-wrap items-center gap-3 text-[9px] font-bold text-[#55556a] uppercase tracking-widest">
                                                     <span className="flex items-center gap-1"><Calendar size={10} /> {new Date(entry.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
