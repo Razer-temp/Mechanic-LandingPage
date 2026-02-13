@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Lock, ArrowRight, ShieldCheck } from 'lucide-react';
+import { createClient } from '@/lib/supabase/client';
 
 export default function AdminLoginPage() {
     const [passcode, setPasscode] = useState('');
@@ -22,18 +23,34 @@ export default function AdminLoginPage() {
         setIsSubmitting(true);
         setError('');
 
-        // Get the custom passcode from settings or default to 8888
-        const storedPasscode = localStorage.getItem('admin_passcode') || '8888';
+        const supabase = createClient();
 
-        // Premium simulated delay
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        try {
+            // Fetch latest passcode from Supabase for cross-device sync
+            const { data, error: fetchError } = await supabase
+                .from('admin_settings')
+                .select('value')
+                .eq('key', 'passcode')
+                .single();
 
-        if (passcode === storedPasscode) {
-            sessionStorage.setItem('admin_auth', 'true');
-            router.push('/admin/dashboard');
-        } else {
-            setError('Neural Key Mismatch. Please re-authenticate.');
-            setPasscode('');
+            // Fallback to localStorage or default
+            const storedPasscode = data?.value || localStorage.getItem('admin_passcode') || '8888';
+
+            // Premium simulated delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            if (passcode === storedPasscode) {
+                // Sync to localStorage for other components that might use it as fallback
+                localStorage.setItem('admin_passcode', storedPasscode);
+                sessionStorage.setItem('admin_auth', 'true');
+                router.push('/admin/dashboard');
+            } else {
+                setError('Neural Key Mismatch. Please re-authenticate.');
+                setPasscode('');
+            }
+        } catch (err) {
+            console.error('Login error:', err);
+            setError('Connection failure. Protocol aborted.');
         }
         setIsSubmitting(false);
     };

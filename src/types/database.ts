@@ -133,6 +133,24 @@ export interface Database {
                     }
                 ];
             };
+            admin_settings: {
+                Row: {
+                    key: string;
+                    value: Json;
+                    updated_at: string;
+                };
+                Insert: {
+                    key: string;
+                    value: Json;
+                    updated_at?: string;
+                };
+                Update: {
+                    key?: string;
+                    value?: Json;
+                    updated_at?: string;
+                };
+                Relationships: [];
+            };
         };
         Views: {
             [_ in never]: never;
@@ -153,3 +171,4 @@ export type Profile = Database['public']['Tables']['profiles']['Row'];
 export type Booking = Database['public']['Tables']['bookings']['Row'];
 export type ChatSession = Database['public']['Tables']['chat_sessions']['Row'];
 export type ChatMessage = Database['public']['Tables']['chat_messages']['Row'];
+export type AdminSetting = Database['public']['Tables']['admin_settings']['Row'];

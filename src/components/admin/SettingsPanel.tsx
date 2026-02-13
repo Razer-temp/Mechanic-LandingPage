@@ -25,63 +25,114 @@ import {
     Monitor,
     MessageSquare
 } from 'lucide-react';
+import { createClient } from '@/lib/supabase/client';
 import clsx from 'clsx';
 
 type SettingsSection = 'security' | 'aesthetics' | 'comms' | 'profile' | 'system';
 
 export default function SettingsPanel() {
+    const supabase = createClient();
     const [activeSection, setActiveSection] = useState<SettingsSection>('security');
     const [passcode, setPasscode] = useState('');
     const [showPasscode, setShowPasscode] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     // Theme & Comms State
-    const [activeTheme, setActiveTheme] = useState(() => {
-        if (typeof window !== 'undefined') {
-            return localStorage.getItem('admin_theme_color') || '#00c8ff';
-        }
-        return '#00c8ff';
+    const [activeTheme, setActiveTheme] = useState('#00c8ff');
+    const [waTemplates, setWaTemplates] = useState({
+        confirmation: "Hello {name}, your booking for {bike} is confirmed! We'll see you at {time}.",
+        completion: "Hi {name}, your {bike} is ready for pickup! Total: {revenue}.",
+        reminder: "Hello {name}, just a reminder about your appointment today for {bike}.",
+        cancellation: "Hello {name}, we have received your request to cancel the booking for {bike}. We hope to see you again soon!"
     });
 
-    const [waTemplates, setWaTemplates] = useState(() => {
-        if (typeof window !== 'undefined') {
-            const saved = localStorage.getItem('admin_whatsapp_templates');
-            return saved ? JSON.parse(saved) : {
-                confirmation: "Hello {name}, your booking for {bike} is confirmed! We'll see you at {time}.",
-                completion: "Hi {name}, your {bike} is ready for pickup! Total: {revenue}.",
-                reminder: "Hello {name}, just a reminder about your appointment today for {bike}."
-            };
-        }
-        return {
-            confirmation: "Hello {name}, your booking for {bike} is confirmed!",
-            completion: "Hi {name}, your {bike} is ready!",
-            reminder: "Hello {name}, reminder for your appointment."
-        };
-    });
+    useEffect(() => {
+        fetchSettings();
+    }, []);
 
-    const handleUpdatePasscode = () => {
+    const fetchSettings = async () => {
+        setLoading(true);
+        try {
+            const { data, error } = await supabase.from('admin_settings').select('*');
+            if (error) throw error;
+
+            data?.forEach((setting: any) => {
+                if (setting.key === 'passcode') {
+                    localStorage.setItem('admin_passcode', setting.value);
+                }
+                if (setting.key === 'theme_color') {
+                    setActiveTheme(setting.value);
+                    localStorage.setItem('admin_theme_color', setting.value);
+                    document.documentElement.style.setProperty('--admin-accent', setting.value);
+                }
+                if (setting.key === 'whatsapp_templates') {
+                    setWaTemplates(setting.value);
+                    localStorage.setItem('admin_whatsapp_templates', JSON.stringify(setting.value));
+                }
+            });
+        } catch (err) {
+            console.error('Error fetching settings:', err);
+        }
+        setLoading(false);
+    };
+
+    const handleUpdatePasscode = async () => {
         if (passcode.length !== 4) {
             alert('Security Protocol Error: Passcode must be exactly 4 digits.');
             return;
         }
         setSaving(true);
-        setTimeout(() => {
+        try {
+            const { error } = await supabase
+                .from('admin_settings')
+                .upsert({ key: 'passcode', value: passcode });
+
+            if (error) throw error;
+
             localStorage.setItem('admin_passcode', passcode);
             setPasscode('');
-            setSaving(false);
-            alert('Security Key updated successfully. New protocols deployed.');
-        }, 1200);
+            alert('Security Key updated successfully. New protocols deployed across all nodes.');
+        } catch (err) {
+            console.error('Error saving passcode:', err);
+            alert('Failed to sync security key.');
+        }
+        setSaving(false);
     };
 
-    const handleUpdateTheme = (color: string) => {
+    const handleUpdateTheme = async (color: string) => {
         setActiveTheme(color);
-        localStorage.setItem('admin_theme_color', color);
-        alert('Aesthetic Protocol Synchronized. System accent updated.');
+        try {
+            const { error } = await supabase
+                .from('admin_settings')
+                .upsert({ key: 'theme_color', value: color });
+
+            if (error) throw error;
+
+            localStorage.setItem('admin_theme_color', color);
+            document.documentElement.style.setProperty('--admin-accent', color);
+            alert('Aesthetic Protocol Synchronized. System accent updated globally.');
+        } catch (err) {
+            console.error('Error saving theme:', err);
+        }
     };
 
-    const handleSaveTemplates = () => {
-        localStorage.setItem('admin_whatsapp_templates', JSON.stringify(waTemplates));
-        alert('Communication Protocols Updated.');
+    const handleSaveTemplates = async () => {
+        setSaving(true);
+        try {
+            const { error } = await supabase
+                .from('admin_settings')
+                .upsert({ key: 'whatsapp_templates', value: waTemplates });
+
+            if (error) throw error;
+
+            localStorage.setItem('admin_whatsapp_templates', JSON.stringify(waTemplates));
+            alert('Communication Protocols Updated across all platforms.');
+        } catch (err) {
+            console.error('Error saving templates:', err);
+            alert('Failed to update communication protocols.');
+        }
+        setSaving(false);
     };
 
     const handleFactoryReset = () => {
@@ -135,7 +186,6 @@ export default function SettingsPanel() {
                 </div>
             </div>
 
-            {/* Sections */}
             <div className="min-h-[500px]">
                 {activeSection === 'security' && (
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 animate-admin-in">

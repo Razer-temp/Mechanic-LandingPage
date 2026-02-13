@@ -38,11 +38,21 @@ ALTER TABLE public.chat_sessions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.chat_messages ENABLE ROW LEVEL SECURITY;
 
 -- Allow anonymous inserts for the landing page
+DROP POLICY IF EXISTS "Allow anonymous inserts to bookings" ON public.bookings;
 CREATE POLICY "Allow anonymous inserts to bookings" ON public.bookings FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow anonymous inserts to chat_sessions" ON public.chat_sessions;
 CREATE POLICY "Allow anonymous inserts to chat_sessions" ON public.chat_sessions FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow anonymous inserts to chat_messages" ON public.chat_messages;
 CREATE POLICY "Allow anonymous inserts to chat_messages" ON public.chat_messages FOR INSERT WITH CHECK (true);
 
 -- Allow admins (simulated with a service role check or similar) to read
+DROP POLICY IF EXISTS "Allow all access to admins" ON public.bookings;
 CREATE POLICY "Allow all access to admins" ON public.bookings FOR ALL USING (true);
+
+DROP POLICY IF EXISTS "Allow all access to admins" ON public.chat_sessions;
 CREATE POLICY "Allow all access to admins" ON public.chat_sessions FOR ALL USING (true);
+
+DROP POLICY IF EXISTS "Allow all access to admins" ON public.chat_messages;
 CREATE POLICY "Allow all access to admins" ON public.chat_messages FOR ALL USING (true);

@@ -47,31 +47,31 @@ export default function AdminDashboard() {
 
     // Sync Global Theme Accent
     useEffect(() => {
-        const color = localStorage.getItem('admin_theme_color') || '#00c8ff';
-        setAccentColor(color);
-        document.documentElement.style.setProperty('--admin-accent', color);
-    }, [activeTab]); // Refresh accent on tab changes to ensure reactivity
+        const fetchTheme = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('admin_settings')
+                    .select('value')
+                    .eq('key', 'theme_color')
+                    .single();
 
-    // Auth Check with dynamic passcode
-    useEffect(() => {
-        const isAdmin = sessionStorage.getItem('admin_auth');
-        if (isAdmin !== 'true') {
-            router.push('/admin/login');
-        } else {
-            fetchData();
-        }
-    }, [router]);
-
-    // Handle clicks outside of notification panel
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
-                setShowNotifications(false);
+                if (data?.value) {
+                    const color = data.value as string;
+                    setAccentColor(color);
+                    localStorage.setItem('admin_theme_color', color);
+                    document.documentElement.style.setProperty('--admin-accent', color);
+                } else {
+                    // Fallback
+                    const color = localStorage.getItem('admin_theme_color') || '#00c8ff';
+                    setAccentColor(color);
+                    document.documentElement.style.setProperty('--admin-accent', color);
+                }
+            } catch (err) {
+                console.error('Error fetching theme:', err);
             }
-        }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+        };
+        fetchTheme();
+    }, [activeTab]); // Refresh accent on tab changes to ensure reactivity
 
     const fetchData = useCallback(async () => {
         setLoading(true);
@@ -89,10 +89,20 @@ export default function AdminDashboard() {
             if (bData) setBookings(bData);
             if (cData) setChats(cData);
         } catch (err) {
-            console.error('Error fetching admin data:', err);
+            console.error('Error fetching data:', err);
         }
         setLoading(false);
     }, [supabase]);
+
+    // Auth Check
+    useEffect(() => {
+        const isAdmin = sessionStorage.getItem('admin_auth');
+        if (isAdmin !== 'true') {
+            router.push('/admin/login');
+        } else {
+            fetchData();
+        }
+    }, [router, fetchData]);
 
     const handleLogout = () => {
         sessionStorage.removeItem('admin_auth');

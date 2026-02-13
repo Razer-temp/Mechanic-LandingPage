@@ -45,12 +45,14 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
         const templates = savedTemplates ? JSON.parse(savedTemplates) : {
             confirmation: "Hello {name}, your booking for {bike} is confirmed! We'll see you at {time}.",
             completion: "Hi {name}, your {bike} is ready for pickup! Total: {revenue}.",
-            reminder: "Hello {name}, just a reminder about your appointment today for {bike}."
+            reminder: "Hello {name}, just a reminder about your appointment today for {bike}.",
+            cancellation: "Hello {name}, we have received your request to cancel the booking for {bike}. We hope to see you again soon!"
         };
 
         // Determine which template to use based on status
         let template = templates.confirmation;
         if (booking.status === 'completed') template = templates.completion;
+        if (booking.status === 'cancelled') template = templates.cancellation;
 
         // Calculate estimated revenue for the tag
         const service = booking.service_type.toLowerCase();
