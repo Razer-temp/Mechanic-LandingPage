@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageSquare, User, Bot, Calendar, ChevronRight, Hash } from 'lucide-react';
+import { MessageSquare, User, Bot, Calendar, ChevronRight, Hash, RotateCcw } from 'lucide-react';
 import clsx from 'clsx';
 
 interface ChatLogsProps {
