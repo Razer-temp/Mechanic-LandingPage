@@ -13,7 +13,8 @@ import {
     ShieldCheck,
     Bell,
     X,
-    Settings
+    Settings,
+    Users
 } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -21,10 +22,14 @@ import clsx from 'clsx';
 import DashboardStats from '@/components/admin/DashboardStats';
 import BookingsList from '@/components/admin/BookingsList';
 import ChatLogs from '@/components/admin/ChatLogs';
+import CustomersList from '@/components/admin/CustomersList';
+import SettingsPanel from '@/components/admin/SettingsPanel';
+
+type AdminTab = 'bookings' | 'chats' | 'customers' | 'settings';
 
 export default function AdminDashboard() {
     const router = useRouter();
-    const [activeTab, setActiveTab] = useState<'bookings' | 'chats'>('bookings');
+    const [activeTab, setActiveTab] = useState<AdminTab>('bookings');
     const [bookings, setBookings] = useState<any[]>([]);
     const [chats, setChats] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -126,6 +131,17 @@ export default function AdminDashboard() {
                     </button>
 
                     <button
+                        onClick={() => setActiveTab('customers')}
+                        className={clsx(
+                            "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
+                            activeTab === 'customers' ? "bg-[#34d3991a] text-[#34d399] shadow-sm shadow-[#34d3990a]" : "text-[#55556a] hover:text-white hover:bg-white/5"
+                        )}
+                    >
+                        <Users size={20} className={clsx("transition-transform group-hover:scale-110", activeTab === 'customers' ? "text-[#34d399]" : "")} />
+                        <span>Customer Base</span>
+                    </button>
+
+                    <button
                         onClick={() => setActiveTab('chats')}
                         className={clsx(
                             "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
@@ -133,12 +149,18 @@ export default function AdminDashboard() {
                         )}
                     >
                         <MessageSquare size={20} className={clsx("transition-transform group-hover:scale-110", activeTab === 'chats' ? "text-[#a78bfa]" : "")} />
-                        <span>AI Interaction</span>
+                        <span>Intelligence Logs</span>
                     </button>
                 </nav>
 
                 <div className="pt-8 border-t border-white/5 space-y-4">
-                    <button className="w-full flex items-center gap-4 px-6 py-3 rounded-2xl font-bold text-[#55556a] hover:text-white hover:bg-white/5 transition-all">
+                    <button
+                        onClick={() => setActiveTab('settings')}
+                        className={clsx(
+                            "w-full flex items-center gap-4 px-6 py-3 rounded-2xl font-bold transition-all",
+                            activeTab === 'settings' ? "bg-white/10 text-white" : "text-[#55556a] hover:text-white hover:bg-white/5"
+                        )}
+                    >
                         <Settings size={20} />
                         <span>Settings</span>
                     </button>
@@ -157,12 +179,14 @@ export default function AdminDashboard() {
                 {/* Top Navbar */}
                 <header className="sticky top-0 bg-[#050508]/90 backdrop-blur-2xl border-b border-white/5 px-6 xl:px-12 py-5 flex items-center justify-between z-30">
                     <div className="flex items-center gap-4">
-                        <h2 className="text-xl xl:text-2xl font-black text-white tracking-tight">
-                            {activeTab === 'bookings' ? 'System Bookings' : 'Intelligence Logs'}
+                        <h2 className="text-xl xl:text-2xl font-black text-white tracking-tight capitalize">
+                            {activeTab === 'bookings' ? 'Deployment Queue' :
+                                activeTab === 'chats' ? 'Intelligence Logs' :
+                                    activeTab === 'customers' ? 'Market Insights' : 'System Configuration'}
                         </h2>
                         <div className="h-6 w-px bg-white/10 mx-2 hidden sm:block"></div>
                         <p className="text-[#8888a0] text-sm font-bold hidden sm:block">
-                            {loading ? 'SYNCING...' : `${activeTab === 'bookings' ? bookings.length : chats.length} RECORDS`}
+                            {loading ? 'SYNCING...' : `OPERATIONAL`}
                         </p>
                     </div>
 
@@ -171,7 +195,7 @@ export default function AdminDashboard() {
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#55556a] group-focus-within:text-[#00c8ff] transition-colors" size={18} />
                             <input
                                 type="text"
-                                placeholder={`Search ${activeTab}...`}
+                                placeholder={`Search across ${activeTab}...`}
                                 className="bg-[#0c0c16] border border-white/10 rounded-2xl py-3 pl-12 pr-6 focus:border-[#00c8ff33] focus:ring-4 focus:ring-[#00c8ff05] outline-none transition-all text-sm w-64 lg:w-96 text-white font-semibold"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -227,7 +251,7 @@ export default function AdminDashboard() {
                 </header>
 
                 {/* Content Area */}
-                <div className="px-6 xl:px-12 py-8 xl:py-12 space-y-12">
+                <div className="px-6 xl:px-12 py-8 xl:py-12 space-y-12 flex-1 overflow-y-auto">
                     {activeTab === 'bookings' && (
                         <>
                             <DashboardStats bookings={bookings} onTabChange={setActiveTab} />
@@ -236,7 +260,7 @@ export default function AdminDashboard() {
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                     <h3 className="text-lg font-black text-white uppercase tracking-widest flex items-center gap-3">
                                         <div className="w-1.5 h-6 bg-[#00c8ff] rounded-full"></div>
-                                        Deployment Queue
+                                        Active Deployment Queue
                                     </h3>
                                     <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-wider text-[#8888a0] bg-white/5 px-4 py-2 rounded-full border border-white/5">
                                         <span className="flex items-center gap-1.5"><div className="w-2 h-2 bg-[#fbbf24] rounded-full"></div> Pending</span>
@@ -261,7 +285,7 @@ export default function AdminDashboard() {
                             <div className="flex items-center justify-between">
                                 <h3 className="text-lg font-black text-white uppercase tracking-widest flex items-center gap-3">
                                     <div className="w-1.5 h-6 bg-[#a78bfa] rounded-full"></div>
-                                    Intelligence Logs
+                                    Intelligence Audit
                                 </h3>
                             </div>
 
@@ -274,6 +298,27 @@ export default function AdminDashboard() {
                             )}
                         </div>
                     )}
+
+                    {activeTab === 'customers' && (
+                        <div className="space-y-8">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-lg font-black text-white uppercase tracking-widest flex items-center gap-3">
+                                    <div className="w-1.5 h-6 bg-[#34d399] rounded-full"></div>
+                                    Primary Customer base
+                                </h3>
+                            </div>
+
+                            {loading ? (
+                                <div className="flex items-center justify-center py-40">
+                                    <div className="w-12 h-12 border-4 border-[#34d399]/20 border-t-[#34d399] rounded-full animate-spin"></div>
+                                </div>
+                            ) : (
+                                <CustomersList bookings={bookings} />
+                            )}
+                        </div>
+                    )}
+
+                    {activeTab === 'settings' && <SettingsPanel />}
                 </div>
             </main>
         </div>
