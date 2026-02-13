@@ -52,7 +52,15 @@ export interface Database {
                     preferred_time: string;
                     notes: string | null;
                     status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
+                    metadata: Json;
+                    vehicle_number: string | null;
+                    estimated_cost: number;
+                    final_cost: number;
+                    mechanic_name: string | null;
+                    started_at: string | null;
+                    completed_at: string | null;
                     created_at: string;
+                    updated_at: string;
                 };
                 Insert: {
                     id?: string;
@@ -67,6 +75,12 @@ export interface Database {
                     preferred_time: string;
                     notes?: string | null;
                     status?: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
+                    vehicle_number?: string | null;
+                    estimated_cost?: number;
+                    final_cost?: number;
+                    mechanic_name?: string | null;
+                    started_at?: string | null;
+                    completed_at?: string | null;
                     created_at?: string;
                 };
                 Update: {
@@ -81,6 +95,13 @@ export interface Database {
                     preferred_time?: string;
                     notes?: string | null;
                     status?: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
+                    metadata?: Json;
+                    vehicle_number?: string | null;
+                    estimated_cost?: number;
+                    final_cost?: number;
+                    mechanic_name?: string | null;
+                    started_at?: string | null;
+                    completed_at?: string | null;
                     created_at?: string;
                 };
                 Relationships: [];
@@ -182,6 +203,75 @@ export interface Database {
                 };
                 Relationships: [];
             };
+            daily_expenses: {
+                Row: {
+                    id: string;
+                    date: string;
+                    category: 'parts' | 'rent' | 'utilities' | 'wages' | 'tools' | 'fuel' | 'misc';
+                    description: string;
+                    amount: number;
+                    created_at: string;
+                };
+                Insert: {
+                    id?: string;
+                    date?: string;
+                    category: 'parts' | 'rent' | 'utilities' | 'wages' | 'tools' | 'fuel' | 'misc';
+                    description: string;
+                    amount: number;
+                    created_at?: string;
+                };
+                Update: {
+                    id?: string;
+                    date?: string;
+                    category?: 'parts' | 'rent' | 'utilities' | 'wages' | 'tools' | 'fuel' | 'misc';
+                    description?: string;
+                    amount?: number;
+                    created_at?: string;
+                };
+                Relationships: [];
+            };
+            service_history: {
+                Row: {
+                    id: string;
+                    vehicle_number: string;
+                    bike_model: string;
+                    customer_phone: string;
+                    customer_name: string;
+                    service_type: string;
+                    mileage_at_service: number | null;
+                    notes: string | null;
+                    cost: number;
+                    date: string;
+                    created_at: string;
+                };
+                Insert: {
+                    id?: string;
+                    vehicle_number: string;
+                    bike_model: string;
+                    customer_phone: string;
+                    customer_name: string;
+                    service_type: string;
+                    mileage_at_service?: number | null;
+                    notes?: string | null;
+                    cost?: number;
+                    date?: string;
+                    created_at?: string;
+                };
+                Update: {
+                    id?: string;
+                    vehicle_number?: string;
+                    bike_model?: string;
+                    customer_phone?: string;
+                    customer_name?: string;
+                    service_type?: string;
+                    mileage_at_service?: number | null;
+                    notes?: string | null;
+                    cost?: number;
+                    date?: string;
+                    created_at?: string;
+                };
+                Relationships: [];
+            };
         };
         Views: {
             [_ in never]: never;
@@ -203,3 +293,6 @@ export type Booking = Database['public']['Tables']['bookings']['Row'];
 export type ChatSession = Database['public']['Tables']['chat_sessions']['Row'];
 export type ChatMessage = Database['public']['Tables']['chat_messages']['Row'];
 export type AdminSetting = Database['public']['Tables']['admin_settings']['Row'];
+export type Service = Database['public']['Tables']['services']['Row'];
+export type DailyExpense = Database['public']['Tables']['daily_expenses']['Row'];
+export type ServiceHistory = Database['public']['Tables']['service_history']['Row'];

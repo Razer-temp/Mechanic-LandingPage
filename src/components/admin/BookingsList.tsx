@@ -8,11 +8,13 @@ import {
     MapPin,
     Phone,
     Calendar,
-    MoreVertical,
     Check,
-    RotateCcw,
     MessageCircle,
-    Trash2
+    Trash2,
+    Wrench,
+    IndianRupee,
+    Play,
+    Hash
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import clsx from 'clsx';
@@ -25,105 +27,107 @@ interface BookingsListProps {
 export default function BookingsList({ bookings, onUpdate }: BookingsListProps) {
     const supabase = createClient();
     const [updatingId, setUpdatingId] = useState<string | null>(null);
+    const [editingCostId, setEditingCostId] = useState<string | null>(null);
+    const [editingMechanicId, setEditingMechanicId] = useState<string | null>(null);
+    const [costInput, setCostInput] = useState('');
+    const [mechanicInput, setMechanicInput] = useState('');
 
     const updateStatus = async (id: string, status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled') => {
         setUpdatingId(id);
         try {
-            const { error } = await supabase.from('bookings').update({ status }).eq('id', id);
+            const updateData: any = { status };
+            if (status === 'in_progress') updateData.started_at = new Date().toISOString();
+            if (status === 'completed') updateData.completed_at = new Date().toISOString();
+
+            const { error } = await supabase.from('bookings').update(updateData).eq('id', id);
             if (error) throw error;
             onUpdate();
         } catch (err) {
             console.error('Error updating status:', err);
-            alert('Failed to update status. Please check your connection.');
+            alert('Failed to update status.');
         } finally {
             setUpdatingId(null);
         }
     };
 
-    const handleDeleteBooking = async (id: string, name: string) => {
-        if (!confirm(`CRITICAL: Permanently delete booking for ${name}? This will remove it from Supabase records.`)) return;
+    const handleSetFinalCost = async (id: string) => {
+        if (!costInput) return;
+        try {
+            const { error } = await supabase.from('bookings').update({ final_cost: parseFloat(costInput) }).eq('id', id);
+            if (error) throw error;
+            setEditingCostId(null);
+            setCostInput('');
+            onUpdate();
+        } catch (err) {
+            console.error('Error setting cost:', err);
+        }
+    };
 
+    const handleSetMechanic = async (id: string) => {
+        if (!mechanicInput) return;
+        try {
+            const { error } = await supabase.from('bookings').update({ mechanic_name: mechanicInput }).eq('id', id);
+            if (error) throw error;
+            setEditingMechanicId(null);
+            setMechanicInput('');
+            onUpdate();
+        } catch (err) {
+            console.error('Error setting mechanic:', err);
+        }
+    };
+
+    const handleDeleteBooking = async (id: string, name: string) => {
+        if (!confirm(`Permanently delete booking for ${name}?`)) return;
         setUpdatingId(id);
         try {
             const { error } = await supabase.from('bookings').delete().eq('id', id);
             if (error) throw error;
             onUpdate();
-            alert('Booking purged from system records.');
         } catch (err) {
             console.error('Error deleting booking:', err);
-            alert('Purge failed. Protocol connection error.');
+            alert('Delete failed.');
         } finally {
             setUpdatingId(null);
         }
     };
 
     const handleWhatsAppConfirm = async (booking: any) => {
-        // Retrieve custom templates from Supabase for real-time sync
         let templates = {
             confirmation: "Hello {name}, your booking for {bike} is confirmed! We'll see you at {time}.",
             completion: "Hi {name}, your {bike} is ready for pickup! Total: {revenue}.",
             reminder: "Hello {name}, just a reminder about your appointment today for {bike}.",
-            cancellation: "Hello {name}, we have received your request to cancel the booking for {bike}. We hope to see you again soon!"
+            cancellation: "Hello {name}, we have received your request to cancel the booking for {bike}."
         };
 
         try {
-            const { data } = await supabase
-                .from('admin_settings')
-                .select('value')
-                .eq('key', 'whatsapp_templates')
-                .single();
+            const { data } = await supabase.from('admin_settings').select('value').eq('key', 'whatsapp_templates').single();
+            if (data?.value) templates = data.value as any;
+        } catch { /* fallback */ }
 
-            if (data?.value) {
-                templates = data.value as any;
-            }
-        } catch (err) {
-            console.warn('Using fallback templates due to sync error');
-        }
-
-        // Determine which template to use based on status
         let template = templates.confirmation;
         if (booking.status === 'completed') template = templates.completion;
         if (booking.status === 'cancelled') template = templates.cancellation;
 
-        // Calculate estimated revenue for the tag
-        const service = booking.service_type.toLowerCase();
-        let estRevenue = "500";
-        if (service.includes('engine')) estRevenue = "2500";
-        else if (service.includes('brake')) estRevenue = "1200";
-        else if (service.includes('general')) estRevenue = "800";
-        else if (service.includes('oil')) estRevenue = "600";
-        else if (service.includes('wash')) estRevenue = "300";
-
-        // Inject variables
-        const name = booking.name;
-        const bike = booking.bike_model;
-        const time = new Date(booking.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-
+        const cost = booking.final_cost || booking.estimated_cost || 0;
         const rawMessage = template
-            .replace(/{name}/g, name)
-            .replace(/{bike}/g, bike)
-            .replace(/{time}/g, time)
-            .replace(/{revenue}/g, `₹${estRevenue}`);
+            .replace(/{name}/g, booking.name)
+            .replace(/{bike}/g, booking.bike_model)
+            .replace(/{time}/g, new Date(booking.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }))
+            .replace(/{revenue}/g, `₹${cost}`);
 
-        // Basic phone normalization
         let phone = booking.phone.replace(/\D/g, '');
         if (phone.length === 10) phone = '91' + phone;
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(rawMessage)}`, '_blank');
 
-        const message = encodeURIComponent(rawMessage);
-        window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
-
-        // Auto-confirm if pending
-        if (booking.status === 'pending') {
-            updateStatus(booking.id, 'confirmed');
-        }
+        if (booking.status === 'pending') updateStatus(booking.id, 'confirmed');
     };
 
     if (bookings.length === 0) {
         return (
             <div className="text-center py-32 bg-[#10101e] rounded-[2.5rem] border border-dashed border-white/10 animate-admin-in shadow-inner">
                 <div className="text-6xl mb-6">📂</div>
-                <p className="text-[#eeeef2] text-lg font-bold">No records found matching your criteria.</p>
-                <p className="text-[#55556a] mt-2">Try adjusting your search or sync filters.</p>
+                <p className="text-[#eeeef2] text-lg font-bold">No Bookings Found</p>
+                <p className="text-[#55556a] mt-2">Bookings will appear here as they come in.</p>
             </div>
         );
     }
@@ -140,7 +144,8 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
                         "absolute top-0 left-0 w-1.5 h-full",
                         b.status === 'pending' ? "bg-[#fbbf24]" :
                             b.status === 'confirmed' ? "bg-[#00c8ff]" :
-                                b.status === 'completed' ? "bg-[#34d399]" : "bg-[#ff2d55]"
+                                b.status === 'in_progress' ? "bg-[#a78bfa]" :
+                                    b.status === 'completed' ? "bg-[#34d399]" : "bg-[#ff2d55]"
                     )}></div>
 
                     <div className="flex flex-col xl:flex-row justify-between gap-8 xl:gap-10">
@@ -158,10 +163,11 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
                                             <Phone size={14} className="text-[var(--admin-accent)]" />
                                             {b.phone}
                                         </div>
-                                        <span className="text-[#333] hidden sm:inline">•</span>
-                                        <div className="flex items-center gap-1.5 text-[10px] bg-white/5 px-2 py-0.5 rounded border border-white/5 uppercase tracking-tighter">
-                                            <span>ID: {b.id.slice(0, 8)}</span>
-                                        </div>
+                                        {b.vehicle_number && (
+                                            <div className="flex items-center gap-1.5 text-[9px] bg-[#fbbf241a] text-[#fbbf24] px-2 py-0.5 rounded border border-[#fbbf2433] uppercase font-black tracking-widest">
+                                                <Hash size={10} /> {b.vehicle_number}
+                                            </div>
+                                        )}
                                         {b.metadata?.device && (
                                             <div className="flex items-center gap-1.5 text-[9px] bg-[var(--admin-accent)] bg-opacity-5 text-[var(--admin-accent)] px-2 py-0.5 rounded border border-[var(--admin-accent)] border-opacity-10 uppercase font-black tracking-widest">
                                                 {b.metadata.device === 'Mobile' ? '📱 Mobile' : '💻 Desktop'}
@@ -172,34 +178,74 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 xl:gap-10">
+                                {/* Vehicle */}
                                 <div className="space-y-2 xl:space-y-3">
                                     <div className="flex items-center gap-2 text-[10px] text-[#8888a0] font-black uppercase tracking-[0.2em]">
                                         <Bike size={12} strokeWidth={3} className="text-[#55556a]" />
-                                        Vehicle Context
+                                        Vehicle
                                     </div>
                                     <p className="text-base xl:text-lg text-white font-black leading-tight">{b.bike_model}</p>
-                                    <div className="flex items-center gap-2">
-                                        <span className="px-3 py-1 bg-[rgba(var(--admin-accent-rgb),0.1)] text-[var(--admin-accent)] rounded-lg text-[10px] font-black uppercase tracking-wider border border-[rgba(var(--admin-accent-rgb),0.2)]">
-                                            {b.service_type}
-                                        </span>
-                                    </div>
+                                    <span className="inline-block px-3 py-1 bg-[rgba(var(--admin-accent-rgb),0.1)] text-[var(--admin-accent)] rounded-lg text-[10px] font-black uppercase tracking-wider border border-[rgba(var(--admin-accent-rgb),0.2)]">
+                                        {b.service_type}
+                                    </span>
                                 </div>
 
+                                {/* Location */}
                                 <div className="space-y-2 xl:space-y-3">
                                     <div className="flex items-center gap-2 text-[10px] text-[#8888a0] font-black uppercase tracking-[0.2em]">
                                         <MapPin size={12} strokeWidth={3} className="text-[#55556a]" />
-                                        Deployment Site
+                                        Location
                                     </div>
                                     <p className="text-base xl:text-lg text-white font-black leading-tight">
                                         {b.service_location === 'doorstep' ? (
-                                            <span className="text-[#fbbf24]">Doorstep Delivery</span>
+                                            <span className="text-[#fbbf24]">Doorstep</span>
                                         ) : (
-                                            <span className="text-[var(--admin-accent)]">Workshop Service</span>
+                                            <span className="text-[var(--admin-accent)]">Workshop</span>
                                         )}
                                     </p>
                                     {b.service_location === 'doorstep' && b.address && (
                                         <p className="text-xs text-[#8888a0] font-medium leading-relaxed max-w-sm italic">
-                                            "{b.address}"
+                                            &ldquo;{b.address}&rdquo;
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Cost + Mechanic Row */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                {/* Estimated Cost */}
+                                <div className="bg-[#050508] p-4 rounded-2xl border border-white/5">
+                                    <p className="text-[8px] font-black text-[#55556a] uppercase tracking-widest mb-1">Estimated</p>
+                                    <p className="text-lg font-black text-white">₹{(b.estimated_cost || 0).toLocaleString('en-IN')}</p>
+                                </div>
+
+                                {/* Final Cost */}
+                                <div className="bg-[#050508] p-4 rounded-2xl border border-white/5">
+                                    <p className="text-[8px] font-black text-[#55556a] uppercase tracking-widest mb-1">Final Cost</p>
+                                    {editingCostId === b.id ? (
+                                        <div className="flex gap-2">
+                                            <input type="number" className="w-full bg-[#10101e] border border-white/10 rounded-lg px-2 py-1 text-sm text-white font-bold outline-none" placeholder="₹" value={costInput} onChange={e => setCostInput(e.target.value)} autoFocus />
+                                            <button onClick={() => handleSetFinalCost(b.id)} className="px-2 py-1 bg-[#34d399] text-black rounded-lg text-xs font-bold">✓</button>
+                                        </div>
+                                    ) : (
+                                        <p className="text-lg font-black text-[#34d399] cursor-pointer hover:underline" onClick={() => { setEditingCostId(b.id); setCostInput(b.final_cost?.toString() || ''); }}>
+                                            {b.final_cost ? `₹${b.final_cost.toLocaleString('en-IN')}` : <span className="text-[#55556a] text-sm">Set cost →</span>}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* Mechanic */}
+                                <div className="bg-[#050508] p-4 rounded-2xl border border-white/5">
+                                    <p className="text-[8px] font-black text-[#55556a] uppercase tracking-widest mb-1">Mechanic</p>
+                                    {editingMechanicId === b.id ? (
+                                        <div className="flex gap-2">
+                                            <input type="text" className="w-full bg-[#10101e] border border-white/10 rounded-lg px-2 py-1 text-sm text-white font-bold outline-none" placeholder="Name" value={mechanicInput} onChange={e => setMechanicInput(e.target.value)} autoFocus />
+                                            <button onClick={() => handleSetMechanic(b.id)} className="px-2 py-1 bg-[#a78bfa] text-black rounded-lg text-xs font-bold">✓</button>
+                                        </div>
+                                    ) : (
+                                        <p className="text-base font-black text-white cursor-pointer hover:underline flex items-center gap-1" onClick={() => { setEditingMechanicId(b.id); setMechanicInput(b.mechanic_name || ''); }}>
+                                            <Wrench size={12} className="text-[#a78bfa]" />
+                                            {b.mechanic_name || <span className="text-[#55556a] text-sm">Assign →</span>}
                                         </p>
                                     )}
                                 </div>
@@ -218,51 +264,50 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
                                         "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg",
                                         b.status === 'pending' ? "bg-[#fbbf24] text-black" :
                                             b.status === 'confirmed' ? "bg-[#00c8ff] text-black" :
-                                                b.status === 'completed' ? "bg-[#34d399] text-black" : "bg-[#ff2d55] text-white"
+                                                b.status === 'in_progress' ? "bg-[#a78bfa] text-black" :
+                                                    b.status === 'completed' ? "bg-[#34d399] text-black" : "bg-[#ff2d55] text-white"
                                     )}>
-                                        {b.status}
+                                        {b.status === 'in_progress' ? 'In Progress' : b.status}
                                     </span>
                                 </div>
+                                {b.preferred_date && (
+                                    <p className="text-xs text-[#55556a] font-bold">
+                                        Preferred: {b.preferred_date} • {b.preferred_time}
+                                    </p>
+                                )}
                             </div>
 
                             {/* Action Buttons */}
                             <div className="flex flex-wrap gap-3 xl:gap-4 w-full xl:justify-end">
                                 {b.status === 'pending' && (
-                                    <button
-                                        onClick={() => updateStatus(b.id, 'confirmed')}
-                                        disabled={updatingId === b.id}
-                                        className="flex-1 xl:flex-none flex items-center justify-center gap-2 px-5 xl:px-6 py-3 bg-[var(--admin-accent)] text-[var(--admin-accent-contrast)] rounded-2xl font-black text-xs xl:text-sm hover:scale-105 transition-all shadow-xl disabled:opacity-50"
-                                    >
-                                        <Check size={18} strokeWidth={3} />
-                                        Confirm
+                                    <button onClick={() => updateStatus(b.id, 'confirmed')} disabled={updatingId === b.id}
+                                        className="flex-1 xl:flex-none flex items-center justify-center gap-2 px-5 xl:px-6 py-3 bg-[var(--admin-accent)] text-[var(--admin-accent-contrast)] rounded-2xl font-black text-xs xl:text-sm hover:scale-105 transition-all shadow-xl disabled:opacity-50">
+                                        <Check size={18} strokeWidth={3} /> Confirm
                                     </button>
                                 )}
-
-                                <button
-                                    onClick={() => handleWhatsAppConfirm(b)}
-                                    className="flex-1 xl:flex-none flex items-center justify-center gap-2 px-5 xl:px-6 py-3 bg-[#25d366] text-white rounded-2xl font-black text-xs xl:text-sm hover:scale-105 transition-all shadow-xl"
-                                >
-                                    <MessageCircle size={18} strokeWidth={3} />
-                                    WhatsApp
-                                </button>
 
                                 {b.status === 'confirmed' && (
-                                    <button
-                                        onClick={() => updateStatus(b.id, 'completed')}
-                                        disabled={updatingId === b.id}
-                                        className="flex-1 xl:flex-none flex items-center justify-center gap-2 px-5 xl:px-6 py-3 bg-[#34d399] text-black rounded-2xl font-black text-xs xl:text-sm hover:scale-105 transition-all shadow-xl disabled:opacity-50"
-                                    >
-                                        <CheckCircle size={18} strokeWidth={3} />
-                                        Done
+                                    <button onClick={() => updateStatus(b.id, 'in_progress')} disabled={updatingId === b.id}
+                                        className="flex-1 xl:flex-none flex items-center justify-center gap-2 px-5 xl:px-6 py-3 bg-[#a78bfa] text-black rounded-2xl font-black text-xs xl:text-sm hover:scale-105 transition-all shadow-xl disabled:opacity-50">
+                                        <Play size={18} strokeWidth={3} /> Start
                                     </button>
                                 )}
 
-                                <button
-                                    onClick={() => handleDeleteBooking(b.id, b.name)}
-                                    disabled={updatingId === b.id}
+                                <button onClick={() => handleWhatsAppConfirm(b)}
+                                    className="flex-1 xl:flex-none flex items-center justify-center gap-2 px-5 xl:px-6 py-3 bg-[#25d366] text-white rounded-2xl font-black text-xs xl:text-sm hover:scale-105 transition-all shadow-xl">
+                                    <MessageCircle size={18} strokeWidth={3} /> WhatsApp
+                                </button>
+
+                                {b.status === 'in_progress' && (
+                                    <button onClick={() => updateStatus(b.id, 'completed')} disabled={updatingId === b.id}
+                                        className="flex-1 xl:flex-none flex items-center justify-center gap-2 px-5 xl:px-6 py-3 bg-[#34d399] text-black rounded-2xl font-black text-xs xl:text-sm hover:scale-105 transition-all shadow-xl disabled:opacity-50">
+                                        <CheckCircle size={18} strokeWidth={3} /> Done
+                                    </button>
+                                )}
+
+                                <button onClick={() => handleDeleteBooking(b.id, b.name)} disabled={updatingId === b.id}
                                     className="p-3 bg-white/5 hover:bg-[#ff2d551a] hover:text-[#ff2d55] rounded-xl transition-all text-[#55556a] border border-white/5"
-                                    title="Delete from System"
-                                >
+                                    title="Delete">
                                     <Trash2 size={20} />
                                 </button>
                             </div>

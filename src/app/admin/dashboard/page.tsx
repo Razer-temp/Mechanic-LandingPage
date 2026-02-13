@@ -27,6 +27,8 @@ import BookingsList from '@/components/admin/BookingsList';
 import ChatLogs from '@/components/admin/ChatLogs';
 import CustomersList from '@/components/admin/CustomersList';
 import SettingsPanel from '@/components/admin/SettingsPanel';
+import RevenueAnalytics from '@/components/admin/RevenueAnalytics';
+import VehicleHistory from '@/components/admin/VehicleHistory';
 
 type AdminTab = 'bookings' | 'chats' | 'customers' | 'settings' | 'fleet' | 'reports';
 
@@ -35,11 +37,13 @@ export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState<AdminTab>('bookings');
     const [bookings, setBookings] = useState<any[]>([]);
     const [chats, setChats] = useState<any[]>([]);
+    const [expenses, setExpenses] = useState<any[]>([]);
+    const [serviceHistory, setServiceHistory] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [showNotifications, setShowNotifications] = useState(false);
     const [showMobileMenu, setShowMobileMenu] = useState(false);
-    const [bookingFilter, setBookingFilter] = useState<'all' | 'pending' | 'confirmed' | 'completed' | 'cancelled'>('all');
+    const [bookingFilter, setBookingFilter] = useState<'all' | 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled'>('all');
     const [accentColor, setAccentColor] = useState('#00c8ff');
 
 
@@ -80,24 +84,19 @@ export default function AdminDashboard() {
     const fetchData = useCallback(async () => {
         setLoading(true);
         try {
-            const { data: bData } = await supabase
-                .from('bookings')
-                .select('*')
-                .order('created_at', { ascending: false });
+            const [bRes, cRes, eRes, shRes] = await Promise.all([
+                supabase.from('bookings').select('*').order('created_at', { ascending: false }),
+                supabase.from('chat_sessions').select('*, chat_messages(*)').order('created_at', { ascending: false }),
+                supabase.from('daily_expenses').select('*').order('date', { ascending: false }),
+                supabase.from('service_history').select('*').order('date', { ascending: false }),
+            ]);
 
-            const { data: cData } = await supabase
-                .from('chat_sessions')
-                .select('*, chat_messages(*)')
-                .order('created_at', { ascending: false });
-
-            if (bData) setBookings(bData);
-            if (cData) setChats(cData);
-
-
-
+            if (bRes.data) setBookings(bRes.data);
+            if (cRes.data) setChats(cRes.data);
+            if (eRes.data) setExpenses(eRes.data);
+            if (shRes.data) setServiceHistory(shRes.data);
         } catch (err: any) {
             console.error('Error fetching data:', err);
-
         } finally {
             setLoading(false);
         }
@@ -203,12 +202,11 @@ export default function AdminDashboard() {
                     onClick={() => { setActiveTab('fleet'); setShowMobileMenu(false); }}
                     className={clsx(
                         "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
-                        activeTab === 'fleet' ? "bg-white/10 text-white" : "text-[#55556a] hover:text-white hover:bg-white/5"
+                        activeTab === 'fleet' ? "bg-[#fbbf241a] text-[#fbbf24] shadow-sm" : "text-[#55556a] hover:text-white hover:bg-white/5"
                     )}
                 >
-                    <Truck size={20} />
+                    <Truck size={20} className={activeTab === 'fleet' ? "text-[#fbbf24]" : ""} />
                     <span>Fleet Ops</span>
-                    <span className="ml-auto text-[8px] bg-white/5 px-1.5 py-0.5 rounded text-[#55556a]">BETA</span>
                 </button>
 
                 <div className="h-4"></div>
@@ -229,10 +227,10 @@ export default function AdminDashboard() {
                     onClick={() => { setActiveTab('reports'); setShowMobileMenu(false); }}
                     className={clsx(
                         "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
-                        activeTab === 'reports' ? "bg-white/10 text-white" : "text-[#55556a] hover:text-white hover:bg-white/5"
+                        activeTab === 'reports' ? "bg-[#34d3991a] text-[#34d399] shadow-sm" : "text-[#55556a] hover:text-white hover:bg-white/5"
                     )}
                 >
-                    <BarChart3 size={20} />
+                    <BarChart3 size={20} className={activeTab === 'reports' ? "text-[#34d399]" : ""} />
                     <span>Analytics</span>
                 </button>
             </nav>
@@ -409,6 +407,7 @@ export default function AdminDashboard() {
                                     <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#8888a0] bg-white/[0.03] px-6 py-3 rounded-2xl border border-white/5">
                                         <button onClick={() => setBookingFilter('pending')} className={clsx("flex items-center gap-2 hover:text-white transition-colors", bookingFilter === 'pending' && "text-[#fbbf24]")}><div className="w-2 h-2 bg-[#fbbf24] rounded-full"></div> Pending</button>
                                         <button onClick={() => setBookingFilter('confirmed')} className={clsx("flex items-center gap-2 hover:text-white transition-colors", bookingFilter === 'confirmed' && "text-[#00c8ff]")}><div className="w-2 h-2 bg-[#00c8ff] rounded-full"></div> Confirmed</button>
+                                        <button onClick={() => setBookingFilter('in_progress')} className={clsx("flex items-center gap-2 hover:text-white transition-colors", bookingFilter === 'in_progress' && "text-[#a78bfa]")}><div className="w-2 h-2 bg-[#a78bfa] rounded-full"></div> In Progress</button>
                                         <button onClick={() => setBookingFilter('completed')} className={clsx("flex items-center gap-2 hover:text-white transition-colors", bookingFilter === 'completed' && "text-[#34d399]")}><div className="w-2 h-2 bg-[#34d399] rounded-full"></div> Done</button>
                                         <div className="w-px h-4 bg-white/10 mx-1"></div>
                                         <button onClick={() => setBookingFilter('all')} className={clsx("hover:text-white transition-colors", bookingFilter === 'all' && "text-white underline decoration-[#00c8ff] underline-offset-4")}>View All</button>
@@ -459,10 +458,12 @@ export default function AdminDashboard() {
 
                     {activeTab === 'settings' && <SettingsPanel />}
 
-                    {(activeTab === 'fleet' || activeTab === 'reports') && (
-                        <div className="flex items-center justify-center py-20">
-                            <p className="text-[10px] text-[#55556a] font-black uppercase tracking-widest italic">Node deployment in progress • Available in rDX v1.5</p>
-                        </div>
+                    {activeTab === 'fleet' && (
+                        <VehicleHistory bookings={bookings} serviceHistory={serviceHistory} onHistoryChange={fetchData} />
+                    )}
+
+                    {activeTab === 'reports' && (
+                        <RevenueAnalytics bookings={bookings} expenses={expenses} onExpenseChange={fetchData} />
                     )}
                 </div>
             </main>
