@@ -42,18 +42,7 @@ export default function AdminDashboard() {
     const [bookingFilter, setBookingFilter] = useState<'all' | 'pending' | 'confirmed' | 'completed' | 'cancelled'>('all');
     const [accentColor, setAccentColor] = useState('#00c8ff');
 
-    // Debug State
-    const [debugInfo, setDebugInfo] = useState<{
-        envUrl: boolean;
-        envKey: boolean;
-        fetchError: string | null;
-        totalBookings: number | null;
-    }>({
-        envUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
-        envKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-        fetchError: null,
-        totalBookings: null
-    });
+
 
     const notificationRef = useRef<HTMLDivElement>(null);
     const supabase = createClient();
@@ -104,19 +93,11 @@ export default function AdminDashboard() {
             if (bData) setBookings(bData);
             if (cData) setChats(cData);
 
-            setDebugInfo(prev => ({
-                ...prev,
-                fetchError: null,
-                totalBookings: bData ? bData.length : 0
-            }));
+
 
         } catch (err: any) {
             console.error('Error fetching data:', err);
-            setDebugInfo(prev => ({
-                ...prev,
-                fetchError: err?.message || 'Unknown network error',
-                totalBookings: 0
-            }));
+
         } finally {
             setLoading(false);
         }
@@ -169,55 +150,7 @@ export default function AdminDashboard() {
         }
     };
 
-    const handleAutoRepair = async () => {
-        if (!confirm("This will attempt to fix the database by inserting default data. Continue?")) return;
-        setLoading(true);
-        try {
-            // 1. Initialize Admin Settings
-            await supabase.from('admin_settings').upsert([
-                { key: 'passcode', value: '"8888"' },
-                { key: 'theme_color', value: '"#00c8ff"' },
-                {
-                    key: 'whatsapp_templates', value: {
-                        confirmation: "Hello {name}, your booking for {bike} is confirmed! We'll see you at {time}.",
-                        completion: "Hi {name}, your {bike} is ready for pickup! Total: {revenue}.",
-                        reminder: "Hello {name}, just a reminder about your appointment today for {bike}.",
-                        cancellation: "Hello {name}, we have received your request to cancel the booking for {bike}. We hope to see you again soon!"
-                    }
-                }
-            ], { onConflict: 'key' });
 
-            // 2. Seed Services
-            const { error: serviceError } = await supabase.from('services').insert([
-                { name: 'Engine Repair', description: 'Complete engine overhaul, timing chain, piston repair.', base_price: 1500, category: 'repair', icon: '🔩' },
-                { name: 'Full Servicing', description: 'Oil change, filter replacement, chain adjustment.', base_price: 799, category: 'servicing', icon: '⚙️' },
-                { name: 'Brake Fix', description: 'Disc & drum brake pads, fluid change.', base_price: 500, category: 'repair', icon: '🛑' },
-                { name: 'Oil Change', description: 'Premium synthetic engine oil replacement.', base_price: 350, category: 'servicing', icon: '🛢️' },
-                { name: 'Emergency Repair', description: 'Roadside assistance and breakdown support.', base_price: 299, category: 'emergency', icon: '🚨' },
-                { name: 'Electrical Work', description: 'Wiring, headlight, battery, ECU diagnostics.', base_price: 400, category: 'repair', icon: '⚡' }
-            ]);
-
-            if (serviceError) throw new Error("Service seeding failed: " + serviceError.message);
-
-            // 3. Seed Test Bookings
-            const { error: bookingError } = await supabase.from('bookings').insert([
-                { name: 'Arjun Sharma', phone: '9811530701', bike_model: 'Royal Enfield Classic 350', service_type: 'Engine Repair', service_location: 'workshop', preferred_date: new Date().toISOString().split('T')[0], preferred_time: 'morning', status: 'confirmed' },
-                { name: 'Sneha Reddy', phone: '9811530702', bike_model: 'Honda Activa 6G', service_type: 'Full Servicing', service_location: 'doorstep', preferred_date: new Date().toISOString().split('T')[0], preferred_time: 'afternoon', status: 'pending' },
-                { name: 'Rahul Verma', phone: '9811530703', bike_model: 'KTM Duke 200', service_type: 'Brake Fix', service_location: 'workshop', preferred_date: new Date().toISOString().split('T')[0], preferred_time: 'evening', status: 'completed' }
-            ]);
-
-            if (bookingError) throw new Error("Booking seeding failed: " + bookingError.message);
-
-            alert("Database repaired successfully! Reloading...");
-            window.location.reload();
-
-        } catch (err: any) {
-            console.error("Auto-Repair Failed:", err);
-            alert("Repair failed: " + err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
 
 
 
@@ -487,29 +420,11 @@ export default function AdminDashboard() {
                                         <div className="w-16 h-16 border-4 border-[#00c8ff1a] border-t-[#00c8ff] rounded-full animate-spin shadow-2xl"></div>
                                     </div>
                                 ) : bookings.length === 0 ? (
-                                    <div className="p-8 bg-[#ff2d551a] border border-[#ff2d5533] rounded-3xl space-y-4">
-                                        <h4 className="text-xl font-black text-[#ff2d55] uppercase tracking-widest flex items-center gap-3">
-                                            <ShieldCheck size={24} />
-                                            System Diagnostics
-                                        </h4>
-                                        <div className="space-y-2 font-mono text-sm text-[#eeeef2]">
-                                            <p className={debugInfo.envUrl ? "text-[#34d399]" : "text-[#ff2d55]"}>• Supabase URL: {debugInfo.envUrl ? "CONNECTED" : "MISSING (Check Vercel Env Vars)"}</p>
-                                            <p className={debugInfo.envKey ? "text-[#34d399]" : "text-[#ff2d55]"}>• Supabase Key: {debugInfo.envKey ? "CONNECTED" : "MISSING (Check Vercel Env Vars)"}</p>
-                                            <p className={debugInfo.fetchError ? "text-[#ff2d55]" : "text-[#34d399]"}>• Connection Status: {debugInfo.fetchError ? `FAILED: ${debugInfo.fetchError}` : "ONLINE"}</p>
-                                            <p className="text-[#8888a0]">• Records Retrieved: {debugInfo.totalBookings ?? "Loading..."}</p>
+                                    <div className="flex flex-col items-center justify-center py-20 text-[#55556a] space-y-4">
+                                        <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center">
+                                            <Calendar size={32} className="opacity-50" />
                                         </div>
-                                        <div className="pt-4 border-t border-white/5">
-                                            <button
-                                                onClick={handleAutoRepair}
-                                                className="w-full py-3 bg-[#00c8ff1a] hover:bg-[#00c8ff33] text-[#00c8ff] font-bold rounded-xl border border-[#00c8ff33] transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-xs"
-                                            >
-                                                <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />
-                                                Auto-Repair Database
-                                            </button>
-                                            <p className="text-[10px] text-center text-[#55556a] mt-2 font-mono">
-                                                Attempts to seed default data directly via client access.
-                                            </p>
-                                        </div>
+                                        <p className="text-sm font-bold uppercase tracking-widest">No Bookings Found</p>
                                     </div>
                                 ) : (
                                     <BookingsList bookings={filteredBookings} onUpdate={fetchData} />
