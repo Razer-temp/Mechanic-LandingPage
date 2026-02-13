@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 /**
@@ -6,16 +8,16 @@ import React from 'react';
  * and manage admin-specific global states or styles.
  */
 export default function AdminLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    return (
-        <div className="admin-root min-h-screen bg-[#050508] text-[#eeeef2] font-sans selection:bg-[#00c8ff33] selection:text-white">
-            {children}
+  return (
+    <div className="admin-root min-h-screen bg-[#050508] text-[#eeeef2] font-sans selection:bg-[#00c8ff33] selection:text-white">
+      {children}
 
-            {/* Admin Specific Global Styles */}
-            <style jsx global>{`
+      {/* Admin Specific Global Styles */}
+      <style jsx global>{`
         /* Reset any conflicting landing page styles if necessary */
         .admin-root {
           --admin-accent: #00c8ff;
@@ -56,6 +58,6 @@ export default function AdminLayout({
           animation: adminFadeInUp 0.4s ease forwards;
         }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 }

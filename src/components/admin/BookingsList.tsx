@@ -12,7 +12,7 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
     const supabase = createClient();
     const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-    const updateStatus = async (id: string, status: string) => {
+    const updateStatus = async (id: string, status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled') => {
         setUpdatingId(id);
         try {
             await supabase.from('bookings').update({ status }).eq('id', id);
