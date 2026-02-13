@@ -92,8 +92,11 @@ export default function AdminDashboard() {
             if (cData) setChats(cData);
         } catch (err) {
             console.error('Error fetching data:', err);
+            // Optional: Add a toast notification here if you have a toast component
+            // alert('Failed to fetch data. Database might be offline or empty.');
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     }, [supabase]);
 
     // Auth Check
