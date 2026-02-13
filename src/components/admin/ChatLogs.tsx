@@ -28,20 +28,20 @@ export default function ChatLogs({ sessions }: ChatLogsProps) {
                     <div className="p-10 border-b border-white/5 bg-white/[0.02]">
                         <div className="flex justify-between items-start">
                             <div className="flex items-center gap-5">
-                                <div className="w-14 h-14 bg-[#ff2d551a] border border-[#ff2d5533] rounded-2xl flex items-center justify-center text-[#ff2d55] shadow-lg">
+                                <div className="w-14 h-14 bg-[var(--admin-accent)] bg-opacity-10 border border-[var(--admin-accent)] border-opacity-20 rounded-2xl flex items-center justify-center text-[var(--admin-accent)] shadow-lg">
                                     <MessageSquare size={28} />
                                 </div>
                                 <div>
                                     <h3 className="text-xl font-black text-white tracking-tight">Intelligence Audit</h3>
                                     <div className="flex items-center gap-2 mt-1">
-                                        <Hash size={12} className="text-[#a78bfa]" />
+                                        <Hash size={12} className="text-[var(--admin-accent)]" />
                                         <p className="text-[10px] text-[#8888a0] font-black uppercase tracking-widest">{session.id.slice(0, 16)}</p>
                                     </div>
                                 </div>
                             </div>
                             <div className="text-right space-y-1">
                                 <div className="flex items-center gap-2 text-[#eeeef2] font-black text-sm justify-end">
-                                    <Calendar size={14} className="text-[#00c8ff]" />
+                                    <Calendar size={14} className="text-[var(--admin-accent)]" />
                                     {new Date(session.created_at).toLocaleDateString()}
                                 </div>
                                 <p className="text-[10px] text-[#55556a] font-black uppercase tracking-widest">{new Date(session.created_at).toLocaleTimeString()}</p>
@@ -63,15 +63,15 @@ export default function ChatLogs({ sessions }: ChatLogsProps) {
                                     <div className={clsx(
                                         "w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center border shadow-lg transition-transform hover:scale-110",
                                         msg.role === 'user'
-                                            ? "bg-[#00c8ff1a] border-[#00c8ff33] text-[#00c8ff]"
-                                            : "bg-[#a78bfa1a] border-[#a78bfa33] text-[#a78bfa]"
+                                            ? "bg-[var(--admin-accent)] bg-opacity-10 border-[var(--admin-accent)] border-opacity-20 text-[var(--admin-accent)]"
+                                            : "bg-white/5 border-white/5 text-[#a78bfa]"
                                     )}>
                                         {msg.role === 'user' ? <User size={18} /> : <Bot size={18} />}
                                     </div>
                                     <div className={clsx(
                                         "p-6 rounded-[1.8rem] text-sm font-bold leading-relaxed shadow-sm",
                                         msg.role === 'user'
-                                            ? "bg-[#00c8ff1a] text-white rounded-tr-none border border-[#00c8ff22]"
+                                            ? "bg-[var(--admin-accent)] bg-opacity-5 text-white rounded-tr-none border border-[var(--admin-accent)] border-opacity-10"
                                             : "bg-[#10101e] text-[#eeeef2] rounded-tl-none border border-white/5"
                                     )}>
                                         {msg.content}

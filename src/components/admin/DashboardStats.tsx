@@ -28,7 +28,7 @@ const StatCard = ({ label, value, icon: Icon, trend, color, onExplore }: StatCar
         <div className="flex justify-between items-center mb-10 relative z-10">
             <div
                 className="p-3 xl:p-4 rounded-xl xl:rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 shadow-lg"
-                style={{ backgroundColor: `${color}1a`, color: color, border: `1px solid ${color}33` }}
+                style={{ backgroundColor: `var(--admin-accent-10)`, color: 'var(--admin-accent)', border: `1px solid var(--admin-accent-20)` }}
             >
                 <Icon size={24} className="xl:hidden" />
                 <Icon size={28} className="hidden xl:block" />
@@ -95,7 +95,7 @@ export default function DashboardStats({ bookings, onExplore }: { bookings: any[
                 value={totalBookings}
                 icon={Calendar}
                 trend={{ value: '+12.4%', isUp: true }}
-                color="#00c8ff"
+                color="var(--admin-accent)"
                 onExplore={() => onExplore?.('all_bookings')}
             />
             <StatCard

@@ -295,6 +295,10 @@ export default function SettingsPanel() {
                             <div className="w-full h-2 rounded-full bg-white/5 overflow-hidden">
                                 <div className="h-full transition-all duration-1000" style={{ backgroundColor: activeTheme, width: '100%' }}></div>
                             </div>
+                            <button
+                                onClick={() => handleUpdateTheme(activeTheme)}
+                                className="px-8 py-3 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest text-white hover:bg-white/10 transition-all"
+                            >Force Re-sync Accent</button>
                         </div>
                     </div>
                 )}
@@ -308,20 +312,38 @@ export default function SettingsPanel() {
                                 </div>
                                 <h4 className="text-xl font-black text-white uppercase tracking-widest">WhatsApp Protocols</h4>
                             </div>
-                            <button
-                                onClick={handleSaveTemplates}
-                                className="bg-white/10 hover:bg-white/20 border border-white/10 px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-white transition-all active:scale-95"
-                            >Save Protocols</button>
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={() => {
+                                        if (confirm('Revert to factory templates?')) {
+                                            setWaTemplates({
+                                                confirmation: "Hello {name}, your booking for {bike} is confirmed! We'll see you at {time}.",
+                                                completion: "Hi {name}, your {bike} is ready for pickup! Total: {revenue}.",
+                                                reminder: "Hello {name}, just a reminder about your appointment today for {bike}.",
+                                                cancellation: "Hello {name}, we have received your request to cancel the booking for {bike}. We hope to see you again soon!"
+                                            });
+                                        }
+                                    }}
+                                    className="bg-white/5 hover:bg-white/10 border border-white/5 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-[#55556a] transition-all"
+                                >Reset Prebuilt</button>
+                                <button
+                                    onClick={handleSaveTemplates}
+                                    disabled={saving}
+                                    className="bg-[var(--admin-accent)] text-black px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50"
+                                >
+                                    {saving ? 'Saving...' : 'Save & Sync Cloud'}
+                                </button>
+                            </div>
                         </div>
                         <div className="space-y-12">
                             {Object.keys(waTemplates).map((type) => (
                                 <div key={type} className="space-y-4">
                                     <div className="flex items-center justify-between ml-2">
-                                        <label className="text-[10px] font-black text-[#00c8ff] uppercase tracking-[0.2em]">{type} Template</label>
+                                        <label className="text-[10px] font-black text-[var(--admin-accent)] uppercase tracking-[0.2em]">{type} Template</label>
                                         <span className="text-[9px] text-[#55556a] font-bold uppercase tracking-widest whitespace-nowrap overflow-hidden">Tags: &#123;name&#125;, &#123;bike&#125;, &#123;time&#125;, &#123;revenue&#125;</span>
                                     </div>
                                     <textarea
-                                        className="w-full bg-[#050508] border-2 border-white/10 rounded-3xl p-8 py-6 text-sm text-[#eeeef2] focus:border-[#00c8ff33] focus:ring-8 focus:ring-[#00c8ff05] outline-none transition-all font-medium leading-relaxed min-h-[100px]"
+                                        className="w-full bg-[#050508] border-2 border-white/10 rounded-3xl p-8 py-6 text-sm text-[#eeeef2] focus:border-[var(--admin-accent)] focus:border-opacity-30 focus:ring-8 focus:ring-[var(--admin-accent)] focus:ring-opacity-5 outline-none transition-all font-medium leading-relaxed min-h-[100px]"
                                         value={(waTemplates as any)[type]}
                                         onChange={(e) => setWaTemplates({ ...waTemplates, [type]: e.target.value })}
                                     />

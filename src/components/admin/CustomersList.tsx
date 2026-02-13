@@ -116,11 +116,11 @@ export default function CustomersList({ bookings }: CustomersListProps) {
             {/* Search & Filter Bar */}
             <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
                 <div className="relative w-full md:max-w-md group">
-                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[#55556a] group-focus-within:text-[#00c8ff] transition-colors" size={20} />
+                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[#55556a] group-focus-within:text-[var(--admin-accent)] transition-colors" size={20} />
                     <input
                         type="text"
                         placeholder="Search by name or mobile..."
-                        className="w-full bg-[#10101e] border-2 border-white/5 rounded-2xl py-4 pl-14 pr-6 text-white font-bold text-sm focus:border-[#00c8ff33] focus:ring-4 focus:ring-[#00c8ff05] outline-none transition-all placeholder:text-[#333]"
+                        className="w-full bg-[#10101e] border-2 border-white/5 rounded-2xl py-4 pl-14 pr-6 text-white font-bold text-sm focus:border-[var(--admin-accent)] focus:border-opacity-30 focus:ring-4 focus:ring-[var(--admin-accent)] focus:ring-opacity-5 outline-none transition-all placeholder:text-[#333]"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -134,7 +134,7 @@ export default function CustomersList({ bookings }: CustomersListProps) {
                                 onClick={() => setFilterTier(tier.toLowerCase())}
                                 className={clsx(
                                     "px-5 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
-                                    filterTier === tier.toLowerCase() ? "bg-[#00c8ff] text-black shadow-lg shadow-[#00c8ff22]" : "text-[#55556a] hover:text-white"
+                                    filterTier === tier.toLowerCase() ? "bg-[var(--admin-accent)] text-black shadow-lg shadow-[var(--admin-accent-20)]" : "text-[#55556a] hover:text-white"
                                 )}
                             >
                                 {tier}
@@ -153,13 +153,13 @@ export default function CustomersList({ bookings }: CustomersListProps) {
                     {customers.map((c: any) => (
                         <div
                             key={c.phone}
-                            className="group bg-[#10101e] border-2 border-white/5 rounded-[2.5rem] md:rounded-[3rem] p-6 sm:p-8 md:p-10 hover:border-[#00c8ff/30] transition-all shadow-3xl relative overflow-hidden"
+                            className="group bg-[#10101e] border-2 border-white/5 rounded-[2.5rem] md:rounded-[3rem] p-6 sm:p-8 md:p-10 hover:border-[var(--admin-accent)] hover:border-opacity-30 transition-all shadow-3xl relative overflow-hidden"
                         >
                             {/* Cinematic Background Glow */}
                             <div
                                 className={clsx(
                                     "absolute -right-20 -top-20 w-64 h-64 blur-[100px] opacity-10 transition-opacity group-hover:opacity-20",
-                                    c.tier === 'Platinum' ? "bg-[#00c8ff]" : c.tier === 'Gold' ? "bg-[#a78bfa]" : "bg-white"
+                                    c.tier === 'Platinum' ? "bg-[#fbbf24]" : c.tier === 'Gold' ? "bg-[var(--admin-accent)]" : "bg-white"
                                 )}
                             ></div>
 
@@ -173,7 +173,7 @@ export default function CustomersList({ bookings }: CustomersListProps) {
                                     <div className="min-w-0">
                                         <h4 className="text-xl sm:text-3xl font-black text-white tracking-tighter mb-1 truncate max-w-[150px] sm:max-w-none">{c.name}</h4>
                                         <div className="flex items-center gap-2 text-[#55556a] font-bold text-sm sm:text-base">
-                                            <Phone size={14} className="text-[#00c8ff]" />
+                                            <Phone size={14} className="text-[var(--admin-accent)]" />
                                             {c.phone}
                                         </div>
                                     </div>
@@ -186,7 +186,7 @@ export default function CustomersList({ bookings }: CustomersListProps) {
                                     <span className={clsx(
                                         "px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-[9px] sm:text-xs font-black uppercase tracking-widest shadow-2xl border",
                                         c.tier === 'Platinum' ? "bg-[#fbbf24] text-black border-[#fbbf2433]" :
-                                            c.tier === 'Gold' ? "bg-[#00c8ff] text-black border-[#00c8ff33]" : "bg-white/5 text-[#8888a0] border-white/10"
+                                            c.tier === 'Gold' ? "bg-[var(--admin-accent)] text-black border-[var(--admin-accent-20)]" : "bg-white/5 text-[#8888a0] border-white/10"
                                     )}>
                                         {c.tier}
                                     </span>

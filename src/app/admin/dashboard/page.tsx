@@ -47,19 +47,21 @@ export default function AdminDashboard() {
 
     // Sync Global Theme Accent
     useEffect(() => {
-        const fetchTheme = async () => {
+        const fetchSettings = async () => {
             try {
                 const { data, error } = await supabase
                     .from('admin_settings')
-                    .select('value')
-                    .eq('key', 'theme_color')
-                    .single();
+                    .select('*');
 
-                if (data?.value) {
-                    const color = data.value as string;
-                    setAccentColor(color);
-                    localStorage.setItem('admin_theme_color', color);
-                    document.documentElement.style.setProperty('--admin-accent', color);
+                if (data) {
+                    data.forEach(setting => {
+                        if (setting.key === 'theme_color') {
+                            const color = setting.value as string;
+                            setAccentColor(color);
+                            localStorage.setItem('admin_theme_color', color);
+                            document.documentElement.style.setProperty('--admin-accent', color);
+                        }
+                    });
                 } else {
                     // Fallback
                     const color = localStorage.getItem('admin_theme_color') || '#00c8ff';
@@ -70,8 +72,8 @@ export default function AdminDashboard() {
                 console.error('Error fetching theme:', err);
             }
         };
-        fetchTheme();
-    }, [activeTab]); // Refresh accent on tab changes to ensure reactivity
+        fetchSettings();
+    }, [supabase]);
 
     const fetchData = useCallback(async () => {
         setLoading(true);

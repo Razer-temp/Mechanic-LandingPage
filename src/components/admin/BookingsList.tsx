@@ -11,9 +11,10 @@ import {
     MoreVertical,
     Check,
     RotateCcw,
-    MessageCircle
+    MessageCircle,
+    Trash2
 } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase';
 import clsx from 'clsx';
 
 interface BookingsListProps {
@@ -22,7 +23,6 @@ interface BookingsListProps {
 }
 
 export default function BookingsList({ bookings, onUpdate }: BookingsListProps) {
-    const supabase = createClient();
     const [updatingId, setUpdatingId] = useState<string | null>(null);
 
     const updateStatus = async (id: string, status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled') => {
@@ -39,15 +39,45 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
         }
     };
 
-    const handleWhatsAppConfirm = (booking: any) => {
-        // Retrieve custom templates or use fallback
-        const savedTemplates = localStorage.getItem('admin_whatsapp_templates');
-        const templates = savedTemplates ? JSON.parse(savedTemplates) : {
+    const handleDeleteBooking = async (id: string, name: string) => {
+        if (!confirm(`CRITICAL: Permanently delete booking for ${name}? This will remove it from Supabase records.`)) return;
+
+        setUpdatingId(id);
+        try {
+            const { error } = await supabase.from('bookings').delete().eq('id', id);
+            if (error) throw error;
+            onUpdate();
+            alert('Booking purged from system records.');
+        } catch (err) {
+            console.error('Error deleting booking:', err);
+            alert('Purge failed. Protocol connection error.');
+        } finally {
+            setUpdatingId(null);
+        }
+    };
+
+    const handleWhatsAppConfirm = async (booking: any) => {
+        // Retrieve custom templates from Supabase for real-time sync
+        let templates = {
             confirmation: "Hello {name}, your booking for {bike} is confirmed! We'll see you at {time}.",
             completion: "Hi {name}, your {bike} is ready for pickup! Total: {revenue}.",
             reminder: "Hello {name}, just a reminder about your appointment today for {bike}.",
             cancellation: "Hello {name}, we have received your request to cancel the booking for {bike}. We hope to see you again soon!"
         };
+
+        try {
+            const { data } = await supabase
+                .from('admin_settings')
+                .select('value')
+                .eq('key', 'whatsapp_templates')
+                .single();
+
+            if (data?.value) {
+                templates = data.value as any;
+            }
+        } catch (err) {
+            console.warn('Using fallback templates due to sync error');
+        }
 
         // Determine which template to use based on status
         let template = templates.confirmation;
@@ -102,7 +132,7 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
             {bookings.map((b) => (
                 <div
                     key={b.id}
-                    className="group relative bg-[#10101e] border border-white/10 rounded-[2.5rem] p-8 xl:p-10 hover:border-[#00c8ff/30] transition-all shadow-2xl overflow-hidden"
+                    className="group relative bg-[#10101e] border border-white/10 rounded-[2.5rem] p-8 xl:p-10 hover:border-white/20 transition-all shadow-2xl overflow-hidden"
                 >
                     {/* Status Bar */}
                     <div className={clsx(
@@ -123,7 +153,7 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
                                 <div>
                                     <h4 className="text-xl xl:text-2xl font-black text-white tracking-tight">{b.name}</h4>
                                     <div className="flex items-center gap-3 text-[#8888a0] mt-1 font-bold text-sm">
-                                        <Phone size={14} className="text-[#00c8ff]" />
+                                        <Phone size={14} className="text-[var(--admin-accent)]" />
                                         {b.phone}
                                         <span className="text-[#333] hidden sm:inline">•</span>
                                         <span className="hidden sm:inline text-[10px] bg-white/5 px-2 py-0.5 rounded border border-white/5 uppercase tracking-tighter">ID: {b.id.slice(0, 8)}</span>
@@ -139,7 +169,7 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
                                     </div>
                                     <p className="text-base xl:text-lg text-white font-black leading-tight">{b.bike_model}</p>
                                     <div className="flex items-center gap-2">
-                                        <span className="px-3 py-1 bg-[#00c8ff1a] text-[#00c8ff] rounded-lg text-xs font-black uppercase tracking-wider border border-[#00c8ff33]">
+                                        <span className="px-3 py-1 bg-[var(--admin-accent)] bg-opacity-10 text-[var(--admin-accent)] rounded-lg text-xs font-black uppercase tracking-wider border border-[var(--admin-accent)] border-opacity-20">
                                             {b.service_type}
                                         </span>
                                     </div>
@@ -151,13 +181,13 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
                                         Deployment Site
                                     </div>
                                     <p className="text-base xl:text-lg text-white font-black leading-tight">
-                                        {b.location === 'doorstep' ? (
+                                        {b.service_location === 'doorstep' ? (
                                             <span className="text-[#fbbf24]">Doorstep Delivery</span>
                                         ) : (
-                                            <span className="text-[#00c8ff]">Workshop Service</span>
+                                            <span className="text-[var(--admin-accent)]">Workshop Service</span>
                                         )}
                                     </p>
-                                    {b.location === 'doorstep' && b.address && (
+                                    {b.service_location === 'doorstep' && b.address && (
                                         <p className="text-xs text-[#8888a0] font-medium leading-relaxed max-w-sm italic">
                                             "{b.address}"
                                         </p>
@@ -191,7 +221,7 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
                                     <button
                                         onClick={() => updateStatus(b.id, 'confirmed')}
                                         disabled={updatingId === b.id}
-                                        className="flex-1 xl:flex-none flex items-center justify-center gap-2 px-5 xl:px-6 py-3 bg-[#00c8ff] text-black rounded-2xl font-black text-xs xl:text-sm hover:scale-105 transition-all shadow-xl disabled:opacity-50"
+                                        className="flex-1 xl:flex-none flex items-center justify-center gap-2 px-5 xl:px-6 py-3 bg-[var(--admin-accent)] text-black rounded-2xl font-black text-xs xl:text-sm hover:scale-105 transition-all shadow-xl disabled:opacity-50"
                                     >
                                         <Check size={18} strokeWidth={3} />
                                         Confirm
@@ -217,16 +247,14 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
                                     </button>
                                 )}
 
-                                {b.status !== 'cancelled' && b.status !== 'completed' && (
-                                    <button
-                                        onClick={() => updateStatus(b.id, 'cancelled')}
-                                        disabled={updatingId === b.id}
-                                        className="p-3 bg-white/5 hover:bg-[#ff2d551a] hover:text-[#ff2d55] rounded-xl transition-all text-[#55556a] border border-white/5"
-                                        title="Cancel Booking"
-                                    >
-                                        <XCircle size={22} />
-                                    </button>
-                                )}
+                                <button
+                                    onClick={() => handleDeleteBooking(b.id, b.name)}
+                                    disabled={updatingId === b.id}
+                                    className="p-3 bg-white/5 hover:bg-[#ff2d551a] hover:text-[#ff2d55] rounded-xl transition-all text-[#55556a] border border-white/5"
+                                    title="Delete from System"
+                                >
+                                    <Trash2 size={20} />
+                                </button>
                             </div>
                         </div>
                     </div>
