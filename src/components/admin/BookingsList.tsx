@@ -40,18 +40,43 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
     };
 
     const handleWhatsAppConfirm = (booking: any) => {
-        // Basic phone normalization (assumes 10 digits for India if it looks like one)
+        // Retrieve custom templates or use fallback
+        const savedTemplates = localStorage.getItem('admin_whatsapp_templates');
+        const templates = savedTemplates ? JSON.parse(savedTemplates) : {
+            confirmation: "Hello {name}, your booking for {bike} is confirmed! We'll see you at {time}.",
+            completion: "Hi {name}, your {bike} is ready for pickup! Total: {revenue}.",
+            reminder: "Hello {name}, just a reminder about your appointment today for {bike}."
+        };
+
+        // Determine which template to use based on status
+        let template = templates.confirmation;
+        if (booking.status === 'completed') template = templates.completion;
+
+        // Calculate estimated revenue for the tag
+        const service = booking.service_type.toLowerCase();
+        let estRevenue = "500";
+        if (service.includes('engine')) estRevenue = "2500";
+        else if (service.includes('brake')) estRevenue = "1200";
+        else if (service.includes('general')) estRevenue = "800";
+        else if (service.includes('oil')) estRevenue = "600";
+        else if (service.includes('wash')) estRevenue = "300";
+
+        // Inject variables
+        const name = booking.name;
+        const bike = booking.bike_model;
+        const time = new Date(booking.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+
+        const rawMessage = template
+            .replace(/{name}/g, name)
+            .replace(/{bike}/g, bike)
+            .replace(/{time}/g, time)
+            .replace(/{revenue}/g, `₹${estRevenue}`);
+
+        // Basic phone normalization
         let phone = booking.phone.replace(/\D/g, '');
         if (phone.length === 10) phone = '91' + phone;
 
-        const message = encodeURIComponent(
-            `Hello ${booking.name}! 🏍️\n\n` +
-            `This is SmartBike Pro confirming your booking for ${booking.service_type} on your ${booking.bike_model}.\n\n` +
-            `📍 Location: ${booking.location === 'doorstep' ? 'Doorstep Service' : 'Workshop Visit'}\n` +
-            `📅 Status: Confirmed\n\n` +
-            `We look forward to serving you! If you have any questions, feel free to reply here.`
-        );
-
+        const message = encodeURIComponent(rawMessage);
         window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
 
         // Auto-confirm if pending

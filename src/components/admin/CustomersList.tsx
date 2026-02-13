@@ -12,6 +12,7 @@ import {
     Star
 } from 'lucide-react';
 import clsx from 'clsx';
+import { createClient } from '@/lib/supabase/client';
 
 interface CustomersListProps {
     bookings: any[];
@@ -20,6 +21,32 @@ interface CustomersListProps {
 export default function CustomersList({ bookings }: CustomersListProps) {
     const [searchQuery, setSearchQuery] = useState('');
     const [filterTier, setFilterTier] = useState<string>('all');
+    const [purging, setPurging] = useState<string | null>(null);
+    const supabase = createClient();
+
+    const handlePurgeCustomer = async (phone: string, name: string) => {
+        if (!confirm(`CRITICAL WARNING: You are about to permanently purge all data for ${name} (${phone}). This action cannot be reversed. Proceed?`)) {
+            return;
+        }
+
+        setPurging(phone);
+        try {
+            // Delete all bookings for this phone number
+            const { error } = await supabase
+                .from('bookings')
+                .delete()
+                .eq('phone', phone);
+
+            if (error) throw error;
+
+            alert(`Customer ${name} and all associated records have been purged.`);
+            window.location.reload(); // Refresh to update aggregation
+        } catch (err) {
+            console.error('Error purging customer:', err);
+            alert('Failed to purge customer nodes.');
+        }
+        setPurging(null);
+    };
 
     // Aggregate customers by phone
     const customerMap = useMemo(() => {
@@ -193,7 +220,13 @@ export default function CustomersList({ bookings }: CustomersListProps) {
                                         <div className="w-1.5 h-1.5 bg-[#00c8ff] rounded-full animate-pulse"></div>
                                         Operational History
                                     </h5>
-                                    <TrendingUp size={16} className="text-[#34d399]" />
+                                    <button
+                                        onClick={() => handlePurgeCustomer(c.phone, c.name)}
+                                        disabled={purging === c.phone}
+                                        className="flex items-center gap-2 text-[10px] font-black text-[#55556a] hover:text-[#ff2d55] transition-all uppercase tracking-widest"
+                                    >
+                                        {purging === c.phone ? "SYST_PRG..." : "Purge Nodes"}
+                                    </button>
                                 </div>
                                 <div className="space-y-4">
                                     {c.bookings.slice().reverse().slice(0, 3).map((b: any, idx: number) => (

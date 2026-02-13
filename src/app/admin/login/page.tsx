@@ -22,17 +22,20 @@ export default function AdminLoginPage() {
         setIsSubmitting(true);
         setError('');
 
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 800));
+        // Get the custom passcode from settings or default to 8888
+        const storedPasscode = localStorage.getItem('admin_passcode') || '8888';
 
-        if (passcode === '8888') {
+        // Premium simulated delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        if (passcode === storedPasscode) {
             sessionStorage.setItem('admin_auth', 'true');
             router.push('/admin/dashboard');
         } else {
-            setError('Invalid Access Key');
+            setError('Neural Key Mismatch. Please re-authenticate.');
             setPasscode('');
-            setIsSubmitting(false);
         }
+        setIsSubmitting(false);
     };
 
     return (

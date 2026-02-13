@@ -38,10 +38,19 @@ export default function AdminDashboard() {
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [showNotifications, setShowNotifications] = useState(false);
+    const [showMobileMenu, setShowMobileMenu] = useState(false);
     const [bookingFilter, setBookingFilter] = useState<'all' | 'pending' | 'confirmed' | 'completed' | 'cancelled'>('all');
+    const [accentColor, setAccentColor] = useState('#00c8ff');
 
     const notificationRef = useRef<HTMLDivElement>(null);
     const supabase = createClient();
+
+    // Sync Global Theme Accent
+    useEffect(() => {
+        const color = localStorage.getItem('admin_theme_color') || '#00c8ff';
+        setAccentColor(color);
+        document.documentElement.style.setProperty('--admin-accent', color);
+    }, [activeTab]); // Refresh accent on tab changes to ensure reactivity
 
     // Auth Check with dynamic passcode
     useEffect(() => {
@@ -124,121 +133,159 @@ export default function AdminDashboard() {
 
     const pendingCount = bookings.filter(b => b.status === 'pending').length;
 
+    const SidebarContent = () => (
+        <>
+            <div className="flex items-center gap-4 mb-14">
+                <div className="w-10 h-10 bg-gradient-to-tr from-[#00c8ff] to-[#a78bfa] rounded-xl flex items-center justify-center shadow-lg shadow-[#00c8ff22]">
+                    <ShieldCheck size={20} className="text-black" />
+                </div>
+                <div className="flex flex-col">
+                    <span className="text-lg font-black text-white leading-none tracking-tight uppercase">SmartBike</span>
+                    <span className="text-[10px] font-black text-[#00c8ff] uppercase tracking-[0.3em] mt-1">Terminal DX</span>
+                </div>
+            </div>
+
+            <nav className="flex-1 space-y-2">
+                <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.3em] ml-4 mb-4 text-left">Operations</p>
+
+                <button
+                    onClick={() => { setActiveTab('bookings'); setBookingFilter('all'); setShowMobileMenu(false); }}
+                    className={clsx(
+                        "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
+                        activeTab === 'bookings' ? "bg-[#00c8ff1a] text-[var(--admin-accent)] shadow-sm" : "text-[#55556a] hover:text-white hover:bg-white/5"
+                    )}
+                >
+                    <Calendar size={20} className={activeTab === 'bookings' ? "text-[var(--admin-accent)]" : ""} />
+                    <span>Reservations</span>
+                    {pendingCount > 0 && activeTab !== 'bookings' && (
+                        <span className="ml-auto w-5 h-5 bg-[#00c8ff] text-black text-[10px] rounded-full flex items-center justify-center font-black">
+                            {pendingCount}
+                        </span>
+                    )}
+                </button>
+
+                <button
+                    onClick={() => { setActiveTab('customers'); setShowMobileMenu(false); }}
+                    className={clsx(
+                        "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
+                        activeTab === 'customers' ? "bg-[#34d3991a] text-[#34d399] shadow-sm" : "text-[#55556a] hover:text-white hover:bg-white/5"
+                    )}
+                >
+                    <Users size={20} className={activeTab === 'customers' ? "text-[#34d399]" : ""} />
+                    <span>Market Database</span>
+                </button>
+
+                <button
+                    onClick={() => { setActiveTab('fleet'); setShowMobileMenu(false); }}
+                    className={clsx(
+                        "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
+                        activeTab === 'fleet' ? "bg-white/10 text-white" : "text-[#55556a] hover:text-white hover:bg-white/5"
+                    )}
+                >
+                    <Truck size={20} />
+                    <span>Fleet Ops</span>
+                    <span className="ml-auto text-[8px] bg-white/5 px-1.5 py-0.5 rounded text-[#55556a]">BETA</span>
+                </button>
+
+                <div className="h-4"></div>
+                <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.3em] ml-4 mb-4 text-left">Intelligence</p>
+
+                <button
+                    onClick={() => { setActiveTab('chats'); setShowMobileMenu(false); }}
+                    className={clsx(
+                        "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
+                        activeTab === 'chats' ? "bg-[#a78bfa1a] text-[#a78bfa] shadow-sm" : "text-[#55556a] hover:text-white hover:bg-white/5"
+                    )}
+                >
+                    <MessageSquare size={20} className={activeTab === 'chats' ? "text-[#a78bfa]" : ""} />
+                    <span>Neural Logs</span>
+                </button>
+
+                <button
+                    onClick={() => { setActiveTab('reports'); setShowMobileMenu(false); }}
+                    className={clsx(
+                        "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
+                        activeTab === 'reports' ? "bg-white/10 text-white" : "text-[#55556a] hover:text-white hover:bg-white/5"
+                    )}
+                >
+                    <BarChart3 size={20} />
+                    <span>Analytics</span>
+                </button>
+            </nav>
+
+            <div className="pt-8 border-t border-white/5 space-y-3">
+                <button
+                    onClick={() => { setActiveTab('settings'); setShowMobileMenu(false); }}
+                    className={clsx(
+                        "w-full flex items-center gap-4 px-6 py-3 rounded-2xl font-bold transition-all",
+                        activeTab === 'settings' ? "bg-white/10 text-white border border-white/10" : "text-[#55556a] hover:text-white hover:bg-white/5 border border-transparent"
+                    )}
+                >
+                    <Settings size={20} />
+                    <span>Settings</span>
+                </button>
+                <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-[#ff2d55] hover:bg-[#ff2d550a] transition-all group"
+                >
+                    <LogOut size={20} className="group-hover:-translate-x-1 transition-transform" />
+                    <span>Terminate</span>
+                </button>
+            </div>
+        </>
+    );
+
     return (
         <div className="flex min-h-screen bg-[#050508] text-[#eeeef2]">
-            {/* Sidebar */}
+            {/* Desktop Sidebar */}
             <aside className="fixed left-0 top-0 h-full w-72 bg-[#0c0c16] border-r border-white/5 p-8 z-40 hidden xl:flex flex-col shadow-2xl">
-                <div className="flex items-center gap-4 mb-14">
-                    <div className="w-10 h-10 bg-gradient-to-tr from-[#00c8ff] to-[#a78bfa] rounded-xl flex items-center justify-center shadow-lg shadow-[#00c8ff22]">
-                        <ShieldCheck size={20} className="text-black" />
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-lg font-black text-white leading-none tracking-tight uppercase">SmartBike</span>
-                        <span className="text-[10px] font-black text-[#00c8ff] uppercase tracking-[0.3em] mt-1">Terminal DX</span>
-                    </div>
-                </div>
-
-                <nav className="flex-1 space-y-2">
-                    <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.3em] ml-4 mb-4">Operations</p>
-
-                    <button
-                        onClick={() => { setActiveTab('bookings'); setBookingFilter('all'); }}
-                        className={clsx(
-                            "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
-                            activeTab === 'bookings' ? "bg-[#00c8ff1a] text-[#00c8ff] shadow-sm" : "text-[#55556a] hover:text-white hover:bg-white/5"
-                        )}
-                    >
-                        <Calendar size={20} className={activeTab === 'bookings' ? "text-[#00c8ff]" : ""} />
-                        <span>Reservations</span>
-                        {pendingCount > 0 && activeTab !== 'bookings' && (
-                            <span className="ml-auto w-5 h-5 bg-[#00c8ff] text-black text-[10px] rounded-full flex items-center justify-center font-black">
-                                {pendingCount}
-                            </span>
-                        )}
-                    </button>
-
-                    <button
-                        onClick={() => setActiveTab('customers')}
-                        className={clsx(
-                            "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
-                            activeTab === 'customers' ? "bg-[#34d3991a] text-[#34d399] shadow-sm" : "text-[#55556a] hover:text-white hover:bg-white/5"
-                        )}
-                    >
-                        <Users size={20} className={activeTab === 'customers' ? "text-[#34d399]" : ""} />
-                        <span>Market Database</span>
-                    </button>
-
-                    <button
-                        onClick={() => setActiveTab('fleet')}
-                        className={clsx(
-                            "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
-                            activeTab === 'fleet' ? "bg-white/10 text-white" : "text-[#55556a] hover:text-white hover:bg-white/5"
-                        )}
-                    >
-                        <Truck size={20} />
-                        <span>Fleet Ops</span>
-                        <span className="ml-auto text-[8px] bg-white/5 px-1.5 py-0.5 rounded text-[#55556a]">BETA</span>
-                    </button>
-
-                    <div className="h-4"></div>
-                    <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.3em] ml-4 mb-4">Intelligence</p>
-
-                    <button
-                        onClick={() => setActiveTab('chats')}
-                        className={clsx(
-                            "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
-                            activeTab === 'chats' ? "bg-[#a78bfa1a] text-[#a78bfa] shadow-sm" : "text-[#55556a] hover:text-white hover:bg-white/5"
-                        )}
-                    >
-                        <MessageSquare size={20} className={activeTab === 'chats' ? "text-[#a78bfa]" : ""} />
-                        <span>Neural Logs</span>
-                    </button>
-
-                    <button
-                        onClick={() => setActiveTab('reports')}
-                        className={clsx(
-                            "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
-                            activeTab === 'reports' ? "bg-white/10 text-white" : "text-[#55556a] hover:text-white hover:bg-white/5"
-                        )}
-                    >
-                        <BarChart3 size={20} />
-                        <span>Analytics</span>
-                    </button>
-                </nav>
-
-                <div className="pt-8 border-t border-white/5 space-y-3">
-                    <button
-                        onClick={() => setActiveTab('settings')}
-                        className={clsx(
-                            "w-full flex items-center gap-4 px-6 py-3 rounded-2xl font-bold transition-all",
-                            activeTab === 'settings' ? "bg-white/10 text-white border border-white/10" : "text-[#55556a] hover:text-white hover:bg-white/5 border border-transparent"
-                        )}
-                    >
-                        <Settings size={20} />
-                        <span>Settings</span>
-                    </button>
-                    <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-[#ff2d55] hover:bg-[#ff2d550a] transition-all group"
-                    >
-                        <LogOut size={20} className="group-hover:-translate-x-1 transition-transform" />
-                        <span>Terminate</span>
-                    </button>
-                </div>
+                <SidebarContent />
             </aside>
+
+            {/* Mobile Sidebar Overlay */}
+            {showMobileMenu && (
+                <>
+                    <div
+                        className="fixed inset-0 bg-black/80 backdrop-blur-md z-[50] xl:hidden"
+                        onClick={() => setShowMobileMenu(false)}
+                    ></div>
+                    <aside className="fixed left-0 top-0 h-full w-80 bg-[#0c0c16] border-r border-white/10 p-8 z-[60] xl:hidden flex flex-col shadow-2xl animate-admin-in">
+                        <div className="flex justify-end mb-4">
+                            <button onClick={() => setShowMobileMenu(false)} className="p-2 text-[#55556a] hover:text-white">
+                                <X size={24} />
+                            </button>
+                        </div>
+                        <SidebarContent />
+                    </aside>
+                </>
+            )}
 
             {/* Main Container */}
             <main className="flex-1 xl:pl-72 flex flex-col min-h-screen relative overflow-hidden">
                 {/* Cinematic Backdrop */}
                 <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-30">
-                    <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#00c8ff05] blur-[150px] rounded-full"></div>
-                    <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#a78bfa05] blur-[150px] rounded-full"></div>
+                    <div
+                        className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] blur-[150px] rounded-full"
+                        style={{ backgroundColor: `${accentColor}08` }}
+                    ></div>
+                    <div
+                        className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] blur-[150px] rounded-full opacity-20"
+                        style={{ backgroundColor: `${accentColor}05` }}
+                    ></div>
                 </div>
 
                 {/* Top Navbar */}
                 <header className="sticky top-0 bg-[#050508]/80 backdrop-blur-3xl border-b border-white/5 px-6 xl:px-12 py-5 flex items-center justify-between z-30">
                     <div className="flex items-center gap-4">
-                        <h2 className="text-xl xl:text-3xl font-black text-white tracking-tighter uppercase">
+                        {/* Mobile Hamburger */}
+                        <button
+                            onClick={() => setShowMobileMenu(true)}
+                            className="xl:hidden p-2 bg-white/5 rounded-xl text-[#eeeef2] border border-white/5"
+                        >
+                            <LayoutDashboard size={20} />
+                        </button>
+
+                        <h2 className="text-xl xl:text-3xl font-black text-white tracking-tighter uppercase whitespace-nowrap">
                             {activeTab === 'bookings' ? `Reservations ${bookingFilter !== 'all' ? `• ${bookingFilter}` : ''}` :
                                 activeTab === 'chats' ? 'Neural Node Logs' :
                                     activeTab === 'customers' ? 'Market Database' :
