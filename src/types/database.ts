@@ -37,96 +37,98 @@ export interface Database {
                     created_at?: string;
                     updated_at?: string;
                 };
-                Relationships: [
-                    {
-                        foreignKeyName: "profiles_id_fkey";
-                        columns: ["id"];
-                        referencedRelation: "users";
-                        referencedColumns: ["id"];
-                    }
-                ];
-            };
-            services: {
-                Row: {
-                    id: string;
-                    name: string;
-                    description: string;
-                    base_price: number;
-                    category: string;
-                    icon: string;
-                    created_at: string;
-                };
-                Insert: {
-                    id?: string;
-                    name: string;
-                    description: string;
-                    base_price: number;
-                    category: string;
-                    icon?: string;
-                    created_at?: string;
-                };
-                Update: {
-                    id?: string;
-                    name?: string;
-                    description?: string;
-                    base_price?: number;
-                    category?: string;
-                    icon?: string;
-                    created_at?: string;
-                };
                 Relationships: [];
             };
             bookings: {
                 Row: {
                     id: string;
-                    user_id: string;
-                    service_id: string | null;
+                    name: string;
+                    phone: string;
                     bike_model: string;
-                    status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
-                    scheduled_at: string;
-                    time_slot: string | null;
+                    service_type: string;
+                    service_location: string;
+                    address: string | null;
+                    preferred_date: string;
+                    preferred_time: string;
                     notes: string | null;
-                    estimated_cost: number | null;
+                    status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
                     created_at: string;
-                    updated_at: string;
                 };
                 Insert: {
                     id?: string;
-                    user_id: string;
-                    service_id?: string | null;
+                    name: string;
+                    phone: string;
                     bike_model: string;
-                    status?: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
-                    scheduled_at: string;
-                    time_slot?: string | null;
+                    service_type: string;
+                    service_location: string;
+                    address?: string | null;
+                    preferred_date: string;
+                    preferred_time: string;
                     notes?: string | null;
-                    estimated_cost?: number | null;
+                    status?: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
                     created_at?: string;
-                    updated_at?: string;
                 };
                 Update: {
                     id?: string;
-                    user_id?: string;
-                    service_id?: string | null;
+                    name?: string;
+                    phone?: string;
                     bike_model?: string;
-                    status?: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
-                    scheduled_at?: string;
-                    time_slot?: string | null;
+                    service_type?: string;
+                    service_location?: string;
+                    address?: string | null;
+                    preferred_date?: string;
+                    preferred_time?: string;
                     notes?: string | null;
-                    estimated_cost?: number | null;
+                    status?: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
                     created_at?: string;
-                    updated_at?: string;
+                };
+                Relationships: [];
+            };
+            chat_sessions: {
+                Row: {
+                    id: string;
+                    customer_name: string | null;
+                    created_at: string;
+                };
+                Insert: {
+                    id?: string;
+                    customer_name?: string | null;
+                    created_at?: string;
+                };
+                Update: {
+                    id?: string;
+                    customer_name?: string | null;
+                    created_at?: string;
+                };
+                Relationships: [];
+            };
+            chat_messages: {
+                Row: {
+                    id: string;
+                    session_id: string;
+                    role: 'bot' | 'user';
+                    content: string;
+                    created_at: string;
+                };
+                Insert: {
+                    id?: string;
+                    session_id: string;
+                    role: 'bot' | 'user';
+                    content: string;
+                    created_at?: string;
+                };
+                Update: {
+                    id?: string;
+                    session_id?: string;
+                    role?: 'bot' | 'user';
+                    content?: string;
+                    created_at?: string;
                 };
                 Relationships: [
                     {
-                        foreignKeyName: "bookings_service_id_fkey";
-                        columns: ["service_id"];
-                        referencedRelation: "services";
-                        referencedColumns: ["id"];
-                    },
-                    {
-                        foreignKeyName: "bookings_user_id_fkey";
-                        columns: ["user_id"];
-                        referencedRelation: "users";
+                        foreignKeyName: "chat_messages_session_id_fkey";
+                        columns: ["session_id"];
+                        referencedRelation: "chat_sessions";
                         referencedColumns: ["id"];
                     }
                 ];
@@ -148,5 +150,6 @@ export interface Database {
 }
 
 export type Profile = Database['public']['Tables']['profiles']['Row'];
-export type Service = Database['public']['Tables']['services']['Row'];
 export type Booking = Database['public']['Tables']['bookings']['Row'];
+export type ChatSession = Database['public']['Tables']['chat_sessions']['Row'];
+export type ChatMessage = Database['public']['Tables']['chat_messages']['Row'];

@@ -5,6 +5,7 @@ import { Navbar } from '@/components/ui/Navbar';
 import { BrandMarquee } from '@/components/ui/BrandMarquee';
 import { Footer } from '@/components/ui/Footer';
 import { diagnose, estimateCost, handleConversation, type DiagnosisResult, type CostEstimate, type ConversationResult } from '@/lib/ai-engine';
+import { createClient } from '@/lib/supabase/client';
 import clsx from 'clsx';
 
 export default function LandingPage() {
@@ -27,6 +28,8 @@ export default function LandingPage() {
     { type: 'bot', html: <>Hi! I&apos;m your AI Mechanic assistant. 🏍️<br />Tell me about your bike problem and I&apos;ll help diagnose it!</> }
   ]);
   const [chatInput, setChatInput] = useState('');
+  const [chatSessionId, setChatSessionId] = useState<string | null>(null);
+  const supabase = createClient();
   const chatMessagesRef = useRef<HTMLDivElement>(null);
 
   // --- Refs for Animations ---
@@ -149,58 +152,117 @@ export default function LandingPage() {
 
     if (!name || !phone || !bike || !service || !loc) return;
 
+    // Save to Supabase
+    const saveBooking = async () => {
+      try {
+        await supabase.from('bookings').insert({
+          name,
+          phone,
+          bike_model: bike,
+          service_type: service,
+          service_location: loc,
+          address: loc === 'doorstep' ? address : null,
+          preferred_date: (formData.get('bookDate') as string),
+          preferred_time: (formData.get('bookTime') as string),
+          notes: (formData.get('bookNotes') as string),
+          status: 'pending'
+        });
+      } catch (err) {
+        console.error('Error saving booking:', err);
+      }
+    };
+    saveBooking();
+
     setBookingData({ name, phone, bike, service, serviceLocation: loc, address });
     setBookingSuccess(true);
   };
 
   // --- 8. Chatbot Logic ---
-  const sendChatMessage = useCallback(() => {
+  const saveChatMessage = async (sessionId: string, role: 'user' | 'bot', content: string) => {
+    try {
+      await supabase.from('chat_messages').insert({
+        session_id: sessionId,
+        role,
+        content
+      });
+    } catch (err) {
+      console.error('Error saving chat message:', err);
+    }
+  };
+
+  const sendChatMessage = useCallback(async () => {
     if (!chatInput.trim()) return;
     const text = chatInput;
     setChatMessages(prev => [...prev, { type: 'user', html: text }]);
     setChatInput('');
 
+    let currentSessionId = chatSessionId;
+
+    // Create session if it doesn't exist
+    if (!currentSessionId) {
+      try {
+        const { data, error } = await supabase.from('chat_sessions').insert({ customer_name: 'Guest' }).select().single();
+        if (data && !error) {
+          currentSessionId = data.id;
+          setChatSessionId(data.id);
+        }
+      } catch (err) {
+        console.error('Error creating chat session:', err);
+      }
+    }
+
+    if (currentSessionId) {
+      saveChatMessage(currentSessionId, 'user', text);
+    }
+
     // Typing indicator delay
     setTimeout(() => {
       // Check for conversational responses first
       const conversation = handleConversation(text);
+      let botText = '';
+      let reply: React.ReactNode;
+
       if (conversation) {
-        const reply = conversation.reply.split('\n').map((line, i) => (
+        botText = conversation.reply;
+        reply = conversation.reply.split('\n').map((line, i) => (
           <React.Fragment key={i}>
             {line}
             {i < conversation.reply.split('\n').length - 1 && <br />}
           </React.Fragment>
         ));
-        setChatMessages(prev => [...prev, { type: 'bot', html: reply }]);
-        return;
+      } else {
+        // Otherwise, try diagnostic logic
+        const result = diagnose(text);
+        if (result) {
+          botText = `${result.title}\n\nPossible causes:\n• ${result.causes.join('\n• ')}\n\nUrgency: ${result.urgency.toUpperCase()}\nEst. Cost: ${result.cost}\n\n${result.tip}`;
+          reply = (
+            <>
+              <strong>{result.title}</strong><br /><br />
+              Possible causes:<br />• {result.causes.join('<br/>• ')}<br /><br />
+              ⚠️ Urgency: <strong>{result.urgency.toUpperCase()}</strong><br />
+              💰 Est. Cost: <strong>{result.cost}</strong><br /><br />
+              💡 {result.tip}<br /><br />
+              👉 <a href="#booking" style={{ color: '#00d4ff' }}>Book a service</a> to get it fixed!
+            </>
+          );
+        } else {
+          botText = "I couldn't identify the exact issue from your description. I'd recommend a Full Diagnostic Checkup (₹199) where our experts will inspect your bike thoroughly.";
+          reply = (
+            <>
+              I couldn&apos;t identify the exact issue from your description. 🤔<br /><br />
+              I&apos;d recommend a <strong>Full Diagnostic Checkup (₹199)</strong> where our experts will inspect your bike thoroughly.<br /><br />
+              👉 <a href="#booking" style={{ color: '#00d4ff' }}>Book a checkup</a> or call us at <a href="tel:+919811530780" style={{ color: '#00d4ff' }}>+91 98115 30780</a>
+            </>
+          );
+        }
       }
 
-      // Otherwise, try diagnostic logic
-      const result = diagnose(text);
-      let reply: React.ReactNode;
-      if (result) {
-        reply = (
-          <>
-            <strong>{result.title}</strong><br /><br />
-            Possible causes:<br />• {result.causes.join('<br/>• ')}<br /><br />
-            ⚠️ Urgency: <strong>{result.urgency.toUpperCase()}</strong><br />
-            💰 Est. Cost: <strong>{result.cost}</strong><br /><br />
-            💡 {result.tip}<br /><br />
-            👉 <a href="#booking" style={{ color: '#00d4ff' }}>Book a service</a> to get it fixed!
-          </>
-        );
-      } else {
-        reply = (
-          <>
-            I couldn&apos;t identify the exact issue from your description. 🤔<br /><br />
-            I&apos;d recommend a <strong>Full Diagnostic Checkup (₹199)</strong> where our experts will inspect your bike thoroughly.<br /><br />
-            👉 <a href="#booking" style={{ color: '#00d4ff' }}>Book a checkup</a> or call us at <a href="tel:+919811530780" style={{ color: '#00d4ff' }}>+91 98115 30780</a>
-          </>
-        );
-      }
       setChatMessages(prev => [...prev, { type: 'bot', html: reply }]);
+      if (currentSessionId) {
+        saveChatMessage(currentSessionId, 'bot', botText);
+      }
     }, 1200);
-  }, [chatInput]);
+  }, [chatInput, chatSessionId, supabase]);
 
   useEffect(() => {
     if (chatMessagesRef.current) {
