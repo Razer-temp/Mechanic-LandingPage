@@ -2,10 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Lock, ArrowRight, ShieldCheck } from 'lucide-react';
 
 export default function AdminLoginPage() {
     const [passcode, setPasscode] = useState('');
     const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -15,59 +17,94 @@ export default function AdminLoginPage() {
         }
     }, [router]);
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        // In a real app, this should be an env variable or server action
-        // For "simpler way" as requested:
+        setIsSubmitting(true);
+        setError('');
+
+        // Simulate network delay for premium feel
+        await new Promise(resolve => setTimeout(resolve, 800));
+
         if (passcode === '8888') {
             sessionStorage.setItem('admin_auth', 'true');
             router.push('/admin/dashboard');
         } else {
-            setError('Invalid passcode. Access denied.');
+            setError('Invalid Access Key');
+            setPasscode('');
+            setIsSubmitting(false);
         }
     };
 
     return (
-        <div className="min-h-screen bg-[#050508] flex items-center justify-center p-4">
-            <div className="max-w-md w-full bg-[#0c0c16] border border-[#ffffff0a] rounded-2xl p-8 shadow-2xl">
-                <div className="text-center mb-8">
-                    <div className="text-4xl mb-4">🔓</div>
-                    <h1 className="text-2xl font-bold bg-gradient-to-r from-[#00c8ff] to-[#a78bfa] bg-clip-text text-transparent">
-                        Admin Portal
+        <div className="min-h-screen flex items-center justify-center p-6 bg-[radial-gradient(circle_at_50%_50%,#0c0c1e_0%,#050508_100%)]">
+            <div className="w-full max-w-md animate-admin-in">
+                {/* Logo/Brand Area */}
+                <div className="text-center mb-10">
+                    <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-tr from-[#00c8ff] to-[#a78bfa] rounded-3xl rotate-12 mb-6 shadow-[0_0_40px_rgba(0,200,255,0.2)]">
+                        <ShieldCheck size={40} className="text-black -rotate-12" />
+                    </div>
+                    <h1 className="text-4xl font-black tracking-tighter text-white mb-2">
+                        SMARTBIKE<span className="text-[#00c8ff]">PRO</span>
                     </h1>
-                    <p className="text-gray-400 mt-2">Enter passcode to continue</p>
+                    <p className="text-[#8888a0] font-medium tracking-wide uppercase text-xs">Command Center</p>
                 </div>
 
-                <form onSubmit={handleLogin} className="space-y-6">
-                    <div>
-                        <input
-                            type="password"
-                            placeholder="Enter 4-digit passcode"
-                            className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-center text-2xl tracking-[1em] focus:border-[#00c8ff] outline-none transition-all"
-                            value={passcode}
-                            onChange={(e) => setPasscode(e.target.value)}
-                            maxLength={4}
-                            autoFocus
-                        />
-                    </div>
+                {/* Login Card */}
+                <div className="bg-[#0c0c16]/80 backdrop-blur-xl border border-white/5 rounded-[2rem] p-10 shadow-2xl relative overflow-hidden group">
+                    {/* Subtle Glow Effect */}
+                    <div className="absolute -top-24 -left-24 w-48 h-48 bg-[#00c8ff]/10 blur-[80px] rounded-full group-hover:bg-[#00c8ff]/20 transition-all duration-700"></div>
 
-                    {error && (
-                        <p className="text-[#ff2d55] text-sm text-center font-medium animate-pulse">
-                            {error}
-                        </p>
-                    )}
+                    <form onSubmit={handleLogin} className="relative z-10 space-y-8">
+                        <div className="space-y-4">
+                            <label className="block text-[10px] font-bold text-[#8888a0] uppercase tracking-[0.2em] ml-1">
+                                Security Passcode
+                            </label>
+                            <div className="relative group/input">
+                                <input
+                                    type="password"
+                                    placeholder="••••"
+                                    className={`w-full bg-black/40 border ${error ? 'border-[#ff2d55]/50' : 'border-white/10'} group-hover/input:border-white/20 rounded-2xl px-6 py-5 text-center text-3xl tracking-[0.5em] focus:border-[#00c8ff] focus:ring-4 focus:ring-[#00c8ff0a] outline-none transition-all placeholder:text-white/5 text-white font-mono`}
+                                    value={passcode}
+                                    onChange={(e) => setPasscode(e.target.value)}
+                                    maxLength={4}
+                                    disabled={isSubmitting}
+                                    autoFocus
+                                />
+                                <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-white/10 group-focus-within/input:text-[#00c8ff] transition-colors" size={20} />
+                            </div>
+                        </div>
 
-                    <button
-                        type="submit"
-                        className="w-full bg-gradient-to-r from-[#00c8ff] to-[#0090c0] text-white font-bold py-3 rounded-xl hover:translate-y-[-2px] transition-all shadow-lg shadow-[#00c8ff1a]"
-                    >
-                        Access Dashboard
-                    </button>
-                </form>
+                        {error && (
+                            <p className="text-[#ff2d55] text-xs text-center font-bold tracking-wide animate-bounce">
+                                ⚠️ {error}
+                            </p>
+                        )}
 
-                <div className="mt-8 pt-6 border-t border-white/5 text-center">
-                    <a href="/" className="text-gray-500 hover:text-[#00c8ff] text-sm transition-colors">
-                        ← Back to Landing Page
+                        <button
+                            type="submit"
+                            disabled={isSubmitting || passcode.length < 4}
+                            className="w-full relative group/btn disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <div className="absolute -inset-1 bg-gradient-to-r from-[#00c8ff] to-[#a78bfa] rounded-2xl blur opacity-25 group-hover/btn:opacity-60 transition-all duration-500"></div>
+                            <div className="relative bg-[#00c8ff] text-black font-black text-sm uppercase tracking-widest py-5 rounded-2xl flex items-center justify-center gap-3 active:scale-95 transition-all">
+                                {isSubmitting ? (
+                                    <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+                                ) : (
+                                    <>
+                                        Authorize Access <ArrowRight size={18} />
+                                    </>
+                                )}
+                            </div>
+                        </button>
+                    </form>
+                </div>
+
+                <div className="mt-12 text-center space-y-4">
+                    <p className="text-[#55556a] text-[10px] uppercase font-bold tracking-[0.3em]">
+                        Restricted Access • Monitoring Active
+                    </p>
+                    <a href="/" className="inline-flex items-center gap-2 text-[#8888a0] hover:text-white text-xs font-semibold transition-colors group">
+                        <span className="group-hover:-translate-x-1 transition-transform">←</span> Return to Terminal
                     </a>
                 </div>
             </div>
