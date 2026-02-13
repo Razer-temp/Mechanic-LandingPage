@@ -19,7 +19,8 @@ export default function LandingPage() {
   const [costEstimate, setCostEstimate] = useState<CostEstimate | null>(null);
 
   const [bookingSuccess, setBookingSuccess] = useState(false);
-  const [bookingData, setBookingData] = useState({ name: '', phone: '', bike: '', service: '' });
+  const [bookingData, setBookingData] = useState({ name: '', phone: '', bike: '', service: '', serviceLocation: 'workshop', address: '' });
+  const [serviceLocation, setServiceLocation] = useState('workshop');
 
   const [chatOpen, setChatOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState<{ type: 'bot' | 'user'; html: React.ReactNode }[]>([
@@ -143,10 +144,12 @@ export default function LandingPage() {
     const phone = formData.get('bookPhone') as string;
     const bike = formData.get('bookBike') as string;
     const service = formData.get('bookService') as string;
+    const loc = formData.get('serviceLocation') as string;
+    const address = formData.get('bookAddress') as string || '';
 
-    if (!name || !phone || !bike || !service) return;
+    if (!name || !phone || !bike || !service || !loc) return;
 
-    setBookingData({ name, phone, bike, service });
+    setBookingData({ name, phone, bike, service, serviceLocation: loc, address });
     setBookingSuccess(true);
   };
 
@@ -528,8 +531,11 @@ export default function LandingPage() {
                 <h3>Booking Confirmed!</h3>
                 <p>Thank you, <strong>{bookingData.name}</strong>! We&apos;ve received your booking for <strong>{bookingData.service}</strong>.</p>
                 <p style={{ marginTop: '8px', color: 'var(--text-muted)' }}>We&apos;ll call you at <strong>{bookingData.phone}</strong> to confirm your slot shortly.</p>
+                {bookingData.serviceLocation === 'doorstep' && (
+                  <p style={{ marginTop: '4px', fontSize: '0.9rem', color: 'var(--accent-violet)' }}>📍 <strong>Doorstep Service</strong> to: {bookingData.address}</p>
+                )}
                 <a
-                  href={`https://wa.me/919811530780?text=Hi!%20I%20just%20booked%20${encodeURIComponent(bookingData.service)}%20for%20my%20${encodeURIComponent(bookingData.bike)}.%20Name:%20${encodeURIComponent(bookingData.name)}`}
+                  href={`https://wa.me/919811530780?text=Hi!%20I%20just%20booked%20${encodeURIComponent(bookingData.service)}%20(${bookingData.serviceLocation === 'doorstep' ? 'Doorstep%20Service' : 'Workshop%20Visit'})${bookingData.serviceLocation === 'doorstep' ? `%20at%20${encodeURIComponent(bookingData.address)}` : ''}%20for%20my%20${encodeURIComponent(bookingData.bike)}.%20Name:%20${encodeURIComponent(bookingData.name)}`}
                   className="btn btn-whatsapp"
                   style={{ marginTop: '24px' }}
                   target="_blank"
@@ -571,9 +577,30 @@ export default function LandingPage() {
                 </div>
                 <div className="form-row">
                   <div className="form-group">
+                    <label htmlFor="serviceLocation">Service Location *</label>
+                    <select
+                      name="serviceLocation"
+                      id="serviceLocation"
+                      required
+                      value={serviceLocation}
+                      onChange={(e) => setServiceLocation(e.target.value)}
+                    >
+                      <option value="workshop">Workshop Visit (In-Store)</option>
+                      <option value="doorstep">Doorstep Service (At Home)</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
                     <label htmlFor="bookDate">Preferred Date *</label>
                     <input type="date" name="bookDate" id="bookDate" required defaultValue={new Date().toISOString().split('T')[0]} min={new Date().toISOString().split('T')[0]} />
                   </div>
+                </div>
+                {serviceLocation === 'doorstep' && (
+                  <div className="form-group animate-fadeInUp">
+                    <label htmlFor="bookAddress">Pickup/Service Address *</label>
+                    <textarea name="bookAddress" id="bookAddress" rows={2} placeholder="Enter your full address for doorstep service" required></textarea>
+                  </div>
+                )}
+                <div className="form-row">
                   <div className="form-group">
                     <label htmlFor="bookTime">Preferred Time</label>
                     <select name="bookTime" id="bookTime">
