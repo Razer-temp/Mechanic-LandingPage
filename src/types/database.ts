@@ -61,6 +61,7 @@ export interface Database {
                     bike_model: string;
                     service_type: string;
                     service_location: string;
+                    metadata?: Json;
                     address?: string | null;
                     preferred_date: string;
                     preferred_time: string;
@@ -148,6 +149,36 @@ export interface Database {
                     key?: string;
                     value?: Json;
                     updated_at?: string;
+                };
+                Relationships: [];
+            };
+            services: {
+                Row: {
+                    id: string;
+                    name: string;
+                    description: string;
+                    base_price: number;
+                    category: string;
+                    icon: string;
+                    created_at: string;
+                };
+                Insert: {
+                    id?: string;
+                    name: string;
+                    description: string;
+                    base_price: number;
+                    category: string;
+                    icon?: string;
+                    created_at?: string;
+                };
+                Update: {
+                    id?: string;
+                    name?: string;
+                    description?: string;
+                    base_price?: number;
+                    category?: string;
+                    icon?: string;
+                    created_at?: string;
                 };
                 Relationships: [];
             };

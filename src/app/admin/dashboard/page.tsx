@@ -169,6 +169,59 @@ export default function AdminDashboard() {
         }
     };
 
+    const handleAutoRepair = async () => {
+        if (!confirm("This will attempt to fix the database by inserting default data. Continue?")) return;
+        setLoading(true);
+        try {
+            // 1. Initialize Admin Settings
+            await supabase.from('admin_settings').upsert([
+                { key: 'passcode', value: '"8888"' },
+                { key: 'theme_color', value: '"#00c8ff"' },
+                {
+                    key: 'whatsapp_templates', value: {
+                        confirmation: "Hello {name}, your booking for {bike} is confirmed! We'll see you at {time}.",
+                        completion: "Hi {name}, your {bike} is ready for pickup! Total: {revenue}.",
+                        reminder: "Hello {name}, just a reminder about your appointment today for {bike}.",
+                        cancellation: "Hello {name}, we have received your request to cancel the booking for {bike}. We hope to see you again soon!"
+                    }
+                }
+            ], { onConflict: 'key' });
+
+            // 2. Seed Services
+            const { error: serviceError } = await supabase.from('services').insert([
+                { name: 'Engine Repair', description: 'Complete engine overhaul, timing chain, piston repair.', base_price: 1500, category: 'repair', icon: '🔩' },
+                { name: 'Full Servicing', description: 'Oil change, filter replacement, chain adjustment.', base_price: 799, category: 'servicing', icon: '⚙️' },
+                { name: 'Brake Fix', description: 'Disc & drum brake pads, fluid change.', base_price: 500, category: 'repair', icon: '🛑' },
+                { name: 'Oil Change', description: 'Premium synthetic engine oil replacement.', base_price: 350, category: 'servicing', icon: '🛢️' },
+                { name: 'Emergency Repair', description: 'Roadside assistance and breakdown support.', base_price: 299, category: 'emergency', icon: '🚨' },
+                { name: 'Electrical Work', description: 'Wiring, headlight, battery, ECU diagnostics.', base_price: 400, category: 'repair', icon: '⚡' }
+            ]);
+
+            if (serviceError) throw new Error("Service seeding failed: " + serviceError.message);
+
+            // 3. Seed Test Bookings
+            const { error: bookingError } = await supabase.from('bookings').insert([
+                { name: 'Arjun Sharma', phone: '9811530701', bike_model: 'Royal Enfield Classic 350', service_type: 'Engine Repair', service_location: 'workshop', preferred_date: new Date().toISOString().split('T')[0], preferred_time: 'morning', status: 'confirmed' },
+                { name: 'Sneha Reddy', phone: '9811530702', bike_model: 'Honda Activa 6G', service_type: 'Full Servicing', service_location: 'doorstep', preferred_date: new Date().toISOString().split('T')[0], preferred_time: 'afternoon', status: 'pending' },
+                { name: 'Rahul Verma', phone: '9811530703', bike_model: 'KTM Duke 200', service_type: 'Brake Fix', service_location: 'workshop', preferred_date: new Date().toISOString().split('T')[0], preferred_time: 'evening', status: 'completed' }
+            ]);
+
+            if (bookingError) throw new Error("Booking seeding failed: " + bookingError.message);
+
+            alert("Database repaired successfully! Reloading...");
+            window.location.reload();
+
+        } catch (err: any) {
+            console.error("Auto-Repair Failed:", err);
+            alert("Repair failed: " + err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+
+
     const pendingCount = bookings.filter(b => b.status === 'pending').length;
 
     const SidebarContent = () => (
@@ -445,7 +498,18 @@ export default function AdminDashboard() {
                                             <p className={debugInfo.fetchError ? "text-[#ff2d55]" : "text-[#34d399]"}>• Connection Status: {debugInfo.fetchError ? `FAILED: ${debugInfo.fetchError}` : "ONLINE"}</p>
                                             <p className="text-[#8888a0]">• Records Retrieved: {debugInfo.totalBookings ?? "Loading..."}</p>
                                         </div>
-                                        <p className="text-xs text-[#8888a0] font-bold">If connection is ONLINE but records are 0, please run the SUPABASE_MASTER_SETUP.sql script.</p>
+                                        <div className="pt-4 border-t border-white/5">
+                                            <button
+                                                onClick={handleAutoRepair}
+                                                className="w-full py-3 bg-[#00c8ff1a] hover:bg-[#00c8ff33] text-[#00c8ff] font-bold rounded-xl border border-[#00c8ff33] transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-xs"
+                                            >
+                                                <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />
+                                                Auto-Repair Database
+                                            </button>
+                                            <p className="text-[10px] text-center text-[#55556a] mt-2 font-mono">
+                                                Attempts to seed default data directly via client access.
+                                            </p>
+                                        </div>
                                     </div>
                                 ) : (
                                     <BookingsList bookings={filteredBookings} onUpdate={fetchData} />
