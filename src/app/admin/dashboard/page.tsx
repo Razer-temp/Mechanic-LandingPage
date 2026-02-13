@@ -429,25 +429,26 @@ export default function AdminDashboard() {
                                     </div>
                                 </div>
 
-                                <div className="flex items-center justify-center py-40">
-                                    <div className="w-16 h-16 border-4 border-[#00c8ff1a] border-t-[#00c8ff] rounded-full animate-spin shadow-2xl"></div>
-                                </div>
-                                ) : bookings.length === 0 ? (
-                                <div className="p-8 bg-[#ff2d551a] border border-[#ff2d5533] rounded-3xl space-y-4">
-                                    <h4 className="text-xl font-black text-[#ff2d55] uppercase tracking-widest flex items-center gap-3">
-                                        <ShieldCheck size={24} />
-                                        System Diagnostics
-                                    </h4>
-                                    <div className="space-y-2 font-mono text-sm text-[#eeeef2]">
-                                        <p className={debugInfo.envUrl ? "text-[#34d399]" : "text-[#ff2d55]"}>• Supabase URL: {debugInfo.envUrl ? "CONNECTED" : "MISSING (Check Vercel Env Vars)"}</p>
-                                        <p className={debugInfo.envKey ? "text-[#34d399]" : "text-[#ff2d55]"}>• Supabase Key: {debugInfo.envKey ? "CONNECTED" : "MISSING (Check Vercel Env Vars)"}</p>
-                                        <p className={debugInfo.fetchError ? "text-[#ff2d55]" : "text-[#34d399]"}>• Connection Status: {debugInfo.fetchError ? `FAILED: ${debugInfo.fetchError}` : "ONLINE"}</p>
-                                        <p className="text-[#8888a0]">• Records Retrieved: {debugInfo.totalBookings ?? "Loading..."}</p>
+                                {loading ? (
+                                    <div className="flex items-center justify-center py-40">
+                                        <div className="w-16 h-16 border-4 border-[#00c8ff1a] border-t-[#00c8ff] rounded-full animate-spin shadow-2xl"></div>
                                     </div>
-                                    <p className="text-xs text-[#8888a0] font-bold">If connection is ONLINE but records are 0, please run the SUPABASE_MASTER_SETUP.sql script.</p>
-                                </div>
+                                ) : bookings.length === 0 ? (
+                                    <div className="p-8 bg-[#ff2d551a] border border-[#ff2d5533] rounded-3xl space-y-4">
+                                        <h4 className="text-xl font-black text-[#ff2d55] uppercase tracking-widest flex items-center gap-3">
+                                            <ShieldCheck size={24} />
+                                            System Diagnostics
+                                        </h4>
+                                        <div className="space-y-2 font-mono text-sm text-[#eeeef2]">
+                                            <p className={debugInfo.envUrl ? "text-[#34d399]" : "text-[#ff2d55]"}>• Supabase URL: {debugInfo.envUrl ? "CONNECTED" : "MISSING (Check Vercel Env Vars)"}</p>
+                                            <p className={debugInfo.envKey ? "text-[#34d399]" : "text-[#ff2d55]"}>• Supabase Key: {debugInfo.envKey ? "CONNECTED" : "MISSING (Check Vercel Env Vars)"}</p>
+                                            <p className={debugInfo.fetchError ? "text-[#ff2d55]" : "text-[#34d399]"}>• Connection Status: {debugInfo.fetchError ? `FAILED: ${debugInfo.fetchError}` : "ONLINE"}</p>
+                                            <p className="text-[#8888a0]">• Records Retrieved: {debugInfo.totalBookings ?? "Loading..."}</p>
+                                        </div>
+                                        <p className="text-xs text-[#8888a0] font-bold">If connection is ONLINE but records are 0, please run the SUPABASE_MASTER_SETUP.sql script.</p>
+                                    </div>
                                 ) : (
-                                <BookingsList bookings={filteredBookings} onUpdate={fetchData} />
+                                    <BookingsList bookings={filteredBookings} onUpdate={fetchData} />
                                 )}
                             </div>
                         </>
@@ -480,20 +481,19 @@ export default function AdminDashboard() {
                     {activeTab === 'settings' && <SettingsPanel />}
 
                     {(activeTab === 'fleet' || activeTab === 'reports') && (
-                        <p className="text-[10px] text-[#55556a] font-black uppercase tracking-widest italic">Node deployment in progress • Available in rDX v1.5</p>
-                            </div>
-        </div>
-    )
-}
-                </div >
-            </main >
+                        <div className="flex items-center justify-center py-20">
+                            <p className="text-[10px] text-[#55556a] font-black uppercase tracking-widest italic">Node deployment in progress • Available in rDX v1.5</p>
+                        </div>
+                    )}
+                </div>
+            </main>
 
-    <style jsx global>{`
-        .custom-scrollbar-minimal::-webkit-scrollbar { width: 5px; height: 5px; }
-        .custom-scrollbar-minimal::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar-minimal::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.03); border-radius: 20px; }
-        .custom-scrollbar-minimal::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.08); }
-      `}</style>
-        </div >
+            <style jsx global>{`
+                .custom-scrollbar-minimal::-webkit-scrollbar { width: 5px; height: 5px; }
+                .custom-scrollbar-minimal::-webkit-scrollbar-track { background: transparent; }
+                .custom-scrollbar-minimal::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.03); border-radius: 20px; }
+                .custom-scrollbar-minimal::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.08); }
+            `}</style>
+        </div>
     );
 }
