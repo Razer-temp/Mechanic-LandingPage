@@ -134,7 +134,7 @@ export default function CustomersList({ bookings }: CustomersListProps) {
                                 onClick={() => setFilterTier(tier.toLowerCase())}
                                 className={clsx(
                                     "px-5 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
-                                    filterTier === tier.toLowerCase() ? "bg-[var(--admin-accent)] text-black shadow-lg shadow-[var(--admin-accent-20)]" : "text-[#55556a] hover:text-white"
+                                    filterTier === tier.toLowerCase() ? "bg-[var(--admin-accent)] text-[var(--admin-accent-contrast)] shadow-lg shadow-[rgba(var(--admin-accent-rgb),0.2)]" : "text-[#55556a] hover:text-white"
                                 )}
                             >
                                 {tier}
@@ -186,7 +186,7 @@ export default function CustomersList({ bookings }: CustomersListProps) {
                                     <span className={clsx(
                                         "px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-[9px] sm:text-xs font-black uppercase tracking-widest shadow-2xl border",
                                         c.tier === 'Platinum' ? "bg-[#fbbf24] text-black border-[#fbbf2433]" :
-                                            c.tier === 'Gold' ? "bg-[var(--admin-accent)] text-black border-[var(--admin-accent-20)]" : "bg-white/5 text-[#8888a0] border-white/10"
+                                            c.tier === 'Gold' ? "bg-[var(--admin-accent)] text-[var(--admin-accent-contrast)] border-[rgba(var(--admin-accent-rgb),0.2)]" : "bg-white/5 text-[#8888a0] border-white/10"
                                     )}>
                                         {c.tier}
                                     </span>

@@ -28,7 +28,7 @@ export default function ChatLogs({ sessions }: ChatLogsProps) {
                     <div className="p-10 border-b border-white/5 bg-white/[0.02]">
                         <div className="flex justify-between items-start">
                             <div className="flex items-center gap-5">
-                                <div className="w-14 h-14 bg-[var(--admin-accent)] bg-opacity-10 border border-[var(--admin-accent)] border-opacity-20 rounded-2xl flex items-center justify-center text-[var(--admin-accent)] shadow-lg">
+                                <div className="w-14 h-14 bg-[rgba(var(--admin-accent-rgb),0.1)] border border-[rgba(var(--admin-accent-rgb),0.2)] rounded-2xl flex items-center justify-center text-[var(--admin-accent)] shadow-lg">
                                     <MessageSquare size={28} />
                                 </div>
                                 <div>
@@ -63,7 +63,7 @@ export default function ChatLogs({ sessions }: ChatLogsProps) {
                                     <div className={clsx(
                                         "w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center border shadow-lg transition-transform hover:scale-110",
                                         msg.role === 'user'
-                                            ? "bg-[var(--admin-accent)] bg-opacity-10 border-[var(--admin-accent)] border-opacity-20 text-[var(--admin-accent)]"
+                                            ? "bg-[rgba(var(--admin-accent-rgb),0.1)] border-[rgba(var(--admin-accent-rgb),0.2)] text-[var(--admin-accent)]"
                                             : "bg-white/5 border-white/5 text-[#a78bfa]"
                                     )}>
                                         {msg.role === 'user' ? <User size={18} /> : <Bot size={18} />}
@@ -71,7 +71,7 @@ export default function ChatLogs({ sessions }: ChatLogsProps) {
                                     <div className={clsx(
                                         "p-6 rounded-[1.8rem] text-sm font-bold leading-relaxed shadow-sm",
                                         msg.role === 'user'
-                                            ? "bg-[var(--admin-accent)] bg-opacity-5 text-white rounded-tr-none border border-[var(--admin-accent)] border-opacity-10"
+                                            ? "bg-[rgba(var(--admin-accent-rgb),0.05)] text-white rounded-tr-none border border-[rgba(var(--admin-accent-rgb),0.1)]"
                                             : "bg-[#10101e] text-[#eeeef2] rounded-tl-none border border-white/5"
                                     )}>
                                         {msg.content}

@@ -164,21 +164,21 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 xl:gap-10">
                                 <div className="space-y-2 xl:space-y-3">
-                                    <div className="flex items-center gap-2 text-[10px] text-[#55556a] font-black uppercase tracking-[0.2em]">
-                                        <Bike size={12} strokeWidth={3} />
+                                    <div className="flex items-center gap-2 text-[10px] text-[#8888a0] font-black uppercase tracking-[0.2em]">
+                                        <Bike size={12} strokeWidth={3} className="text-[#55556a]" />
                                         Vehicle Context
                                     </div>
                                     <p className="text-base xl:text-lg text-white font-black leading-tight">{b.bike_model}</p>
                                     <div className="flex items-center gap-2">
-                                        <span className="px-3 py-1 bg-[var(--admin-accent)] bg-opacity-10 text-[var(--admin-accent)] rounded-lg text-xs font-black uppercase tracking-wider border border-[var(--admin-accent)] border-opacity-20">
+                                        <span className="px-3 py-1 bg-[rgba(var(--admin-accent-rgb),0.1)] text-[var(--admin-accent)] rounded-lg text-[10px] font-black uppercase tracking-wider border border-[rgba(var(--admin-accent-rgb),0.2)]">
                                             {b.service_type}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div className="space-y-2 xl:space-y-3">
-                                    <div className="flex items-center gap-2 text-[10px] text-[#55556a] font-black uppercase tracking-[0.2em]">
-                                        <MapPin size={12} strokeWidth={3} />
+                                    <div className="flex items-center gap-2 text-[10px] text-[#8888a0] font-black uppercase tracking-[0.2em]">
+                                        <MapPin size={12} strokeWidth={3} className="text-[#55556a]" />
                                         Deployment Site
                                     </div>
                                     <p className="text-base xl:text-lg text-white font-black leading-tight">
@@ -222,7 +222,7 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
                                     <button
                                         onClick={() => updateStatus(b.id, 'confirmed')}
                                         disabled={updatingId === b.id}
-                                        className="flex-1 xl:flex-none flex items-center justify-center gap-2 px-5 xl:px-6 py-3 bg-[var(--admin-accent)] text-black rounded-2xl font-black text-xs xl:text-sm hover:scale-105 transition-all shadow-xl disabled:opacity-50"
+                                        className="flex-1 xl:flex-none flex items-center justify-center gap-2 px-5 xl:px-6 py-3 bg-[var(--admin-accent)] text-[var(--admin-accent-contrast)] rounded-2xl font-black text-xs xl:text-sm hover:scale-105 transition-all shadow-xl disabled:opacity-50"
                                     >
                                         <Check size={18} strokeWidth={3} />
                                         Confirm

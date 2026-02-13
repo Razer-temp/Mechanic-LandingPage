@@ -329,7 +329,7 @@ export default function SettingsPanel() {
                                 <button
                                     onClick={handleSaveTemplates}
                                     disabled={saving}
-                                    className="bg-[var(--admin-accent)] text-black px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50"
+                                    className="bg-[var(--admin-accent)] text-[var(--admin-accent-contrast)] px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50"
                                 >
                                     {saving ? 'Saving...' : 'Save & Sync Cloud'}
                                 </button>
