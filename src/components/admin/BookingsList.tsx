@@ -14,7 +14,7 @@ import {
     MessageCircle,
     Trash2
 } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase/client';
 import clsx from 'clsx';
 
 interface BookingsListProps {
@@ -23,6 +23,7 @@ interface BookingsListProps {
 }
 
 export default function BookingsList({ bookings, onUpdate }: BookingsListProps) {
+    const supabase = createClient();
     const [updatingId, setUpdatingId] = useState<string | null>(null);
 
     const updateStatus = async (id: string, status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled') => {
