@@ -164,7 +164,7 @@ export default function AdminDashboard() {
                 </div>
                 <div className="flex flex-col">
                     <span className="text-lg font-black text-white leading-none tracking-tight uppercase">SmartBike</span>
-                    <span className="text-[10px] font-black text-[#00c8ff] uppercase tracking-[0.3em] mt-1">Terminal DX</span>
+                    <span className="text-[10px] font-black text-[#8888a0] uppercase tracking-[0.3em] mt-1">Terminal DX</span>
                 </div>
             </div>
 
@@ -315,7 +315,7 @@ export default function AdminDashboard() {
                                             activeTab === 'reports' ? 'Revenue Analytics' : 'System Configuration'}
                         </h2>
                         <div className="h-8 w-px bg-white/10 mx-4 hidden lg:block"></div>
-                        <p className="text-[#55556a] text-[10px] font-black uppercase tracking-[0.4em] hidden lg:block animate-pulse">
+                        <p className="text-[#8888a0] text-[10px] font-black uppercase tracking-[0.4em] hidden lg:block animate-pulse">
                             Operational Status: Nominal
                         </p>
                     </div>
@@ -326,7 +326,7 @@ export default function AdminDashboard() {
                             <input
                                 type="text"
                                 placeholder={`Query data across ${activeTab}...`}
-                                className="bg-[#0c0c16] border-2 border-white/5 rounded-2xl py-3 pl-12 pr-6 focus:border-[#00c8ff33] focus:ring-8 focus:ring-[#00c8ff05] outline-none transition-all text-sm w-64 lg:w-96 text-white font-bold placeholder:text-[#1a1a2e]"
+                                className="bg-[#0c0c16] border-2 border-white/5 rounded-2xl py-3 pl-12 pr-6 focus:border-[#00c8ff33] focus:ring-8 focus:ring-[#00c8ff05] outline-none transition-all text-sm w-64 lg:w-96 text-white font-bold placeholder:text-[#55556a]"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />

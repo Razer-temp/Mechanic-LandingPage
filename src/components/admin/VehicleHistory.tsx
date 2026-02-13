@@ -193,7 +193,7 @@ export default function VehicleHistory({ bookings, serviceHistory, onHistoryChan
                 <input
                     type="text"
                     placeholder="Search by vehicle number, model, or owner..."
-                    className="w-full bg-[#10101e] border-2 border-white/5 rounded-2xl py-4 pl-14 pr-6 text-white font-bold text-sm focus:border-[#fbbf2433] focus:ring-4 focus:ring-[#fbbf2405] outline-none transition-all placeholder:text-[#333]"
+                    className="w-full bg-[#10101e] border-2 border-white/5 rounded-2xl py-4 pl-14 pr-6 text-white font-bold text-sm focus:border-[#fbbf2433] focus:ring-4 focus:ring-[#fbbf2405] outline-none transition-all placeholder:text-[#55556a]"
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                 />
@@ -299,7 +299,7 @@ export default function VehicleHistory({ bookings, serviceHistory, onHistoryChan
                         <div className="bg-[#10101e] border border-dashed border-white/10 rounded-3xl p-16 text-center">
                             <Bike size={48} className="mx-auto text-[#55556a] mb-4" />
                             <p className="text-[#55556a] font-bold text-sm">Select a vehicle to view service history</p>
-                            <p className="text-[#333] text-xs mt-2">Click any vehicle card on the left</p>
+                            <p className="text-[#55556a] text-xs mt-2">Click any vehicle card on the left</p>
                         </div>
                     )}
                 </div>

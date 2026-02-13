@@ -125,7 +125,7 @@ export default function CustomersList({ bookings }: CustomersListProps) {
                     <input
                         type="text"
                         placeholder="Search by name or mobile..."
-                        className="w-full bg-[#10101e] border-2 border-white/5 rounded-2xl py-4 pl-14 pr-6 text-white font-bold text-sm focus:border-[var(--admin-accent)] focus:border-opacity-30 focus:ring-4 focus:ring-[var(--admin-accent)] focus:ring-opacity-5 outline-none transition-all placeholder:text-[#333]"
+                        className="w-full bg-[#10101e] border-2 border-white/5 rounded-2xl py-4 pl-14 pr-6 text-white font-bold text-sm focus:border-[var(--admin-accent)] focus:border-opacity-30 focus:ring-4 focus:ring-[var(--admin-accent)] focus:ring-opacity-5 outline-none transition-all placeholder:text-[#55556a]"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />

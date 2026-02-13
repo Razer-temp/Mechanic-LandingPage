@@ -249,7 +249,7 @@ export default function RevenueAnalytics({ bookings, expenses, onExpenseChange }
                             </div>
                             <span className={clsx(
                                 "text-[7px] font-black uppercase mt-1",
-                                d.isToday ? "text-[#00c8ff]" : "text-[#333]"
+                                d.isToday ? "text-[#00c8ff]" : "text-[#55556a]"
                             )}>{d.label}</span>
                         </div>
                     ))}
