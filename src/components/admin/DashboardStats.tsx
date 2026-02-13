@@ -46,10 +46,10 @@ const StatCard = ({ label, value, icon: Icon, trend, color, onExplore }: StatCar
             )}
         </div>
 
-        <div className="flex-1 relative z-10 mt-auto">
+        <div className="flex-1 relative z-10 mt-auto overflow-visible">
             <p className="text-[#8888a0] text-[10px] xl:text-xs font-black uppercase tracking-[0.3em] mb-2">{label}</p>
-            <div className="flex items-baseline gap-2">
-                <h4 className="text-3xl xl:text-5xl font-black text-white tracking-tighter truncate leading-none">{value}</h4>
+            <div className="flex items-baseline gap-2 overflow-visible">
+                <h4 className="text-3xl xl:text-5xl font-black text-white leading-none whitespace-nowrap">{value}</h4>
             </div>
         </div>
 
