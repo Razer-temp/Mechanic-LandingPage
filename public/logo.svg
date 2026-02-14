@@ -1,16 +1,19 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="wrench-grad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#00c8ff" />
       <stop offset="100%" stop-color="#a78bfa" />
     </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+    <filter id="wrench-glow" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="15" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
   </defs>
-  <path d="M120 180 L400 180 L380 220 L140 220 Z" fill="url(#logo-grad)" filter="url(#glow)" />
-  <path d="M160 240 L440 240 L410 300 L190 300 Z" fill="url(#logo-grad)" filter="url(#glow)" opacity="0.8" />
-  <path d="M200 320 L360 320 L340 360 L220 360 Z" fill="url(#logo-grad)" filter="url(#glow)" opacity="0.6" />
-  <circle cx="256" cy="256" r="40" fill="white" opacity="0.2" />
+  <path 
+    d="M312 135 C312 135 312 135 312 135 C300 135 288 138 277 144 L200 221 C180 216 158 219 140 231 C115 248 105 279 115 307 L114 308 C112 312 110 317 110 322 C110 338 123 352 139 352 C146 352 153 349 158 344 L158 344 C186 314 227 305 264 322 L341 245 C347 256 350 268 350 280 C350 319 319 351 280 351 L200 351 L195 385 C190 415 212 442 242 447 C245 448 248 448 251 448 C278 448 301 428 305 401 L315 330 C364 320 400 277 400 225 C400 175 361 135 312 135 Z" 
+    fill="url(#wrench-grad)" 
+    filter="url(#wrench-glow)"
+    transform="rotate(-45 256 256)"
+  />
+  <circle cx="256" cy="256" r="30" fill="white" opacity="0.3" filter="url(#wrench-glow)"/>
 </svg>
