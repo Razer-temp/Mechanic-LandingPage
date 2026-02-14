@@ -15,10 +15,12 @@ export default function LandingPage() {
   const [bikeModel, setBikeModel] = useState('');
   const [diagnosisResult, setDiagnosisResult] = useState<DiagnosisResult | null>(null);
   const [isDiagnosing, setIsDiagnosing] = useState(false);
+  const [diagnosisAttempted, setDiagnosisAttempted] = useState(false);
 
   const [estBikeType, setEstBikeType] = useState('');
   const [estServiceType, setEstServiceType] = useState('');
   const [costEstimate, setCostEstimate] = useState<CostEstimate | null>(null);
+  const [estimateAttempted, setEstimateAttempted] = useState(false);
 
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingData, setBookingData] = useState({ name: '', phone: '', bike: '', service: '', serviceLocation: 'workshop', address: '' });
@@ -124,6 +126,7 @@ export default function LandingPage() {
       const result = diagnose(diagnosisText);
       setDiagnosisResult(result);
       setIsDiagnosing(false);
+      setDiagnosisAttempted(true);
 
       if (result) {
         try {
@@ -156,6 +159,7 @@ export default function LandingPage() {
     if (!estBikeType || !estServiceType) return;
     const result = estimateCost(estBikeType, estServiceType);
     setCostEstimate(result);
+    setEstimateAttempted(true);
 
     if (result) {
       const saveEstimateResult = async () => {
@@ -459,6 +463,25 @@ export default function LandingPage() {
                     <span>📅</span> Book Repair Now
                   </a>
                 </div>
+              ) : diagnosisAttempted ? (
+                <div className="diagnosis-output" style={{ padding: '36px', animation: 'fadeInUp 0.5s ease' }}>
+                  <div className="ai-brain-icon" style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>🤔</div>
+                  <h3 className="text-white font-bold text-xl mb-4">Diagnosis Update</h3>
+                  <p className="text-[#a1a1aa] leading-relaxed mb-6">
+                    I couldn&apos;t identify the exact issue from your description.
+                  </p>
+                  <div className="bg-[#050508] rounded-3xl p-6 border border-white/5 mb-8">
+                    <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.2em] mb-3">Recommended Action</p>
+                    <p className="text-white font-bold mb-2">Full Diagnostic Checkup (₹199)</p>
+                    <p className="text-[#55556a] text-xs">Our experts will inspect your bike thoroughly to pinpoint the exact problem.</p>
+                  </div>
+                  <a href="#booking" className="btn btn-primary btn-glow btn-full">
+                    <span>📅</span> Book a Checkup
+                  </a>
+                  <p className="text-center mt-6 text-[#55556a] text-xs font-bold uppercase tracking-widest">
+                    OR CALL US AT <a href="tel:+919811530780" className="text-[#00c8ff] hover:underline">+91 98115 30780</a>
+                  </p>
+                </div>
               ) : (
                 <div className="result-placeholder">
                   <div className="ai-brain-icon">🧠</div>
@@ -594,14 +617,22 @@ export default function LandingPage() {
               </button>
             </div>
             <div className="estimate-result" id="estimateResult">
-              {costEstimate && (
+              {costEstimate ? (
                 <div className="estimate-output" style={{ animation: 'fadeInUp 0.5s ease' }}>
                   <p className="est-price">
                     {costEstimate.min === 0 && costEstimate.max === 0 ? 'N/A' : `₹${costEstimate.min.toLocaleString()} – ₹${costEstimate.max.toLocaleString()}`}
                   </p>
                   <p className="est-note">{costEstimate.note}</p>
                 </div>
-              )}
+              ) : estimateAttempted ? (
+                <div className="estimate-output" style={{ animation: 'fadeInUp 0.5s ease', textAlign: 'center' }}>
+                  <p className="text-white font-bold mb-2">No Estimate Found 🤔</p>
+                  <p className="text-[#55556a] text-xs mb-4">We couldn&apos;t generate an instant estimate for this combination.</p>
+                  <a href="#booking" className="text-[#00c8ff] text-xs font-black uppercase tracking-widest hover:underline">
+                    Book a Checkup for Exact Pricing 🔧
+                  </a>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
