@@ -33,19 +33,12 @@ interface IntelligenceLogsProps {
     chats: any[];
     diagnoses: any[];
     estimates: any[];
-    defaultSubTab?: 'chats' | 'diagnoses' | 'estimates';
+    activeSubTab: 'chats' | 'diagnoses' | 'estimates';
+    setActiveSubTab: (tab: 'chats' | 'diagnoses' | 'estimates') => void;
 }
 
-export default function IntelligenceLogs({ chats, diagnoses, estimates, defaultSubTab = 'chats' }: IntelligenceLogsProps) {
-    const [activeSubTab, setActiveSubTab] = useState<'chats' | 'diagnoses' | 'estimates'>(defaultSubTab);
+export default function IntelligenceLogs({ chats, diagnoses, estimates, activeSubTab, setActiveSubTab }: IntelligenceLogsProps) {
     const [expandedSessions, setExpandedSessions] = useState<Set<string>>(new Set());
-
-    // Update sub-tab if prop changes
-    React.useEffect(() => {
-        if (defaultSubTab) {
-            setActiveSubTab(defaultSubTab);
-        }
-    }, [defaultSubTab]);
 
     const toggleSession = (id: string) => {
         const next = new Set(expandedSessions);
