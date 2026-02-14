@@ -7,6 +7,7 @@ import { Footer } from '@/components/ui/Footer';
 import { diagnose, estimateCost, handleConversation, type DiagnosisResult, type CostEstimate, type ConversationResult } from '@/lib/ai-engine';
 import { getDeviceInfo } from '@/lib/device';
 import { createClient } from '@/lib/supabase/client';
+import './ai-intelligence.css';
 import clsx from 'clsx';
 
 export default function LandingPage() {
@@ -437,11 +438,11 @@ export default function LandingPage() {
             <div className="diagnosis-result-card glass-card animate-on-scroll" id="diagnosisResult">
               {isDiagnosing ? (
                 <div className="result-placeholder">
-                  <div className="ai-brain-icon" style={{ animation: 'breathe 0.5s ease-in-out infinite' }}>🧠</div>
+                  <div className="ai-brain-icon analyzing">🧠</div>
                   <p>Analyzing {bikeModel ? <>for <strong>{bikeModel}</strong></> : null}...</p>
                 </div>
               ) : diagnosisResult ? (
-                <div className="diagnosis-output" style={{ padding: '36px', animation: 'fadeInUp 0.5s ease' }}>
+                <div className="diagnosis-output">
                   <h3>🔍 AI Analysis: {diagnosisResult.title}</h3>
                   <div className="result-section">
                     <h4>Possible Causes</h4>
@@ -464,22 +465,22 @@ export default function LandingPage() {
                   </a>
                 </div>
               ) : diagnosisAttempted ? (
-                <div className="diagnosis-output" style={{ padding: '36px', animation: 'fadeInUp 0.5s ease' }}>
-                  <div className="ai-brain-icon" style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>🤔</div>
-                  <h3 className="text-white font-bold text-xl mb-4">Diagnosis Update</h3>
-                  <p className="text-[#a1a1aa] leading-relaxed mb-6">
+                <div className="ai-fallback-card">
+                  <div className="ai-fallback-icon">🤔</div>
+                  <h3 className="ai-fallback-title">Diagnosis Update</h3>
+                  <p className="ai-fallback-text">
                     I couldn&apos;t identify the exact issue from your description.
                   </p>
-                  <div className="bg-[#050508] rounded-3xl p-6 border border-white/5 mb-8">
-                    <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.2em] mb-3">Recommended Action</p>
-                    <p className="text-white font-bold mb-2">Full Diagnostic Checkup (₹199)</p>
-                    <p className="text-[#55556a] text-xs">Our experts will inspect your bike thoroughly to pinpoint the exact problem.</p>
+                  <div className="ai-fallback-highlight">
+                    <p className="ai-fallback-highlight-tag">Recommended Action</p>
+                    <p className="ai-fallback-highlight-title">Full Diagnostic Checkup (₹199)</p>
+                    <p className="ai-fallback-highlight-desc">Our experts will inspect your bike thoroughly to pinpoint the exact problem.</p>
                   </div>
                   <a href="#booking" className="btn btn-primary btn-glow btn-full">
                     <span>📅</span> Book a Checkup
                   </a>
-                  <p className="text-center mt-6 text-[#55556a] text-xs font-bold uppercase tracking-widest">
-                    OR CALL US AT <a href="tel:+919811530780" className="text-[#00c8ff] hover:underline">+91 98115 30780</a>
+                  <p className="ai-fallback-footer">
+                    OR CALL US AT <a href="tel:+919811530780" className="ai-fallback-phone">+91 98115 30780</a>
                   </p>
                 </div>
               ) : (
@@ -625,7 +626,7 @@ export default function LandingPage() {
                   <p className="est-note">{costEstimate.note}</p>
                 </div>
               ) : estimateAttempted ? (
-                <div className="estimate-output" style={{ animation: 'fadeInUp 0.5s ease', textAlign: 'center' }}>
+                <div className="estimate-output fallback">
                   <p className="text-white font-bold mb-2">No Estimate Found 🤔</p>
                   <p className="text-[#55556a] text-xs mb-4">We couldn&apos;t generate an instant estimate for this combination.</p>
                   <a href="#booking" className="text-[#00c8ff] text-xs font-black uppercase tracking-widest hover:underline">

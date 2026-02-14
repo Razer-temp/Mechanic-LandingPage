@@ -1,0 +1,211 @@
+/* AI Intelligence — Refined Styles
+   Isolated from globals.css to prevent conflicts
+   ========================================= */
+
+/* AI Diagnosis Results */
+.diagnosis-output {
+    padding: 36px;
+    animation: fadeInUp 0.5s ease;
+}
+
+.diagnosis-output h3 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--accent);
+}
+
+.diagnosis-output .result-section {
+    margin-bottom: 18px;
+}
+
+.diagnosis-output .result-section h4 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 8px;
+}
+
+.diagnosis-output .result-section p,
+.diagnosis-output .result-section ul {
+    color: var(--text-primary);
+    font-size: 0.92rem;
+    line-height: 1.7;
+}
+
+.diagnosis-output .result-section ul {
+    padding-left: 18px;
+}
+
+.diagnosis-output .result-section li {
+    list-style: disc;
+    margin-bottom: 4px;
+}
+
+/* AI Cost Estimator */
+.estimate-result {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.estimate-output {
+    padding: 28px;
+    background: rgba(0, 200, 255, 0.04);
+    border: 1px solid var(--border-accent);
+    border-radius: var(--r-md);
+    animation: fadeInUp 0.5s ease;
+}
+
+.estimate-output .est-price {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 800;
+    background: var(--grad-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+}
+
+.estimate-output .est-note {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+
+/* AI Fallback Message UI */
+.ai-fallback-card {
+    padding: 36px;
+    animation: fadeInUp 0.5s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.ai-fallback-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.ai-fallback-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.ai-fallback-text {
+    color: #a1a1aa;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.ai-fallback-highlight {
+    background: #050508;
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 2rem;
+}
+
+.ai-fallback-highlight-tag {
+    font-size: 10px;
+    font-weight: 900;
+    color: #55556a;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 0.75rem;
+}
+
+.ai-fallback-highlight-title {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.ai-fallback-highlight-desc {
+    color: #55556a;
+    font-size: 0.75rem;
+}
+
+.ai-fallback-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #55556a;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.ai-fallback-phone {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.ai-fallback-phone:hover {
+    text-decoration: underline;
+}
+
+/* Base UI Elements */
+.ai-brain-icon.analyzing {
+    animation: breathe 0.5s ease-in-out infinite;
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+@keyframes breathe {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+}
+
+/* Urgency Badges */
+.urgency-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: var(--r-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.urgency-high {
+    background: rgba(255, 45, 85, 0.1);
+    color: var(--accent-red);
+    border: 1px solid rgba(255, 45, 85, 0.2);
+}
+
+.urgency-medium {
+    background: rgba(251, 191, 36, 0.1);
+    color: var(--accent-amber);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.urgency-low {
+    background: rgba(52, 211, 153, 0.1);
+    color: var(--accent-green);
+    border: 1px solid rgba(52, 211, 153, 0.2);
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

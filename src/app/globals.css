@@ -906,74 +906,7 @@ ul {
   }
 }
 
-/* Diagnosis Output */
-.diagnosis-output {
-  padding: 0;
-}
 
-.diagnosis-output h3 {
-  font-family: var(--font-heading);
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: var(--accent);
-}
-
-.diagnosis-output .result-section {
-  margin-bottom: 18px;
-}
-
-.diagnosis-output .result-section h4 {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  margin-bottom: 8px;
-}
-
-.diagnosis-output .result-section p,
-.diagnosis-output .result-section ul {
-  color: var(--text-primary);
-  font-size: 0.92rem;
-  line-height: 1.7;
-}
-
-.diagnosis-output .result-section ul {
-  padding-left: 18px;
-}
-
-.diagnosis-output .result-section li {
-  list-style: disc;
-  margin-bottom: 4px;
-}
-
-.urgency-badge {
-  display: inline-block;
-  padding: 4px 14px;
-  border-radius: var(--r-full);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-.urgency-high {
-  background: rgba(255, 45, 85, 0.1);
-  color: var(--accent-red);
-  border: 1px solid rgba(255, 45, 85, 0.2);
-}
-
-.urgency-medium {
-  background: rgba(251, 191, 36, 0.1);
-  color: var(--accent-amber);
-  border: 1px solid rgba(251, 191, 36, 0.2);
-}
-
-.urgency-low {
-  background: rgba(52, 211, 153, 0.1);
-  color: var(--accent-green);
-  border: 1px solid rgba(52, 211, 153, 0.2);
-}
 
 /* ===== SERVICES — Sleek Grid ===== */
 .section-services {
@@ -1210,33 +1143,7 @@ ul {
   gap: 20px;
 }
 
-.estimate-result {
-  margin-top: 24px;
-  text-align: center;
-}
 
-.estimate-output {
-  padding: 28px;
-  background: rgba(0, 200, 255, 0.04);
-  border: 1px solid var(--border-accent);
-  border-radius: var(--r-md);
-}
-
-.estimate-output .est-price {
-  font-family: var(--font-heading);
-  font-size: 1.8rem;
-  font-weight: 800;
-  background: var(--grad-hero);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 8px;
-}
-
-.estimate-output .est-note {
-  font-size: 0.82rem;
-  color: var(--text-muted);
-}
 
 /* ===== REVIEWS — Elegant ===== */
 .section-reviews {
