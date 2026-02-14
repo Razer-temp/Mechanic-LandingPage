@@ -127,7 +127,7 @@ export default function LandingPage() {
 
       if (result) {
         try {
-          await supabase.from('ai_diagnoses').insert({
+          await supabase.from('ai_diagnoses' as any).insert({
             input_text: diagnosisText,
             result_title: result.title,
             result_urgency: result.urgency,
@@ -154,7 +154,7 @@ export default function LandingPage() {
     if (result) {
       const saveEstimate = async () => {
         try {
-          await supabase.from('ai_estimates').insert({
+          await supabase.from('ai_estimates' as any).insert({
             bike_type: estBikeType,
             service_type: estServiceType,
             min_cost: result.min,

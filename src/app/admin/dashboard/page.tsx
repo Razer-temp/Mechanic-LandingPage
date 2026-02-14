@@ -91,8 +91,8 @@ export default function AdminDashboard() {
                 supabase.from('chat_sessions').select('*, chat_messages(*)').order('created_at', { ascending: false }),
                 supabase.from('daily_expenses').select('*').order('date', { ascending: false }),
                 supabase.from('service_history').select('*').order('date', { ascending: false }),
-                supabase.from('ai_diagnoses').select('*').order('created_at', { ascending: false }),
-                supabase.from('ai_estimates').select('*').order('created_at', { ascending: false }),
+                supabase.from('ai_diagnoses' as any).select('*').order('created_at', { ascending: false }),
+                supabase.from('ai_estimates' as any).select('*').order('created_at', { ascending: false }),
             ]);
 
             if (bRes.data) setBookings(bRes.data);
