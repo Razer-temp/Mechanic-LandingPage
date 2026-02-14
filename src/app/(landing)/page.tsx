@@ -127,13 +127,19 @@ export default function LandingPage() {
 
       if (result) {
         try {
-          await supabase.from('ai_diagnoses' as any).insert({
+          const deviceInfo = getDeviceInfo();
+          const sessionId = chatSessionId;
+
+          const { error } = await supabase.from('ai_diagnoses' as any).insert({
             input_text: diagnosisText,
             result_title: result.title,
             result_urgency: result.urgency,
             result_cost: result.cost,
-            metadata: getDeviceInfo()
+            metadata: deviceInfo,
+            session_id: sessionId || null
           });
+
+          if (error) console.error('Error saving diagnosis:', error);
         } catch (err) {
           console.error('Error saving diagnosis:', err);
         }
@@ -154,13 +160,19 @@ export default function LandingPage() {
     if (result) {
       const saveEstimateResult = async () => {
         try {
-          await supabase.from('ai_estimates' as any).insert({
+          const deviceInfo = getDeviceInfo();
+          const sessionId = chatSessionId;
+
+          const { error } = await supabase.from('ai_estimates' as any).insert({
             bike_type: estBikeType,
             service_type: estServiceType,
             min_cost: result.min,
             max_cost: result.max,
-            metadata: getDeviceInfo()
+            metadata: deviceInfo,
+            session_id: sessionId || null
           });
+
+          if (error) console.error('Error saving estimate:', error);
         } catch (err) {
           console.error('Error saving estimate:', err);
         }

@@ -232,66 +232,26 @@ export default function AdminDashboard() {
                 <div className="h-4"></div>
                 <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.3em] ml-4 mb-4 text-left">Intelligence</p>
 
-                <div className={clsx(
-                    "w-full flex flex-col gap-2 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
-                    activeTab === 'chats' ? "bg-[#a78bfa1a] text-[#a78bfa] shadow-sm" : "text-[#55556a] hover:text-white hover:bg-white/5"
-                )}>
-                    <button
-                        onClick={() => { setActiveTab('chats'); setActiveSubTab('chats'); setShowMobileMenu(false); }}
-                        className={clsx(
-                            "w-full flex items-center gap-4 font-bold transition-all duration-300 group",
-                            activeTab === 'chats' ? "text-[#a78bfa]" : "text-[#55556a] hover:text-white"
-                        )}
-                    >
-                        <div className={clsx(
-                            "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
-                            activeTab === 'chats' ? "bg-[#a78bfa] text-black shadow-lg" : "bg-white/5 text-[#55556a]"
-                        )}>
-                            <BrainCircuit size={20} />
-                        </div>
-                        <span>Intelligence Hub</span>
-                    </button>
-                    {activeTab === 'chats' && (
-                        <div className="flex flex-col gap-2 pl-14 pt-2">
-                            <button
-                                onClick={() => setActiveSubTab('chats')}
-                                className={clsx(
-                                    "px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all flex items-center gap-2",
-                                    activeSubTab === 'chats' ? "bg-[#a78bfa] text-black shadow-lg" : "text-[#55556a] hover:text-white"
-                                )}
-                            >
-                                Neural Logs
-                                <span className={clsx("px-1.5 py-0.5 rounded-md text-[10px]", activeSubTab === 'chats' ? "bg-black/20" : "bg-white/5")}>
-                                    {chats.length}
-                                </span>
-                            </button>
-                            <button
-                                onClick={() => setActiveSubTab('diagnoses')}
-                                className={clsx(
-                                    "px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all flex items-center gap-2",
-                                    activeSubTab === 'diagnoses' ? "bg-[#00c8ff] text-black shadow-lg" : "text-[#55556a] hover:text-white"
-                                )}
-                            >
-                                Diagnoses
-                                <span className={clsx("px-1.5 py-0.5 rounded-md text-[10px]", activeSubTab === 'diagnoses' ? "bg-black/20" : "bg-white/5")}>
-                                    {diagnoses.length}
-                                </span>
-                            </button>
-                            <button
-                                onClick={() => setActiveSubTab('estimates')}
-                                className={clsx(
-                                    "px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all flex items-center gap-2",
-                                    activeSubTab === 'estimates' ? "bg-[#34d399] text-black shadow-lg" : "text-[#55556a] hover:text-white"
-                                )}
-                            >
-                                Estimates
-                                <span className={clsx("px-1.5 py-0.5 rounded-md text-[10px]", activeSubTab === 'estimates' ? "bg-black/20" : "bg-white/5")}>
-                                    {estimates.length}
-                                </span>
-                            </button>
-                        </div>
+                <button
+                    onClick={() => { setActiveTab('chats'); setActiveSubTab('chats'); setShowMobileMenu(false); }}
+                    className={clsx(
+                        "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
+                        activeTab === 'chats' ? "bg-[#a78bfa1a] text-[#a78bfa] shadow-sm" : "text-[#55556a] hover:text-white hover:bg-white/5"
                     )}
-                </div>
+                >
+                    <div className={clsx(
+                        "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
+                        activeTab === 'chats' ? "bg-[#a78bfa] text-black shadow-lg" : "bg-white/5 text-[#55556a]"
+                    )}>
+                        <BrainCircuit size={20} />
+                    </div>
+                    <span>Intelligence Hub</span>
+                    {(diagnoses.length + estimates.length + chats.length) > 0 && (
+                        <span className="ml-auto w-5 h-5 bg-[#a78bfa] text-black text-[10px] rounded-full flex items-center justify-center font-black animate-pulse">
+                            {(diagnoses.length + estimates.length + chats.length)}
+                        </span>
+                    )}
+                </button>
 
                 <button
                     onClick={() => { setActiveTab('reports'); setShowMobileMenu(false); }}
