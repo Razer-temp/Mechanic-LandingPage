@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: 'SmartBike Pro — AI-Powered Two-Wheeler Service Center',
   description: 'AI-powered two-wheeler diagnostics, expert mechanics, and affordable pricing. Book your service now!',
   icons: {
-    icon: '/logo.svg',
+    icon: '/favicon.svg',
   },
 };
 
