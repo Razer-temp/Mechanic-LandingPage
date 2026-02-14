@@ -136,6 +136,7 @@ export default function LandingPage() {
 
           const { error } = await supabase.from('ai_diagnoses' as any).insert({
             input_text: diagnosisText,
+            bike_model: bikeModel || null,
             result_title: result.title,
             result_urgency: result.urgency,
             result_cost: result.cost,

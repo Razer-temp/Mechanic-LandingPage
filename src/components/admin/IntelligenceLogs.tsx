@@ -178,22 +178,29 @@ export default function IntelligenceLogs({ chats, diagnoses, estimates, activeSu
                                         <div className="w-12 h-12 bg-[#00c8ff]/10 rounded-2xl flex items-center justify-center text-[#00c8ff]">
                                             <Zap size={20} />
                                         </div>
-                                        <div className="flex items-center gap-3">
-                                            <div className={clsx(
-                                                "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border",
-                                                d.result_urgency === 'high' ? "bg-red-500/10 text-red-500 border-red-500/20" :
-                                                    d.result_urgency === 'medium' ? "bg-amber-500/10 text-amber-500 border-amber-500/20" :
-                                                        "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
-                                            )}>
-                                                {d.result_urgency} Urgency
+                                        <div className="flex flex-col items-end gap-2">
+                                            <div className="flex items-center gap-3">
+                                                <div className={clsx(
+                                                    "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border",
+                                                    d.result_urgency === 'high' ? "bg-red-500/10 text-red-500 border-red-500/20" :
+                                                        d.result_urgency === 'medium' ? "bg-amber-500/10 text-amber-500 border-amber-500/20" :
+                                                            "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                                                )}>
+                                                    {d.result_urgency} Urgency
+                                                </div>
+                                                <button
+                                                    onClick={(e) => { e.stopPropagation(); if (window.confirm('Delete this diagnosis?')) onDelete?.('ai_diagnoses', d.id); }}
+                                                    className="p-2 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-black transition-all opacity-0 group-hover:opacity-100"
+                                                    title="Delete Diagnosis"
+                                                >
+                                                    <Trash2 size={14} />
+                                                </button>
                                             </div>
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); if (window.confirm('Delete this diagnosis?')) onDelete?.('ai_diagnoses', d.id); }}
-                                                className="p-2 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-black transition-all opacity-0 group-hover:opacity-100"
-                                                title="Delete Diagnosis"
-                                            >
-                                                <Trash2 size={14} />
-                                            </button>
+                                            {d.bike_model && (
+                                                <div className="px-3 py-1 bg-[#00c8ff]/5 border border-[#00c8ff]/10 rounded-full text-[9px] font-bold text-[#00c8ff] uppercase tracking-widest">
+                                                    🚲 {d.bike_model}
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 
