@@ -439,15 +439,11 @@ export default function AdminDashboard() {
                     )}
 
                     {activeTab === 'chats' && (
-                        <div className="space-y-10 animate-admin-in">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-xl font-black text-white uppercase tracking-[0.3em] flex items-center gap-4">
-                                    <div className="w-2 h-8 bg-[#a78bfa] rounded-full shadow-[0_0_20px_rgba(167,139,250,0.4)]"></div>
-                                    Neural Audit
-                                </h3>
-                            </div>
-                            <ChatLogs sessions={filteredChats} />
-                        </div>
+                        <IntelligenceLogs
+                            chats={chats}
+                            diagnoses={diagnoses}
+                            estimates={estimates}
+                        />
                     )}
 
                     {activeTab === 'customers' && (

@@ -12,7 +12,20 @@ import {
     AlertCircle
 } from 'lucide-react';
 import clsx from 'clsx';
-import { format } from 'date-fns';
+
+const formatDate = (dateString: string, includeTime = false) => {
+    try {
+        const date = new Date(dateString);
+        return new Intl.DateTimeFormat('en-IN', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+            ...(includeTime ? { hour: '2-digit', minute: '2-digit' } : {})
+        }).format(date);
+    } catch (e) {
+        return dateString;
+    }
+};
 
 interface IntelligenceLogsProps {
     chats: any[];
@@ -88,7 +101,7 @@ export default function IntelligenceLogs({ chats, diagnoses, estimates }: Intell
                                             <div>
                                                 <h4 className="text-white font-bold">{chat.customer_name || 'Anonymous Rider'}</h4>
                                                 <p className="text-[10px] text-[#55556a] font-bold uppercase tracking-widest">
-                                                    {format(new Date(chat.created_at), 'PPP • p')}
+                                                    {formatDate(chat.created_at, true)}
                                                 </p>
                                             </div>
                                         </div>
@@ -97,7 +110,7 @@ export default function IntelligenceLogs({ chats, diagnoses, estimates }: Intell
                                         </div>
                                     </div>
 
-                                    <div className="space-y-3 pl-13">
+                                    <div className="space-y-3 pl-12">
                                         {chat.chat_messages?.slice(0, 2).map((msg: any) => (
                                             <div key={msg.id} className={clsx(
                                                 "p-3 rounded-2xl text-[13px] leading-relaxed",
@@ -156,7 +169,7 @@ export default function IntelligenceLogs({ chats, diagnoses, estimates }: Intell
                                     </div>
 
                                     <div className="mt-6 pt-6 border-t border-white/5 flex justify-between items-center text-[10px] font-bold text-[#55556a] uppercase tracking-widest">
-                                        <span>{format(new Date(d.created_at), 'PPP')}</span>
+                                        <span>{formatDate(d.created_at)}</span>
                                         <span className="opacity-50">ID: {d.id.slice(0, 8)}</span>
                                     </div>
                                 </div>
@@ -181,7 +194,7 @@ export default function IntelligenceLogs({ chats, diagnoses, estimates }: Intell
                                                 <IndianRupee size={18} />
                                             </div>
                                             <span className="text-[9px] font-black text-[#55556a] uppercase tracking-widest">
-                                                {format(new Date(e.created_at), 'MMM d')}
+                                                {formatDate(e.created_at)}
                                             </span>
                                         </div>
 
