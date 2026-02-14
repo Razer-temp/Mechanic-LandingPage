@@ -650,24 +650,64 @@ export default function LandingPage() {
             <span className="section-tag">⭐ Testimonials</span>
             <h2 className="section-title">What Our <span className="gradient-text">Customers Say</span></h2>
           </div>
-          <div className="reviews-grid">
-            {[
-              { name: 'Rajesh Kumar', bike: 'Honda Activa 6G Owner', avatar: 'RK', text: '"The AI diagnosis was spot-on! It told me my bike had a carburetor issue before I even visited. The repair was done in 3 hours. Incredibly impressed!"' },
-              { name: 'Priya Sharma', bike: 'RE Classic 350 Owner', avatar: 'PS', text: '"Best mechanic service in town! The cost estimator was accurate, no hidden charges. My Royal Enfield runs like new. Highly recommended!"' },
-              { name: 'Amit Verma', bike: 'KTM Duke 200 Owner', avatar: 'AV', text: '"Emergency breakdown at midnight — they picked up my bike and had it ready by morning. The WhatsApp updates kept me informed. Lifesavers!"' },
-            ].map((r, i) => (
-              <div key={i} className="review-card glass-card animate-on-scroll">
-                <div className="review-stars">★★★★★</div>
-                <p className="review-text">{r.text}</p>
-                <div className="review-author">
-                  <div className="author-avatar">{r.avatar}</div>
-                  <div>
-                    <strong>{r.name}</strong>
-                    <span>{r.bike}</span>
+          <div className="reviews-marquee-wrapper">
+            {/* Row 1: Scroll Left */}
+            <div className="marquee-container">
+              <div className="marquee-track scroll-left">
+                {[
+                  { name: 'Rajesh Kumar', bike: 'Honda Activa 6G', avatar: 'RK', text: '"The AI diagnosis was spot-on! It told me my bike had a carburetor issue before I even visited. The repair was done in 3 hours. Incredibly impressed!"' },
+                  { name: 'Priya Sharma', bike: 'RE Classic 350', avatar: 'PS', text: '"Best mechanic service in town! The cost estimator was accurate, no hidden charges. My Royal Enfield runs like new. Highly recommended!"' },
+                  { name: 'Amit Verma', bike: 'KTM Duke 200', avatar: 'AV', text: '"Emergency breakdown at midnight — they picked up my bike and had it ready by morning. The WhatsApp updates kept me informed. Lifesavers!"' },
+                  { name: 'Sneha Gupta', bike: 'TVS Jupiter', avatar: 'SG', text: '"Loved the transparency! The mechanic explained everything, and the final bill matched the AI estimate perfectly. Will definitely visit again."' },
+                  // Duplicates for seamless loop
+                  { name: 'Rajesh Kumar', bike: 'Honda Activa 6G', avatar: 'RK', text: '"The AI diagnosis was spot-on! It told me my bike had a carburetor issue before I even visited. The repair was done in 3 hours. Incredibly impressed!"' },
+                  { name: 'Priya Sharma', bike: 'RE Classic 350', avatar: 'PS', text: '"Best mechanic service in town! The cost estimator was accurate, no hidden charges. My Royal Enfield runs like new. Highly recommended!"' },
+                  { name: 'Amit Verma', bike: 'KTM Duke 200', avatar: 'AV', text: '"Emergency breakdown at midnight — they picked up my bike and had it ready by morning. The WhatsApp updates kept me informed. Lifesavers!"' },
+                  { name: 'Sneha Gupta', bike: 'TVS Jupiter', avatar: 'SG', text: '"Loved the transparency! The mechanic explained everything, and the final bill matched the AI estimate perfectly. Will definitely visit again."' },
+                ].map((r, i) => (
+                  <div key={i} className="review-card glass-card marquee-item">
+                    <div className="review-stars">★★★★★</div>
+                    <p className="review-text">{r.text}</p>
+                    <div className="review-author">
+                      <div className="author-avatar">{r.avatar}</div>
+                      <div>
+                        <strong>{r.name}</strong>
+                        <span>{r.bike}</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+            {/* Row 2: Scroll Right */}
+            <div className="marquee-container">
+              <div className="marquee-track scroll-right">
+                {[
+                  { name: 'Vikram Singh', bike: 'Yamaha R15 V4', avatar: 'VS', text: '"Professional and tech-savvy. The online booking was smooth, and they heavily optimized my R15 chain set. Feels faster now!"' },
+                  { name: 'Anjali Desai', bike: 'Ola S1 Pro', avatar: 'AD', text: '"Finally a mechanic that understands EVs! They fixed my front fork suspension issue without confusing me with technical jargon."' },
+                  { name: 'Rahul Mehta', bike: 'Bajaj Pulsar 150', avatar: 'RM', text: '"Great value for money. The full service package covered everything. My Pulsar vibration issue is completely gone."' },
+                  { name: 'Karthik R', bike: 'Hero Splendor+', avatar: 'KR', text: '"Simple, fast, and honest. No unnecessary part replacements. They actually repaired my old part instead of forcing a new one."' },
+                  // Duplicates for seamless loop
+                  { name: 'Vikram Singh', bike: 'Yamaha R15 V4', avatar: 'VS', text: '"Professional and tech-savvy. The online booking was smooth, and they heavily optimized my R15 chain set. Feels faster now!"' },
+                  { name: 'Anjali Desai', bike: 'Ola S1 Pro', avatar: 'AD', text: '"Finally a mechanic that understands EVs! They fixed my front fork suspension issue without confusing me with technical jargon."' },
+                  { name: 'Rahul Mehta', bike: 'Bajaj Pulsar 150', avatar: 'RM', text: '"Great value for money. The full service package covered everything. My Pulsar vibration issue is completely gone."' },
+                  { name: 'Karthik R', bike: 'Hero Splendor+', avatar: 'KR', text: '"Simple, fast, and honest. No unnecessary part replacements. They actually repaired my old part instead of forcing a new one."' },
+                ].map((r, i) => (
+                  <div key={i} className="review-card glass-card marquee-item">
+                    <div className="review-stars">★★★★★</div>
+                    <p className="review-text">{r.text}</p>
+                    <div className="review-author">
+                      <div className="author-avatar">{r.avatar}</div>
+                      <div>
+                        <strong>{r.name}</strong>
+                        <span>{r.bike}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
