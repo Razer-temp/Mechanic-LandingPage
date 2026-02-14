@@ -14,7 +14,8 @@ import {
     Clock,
     User,
     MapPin,
-    Trash2
+    Trash2,
+    RefreshCw
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import clsx from 'clsx';
@@ -38,6 +39,7 @@ export default function VehicleHistory({ bookings, serviceHistory, onHistoryChan
         customer_name: '',
         service_type: '',
         mileage_at_service: '',
+        next_service_km: '',
         notes: '',
         cost: ''
     });
@@ -92,6 +94,7 @@ export default function VehicleHistory({ bookings, serviceHistory, onHistoryChan
                 date: s.date,
                 service_type: s.service_type,
                 mileage: s.mileage_at_service,
+                next_mileage: s.next_service_km,
                 notes: s.notes,
                 cost: s.cost,
                 customer_name: s.customer_name,
@@ -110,6 +113,7 @@ export default function VehicleHistory({ bookings, serviceHistory, onHistoryChan
                         date: b.preferred_date || b.created_at?.split('T')[0],
                         service_type: b.service_type,
                         mileage: null,
+                        next_mileage: b.next_service_km,
                         notes: b.notes,
                         cost: b.final_cost || b.estimated_cost,
                         customer_name: b.name,
@@ -136,12 +140,13 @@ export default function VehicleHistory({ bookings, serviceHistory, onHistoryChan
                 customer_name: newEntry.customer_name,
                 service_type: newEntry.service_type,
                 mileage_at_service: newEntry.mileage_at_service ? parseFloat(newEntry.mileage_at_service) : null,
+                next_service_km: newEntry.next_service_km ? parseFloat(newEntry.next_service_km) : null,
                 notes: newEntry.notes || null,
                 cost: newEntry.cost ? parseFloat(newEntry.cost) : 0,
                 date: new Date().toISOString().split('T')[0]
             });
             if (error) throw error;
-            setNewEntry({ vehicle_number: '', bike_model: '', customer_phone: '', customer_name: '', service_type: '', mileage_at_service: '', notes: '', cost: '' });
+            setNewEntry({ vehicle_number: '', bike_model: '', customer_phone: '', customer_name: '', service_type: '', mileage_at_service: '', next_service_km: '', notes: '', cost: '' });
             setShowAddEntry(false);
             onHistoryChange();
         } catch (err) {
@@ -191,6 +196,7 @@ export default function VehicleHistory({ bookings, serviceHistory, onHistoryChan
                         <input type="text" placeholder="Customer Phone" className="bg-[#050508] border border-white/10 rounded-xl py-3 px-4 text-sm text-white font-bold outline-none focus:border-[#fbbf2433]" value={newEntry.customer_phone} onChange={e => setNewEntry(p => ({ ...p, customer_phone: e.target.value }))} />
                         <input type="text" placeholder="Service Type" className="bg-[#050508] border border-white/10 rounded-xl py-3 px-4 text-sm text-white font-bold outline-none focus:border-[#fbbf2433]" value={newEntry.service_type} onChange={e => setNewEntry(p => ({ ...p, service_type: e.target.value }))} />
                         <input type="number" placeholder="Mileage (km)" className="bg-[#050508] border border-white/10 rounded-xl py-3 px-4 text-sm text-white font-bold outline-none focus:border-[#fbbf2433]" value={newEntry.mileage_at_service} onChange={e => setNewEntry(p => ({ ...p, mileage_at_service: e.target.value }))} />
+                        <input type="number" placeholder="Next Service km" className="bg-[#050508] border border-white/10 rounded-xl py-3 px-4 text-sm text-white font-bold outline-none focus:border-[#fbbf2433]" value={newEntry.next_service_km} onChange={e => setNewEntry(p => ({ ...p, next_service_km: e.target.value }))} />
                         <input type="number" placeholder="Cost ₹" className="bg-[#050508] border border-white/10 rounded-xl py-3 px-4 text-sm text-white font-bold outline-none focus:border-[#fbbf2433]" value={newEntry.cost} onChange={e => setNewEntry(p => ({ ...p, cost: e.target.value }))} />
                         <input type="text" placeholder="Notes (optional)" className="bg-[#050508] border border-white/10 rounded-xl py-3 px-4 text-sm text-white font-bold outline-none focus:border-[#fbbf2433]" value={newEntry.notes} onChange={e => setNewEntry(p => ({ ...p, notes: e.target.value }))} />
                     </div>
@@ -259,8 +265,14 @@ export default function VehicleHistory({ bookings, serviceHistory, onHistoryChan
                                 {nextServiceMileage && latestMileage > 0 && (
                                     <div className="bg-[#fbbf241a] border border-[#fbbf2433] rounded-2xl p-4 text-center">
                                         <p className="text-[8px] font-black text-[#fbbf24] uppercase tracking-widest mb-1">Next Service</p>
-                                        <p className="text-xl font-black text-white">{nextServiceMileage.toLocaleString()} km</p>
-                                        <p className="text-[8px] text-[#55556a] font-bold mt-1">{(nextServiceMileage - latestMileage).toLocaleString()} km remaining</p>
+                                        <p className="text-xl font-black text-white">
+                                            {(timeline.find(t => t.next_mileage)?.next_mileage || nextServiceMileage || 0).toLocaleString()} km
+                                        </p>
+                                        {latestMileage > 0 && (
+                                            <p className="text-[8px] text-[#55556a] font-bold mt-1">
+                                                {((timeline.find(t => t.next_mileage)?.next_mileage || nextServiceMileage || 0) - latestMileage).toLocaleString()} km remaining
+                                            </p>
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -301,6 +313,7 @@ export default function VehicleHistory({ bookings, serviceHistory, onHistoryChan
                                                 <div className="flex flex-wrap items-center gap-3 text-[9px] font-bold text-[#55556a] uppercase tracking-widest">
                                                     <span className="flex items-center gap-1"><Calendar size={10} /> {new Date(entry.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                                                     {entry.mileage && <span className="flex items-center gap-1"><Gauge size={10} /> {entry.mileage.toLocaleString()} km</span>}
+                                                    {entry.next_mileage > 0 && <span className="flex items-center gap-1 text-[#fbbf24]"><RefreshCw size={10} /> Next: {entry.next_mileage.toLocaleString()} km</span>}
                                                     {entry.status && (
                                                         <span className={clsx(
                                                             "px-2 py-0.5 rounded",

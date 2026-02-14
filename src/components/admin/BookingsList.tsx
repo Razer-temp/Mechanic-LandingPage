@@ -31,13 +31,28 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
     const [editingMechanicId, setEditingMechanicId] = useState<string | null>(null);
     const [costInput, setCostInput] = useState('');
     const [mechanicInput, setMechanicInput] = useState('');
+    const [completionModal, setCompletionModal] = useState<{
+        show: boolean;
+        booking: any;
+        km: string;
+        nextKm: string;
+    }>({ show: false, booking: null, km: '', nextKm: '' });
 
     const updateStatus = async (id: string, status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled') => {
         setUpdatingId(id);
         try {
             const updateData: any = { status };
             if (status === 'in_progress') updateData.started_at = new Date().toISOString();
-            if (status === 'completed') updateData.completed_at = new Date().toISOString();
+            if (status === 'completed') {
+                setCompletionModal({
+                    show: true,
+                    booking: bookings.find(b => b.id === id),
+                    km: '',
+                    nextKm: ''
+                });
+                setUpdatingId(null);
+                return; // Wait for modal
+            }
 
             const { error } = await supabase.from('bookings').update(updateData).eq('id', id);
             if (error) throw error;
@@ -86,6 +101,51 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
         } catch (err) {
             console.error('Error deleting booking:', err);
             alert('Delete failed.');
+        } finally {
+            setUpdatingId(null);
+        }
+    };
+
+    const handleCompleteJob = async () => {
+        const { booking, km, nextKm } = completionModal;
+        if (!booking || !km) {
+            alert("Mileage at service is required.");
+            return;
+        }
+
+        setUpdatingId(booking.id);
+        try {
+            const finalCost = booking.final_cost || booking.estimated_cost || 0;
+            const completionDate = new Date().toISOString();
+
+            // 1. Update Booking
+            const { error: bError } = await supabase.from('bookings').update({
+                status: 'completed',
+                completed_at: completionDate,
+                next_service_km: parseFloat(nextKm) || 0
+            }).eq('id', booking.id);
+            if (bError) throw bError;
+
+            // 2. Add to Service History (Garage Hub)
+            const { error: shError } = await supabase.from('service_history').insert({
+                vehicle_number: booking.vehicle_number,
+                bike_model: booking.bike_model,
+                customer_phone: booking.phone,
+                customer_name: booking.name,
+                service_type: booking.service_type,
+                mileage_at_service: parseFloat(km),
+                next_service_km: parseFloat(nextKm) || 0,
+                cost: finalCost,
+                notes: booking.notes,
+                date: completionDate.split('T')[0]
+            });
+            if (shError) throw shError;
+
+            setCompletionModal({ show: false, booking: null, km: '', nextKm: '' });
+            onUpdate();
+        } catch (err) {
+            console.error('Error completing job:', err);
+            alert('Failed to complete job record.');
         } finally {
             setUpdatingId(null);
         }
@@ -317,6 +377,63 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
                     </div>
                 </div>
             ))}
+            {/* Completion Modal */}
+            {completionModal.show && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm animate-admin-in">
+                    <div className="bg-[#10101e] border-2 border-white/10 rounded-[3rem] p-8 xl:p-12 w-full max-w-xl shadow-[0_30px_100px_rgba(0,0,0,0.5)] relative overflow-hidden">
+                        {/* Glow */}
+                        <div className="absolute -right-20 -top-20 w-64 h-64 bg-[#34d399] blur-[100px] opacity-10"></div>
+
+                        <div className="relative z-10 space-y-8">
+                            <div>
+                                <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">Finalize Service</h3>
+                                <p className="text-[#8888a0] text-sm font-bold">Complete the record for {completionModal.booking?.name}&apos;s {completionModal.booking?.bike_model}</p>
+                            </div>
+
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.2em] ml-1">Current Mileage (KM)*</label>
+                                    <input
+                                        type="number"
+                                        placeholder="e.g. 12500"
+                                        className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-4 px-6 text-white font-bold outline-none focus:border-[#34d399] focus:border-opacity-40 transition-all placeholder:text-[#55556a]"
+                                        value={completionModal.km}
+                                        onChange={e => setCompletionModal(p => ({ ...p, km: e.target.value }))}
+                                        autoFocus
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.2em] ml-1">Next Service KM (Optional)</label>
+                                    <input
+                                        type="number"
+                                        placeholder="e.g. 15000"
+                                        className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-4 px-6 text-white font-bold outline-none focus:border-[#00c8ff] focus:border-opacity-40 transition-all placeholder:text-[#55556a]"
+                                        value={completionModal.nextKm}
+                                        onChange={e => setCompletionModal(p => ({ ...p, nextKm: e.target.value }))}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="flex gap-4">
+                                <button
+                                    onClick={() => setCompletionModal({ show: false, booking: null, km: '', nextKm: '' })}
+                                    className="flex-1 py-4 bg-white/5 text-[#8888a0] font-black uppercase text-xs tracking-widest rounded-2xl hover:bg-white/10 transition-all"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleCompleteJob}
+                                    disabled={updatingId === completionModal.booking?.id || !completionModal.km}
+                                    className="flex-[2] py-4 bg-[#34d399] text-black font-black uppercase text-xs tracking-widest rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-[#34d39922] disabled:opacity-50"
+                                >
+                                    {updatingId === completionModal.booking?.id ? 'Processing...' : 'Complete Record'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
