@@ -219,53 +219,55 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.15em;
+    opacity: 0.8;
+}
 
-    /* Marquee Testimonials */
-    .marquee-container {
-        position: relative;
-        width: 100%;
-        overflow: hidden;
-        mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-        padding: 20px 0;
+/* Marquee Testimonials */
+.marquee-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    padding: 20px 0;
+}
+
+.marquee-track {
+    display: flex;
+    gap: 24px;
+    width: max-content;
+}
+
+.marquee-track.scroll-left {
+    animation: scrollLeft 40s linear infinite;
+}
+
+.marquee-track.scroll-right {
+    animation: scrollRight 40s linear infinite;
+}
+
+.marquee-container:hover .marquee-track {
+    animation-play-state: paused;
+}
+
+@keyframes scrollLeft {
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes scrollRight {
+    from {
+        transform: translateX(-50%);
     }
 
-    .marquee-track {
-        display: flex;
-        gap: 24px;
-        width: max-content;
+    to {
+        transform: translateX(0);
     }
+}
 
-    .marquee-track.scroll-left {
-        animation: scrollLeft 40s linear infinite;
-    }
-
-    .marquee-track.scroll-right {
-        animation: scrollRight 40s linear infinite;
-    }
-
-    .marquee-container:hover .marquee-track {
-        animation-play-state: paused;
-    }
-
-    @keyframes scrollLeft {
-        to {
-            transform: translateX(-50%);
-        }
-    }
-
-    @keyframes scrollRight {
-        from {
-            transform: translateX(-50%);
-        }
-
-        to {
-            transform: translateX(0);
-        }
-    }
-
-    /* Adjust card for marquee */
-    .review-card.marquee-item {
-        width: 350px;
-        flex-shrink: 0;
-        margin: 0;
-    }
+/* Adjust card for marquee */
+.review-card.marquee-item {
+    width: 350px;
+    flex-shrink: 0;
+    margin: 0;
+}
