@@ -26,6 +26,7 @@ export function BrandMarquee() {
                         className="brand-item"
                         style={{ '--hover-color': brand.color } as React.CSSProperties}
                     >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             src={brand.src}
                             alt={`${brand.name} Logo`}

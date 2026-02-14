@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 /* =========================================
    SMARTBIKE PRO — Premium Design System
@@ -2046,4 +2046,115 @@ ul {
   .user-menu-trigger.active+.user-dropdown {
     display: block;
   }
+}
+
+/* ===== PREMIUM ANIMATIONS ===== */
+
+/* Text Reveal */
+.text-reveal-wrapper {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.text-reveal {
+  transform: translateY(100%);
+  animation: revealText 0.8s var(--ease) forwards;
+  display: inline-block;
+}
+
+@keyframes revealText {
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Magnetic Button Effect */
+.magnetic-btn {
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+/* Hover Glow Container — uses ::after to avoid conflict with glass-card ::before */
+.hover-glow {
+  position: relative;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+}
+
+.hover-glow::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(0, 200, 255, 0.15), transparent 40%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.hover-glow:hover::after {
+  opacity: 1;
+}
+
+/* Stagger Delays */
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+/* 3D Tilt Base */
+.tilt-card {
+  transition: transform 0.15s ease;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+.tilt-card:hover {
+  transform: perspective(1000px) rotateX(calc((var(--mouse-y-pct, 0.5) - 0.5) * -8deg)) rotateY(calc((var(--mouse-x-pct, 0.5) - 0.5) * 8deg));
+}
+
+/* Connector Line for "How It Works" */
+.steps-timeline {
+  position: relative;
+}
+
+.step-connector-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 2px;
+  background: var(--accent);
+  transform: translateX(-50%);
+  z-index: 0;
+  height: 0%;
+  transition: height 0.1s linear;
+  box-shadow: 0 0 12px var(--accent);
+}
+
+.step-card {
+  z-index: 1;
+  position: relative;
+}
+
+/* Active Nav Link Indicator */
+.nav-links a.active-link {
+  color: var(--text-primary) !important;
+}
+
+.nav-links a.active-link::after {
+  width: 100% !important;
+  background: var(--accent);
 }

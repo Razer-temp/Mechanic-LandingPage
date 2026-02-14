@@ -117,7 +117,50 @@ export default function LandingPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // --- 5. AI Diagnosis Logic ---
+  // --- 5. Mouse Glow Effect ---
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const cards = document.querySelectorAll('.hover-glow');
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const xPct = x / rect.width;
+        const yPct = y / rect.height;
+        (card as HTMLElement).style.setProperty('--mouse-x', `${x}px`);
+        (card as HTMLElement).style.setProperty('--mouse-y', `${y}px`);
+        (card as HTMLElement).style.setProperty('--mouse-x-pct', `${xPct}`);
+        (card as HTMLElement).style.setProperty('--mouse-y-pct', `${yPct}`);
+      });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // --- 6. Scroll Connector Line ---
+  const connectorLineRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!connectorLineRef.current) return;
+      const rect = connectorLineRef.current.parentElement?.getBoundingClientRect();
+      if (!rect) return;
+
+      const windowHeight = window.innerHeight;
+      const elementTop = rect.top;
+      const elementHeight = rect.height;
+
+      // Calculate progress based on scroll position relative to viewport
+      let progress = (windowHeight / 2 - elementTop) / elementHeight;
+      progress = Math.max(0, Math.min(1, progress));
+
+      connectorLineRef.current.style.height = `${progress * 100}%`;
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // --- 7. AI Diagnosis Logic ---
   const handleDiagnosis = () => {
     if (!diagnosisText.trim()) return;
     setIsDiagnosing(true);
@@ -351,20 +394,25 @@ export default function LandingPage() {
             <span className="pulse-dot"></span> AI-Powered Workshop
           </div>
           <h1 className="hero-title animate-on-scroll">
-            Smart Bike Care.<br />
-            <span className="gradient-text">Faster. Better.</span>
+            <span className="text-reveal-wrapper">
+              <span className="text-reveal delay-100">Smart Bike Care.</span>
+            </span>
+            <br />
+            <span className="text-reveal-wrapper">
+              <span className="text-reveal delay-300 gradient-text">Faster. Better.</span>
+            </span>
           </h1>
-          <p className="hero-subtitle animate-on-scroll">
+          <p className="hero-subtitle animate-on-scroll delay-500">
             AI-Powered Two-Wheeler Diagnostics &amp; Repair — Expert mechanics, instant diagnosis, and transparent pricing for your ride.
           </p>
-          <div className="hero-ctas animate-on-scroll">
-            <a href="#booking" className="btn btn-primary btn-glow">
+          <div className="hero-ctas animate-on-scroll delay-500">
+            <a href="#booking" className="btn btn-primary btn-glow magnetic-btn">
               <span>🔧</span> Book Service
             </a>
-            <a href="#diagnosis" className="btn btn-secondary">
+            <a href="#diagnosis" className="btn btn-secondary magnetic-btn">
               <span>🤖</span> AI Bike Check
             </a>
-            <a href="tel:+919811530780" className="btn btn-outline">
+            <a href="tel:+919811530780" className="btn btn-outline magnetic-btn">
               <span>📞</span> Call Now
             </a>
           </div>
@@ -397,7 +445,7 @@ export default function LandingPage() {
             <p className="section-desc">Describe your bike&apos;s problem and our AI will analyze it in seconds — giving you potential causes, urgency level, and estimated costs.</p>
           </div>
           <div className="diagnosis-grid">
-            <div className="diagnosis-input-card glass-card animate-on-scroll">
+            <div className="diagnosis-input-card glass-card animate-on-scroll hover-glow tilt-card">
               <h3>Describe Your Bike Issue</h3>
               <div className="diagnosis-form">
                 <div className="form-group">
@@ -436,7 +484,7 @@ export default function LandingPage() {
                 </button>
               </div>
             </div>
-            <div className="diagnosis-result-card glass-card animate-on-scroll" id="diagnosisResult">
+            <div className="diagnosis-result-card glass-card animate-on-scroll hover-glow tilt-card" id="diagnosisResult">
               {isDiagnosing ? (
                 <div className="result-placeholder">
                   <div className="ai-brain-icon analyzing">🧠</div>
@@ -512,7 +560,7 @@ export default function LandingPage() {
               { icon: '🚨', title: 'Emergency Repair', desc: 'Roadside assistance, flat tire, towing service, and emergency breakdown support.', price: 'From ₹299*' },
               { icon: '⚡', title: 'Electrical Work', desc: 'Wiring repair, headlight upgrade, battery replacement, ECU diagnostics.', price: 'From ₹400*' },
             ].map((s, i) => (
-              <div key={i} className="service-card glass-card animate-on-scroll">
+              <div key={i} className="service-card glass-card animate-on-scroll hover-glow tilt-card">
                 <div className="service-icon">{s.icon}</div>
                 <h3>{s.title}</h3>
                 <p>{s.desc}</p>
@@ -542,7 +590,7 @@ export default function LandingPage() {
               { icon: '🛡️', title: 'Warranty Assured', desc: '6-month warranty on all repairs. Genuine parts with quality guarantee.' },
               { icon: '📍', title: 'Pickup & Drop', desc: 'Free pick-up and delivery within 10km radius. Hassle-free doorstep service.' },
             ].map((w, i) => (
-              <div key={i} className="why-card animate-on-scroll">
+              <div key={i} className="why-card animate-on-scroll hover-glow tilt-card">
                 <div className="why-icon-wrap"><span>{w.icon}</span></div>
                 <h3>{w.title}</h3>
                 <p>{w.desc}</p>
@@ -575,9 +623,9 @@ export default function LandingPage() {
                     <p>{step.desc}</p>
                   </div>
                 </div>
-                {i < arr.length - 1 && <div className="step-connector"></div>}
               </React.Fragment>
             ))}
+            <div className="step-connector-line" ref={connectorLineRef}></div>
           </div>
         </div>
       </section>
@@ -590,7 +638,7 @@ export default function LandingPage() {
             <h2 className="section-title">AI <span className="gradient-text">Cost Estimator</span></h2>
             <p className="section-desc">Get an instant price range for your service — no obligation, no surprises.</p>
           </div>
-          <div className="estimator-card glass-card animate-on-scroll">
+          <div className="estimator-card glass-card animate-on-scroll hover-glow tilt-card">
             <div className="estimator-form">
               <div className="form-row">
                 <div className="form-group">
@@ -665,7 +713,7 @@ export default function LandingPage() {
                   { name: 'Amit Verma', bike: 'KTM Duke 200', avatar: 'AV', text: '"Emergency breakdown at midnight — they picked up my bike and had it ready by morning. The WhatsApp updates kept me informed. Lifesavers!"' },
                   { name: 'Sneha Gupta', bike: 'TVS Jupiter', avatar: 'SG', text: '"Loved the transparency! The mechanic explained everything, and the final bill matched the AI estimate perfectly. Will definitely visit again."' },
                 ].map((r, i) => (
-                  <div key={i} className="review-card glass-card marquee-item">
+                  <div key={i} className="review-card glass-card marquee-item hover-glow">
                     <div className="review-stars">★★★★★</div>
                     <p className="review-text">{r.text}</p>
                     <div className="review-author">
@@ -694,7 +742,7 @@ export default function LandingPage() {
                   { name: 'Rahul Mehta', bike: 'Bajaj Pulsar 150', avatar: 'RM', text: '"Great value for money. The full service package covered everything. My Pulsar vibration issue is completely gone."' },
                   { name: 'Karthik R', bike: 'Hero Splendor+', avatar: 'KR', text: '"Simple, fast, and honest. No unnecessary part replacements. They actually repaired my old part instead of forcing a new one."' },
                 ].map((r, i) => (
-                  <div key={i} className="review-card glass-card marquee-item">
+                  <div key={i} className="review-card glass-card marquee-item hover-glow">
                     <div className="review-stars">★★★★★</div>
                     <p className="review-text">{r.text}</p>
                     <div className="review-author">
@@ -720,7 +768,7 @@ export default function LandingPage() {
             <h2 className="section-title">Schedule Your <span className="gradient-text">Service</span></h2>
             <p className="section-desc">Fill in the form and we&apos;ll confirm your slot within minutes.</p>
           </div>
-          <div className="booking-card glass-card animate-on-scroll">
+          <div className="booking-card glass-card animate-on-scroll hover-glow">
             {bookingSuccess ? (
               <div className="booking-success" style={{ animation: 'fadeInUp 0.5s ease' }}>
                 <div className="success-icon">✅</div>
