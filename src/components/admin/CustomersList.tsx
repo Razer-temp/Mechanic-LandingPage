@@ -285,130 +285,6 @@ export default function CustomersList({ bookings }: CustomersListProps) {
                                     {c.isInactive && (
                                         <span className="text-[8px] font-black text-[#ff2d55] uppercase tracking-widest">{c.daysSince}d ago</span>
                                     )}
-                                    {/* Edit Customer Modal */}
-                                    {editingCustomer && (
-                                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm animate-admin-in">
-                                            <div className="bg-[#10101e] border-2 border-white/10 rounded-[3rem] p-8 xl:p-12 w-full max-w-xl shadow-3xl relative overflow-hidden">
-                                                <div className="absolute -right-20 -top-20 w-64 h-64 bg-[#a78bfa] blur-[100px] opacity-10"></div>
-                                                <div className="relative z-10 space-y-8">
-                                                    <div>
-                                                        <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">Edit Customer</h3>
-                                                        <p className="text-[#8888a0] text-sm font-bold">Update details for {editingCustomer.name}</p>
-                                                    </div>
-                                                    <div className="space-y-6">
-                                                        <div className="space-y-2">
-                                                            <label className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.2em] ml-1">Full Name</label>
-                                                            <input
-                                                                type="text"
-                                                                className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-4 px-6 text-white font-bold outline-none focus:border-[#a78bfa] focus:border-opacity-40 transition-all"
-                                                                value={editingCustomer.name}
-                                                                onChange={e => setEditingCustomer({ ...editingCustomer, name: e.target.value })}
-                                                            />
-                                                        </div>
-                                                        <div className="space-y-2">
-                                                            <label className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.2em] ml-1">Phone Number</label>
-                                                            <input
-                                                                type="text"
-                                                                className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-4 px-6 text-white font-bold outline-none focus:border-[#a78bfa] focus:border-opacity-40 transition-all"
-                                                                value={editingCustomer.phone}
-                                                                onChange={e => setEditingCustomer({ ...editingCustomer, phone: e.target.value })}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex gap-4">
-                                                        <button onClick={() => setEditingCustomer(null)} className="flex-1 py-4 bg-white/5 text-[#8888a0] font-black uppercase text-xs tracking-widest rounded-2xl hover:bg-white/10 transition-all">Cancel</button>
-                                                        <button
-                                                            onClick={() => handleUpdateCustomer(editingCustomer.phone, editingCustomer.name, editingCustomer.phone)}
-                                                            disabled={saving}
-                                                            className="flex-[2] py-4 bg-[#a78bfa] text-black font-black uppercase text-xs tracking-widest rounded-2xl hover:scale-[1.02] transition-all disabled:opacity-50"
-                                                        >
-                                                            {saving ? 'Saving...' : 'Save Changes'}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* Add Service Modal */}
-                                    {newServiceCustomer && (
-                                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm animate-admin-in">
-                                            <div className="bg-[#10101e] border-2 border-white/10 rounded-[3rem] p-8 xl:p-12 w-full max-w-xl shadow-3xl relative overflow-hidden">
-                                                <div className="absolute -right-20 -top-20 w-64 h-64 bg-[#00c8ff] blur-[100px] opacity-10"></div>
-                                                <div className="relative z-10 space-y-8">
-                                                    <div>
-                                                        <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">New Service Record</h3>
-                                                        <p className="text-[#8888a0] text-sm font-bold">Creating entry for {newServiceCustomer.name}</p>
-                                                    </div>
-                                                    <div className="space-y-6 max-h-[400px] overflow-y-auto px-2 custom-scrollbar-minimal">
-                                                        <div className="space-y-2">
-                                                            <label className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.2em] ml-1">Bike Model*</label>
-                                                            <input
-                                                                type="text"
-                                                                className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-4 px-6 text-white font-bold outline-none focus:border-[#00c8ff] focus:border-opacity-40 transition-all"
-                                                                value={newServiceCustomer.temp_bike || (newServiceCustomer.vehicles[0] || '')}
-                                                                onChange={e => setNewServiceCustomer({ ...newServiceCustomer, temp_bike: e.target.value })}
-                                                            />
-                                                        </div>
-                                                        <div className="space-y-2">
-                                                            <label className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.2em] ml-1">Vehicle Number</label>
-                                                            <input
-                                                                type="text"
-                                                                className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-4 px-6 text-white font-bold outline-none focus:border-[#00c8ff] focus:border-opacity-40 transition-all"
-                                                                value={newServiceCustomer.temp_vnum || (newServiceCustomer.vehicleNumbers[0] || '')}
-                                                                onChange={e => setNewServiceCustomer({ ...newServiceCustomer, temp_vnum: e.target.value })}
-                                                            />
-                                                        </div>
-                                                        <div className="space-y-2">
-                                                            <label className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.2em] ml-1">Service Type</label>
-                                                            <select
-                                                                className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-4 px-6 text-white font-bold outline-none focus:border-[#00c8ff] transition-all"
-                                                                onChange={e => setNewServiceCustomer({ ...newServiceCustomer, temp_type: e.target.value })}
-                                                                defaultValue="General Service"
-                                                            >
-                                                                <option value="General Service">General Service</option>
-                                                                <option value="Oil Change">Oil Change</option>
-                                                                <option value="Brake Service">Brake Service</option>
-                                                                <option value="Engine Work">Engine Work</option>
-                                                                <option value="Electrical Repair">Electrical Repair</option>
-                                                                <option value="Detailing & Polishing">Detailing & Polishing</option>
-                                                            </select>
-                                                        </div>
-                                                        <div className="space-y-2">
-                                                            <label className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.2em] ml-1">Location</label>
-                                                            <div className="flex gap-4">
-                                                                <button
-                                                                    onClick={() => setNewServiceCustomer({ ...newServiceCustomer, temp_loc: 'workshop' })}
-                                                                    className={clsx("flex-1 py-3 rounded-xl border-2 font-black text-[10px] tracking-widest uppercase transition-all", (newServiceCustomer.temp_loc || 'workshop') === 'workshop' ? "bg-[var(--admin-accent)] border-[var(--admin-accent)] text-black" : "border-white/5 text-[#55556a]")}
-                                                                >Workshop</button>
-                                                                <button
-                                                                    onClick={() => setNewServiceCustomer({ ...newServiceCustomer, temp_loc: 'doorstep' })}
-                                                                    className={clsx("flex-1 py-3 rounded-xl border-2 font-black text-[10px] tracking-widest uppercase transition-all", (newServiceCustomer.temp_loc || 'workshop') === 'doorstep' ? "bg-[#fbbf24] border-[#fbbf24] text-black" : "border-white/5 text-[#55556a]")}
-                                                                >Doorstep</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex gap-4">
-                                                        <button onClick={() => setNewServiceCustomer(null)} className="flex-1 py-4 bg-white/5 text-[#8888a0] font-black uppercase text-xs tracking-widest rounded-2xl hover:bg-white/10 transition-all">Cancel</button>
-                                                        <button
-                                                            onClick={() => handleCreateService({
-                                                                name: newServiceCustomer.name,
-                                                                phone: newServiceCustomer.phone,
-                                                                bike_model: newServiceCustomer.temp_bike || newServiceCustomer.vehicles[0],
-                                                                vehicle_number: newServiceCustomer.temp_vnum || newServiceCustomer.vehicleNumbers[0],
-                                                                service_type: newServiceCustomer.temp_type || 'General Service',
-                                                                service_location: newServiceCustomer.temp_loc || 'workshop'
-                                                            })}
-                                                            disabled={saving || !(newServiceCustomer.temp_bike || newServiceCustomer.vehicles[0])}
-                                                            className="flex-[2] py-4 bg-[var(--admin-accent)] text-black font-black uppercase text-xs tracking-widest rounded-2xl hover:scale-[1.02] transition-all disabled:opacity-50"
-                                                        >
-                                                            {saving ? 'Creating...' : 'Create Booking'}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
 
@@ -471,6 +347,131 @@ export default function CustomersList({ bookings }: CustomersListProps) {
                             </div>
                         </div>
                     ))}
+                </div>
+            )}
+
+            {/* Edit Customer Modal */}
+            {editingCustomer && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#050508]/95 backdrop-blur-xl animate-admin-in">
+                    <div className="bg-[#10101e] border-2 border-white/10 rounded-[3rem] p-8 xl:p-12 w-full max-w-xl shadow-3xl relative overflow-hidden">
+                        <div className="absolute -right-20 -top-20 w-64 h-64 bg-[#a78bfa] blur-[100px] opacity-10"></div>
+                        <div className="relative z-10 space-y-8">
+                            <div>
+                                <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">Edit Customer</h3>
+                                <p className="text-[#8888a0] text-sm font-bold">Update details for {editingCustomer.name}</p>
+                            </div>
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.2em] ml-1">Full Name</label>
+                                    <input
+                                        type="text"
+                                        className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-4 px-6 text-white font-bold outline-none focus:border-[#a78bfa] focus:border-opacity-40 transition-all"
+                                        value={editingCustomer.name}
+                                        onChange={e => setEditingCustomer({ ...editingCustomer, name: e.target.value })}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.2em] ml-1">Phone Number</label>
+                                    <input
+                                        type="text"
+                                        className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-4 px-6 text-white font-bold outline-none focus:border-[#a78bfa] focus:border-opacity-40 transition-all"
+                                        value={editingCustomer.phone}
+                                        onChange={e => setEditingCustomer({ ...editingCustomer, phone: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex gap-4">
+                                <button onClick={() => setEditingCustomer(null)} className="flex-1 py-4 bg-white/5 text-[#8888a0] font-black uppercase text-xs tracking-widest rounded-2xl hover:bg-white/10 transition-all">Cancel</button>
+                                <button
+                                    onClick={() => handleUpdateCustomer(editingCustomer.phone, editingCustomer.name, editingCustomer.phone)}
+                                    disabled={saving}
+                                    className="flex-[2] py-4 bg-[#a78bfa] text-black font-black uppercase text-xs tracking-widest rounded-2xl hover:scale-[1.02] transition-all disabled:opacity-50"
+                                >
+                                    {saving ? 'Saving...' : 'Save Changes'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Add Service Modal */}
+            {newServiceCustomer && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#050508]/95 backdrop-blur-xl animate-admin-in">
+                    <div className="bg-[#10101e] border-2 border-white/10 rounded-[3rem] p-8 xl:p-12 w-full max-w-xl shadow-3xl relative overflow-hidden">
+                        <div className="absolute -right-20 -top-20 w-64 h-64 bg-[#00c8ff] blur-[100px] opacity-10"></div>
+                        <div className="relative z-10 space-y-8">
+                            <div>
+                                <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">New Service Record</h3>
+                                <p className="text-[#8888a0] text-sm font-bold">Creating entry for {newServiceCustomer.name}</p>
+                            </div>
+                            <div className="space-y-6 max-h-[400px] overflow-y-auto px-2 custom-scrollbar-minimal">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.2em] ml-1">Bike Model*</label>
+                                    <input
+                                        type="text"
+                                        className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-4 px-6 text-white font-bold outline-none focus:border-[#00c8ff] focus:border-opacity-40 transition-all"
+                                        value={newServiceCustomer.temp_bike || (newServiceCustomer.vehicles[0] || '')}
+                                        onChange={e => setNewServiceCustomer({ ...newServiceCustomer, temp_bike: e.target.value })}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.2em] ml-1">Vehicle Number</label>
+                                    <input
+                                        type="text"
+                                        className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-4 px-6 text-white font-bold outline-none focus:border-[#00c8ff] focus:border-opacity-40 transition-all"
+                                        value={newServiceCustomer.temp_vnum || (newServiceCustomer.vehicleNumbers[0] || '')}
+                                        onChange={e => setNewServiceCustomer({ ...newServiceCustomer, temp_vnum: e.target.value })}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.2em] ml-1">Service Type</label>
+                                    <select
+                                        className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-4 px-6 text-white font-bold outline-none focus:border-[#00c8ff] transition-all"
+                                        onChange={e => setNewServiceCustomer({ ...newServiceCustomer, temp_type: e.target.value })}
+                                        defaultValue="General Service"
+                                    >
+                                        <option value="General Service">General Service</option>
+                                        <option value="Oil Change">Oil Change</option>
+                                        <option value="Brake Service">Brake Service</option>
+                                        <option value="Engine Work">Engine Work</option>
+                                        <option value="Electrical Repair">Electrical Repair</option>
+                                        <option value="Detailing & Polishing">Detailing & Polishing</option>
+                                    </select>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.2em] ml-1">Location</label>
+                                    <div className="flex gap-4">
+                                        <button
+                                            onClick={() => setNewServiceCustomer({ ...newServiceCustomer, temp_loc: 'workshop' })}
+                                            className={clsx("flex-1 py-3 rounded-xl border-2 font-black text-[10px] tracking-widest uppercase transition-all", (newServiceCustomer.temp_loc || 'workshop') === 'workshop' ? "bg-[var(--admin-accent)] border-[var(--admin-accent)] text-black" : "border-white/5 text-[#55556a]")}
+                                        >Workshop</button>
+                                        <button
+                                            onClick={() => setNewServiceCustomer({ ...newServiceCustomer, temp_loc: 'doorstep' })}
+                                            className={clsx("flex-1 py-3 rounded-xl border-2 font-black text-[10px] tracking-widest uppercase transition-all", (newServiceCustomer.temp_loc || 'workshop') === 'doorstep' ? "bg-[#fbbf24] border-[#fbbf24] text-black" : "border-white/5 text-[#55556a]")}
+                                        >Doorstep</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex gap-4">
+                                <button onClick={() => setNewServiceCustomer(null)} className="flex-1 py-4 bg-white/5 text-[#8888a0] font-black uppercase text-xs tracking-widest rounded-2xl hover:bg-white/10 transition-all">Cancel</button>
+                                <button
+                                    onClick={() => handleCreateService({
+                                        name: newServiceCustomer.name,
+                                        phone: newServiceCustomer.phone,
+                                        bike_model: newServiceCustomer.temp_bike || newServiceCustomer.vehicles[0],
+                                        vehicle_number: newServiceCustomer.temp_vnum || newServiceCustomer.vehicleNumbers[0],
+                                        service_type: newServiceCustomer.temp_type || 'General Service',
+                                        service_location: newServiceCustomer.temp_loc || 'workshop'
+                                    })}
+                                    disabled={saving || !(newServiceCustomer.temp_bike || newServiceCustomer.vehicles[0])}
+                                    className="flex-[2] py-4 bg-[var(--admin-accent)] text-black font-black uppercase text-xs tracking-widest rounded-2xl hover:scale-[1.02] transition-all disabled:opacity-50"
+                                >
+                                    {saving ? 'Creating...' : 'Create Booking'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

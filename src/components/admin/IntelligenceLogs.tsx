@@ -236,7 +236,7 @@ export default function IntelligenceLogs({ chats, diagnoses, estimates, activeSu
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 {estimates.map((e) => (
-                                    <div key={e.id} className="bg-[#10101e] border border-white/5 rounded-3xl p-6 hover:border-[#34d399]/30 transition-all">
+                                    <div key={e.id} className="bg-[#10101e] border border-white/5 rounded-3xl p-6 hover:border-[#34d399]/30 transition-all group">
                                         <div className="flex items-center justify-between mb-4">
                                             <div className="w-10 h-10 bg-[#34d399]/10 rounded-xl flex items-center justify-center text-[#34d399]">
                                                 <IndianRupee size={18} />
