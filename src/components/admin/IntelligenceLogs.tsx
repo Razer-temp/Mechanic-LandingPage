@@ -9,7 +9,9 @@ import {
     Search,
     ChevronDown,
     BrainCircuit,
-    AlertCircle
+    AlertCircle,
+    BarChart3,
+    ChevronRight
 } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -31,11 +33,19 @@ interface IntelligenceLogsProps {
     chats: any[];
     diagnoses: any[];
     estimates: any[];
+    defaultSubTab?: 'chats' | 'diagnoses' | 'estimates';
 }
 
-export default function IntelligenceLogs({ chats, diagnoses, estimates }: IntelligenceLogsProps) {
-    const [activeSubTab, setActiveSubTab] = useState<'chats' | 'diagnoses' | 'estimates'>('chats');
+export default function IntelligenceLogs({ chats, diagnoses, estimates, defaultSubTab = 'chats' }: IntelligenceLogsProps) {
+    const [activeSubTab, setActiveSubTab] = useState<'chats' | 'diagnoses' | 'estimates'>(defaultSubTab);
     const [expandedSessions, setExpandedSessions] = useState<Set<string>>(new Set());
+
+    // Update sub-tab if prop changes
+    React.useEffect(() => {
+        if (defaultSubTab) {
+            setActiveSubTab(defaultSubTab);
+        }
+    }, [defaultSubTab]);
 
     const toggleSession = (id: string) => {
         const next = new Set(expandedSessions);

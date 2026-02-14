@@ -17,7 +17,9 @@ import {
     Users,
     Bike,
     BarChart3,
-    ChevronRight
+    ChevronRight,
+    Zap,
+    IndianRupee
 } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -30,7 +32,7 @@ import SettingsPanel from '@/components/admin/SettingsPanel';
 import RevenueAnalytics from '@/components/admin/RevenueAnalytics';
 import VehicleHistory from '@/components/admin/VehicleHistory';
 
-type AdminTab = 'bookings' | 'chats' | 'customers' | 'settings' | 'fleet' | 'reports';
+type AdminTab = 'bookings' | 'chats' | 'customers' | 'settings' | 'fleet' | 'reports' | 'diagnoses' | 'estimates';
 
 export default function AdminDashboard() {
     const router = useRouter();
@@ -95,6 +97,16 @@ export default function AdminDashboard() {
                 supabase.from('ai_estimates' as any).select('*').order('created_at', { ascending: false }),
             ]);
 
+            if (dRes.error) console.error('AI Diagnoses Fetch Error:', dRes.error);
+            if (estRes.error) console.error('AI Estimates Fetch Error:', estRes.error);
+
+            console.log('Admin Data Fetch Results:', {
+                bookings: bRes.data?.length || 0,
+                chats: cRes.data?.length || 0,
+                diagnoses: dRes.data?.length || 0,
+                estimates: estRes.data?.length || 0
+            });
+
             if (bRes.data) setBookings(bRes.data);
             if (cRes.data) setChats(cRes.data);
             if (eRes.data) setExpenses(eRes.data);
@@ -102,7 +114,7 @@ export default function AdminDashboard() {
             if (dRes.data) setDiagnoses(dRes.data);
             if (estRes.data) setEstimates(estRes.data);
         } catch (err: any) {
-            console.error('Error fetching data:', err);
+            console.error('CRITICAL: Error fetching dashboard data:', err);
         } finally {
             setLoading(false);
         }
@@ -226,7 +238,29 @@ export default function AdminDashboard() {
                     )}
                 >
                     <MessageSquare size={20} className={activeTab === 'chats' ? "text-[#a78bfa]" : ""} />
-                    <span>AI Intelligence</span>
+                    <span>Neural Logs</span>
+                </button>
+
+                <button
+                    onClick={() => { setActiveTab('diagnoses'); setShowMobileMenu(false); }}
+                    className={clsx(
+                        "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
+                        activeTab === 'diagnoses' ? "bg-[#00c8ff1a] text-[#00c8ff] shadow-sm" : "text-[#55556a] hover:text-white hover:bg-white/5"
+                    )}
+                >
+                    <Zap size={20} className={activeTab === 'diagnoses' ? "text-[#00c8ff]" : ""} />
+                    <span>AI Diagnoses</span>
+                </button>
+
+                <button
+                    onClick={() => { setActiveTab('estimates'); setShowMobileMenu(false); }}
+                    className={clsx(
+                        "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
+                        activeTab === 'estimates' ? "bg-[#34d3991a] text-[#34d399] shadow-sm" : "text-[#55556a] hover:text-white hover:bg-white/5"
+                    )}
+                >
+                    <IndianRupee size={20} className={activeTab === 'estimates' ? "text-[#34d399]" : ""} />
+                    <span>Cost Estimator</span>
                 </button>
 
                 <button
@@ -443,6 +477,25 @@ export default function AdminDashboard() {
                             chats={chats}
                             diagnoses={diagnoses}
                             estimates={estimates}
+                            defaultSubTab="chats"
+                        />
+                    )}
+
+                    {activeTab === 'diagnoses' && (
+                        <IntelligenceLogs
+                            chats={chats}
+                            diagnoses={diagnoses}
+                            estimates={estimates}
+                            defaultSubTab="diagnoses"
+                        />
+                    )}
+
+                    {activeTab === 'estimates' && (
+                        <IntelligenceLogs
+                            chats={chats}
+                            diagnoses={diagnoses}
+                            estimates={estimates}
+                            defaultSubTab="estimates"
                         />
                     )}
 
