@@ -132,6 +132,32 @@ export default function AdminDashboard() {
         }
     }, [router, fetchData]);
 
+    // Deletion handler for waste data
+    const handleDeleteRecord = async (table: string, id: string) => {
+        try {
+            const { error } = await supabase
+                .from(table as any)
+                .delete()
+                .eq('id', id);
+
+            if (error) {
+                console.error(`Error deleting from ${table}:`, error);
+                alert(`Failed to delete record: ${error.message}`);
+                return;
+            }
+
+            // Optimization: Remove from local state immediately for snappy UI
+            if (table === 'chat_sessions') setChats(prev => prev.filter(c => c.id !== id));
+            if (table === 'ai_diagnoses') setDiagnoses(prev => prev.filter(d => d.id !== id));
+            if (table === 'ai_estimates') setEstimates(prev => prev.filter(e => e.id !== id));
+
+            // Full refresh to be safe
+            fetchData();
+        } catch (err) {
+            console.error('Unexpected deletion error:', err);
+        }
+    };
+
     const handleLogout = () => {
         sessionStorage.removeItem('admin_auth');
         router.push('/admin/login');
@@ -469,6 +495,7 @@ export default function AdminDashboard() {
                             estimates={estimates}
                             activeSubTab={activeSubTab}
                             setActiveSubTab={setActiveSubTab}
+                            onDelete={handleDeleteRecord}
                         />
                     )}
 

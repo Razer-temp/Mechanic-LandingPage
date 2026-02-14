@@ -11,7 +11,8 @@ import {
     BrainCircuit,
     AlertCircle,
     BarChart3,
-    ChevronRight
+    ChevronRight,
+    Trash2
 } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -35,9 +36,10 @@ interface IntelligenceLogsProps {
     estimates: any[];
     activeSubTab: 'chats' | 'diagnoses' | 'estimates';
     setActiveSubTab: (tab: 'chats' | 'diagnoses' | 'estimates') => void;
+    onDelete?: (table: string, id: string) => void;
 }
 
-export default function IntelligenceLogs({ chats, diagnoses, estimates, activeSubTab, setActiveSubTab }: IntelligenceLogsProps) {
+export default function IntelligenceLogs({ chats, diagnoses, estimates, activeSubTab, setActiveSubTab, onDelete }: IntelligenceLogsProps) {
     const [expandedSessions, setExpandedSessions] = useState<Set<string>>(new Set());
 
     const toggleSession = (id: string) => {
@@ -122,8 +124,17 @@ export default function IntelligenceLogs({ chats, diagnoses, estimates, activeSu
                                                     </p>
                                                 </div>
                                             </div>
-                                            <div className="px-3 py-1 bg-white/5 rounded-full text-[9px] font-black text-[#8888a0] uppercase tracking-widest">
-                                                {chat.chat_messages?.length || 0} Messages
+                                            <div className="flex items-center gap-3">
+                                                <div className="px-3 py-1 bg-white/5 rounded-full text-[9px] font-black text-[#8888a0] uppercase tracking-widest">
+                                                    {chat.chat_messages?.length || 0} Messages
+                                                </div>
+                                                <button
+                                                    onClick={(e) => { e.stopPropagation(); if (window.confirm('Delete this chat session?')) onDelete?.('chat_sessions', chat.id); }}
+                                                    className="p-2 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-black transition-all opacity-0 group-hover:opacity-100"
+                                                    title="Delete Session"
+                                                >
+                                                    <Trash2 size={14} />
+                                                </button>
                                             </div>
                                         </div>
 
@@ -167,13 +178,22 @@ export default function IntelligenceLogs({ chats, diagnoses, estimates, activeSu
                                         <div className="w-12 h-12 bg-[#00c8ff]/10 rounded-2xl flex items-center justify-center text-[#00c8ff]">
                                             <Zap size={20} />
                                         </div>
-                                        <div className={clsx(
-                                            "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border",
-                                            d.result_urgency === 'high' ? "bg-red-500/10 text-red-500 border-red-500/20" :
-                                                d.result_urgency === 'medium' ? "bg-amber-500/10 text-amber-500 border-amber-500/20" :
-                                                    "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
-                                        )}>
-                                            {d.result_urgency} Urgency
+                                        <div className="flex items-center gap-3">
+                                            <div className={clsx(
+                                                "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border",
+                                                d.result_urgency === 'high' ? "bg-red-500/10 text-red-500 border-red-500/20" :
+                                                    d.result_urgency === 'medium' ? "bg-amber-500/10 text-amber-500 border-amber-500/20" :
+                                                        "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                                            )}>
+                                                {d.result_urgency} Urgency
+                                            </div>
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); if (window.confirm('Delete this diagnosis?')) onDelete?.('ai_diagnoses', d.id); }}
+                                                className="p-2 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-black transition-all opacity-0 group-hover:opacity-100"
+                                                title="Delete Diagnosis"
+                                            >
+                                                <Trash2 size={14} />
+                                            </button>
                                         </div>
                                     </div>
 
@@ -214,9 +234,18 @@ export default function IntelligenceLogs({ chats, diagnoses, estimates, activeSu
                                             <div className="w-10 h-10 bg-[#34d399]/10 rounded-xl flex items-center justify-center text-[#34d399]">
                                                 <IndianRupee size={18} />
                                             </div>
-                                            <span className="text-[9px] font-black text-[#55556a] uppercase tracking-widest">
-                                                {formatDate(e.created_at)}
-                                            </span>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-[9px] font-black text-[#55556a] uppercase tracking-widest">
+                                                    {formatDate(e.created_at)}
+                                                </span>
+                                                <button
+                                                    onClick={(ev) => { ev.stopPropagation(); if (window.confirm('Delete this estimate?')) onDelete?.('ai_estimates', e.id); }}
+                                                    className="p-1.5 bg-red-500/10 text-red-500 rounded-lg hover:bg-red-500 hover:text-black transition-all opacity-0 group-hover:opacity-100"
+                                                    title="Delete Estimate"
+                                                >
+                                                    <Trash2 size={12} />
+                                                </button>
+                                            </div>
                                         </div>
 
                                         <h4 className="text-white font-bold capitalize mb-1">{e.bike_type}</h4>
