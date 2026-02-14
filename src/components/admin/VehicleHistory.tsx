@@ -15,7 +15,9 @@ import {
     User,
     MapPin,
     Trash2,
-    RefreshCw
+    RefreshCw,
+    Edit2,
+    XCircle
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import clsx from 'clsx';
@@ -43,6 +45,7 @@ export default function VehicleHistory({ bookings, serviceHistory, onHistoryChan
         notes: '',
         cost: ''
     });
+    const [editingEntry, setEditingEntry] = useState<any | null>(null);
 
     // Build unique vehicle list from BOTH bookings and service_history
     const vehicles = useMemo(() => {
@@ -152,6 +155,33 @@ export default function VehicleHistory({ bookings, serviceHistory, onHistoryChan
         } catch (err) {
             console.error('Error adding entry:', err);
             alert('Failed to add service entry');
+        }
+        setSaving(false);
+    };
+
+    const handleUpdateEntry = async () => {
+        if (!editingEntry) return;
+        setSaving(true);
+        try {
+            const { error } = await supabase.from('service_history').update({
+                vehicle_number: editingEntry.vehicle_number.toUpperCase(),
+                bike_model: editingEntry.bike_model,
+                customer_phone: editingEntry.customer_phone,
+                customer_name: editingEntry.customer_name,
+                service_type: editingEntry.service_type,
+                mileage_at_service: editingEntry.mileage_at_service ? parseFloat(editingEntry.mileage_at_service) : null,
+                next_service_km: editingEntry.next_service_km ? parseFloat(editingEntry.next_service_km) : null,
+                notes: editingEntry.notes || null,
+                cost: editingEntry.cost ? parseFloat(editingEntry.cost) : 0,
+                date: editingEntry.date
+            }).eq('id', editingEntry.id);
+
+            if (error) throw error;
+            setEditingEntry(null);
+            onHistoryChange();
+        } catch (err) {
+            console.error('Error updating entry:', err);
+            alert('Failed to update entry');
         }
         setSaving(false);
     };
@@ -308,6 +338,15 @@ export default function VehicleHistory({ bookings, serviceHistory, onHistoryChan
                                                                 <Trash2 size={14} />
                                                             </button>
                                                         )}
+                                                        {entry.type === 'history' && (
+                                                            <button
+                                                                onClick={() => setEditingEntry(entry)}
+                                                                className="text-[#55556a] hover:text-[#fbbf24] transition-colors"
+                                                                title="Edit Entry"
+                                                            >
+                                                                <Edit2 size={14} />
+                                                            </button>
+                                                        )}
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-wrap items-center gap-3 text-[9px] font-bold text-[#55556a] uppercase tracking-widest">
@@ -341,6 +380,55 @@ export default function VehicleHistory({ bookings, serviceHistory, onHistoryChan
                     )}
                 </div>
             </div>
+            {/* Edit Entry Modal */}
+            {editingEntry && (
+                <div className="fixed inset-0 z-[110] flex items-center justify-center p-6 bg-black/90 backdrop-blur-md animate-admin-in">
+                    <div className="bg-[#10101e] border-2 border-white/10 rounded-[3rem] p-8 xl:p-12 w-full max-w-2xl shadow-[0_30px_100px_rgba(0,0,0,0.8)] relative overflow-hidden custom-scrollbar-minimal overflow-y-auto max-h-[90vh]">
+                        <div className="flex justify-between items-center mb-8">
+                            <div>
+                                <h3 className="text-3xl font-black text-white uppercase tracking-tighter">Edit History Entry</h3>
+                                <p className="text-[#8888a0] text-sm font-bold mt-1">Vehicle: {editingEntry.vehicle_number}</p>
+                            </div>
+                            <button onClick={() => setEditingEntry(null)} className="p-3 bg-white/5 rounded-2xl text-[#55556a] hover:text-white transition-all">
+                                <XCircle size={24} />
+                            </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-4">
+                                <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.3em] ml-1">Vehicle & Owner</p>
+                                <input type="text" placeholder="Vehicle Number" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[#fbbf24]/30" value={editingEntry.vehicle_number} onChange={e => setEditingEntry({ ...editingEntry, vehicle_number: e.target.value.toUpperCase() })} />
+                                <input type="text" placeholder="Bike Model" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[#fbbf24]/30" value={editingEntry.bike_model || ''} onChange={e => setEditingEntry({ ...editingEntry, bike_model: e.target.value })} />
+                                <input type="text" placeholder="Customer Name" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[#fbbf24]/30" value={editingEntry.customer_name || ''} onChange={e => setEditingEntry({ ...editingEntry, customer_name: e.target.value })} />
+                                <input type="text" placeholder="Customer Phone" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[#fbbf24]/30" value={editingEntry.customer_phone || ''} onChange={e => setEditingEntry({ ...editingEntry, customer_phone: e.target.value })} />
+                            </div>
+
+                            <div className="space-y-4">
+                                <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.3em] ml-1">Service & Metrics</p>
+                                <input type="text" placeholder="Service Type" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[#fbbf24]/30" value={editingEntry.service_type || ''} onChange={e => setEditingEntry({ ...editingEntry, service_type: e.target.value })} />
+                                <input type="number" placeholder="Mileage (km)" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[#fbbf24]/30" value={editingEntry.mileage || ''} onChange={e => setEditingEntry({ ...editingEntry, mileage_at_service: e.target.value, mileage: e.target.value })} />
+                                <input type="number" placeholder="Next Service km" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[#fbbf24]/30" value={editingEntry.next_mileage || ''} onChange={e => setEditingEntry({ ...editingEntry, next_service_km: e.target.value, next_mileage: e.target.value })} />
+                                <input type="date" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[#fbbf24]/30" value={editingEntry.date || ''} onChange={e => setEditingEntry({ ...editingEntry, date: e.target.value })} />
+                            </div>
+
+                            <div className="md:col-span-2 space-y-4">
+                                <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.3em] ml-1">Cost & Notes</p>
+                                <input type="number" placeholder="Cost ₹" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[#fbbf24]/30" value={editingEntry.cost || ''} onChange={e => setEditingEntry({ ...editingEntry, cost: e.target.value })} />
+                                <textarea placeholder="Notes" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[#fbbf24]/30 min-h-[80px]" value={editingEntry.notes || ''} onChange={e => setEditingEntry({ ...editingEntry, notes: e.target.value })} />
+                            </div>
+                        </div>
+
+                        <div className="mt-10 flex gap-4">
+                            <button onClick={handleUpdateEntry} disabled={saving} className="flex-[2] py-4 bg-[#fbbf24] text-black font-black uppercase text-xs tracking-widest rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl disabled:opacity-50">
+                                {saving ? 'Saving Changes...' : 'Save All Changes'}
+                            </button>
+                            <button onClick={() => setEditingEntry(null)} className="flex-1 py-4 bg-white/5 text-[#8888a0] font-black uppercase text-xs tracking-widest rounded-2xl hover:bg-white/10 transition-all border border-white/5">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

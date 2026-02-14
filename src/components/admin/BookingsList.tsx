@@ -14,7 +14,8 @@ import {
     Wrench,
     IndianRupee,
     Play,
-    Hash
+    Hash,
+    Edit2
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import clsx from 'clsx';
@@ -38,6 +39,7 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
         nextKm: string;
         vnum: string;
     }>({ show: false, booking: null, km: '', nextKm: '', vnum: '' });
+    const [editingBooking, setEditingBooking] = useState<any | null>(null);
 
     const updateStatus = async (id: string, status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled') => {
         setUpdatingId(id);
@@ -104,6 +106,37 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
         } catch (err) {
             console.error('Error deleting booking:', err);
             alert('Delete failed.');
+        } finally {
+            setUpdatingId(null);
+        }
+    };
+
+    const handleUpdateBooking = async () => {
+        if (!editingBooking) return;
+        setUpdatingId(editingBooking.id);
+        try {
+            const { error } = await supabase.from('bookings').update({
+                name: editingBooking.name,
+                phone: editingBooking.phone,
+                bike_model: editingBooking.bike_model,
+                service_type: editingBooking.service_type,
+                service_location: editingBooking.service_location,
+                address: editingBooking.address,
+                preferred_date: editingBooking.preferred_date,
+                preferred_time: editingBooking.preferred_time,
+                notes: editingBooking.notes,
+                final_cost: parseFloat(editingBooking.final_cost) || 0,
+                estimated_cost: parseFloat(editingBooking.estimated_cost) || 0,
+                mechanic_name: editingBooking.mechanic_name,
+                vehicle_number: editingBooking.vehicle_number?.toUpperCase()
+            }).eq('id', editingBooking.id);
+
+            if (error) throw error;
+            setEditingBooking(null);
+            onUpdate();
+        } catch (err) {
+            console.error('Error updating booking:', err);
+            alert('Failed to update booking.');
         } finally {
             setUpdatingId(null);
         }
@@ -376,6 +409,12 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
                                     title="Delete">
                                     <Trash2 size={20} />
                                 </button>
+
+                                <button onClick={() => setEditingBooking(b)}
+                                    className="p-3 bg-[var(--admin-accent)]/10 text-[var(--admin-accent)] hover:bg-[var(--admin-accent)]/20 rounded-xl transition-all border border-[var(--admin-accent)]/20"
+                                    title="Edit Details">
+                                    <Edit2 size={20} />
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -444,6 +483,82 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
                                     {updatingId === completionModal.booking?.id ? 'Processing...' : 'Complete Record'}
                                 </button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Edit Booking Modal */}
+            {editingBooking && (
+                <div className="fixed inset-0 z-[110] flex items-center justify-center p-6 bg-black/90 backdrop-blur-md animate-admin-in">
+                    <div className="bg-[#10101e] border-2 border-white/10 rounded-[3rem] p-8 xl:p-12 w-full max-w-2xl shadow-[0_30px_100px_rgba(0,0,0,0.8)] relative overflow-hidden custom-scrollbar-minimal overflow-y-auto max-h-[90vh]">
+                        <div className="flex justify-between items-center mb-8">
+                            <div>
+                                <h3 className="text-3xl font-black text-white uppercase tracking-tighter">Edit Reservation</h3>
+                                <p className="text-[#8888a0] text-sm font-bold mt-1">Modifying booking ID: {editingBooking.id.slice(0, 8)}...</p>
+                            </div>
+                            <button onClick={() => setEditingBooking(null)} className="p-3 bg-white/5 rounded-2xl text-[#55556a] hover:text-white transition-all">
+                                <XCircle size={24} />
+                            </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Basic Info */}
+                            <div className="space-y-4">
+                                <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.3em] ml-1">Customer Details</p>
+                                <input type="text" placeholder="Name" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[var(--admin-accent)]/30" value={editingBooking.name} onChange={e => setEditingBooking({ ...editingBooking, name: e.target.value })} />
+                                <input type="text" placeholder="Phone" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[var(--admin-accent)]/30" value={editingBooking.phone} onChange={e => setEditingBooking({ ...editingBooking, phone: e.target.value })} />
+                                <input type="text" placeholder="Vehicle Number" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[var(--admin-accent)]/30" value={editingBooking.vehicle_number || ''} onChange={e => setEditingBooking({ ...editingBooking, vehicle_number: e.target.value.toUpperCase() })} />
+                            </div>
+
+                            {/* Service Info */}
+                            <div className="space-y-4">
+                                <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.3em] ml-1">Service Details</p>
+                                <input type="text" placeholder="Bike Model" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[var(--admin-accent)]/30" value={editingBooking.bike_model} onChange={e => setEditingBooking({ ...editingBooking, bike_model: e.target.value })} />
+                                <input type="text" placeholder="Service Type" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[var(--admin-accent)]/30" value={editingBooking.service_type} onChange={e => setEditingBooking({ ...editingBooking, service_type: e.target.value })} />
+                                <select
+                                    className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[var(--admin-accent)]/30"
+                                    value={editingBooking.service_location}
+                                    onChange={e => setEditingBooking({ ...editingBooking, service_location: e.target.value })}
+                                >
+                                    <option value="workshop">Workshop</option>
+                                    <option value="doorstep">Doorstep</option>
+                                </select>
+                            </div>
+
+                            {/* Scheduling */}
+                            <div className="space-y-4">
+                                <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.3em] ml-1">Scheduling</p>
+                                <input type="date" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[var(--admin-accent)]/30" value={editingBooking.preferred_date || ''} onChange={e => setEditingBooking({ ...editingBooking, preferred_date: e.target.value })} />
+                                <input type="text" placeholder="Time Slot" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[var(--admin-accent)]/30" value={editingBooking.preferred_time || ''} onChange={e => setEditingBooking({ ...editingBooking, preferred_time: e.target.value })} />
+                            </div>
+
+                            {/* Financials & Staff */}
+                            <div className="space-y-4">
+                                <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.3em] ml-1">Finance & Staff</p>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <input type="number" placeholder="Estimated ₹" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-4 text-white font-bold outline-none focus:border-[var(--admin-accent)]/30" value={editingBooking.estimated_cost || ''} onChange={e => setEditingBooking({ ...editingBooking, estimated_cost: e.target.value })} />
+                                    <input type="number" placeholder="Final ₹" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-4 text-white font-bold outline-none focus:border-[var(--admin-accent)]/30" value={editingBooking.final_cost || ''} onChange={e => setEditingBooking({ ...editingBooking, final_cost: e.target.value })} />
+                                </div>
+                                <input type="text" placeholder="Assigned Mechanic" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[var(--admin-accent)]/30" value={editingBooking.mechanic_name || ''} onChange={e => setEditingBooking({ ...editingBooking, mechanic_name: e.target.value })} />
+                            </div>
+
+                            {/* Full Width Fields */}
+                            <div className="md:col-span-2 space-y-4">
+                                <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.3em] ml-1">Additional Information</p>
+                                {editingBooking.service_location === 'doorstep' && (
+                                    <textarea placeholder="Service Address" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[var(--admin-accent)]/30 min-h-[80px]" value={editingBooking.address || ''} onChange={e => setEditingBooking({ ...editingBooking, address: e.target.value })} />
+                                )}
+                                <textarea placeholder="Service Notes" className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-3 px-6 text-white font-bold outline-none focus:border-[var(--admin-accent)]/30 min-h-[80px]" value={editingBooking.notes || ''} onChange={e => setEditingBooking({ ...editingBooking, notes: e.target.value })} />
+                            </div>
+                        </div>
+
+                        <div className="mt-10 flex gap-4">
+                            <button onClick={handleUpdateBooking} disabled={updatingId === editingBooking.id} className="flex-[2] py-4 bg-[var(--admin-accent)] text-[var(--admin-accent-contrast)] font-black uppercase text-xs tracking-widest rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl disabled:opacity-50">
+                                {updatingId === editingBooking.id ? 'Saving Changes...' : 'Save All Changes'}
+                            </button>
+                            <button onClick={() => setEditingBooking(null)} className="flex-1 py-4 bg-white/5 text-[#8888a0] font-black uppercase text-xs tracking-widest rounded-2xl hover:bg-white/10 transition-all border border-white/5">
+                                Cancel
+                            </button>
                         </div>
                     </div>
                 </div>
