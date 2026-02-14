@@ -779,7 +779,7 @@ export default function LandingPage() {
                 <span className="contact-icon">✉️</span>
                 <div>
                   <strong>Email</strong>
-                  <p><a href="mailto:hello@smartbikepro.in">hello@smartbikepro.in</a></p>
+                  <p><a href="mailto:hello.smartbikepro@gmail.com">hello.smartbikepro@gmail.com</a></p>
                 </div>
               </div>
               <div className="contact-buttons">
