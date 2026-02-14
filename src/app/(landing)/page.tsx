@@ -5,6 +5,7 @@ import { Navbar } from '@/components/ui/Navbar';
 import { BrandMarquee } from '@/components/ui/BrandMarquee';
 import { Footer } from '@/components/ui/Footer';
 import { diagnose, estimateCost, handleConversation, type DiagnosisResult, type CostEstimate, type ConversationResult } from '@/lib/ai-engine';
+import { getDeviceInfo } from '@/lib/device';
 import { createClient } from '@/lib/supabase/client';
 import clsx from 'clsx';
 
@@ -155,12 +156,7 @@ export default function LandingPage() {
     // Save to Supabase
     const saveBooking = async () => {
       try {
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        const deviceInfo = {
-          device: isMobile ? 'Mobile' : 'Desktop',
-          os: navigator.platform,
-          userAgent: navigator.userAgent
-        };
+        const deviceInfo = getDeviceInfo();
 
         await supabase.from('bookings').insert({
           name,
@@ -209,11 +205,7 @@ export default function LandingPage() {
     // Create session if it doesn't exist
     if (!currentSessionId) {
       try {
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        const deviceInfo = {
-          device: isMobile ? 'Mobile' : 'Desktop',
-          userAgent: navigator.userAgent
-        };
+        const deviceInfo = getDeviceInfo();
 
         const { data, error } = await supabase.from('chat_sessions').insert({
           customer_name: 'Guest',

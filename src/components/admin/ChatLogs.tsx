@@ -37,8 +37,10 @@ export default function ChatLogs({ sessions }: ChatLogsProps) {
                                         <Hash size={12} className="text-[var(--admin-accent)]" />
                                         <p className="text-[10px] text-[#8888a0] font-black uppercase tracking-widest">{session.id.slice(0, 16)}</p>
                                         {session.metadata?.device && (
-                                            <span className="text-[8px] bg-white/5 px-2 py-0.5 rounded text-[#55556a]">
-                                                {session.metadata.device}
+                                            <span className="text-[8px] bg-white/5 px-2 py-0.5 rounded text-[#8888a0] font-black uppercase tracking-widest border border-white/5">
+                                                {session.metadata.device === 'Mobile' ? '📱 ' + (session.metadata.model || 'Mobile') :
+                                                    session.metadata.device === 'Tablet' ? '📟 ' + (session.metadata.model || 'Tablet') :
+                                                        '💻 ' + (session.metadata.os || 'Desktop')}
                                             </span>
                                         )}
                                     </div>

@@ -170,7 +170,9 @@ export default function BookingsList({ bookings, onUpdate }: BookingsListProps) 
                                         )}
                                         {b.metadata?.device && (
                                             <div className="flex items-center gap-1.5 text-[9px] bg-white text-black px-2 py-0.5 rounded border border-white/20 uppercase font-black tracking-widest shadow-[0_0_10px_rgba(255,255,255,0.2)]">
-                                                {b.metadata.device === 'Mobile' ? '📱 Mobile' : '💻 Desktop'}
+                                                {b.metadata.device === 'Mobile' ? '📱 ' + (b.metadata.model || 'Mobile') :
+                                                    b.metadata.device === 'Tablet' ? '📟 ' + (b.metadata.model || 'Tablet') :
+                                                        '💻 ' + (b.metadata.os || 'Desktop')}
                                             </div>
                                         )}
                                     </div>
