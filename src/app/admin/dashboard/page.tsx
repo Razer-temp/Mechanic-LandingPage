@@ -201,6 +201,32 @@ export default function AdminDashboard() {
 
 
     const pendingCount = bookings.filter(b => b.status === 'pending').length;
+    const unreadAICount =
+        diagnoses.filter((d: any) => !d.is_read).length +
+        estimates.filter((e: any) => !e.is_read).length +
+        chats.filter((c: any) => !c.is_read).length;
+
+    // Effect to mark AI data as read when viewing Intelligence Hub
+    useEffect(() => {
+        if (activeTab === 'chats') {
+            const markAsRead = async () => {
+                try {
+                    await Promise.all([
+                        supabase.from('ai_diagnoses' as any).update({ is_read: true }).eq('is_read', false),
+                        supabase.from('ai_estimates' as any).update({ is_read: true }).eq('is_read', false),
+                        supabase.from('chat_sessions' as any).update({ is_read: true }).eq('is_read', false)
+                    ]);
+                    // Local update to clear badge instantly
+                    setDiagnoses(prev => prev.map((d: any) => ({ ...d, is_read: true })));
+                    setEstimates(prev => prev.map((e: any) => ({ ...e, is_read: true })));
+                    setChats(prev => prev.map((c: any) => ({ ...c, is_read: true })));
+                } catch (err) {
+                    console.error('Error marking AI data as read:', err);
+                }
+            };
+            markAsRead();
+        }
+    }, [activeTab, supabase]);
 
     const SidebarContent = () => (
         <>
@@ -272,9 +298,9 @@ export default function AdminDashboard() {
                         <BrainCircuit size={20} />
                     </div>
                     <span>Intelligence Hub</span>
-                    {(diagnoses.length + estimates.length + chats.length) > 0 && (
+                    {unreadAICount > 0 && (
                         <span className="ml-auto w-5 h-5 bg-[#a78bfa] text-black text-[10px] rounded-full flex items-center justify-center font-black animate-pulse">
-                            {(diagnoses.length + estimates.length + chats.length)}
+                            {unreadAICount}
                         </span>
                     )}
                 </button>

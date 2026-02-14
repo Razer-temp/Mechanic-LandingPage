@@ -129,25 +129,25 @@ export default function LandingPage() {
       setIsDiagnosing(false);
       setDiagnosisAttempted(true);
 
-      if (result) {
-        try {
-          const deviceInfo = getDeviceInfo();
-          const sessionId = chatSessionId;
+      // Always save to DB, even if AI couldn't identify specific issue
+      try {
+        const deviceInfo = getDeviceInfo();
+        const sessionId = chatSessionId;
 
-          const { error } = await supabase.from('ai_diagnoses' as any).insert({
-            input_text: diagnosisText,
-            bike_model: bikeModel || null,
-            result_title: result.title,
-            result_urgency: result.urgency,
-            result_cost: result.cost,
-            metadata: deviceInfo,
-            session_id: sessionId || null
-          });
+        const { error } = await supabase.from('ai_diagnoses' as any).insert({
+          input_text: diagnosisText,
+          bike_model: bikeModel || null,
+          result_title: result?.title || 'Unidentified Issue',
+          result_urgency: result?.urgency || 'low',
+          result_cost: result?.cost || 'Manual Review Required',
+          metadata: deviceInfo,
+          session_id: sessionId || null,
+          is_read: false
+        });
 
-          if (error) console.error('Error saving diagnosis:', error);
-        } catch (err) {
-          console.error('Error saving diagnosis:', err);
-        }
+        if (error) console.error('Error saving diagnosis:', error);
+      } catch (err) {
+        console.error('Error saving diagnosis:', err);
       }
     }, 1500);
   };
