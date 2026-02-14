@@ -24,8 +24,8 @@ import clsx from 'clsx';
 // Admin Components
 import DashboardStats from '@/components/admin/DashboardStats';
 import BookingsList from '@/components/admin/BookingsList';
-import ChatLogs from '@/components/admin/ChatLogs';
 import CustomersList from '@/components/admin/CustomersList';
+import IntelligenceLogs from '@/components/admin/IntelligenceLogs';
 import SettingsPanel from '@/components/admin/SettingsPanel';
 import RevenueAnalytics from '@/components/admin/RevenueAnalytics';
 import VehicleHistory from '@/components/admin/VehicleHistory';
@@ -37,6 +37,8 @@ export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState<AdminTab>('bookings');
     const [bookings, setBookings] = useState<any[]>([]);
     const [chats, setChats] = useState<any[]>([]);
+    const [diagnoses, setDiagnoses] = useState<any[]>([]);
+    const [estimates, setEstimates] = useState<any[]>([]);
     const [expenses, setExpenses] = useState<any[]>([]);
     const [serviceHistory, setServiceHistory] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -84,17 +86,21 @@ export default function AdminDashboard() {
     const fetchData = useCallback(async () => {
         setLoading(true);
         try {
-            const [bRes, cRes, eRes, shRes] = await Promise.all([
+            const [bRes, cRes, eRes, shRes, dRes, estRes] = await Promise.all([
                 supabase.from('bookings').select('*').order('created_at', { ascending: false }),
                 supabase.from('chat_sessions').select('*, chat_messages(*)').order('created_at', { ascending: false }),
                 supabase.from('daily_expenses').select('*').order('date', { ascending: false }),
                 supabase.from('service_history').select('*').order('date', { ascending: false }),
+                supabase.from('ai_diagnoses').select('*').order('created_at', { ascending: false }),
+                supabase.from('ai_estimates').select('*').order('created_at', { ascending: false }),
             ]);
 
             if (bRes.data) setBookings(bRes.data);
             if (cRes.data) setChats(cRes.data);
             if (eRes.data) setExpenses(eRes.data);
             if (shRes.data) setServiceHistory(shRes.data);
+            if (dRes.data) setDiagnoses(dRes.data);
+            if (estRes.data) setEstimates(estRes.data);
         } catch (err: any) {
             console.error('Error fetching data:', err);
         } finally {
@@ -220,7 +226,7 @@ export default function AdminDashboard() {
                     )}
                 >
                     <MessageSquare size={20} className={activeTab === 'chats' ? "text-[#a78bfa]" : ""} />
-                    <span>Neural Logs</span>
+                    <span>AI Intelligence</span>
                 </button>
 
                 <button

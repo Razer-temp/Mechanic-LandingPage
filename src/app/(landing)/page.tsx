@@ -120,10 +120,24 @@ export default function LandingPage() {
     setIsDiagnosing(true);
     setDiagnosisResult(null);
 
-    setTimeout(() => {
+    setTimeout(async () => {
       const result = diagnose(diagnosisText);
       setDiagnosisResult(result);
       setIsDiagnosing(false);
+
+      if (result) {
+        try {
+          await supabase.from('ai_diagnoses').insert({
+            input_text: diagnosisText,
+            result_title: result.title,
+            result_urgency: result.urgency,
+            result_cost: result.cost,
+            metadata: getDeviceInfo()
+          });
+        } catch (err) {
+          console.error('Error saving diagnosis:', err);
+        }
+      }
     }, 1500);
   };
 
@@ -136,6 +150,23 @@ export default function LandingPage() {
     if (!estBikeType || !estServiceType) return;
     const result = estimateCost(estBikeType, estServiceType);
     setCostEstimate(result);
+
+    if (result) {
+      const saveEstimate = async () => {
+        try {
+          await supabase.from('ai_estimates').insert({
+            bike_type: estBikeType,
+            service_type: estServiceType,
+            min_cost: result.min,
+            max_cost: result.max,
+            metadata: getDeviceInfo()
+          });
+        } catch (err) {
+          console.error('Error saving estimate:', err);
+        }
+      };
+      saveEstimate();
+    }
   };
 
   // --- 7. Booking Logic ---
