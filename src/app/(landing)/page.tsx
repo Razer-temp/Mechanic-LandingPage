@@ -146,13 +146,13 @@ export default function LandingPage() {
   };
 
   // --- 6. Cost Estimator Logic ---
-  const handleEstimate = () => {
+  const handleEstimate = async () => {
     if (!estBikeType || !estServiceType) return;
     const result = estimateCost(estBikeType, estServiceType);
     setCostEstimate(result);
 
     if (result) {
-      const saveEstimate = async () => {
+      const saveEstimateResult = async () => {
         try {
           await supabase.from('ai_estimates' as any).insert({
             bike_type: estBikeType,
@@ -165,7 +165,7 @@ export default function LandingPage() {
           console.error('Error saving estimate:', err);
         }
       };
-      saveEstimate();
+      await saveEstimateResult();
     }
   };
 
