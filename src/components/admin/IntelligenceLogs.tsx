@@ -35,6 +35,14 @@ interface IntelligenceLogsProps {
 
 export default function IntelligenceLogs({ chats, diagnoses, estimates }: IntelligenceLogsProps) {
     const [activeSubTab, setActiveSubTab] = useState<'chats' | 'diagnoses' | 'estimates'>('chats');
+    const [expandedSessions, setExpandedSessions] = useState<Set<string>>(new Set());
+
+    const toggleSession = (id: string) => {
+        const next = new Set(expandedSessions);
+        if (next.has(id)) next.delete(id);
+        else next.add(id);
+        setExpandedSessions(next);
+    };
 
     return (
         <div className="space-y-6 animate-admin-in">
@@ -91,43 +99,53 @@ export default function IntelligenceLogs({ chats, diagnoses, estimates }: Intell
                                 <p className="text-[#55556a] font-bold uppercase text-xs tracking-widest">No chat sessions found</p>
                             </div>
                         ) : (
-                            chats.map((chat) => (
-                                <div key={chat.id} className="bg-[#10101e] border border-white/5 rounded-[2rem] p-6 hover:border-[#a78bfa]/30 transition-all group">
-                                    <div className="flex justify-between items-start mb-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-xl bg-[#a78bfa]/10 flex items-center justify-center text-[#a78bfa]">
-                                                <MessageSquare size={18} />
-                                            </div>
-                                            <div>
-                                                <h4 className="text-white font-bold">{chat.customer_name || 'Anonymous Rider'}</h4>
-                                                <p className="text-[10px] text-[#55556a] font-bold uppercase tracking-widest">
-                                                    {formatDate(chat.created_at, true)}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="px-3 py-1 bg-white/5 rounded-full text-[9px] font-black text-[#8888a0] uppercase tracking-widest">
-                                            {chat.chat_messages?.length || 0} Messages
-                                        </div>
-                                    </div>
+                            chats.map((chat) => {
+                                const isExpanded = expandedSessions.has(chat.id);
+                                const displayedMessages = isExpanded
+                                    ? chat.chat_messages
+                                    : chat.chat_messages?.slice(0, 2);
 
-                                    <div className="space-y-3 pl-12">
-                                        {chat.chat_messages?.slice(0, 2).map((msg: any) => (
-                                            <div key={msg.id} className={clsx(
-                                                "p-3 rounded-2xl text-[13px] leading-relaxed",
-                                                msg.role === 'user' ? "bg-white/5 text-[#eeeef2] rounded-tl-none" : "bg-[#a78bfa]/5 text-[#a78bfa] rounded-tr-none border border-[#a78bfa]/10"
-                                            )}>
-                                                <span className="font-black uppercase text-[9px] block mb-1 opacity-50">{msg.role}</span>
-                                                {msg.content}
+                                return (
+                                    <div key={chat.id} className="bg-[#10101e] border border-white/5 rounded-[2rem] p-6 hover:border-[#a78bfa]/30 transition-all group">
+                                        <div className="flex justify-between items-start mb-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-xl bg-[#a78bfa]/10 flex items-center justify-center text-[#a78bfa]">
+                                                    <MessageSquare size={18} />
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-white font-bold">{chat.customer_name || 'Anonymous Rider'}</h4>
+                                                    <p className="text-[10px] text-[#55556a] font-bold uppercase tracking-widest">
+                                                        {formatDate(chat.created_at, true)}
+                                                    </p>
+                                                </div>
                                             </div>
-                                        ))}
-                                        {chat.chat_messages?.length > 2 && (
-                                            <button className="text-[10px] font-black text-[#a78bfa] uppercase tracking-widest mt-2 hover:opacity-70">
-                                                + {chat.chat_messages.length - 2} more messages...
-                                            </button>
-                                        )}
+                                            <div className="px-3 py-1 bg-white/5 rounded-full text-[9px] font-black text-[#8888a0] uppercase tracking-widest">
+                                                {chat.chat_messages?.length || 0} Messages
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-3 pl-12">
+                                            {displayedMessages?.map((msg: any) => (
+                                                <div key={msg.id} className={clsx(
+                                                    "p-3 rounded-2xl text-[13px] leading-relaxed",
+                                                    msg.role === 'user' ? "bg-white/5 text-[#eeeef2] rounded-tl-none" : "bg-[#a78bfa]/5 text-[#a78bfa] rounded-tr-none border border-[#a78bfa]/10"
+                                                )}>
+                                                    <span className="font-black uppercase text-[9px] block mb-1 opacity-50">{msg.role}</span>
+                                                    {msg.content}
+                                                </div>
+                                            ))}
+                                            {chat.chat_messages?.length > 2 && (
+                                                <button
+                                                    onClick={() => toggleSession(chat.id)}
+                                                    className="text-[10px] font-black text-[#a78bfa] uppercase tracking-widest mt-2 hover:opacity-70 flex items-center gap-2"
+                                                >
+                                                    {isExpanded ? "Show Less" : `+ ${chat.chat_messages.length - 2} more messages...`}
+                                                </button>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            ))
+                                );
+                            })
                         )}
                     </div>
                 )}
