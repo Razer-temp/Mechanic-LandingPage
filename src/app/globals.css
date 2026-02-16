@@ -432,109 +432,130 @@ ul {
 
 .nav-cta {
   position: relative;
-  padding: 10px 24px !important;
-  background: var(--grad-blue) !important;
-  border-radius: var(--r-md) !important;
-  color: #fff !important;
-  font-weight: 700 !important;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 200, 255, 0.15);
-  transition: all 0.4s var(--ease) !important;
-  z-index: 1;
   display: inline-flex !important;
   align-items: center;
+  justify-content: center;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  cursor: pointer;
+  z-index: 1;
+  transition: all 0.3s ease !important;
+  box-shadow: none !important;
+  /* Managed by layers */
+}
+
+/* Mobile: Flat Version */
+.nav-cta .top {
+  padding: 10px 24px;
+  background: var(--grad-blue);
+  color: #fff;
+  border-radius: var(--r-md);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
   gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 200, 255, 0.15);
+  transition: all 0.3s ease;
 }
 
-.nav-cta .btn-text {
-  position: relative;
-  z-index: 2;
-}
-
-.nav-cta .btn-icon {
+.nav-cta .bottom {
   display: none;
-  /* Hidden by default (mobile) */
 }
 
-/* Base Hover (Mobile Friendly) */
-.nav-cta:hover {
+.nav-cta:hover .top {
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(0, 200, 255, 0.25);
-  color: #fff !important;
 }
 
-/* Desktop-Only Hyper-Premium Enhancements */
+/* Desktop-Only 3D Hyper-Premium */
 @media (min-width: 1024px) {
   .nav-cta {
-    padding: 10px 28px !important;
-    transition: all 0.45s var(--ease-bounce) !important;
+    width: auto;
+    height: 48px;
+    padding: 0 !important;
+    perspective: 1000px;
+  }
+
+  .nav-cta .top {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0 32px;
+    background: var(--grad-blue);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    z-index: 2;
+    overflow: hidden;
+    transition: transform 0.2s var(--ease), background 0.2s ease;
+  }
+
+  .nav-cta .bottom {
+    display: block;
+    position: absolute;
+    top: 6px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0088cc;
+    /* Depth Color */
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    z-index: 1;
+    transition: transform 0.2s var(--ease);
+  }
+
+  /* BaseFoundation (Simulated using button::before logic) */
+  .nav-cta::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 16px;
+    filter: blur(4px);
+    z-index: 0;
+    transition: transform 0.2s var(--ease);
+  }
+
+  /* Press Animation */
+  .nav-cta:active .top {
+    transform: translateY(6px);
+  }
+
+  .nav-cta:active .bottom {
+    transform: translateY(2px);
+  }
+
+  /* Glint/Shine on Click/Active */
+  .nav-cta .top::before {
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transform: skewX(-30deg);
+    left: -100px;
+    transition: 0s;
+    z-index: 3;
+  }
+
+  .nav-cta:active .top::before {
+    left: 150%;
+    transition: left 0.6s ease-out;
   }
 
   .nav-cta .btn-icon {
-    display: inline-block;
-    position: relative;
-    z-index: 2;
-    font-size: 1rem;
-    transition: transform 0.5s var(--ease-bounce), opacity 0.3s ease;
-    transform: translateX(10px);
-    opacity: 0;
-  }
-
-  /* The Glint (Thin Shimmer) */
-  .nav-cta::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 30px;
-    height: 100%;
-    background: linear-gradient(90deg,
-        transparent,
-        rgba(255, 255, 255, 0.4),
-        transparent);
-    transform: skewX(-25deg);
-    z-index: 1;
-  }
-
-  /* Soft Ambient Glow */
-  .nav-cta::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--accent);
-    z-index: -1;
-    filter: blur(15px);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    border-radius: inherit;
-  }
-
-  .nav-cta:hover {
-    transform: translateY(-3px) scale(1.04);
-    box-shadow: 0 12px 24px rgba(0, 200, 255, 0.3);
-  }
-
-  .nav-cta:hover::before {
-    animation: glintSweep 0.8s ease-in-out;
-  }
-
-  .nav-cta:hover::after {
-    opacity: 0.25;
+    display: inline-block !important;
+    transition: transform 0.3s var(--ease-bounce);
+    opacity: 1 !important;
+    transform: none !important;
   }
 
   .nav-cta:hover .btn-icon {
-    transform: translateX(0);
-    opacity: 1;
-  }
-
-  @keyframes glintSweep {
-    0% {
-      left: -100%;
-    }
-
-    100% {
-      left: 200%;
-    }
+    transform: scale(1.2) rotate(10deg) !important;
   }
 }
 
