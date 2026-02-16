@@ -120,13 +120,12 @@ export default function LandingPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // --- 5. Mouse Glow & Tilt Effect (Optimized) ---
+  // --- 5. Mouse Glow & Tilt Effect (Event Delegation — works for all cards) ---
   useEffect(() => {
-    // Target both tilt cards and hover-glow cards
-    const cards = document.querySelectorAll<HTMLElement>('.tilt-card, .hover-glow, .magnetic-btn');
-
     const handleMouseMove = (e: MouseEvent) => {
-      const card = e.currentTarget as HTMLElement;
+      const card = (e.target as HTMLElement).closest<HTMLElement>('.tilt-card, .hover-glow, .magnetic-btn');
+      if (!card) return;
+
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -139,28 +138,34 @@ export default function LandingPage() {
       card.style.setProperty('--mouse-y-pct', `${yPct}`);
     };
 
-    const handleMouseLeave = (e: MouseEvent) => {
-      const card = e.currentTarget as HTMLElement;
-      // FIX: Do NOT remove --mouse-x/y so the glow fades out at the last position
-      // instead of snapping to default (center).
-
-      // We DO remove percentages so tilt resets to flat (0.5 = 0deg tilt)
-      card.style.removeProperty('--mouse-x-pct');
-      card.style.removeProperty('--mouse-y-pct');
-
-      // Optional: Smoothly reset tilt via CSS transition
+    const handleMouseOver = (e: MouseEvent) => {
+      // Track which card the mouse is currently over
+      const card = (e.target as HTMLElement).closest<HTMLElement>('.tilt-card, .hover-glow, .magnetic-btn');
+      if (card) card.dataset.hovered = 'true';
     };
 
-    cards.forEach(card => {
-      card.addEventListener('mousemove', handleMouseMove);
-      card.addEventListener('mouseleave', handleMouseLeave);
-    });
+    const handleMouseOut = (e: MouseEvent) => {
+      const card = (e.target as HTMLElement).closest<HTMLElement>('.tilt-card, .hover-glow, .magnetic-btn');
+      if (!card) return;
+
+      // Only reset if we actually left the card (not just moved between children)
+      const related = e.relatedTarget as HTMLElement | null;
+      if (related && card.contains(related)) return;
+
+      delete card.dataset.hovered;
+      // Reset tilt percentages so card returns to flat
+      card.style.removeProperty('--mouse-x-pct');
+      card.style.removeProperty('--mouse-y-pct');
+    };
+
+    document.addEventListener('mousemove', handleMouseMove, { passive: true });
+    document.addEventListener('mouseover', handleMouseOver, { passive: true });
+    document.addEventListener('mouseout', handleMouseOut, { passive: true });
 
     return () => {
-      cards.forEach(card => {
-        card.removeEventListener('mousemove', handleMouseMove);
-        card.removeEventListener('mouseleave', handleMouseLeave);
-      });
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseover', handleMouseOver);
+      document.removeEventListener('mouseout', handleMouseOut);
     };
   }, []);
 
