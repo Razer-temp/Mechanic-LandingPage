@@ -8,6 +8,7 @@ import { diagnose, estimateCost, handleConversation, type DiagnosisResult, type 
 import { getDeviceInfo } from '@/lib/device';
 import { createClient } from '@/lib/supabase/client';
 import './ai-intelligence.css';
+import './landing-effects.css';
 import clsx from 'clsx';
 
 export default function LandingPage() {
@@ -119,7 +120,8 @@ export default function LandingPage() {
 
   // --- 5. Mouse Glow & Tilt Effect (Optimized) ---
   useEffect(() => {
-    const cards = document.querySelectorAll<HTMLElement>('.tilt-card');
+    // Target both tilt cards and hover-glow cards
+    const cards = document.querySelectorAll<HTMLElement>('.tilt-card, .hover-glow, .magnetic-btn');
 
     const handleMouseMove = (e: MouseEvent) => {
       const card = e.currentTarget as HTMLElement;
@@ -137,11 +139,14 @@ export default function LandingPage() {
 
     const handleMouseLeave = (e: MouseEvent) => {
       const card = e.currentTarget as HTMLElement;
-      card.style.removeProperty('--mouse-x');
-      card.style.removeProperty('--mouse-y');
+      // FIX: Do NOT remove --mouse-x/y so the glow fades out at the last position
+      // instead of snapping to default (center).
+
+      // We DO remove percentages so tilt resets to flat (0.5 = 0deg tilt)
       card.style.removeProperty('--mouse-x-pct');
       card.style.removeProperty('--mouse-y-pct');
-      // Reset transform is handled by CSS transition
+
+      // Optional: Smoothly reset tilt via CSS transition
     };
 
     cards.forEach(card => {
@@ -608,23 +613,43 @@ export default function LandingPage() {
             <h2 className="section-title">How It <span className="gradient-text">Works</span></h2>
             <p className="section-desc">From diagnosis to repair — seamless, smart, and stress-free.</p>
           </div>
-          <div className="steps-timeline">
+
+          <div className="how-it-works-grid">
             {[
-              { num: '01', title: 'Describe Your Problem', desc: 'Use our AI chatbot or form to describe your bike\'s issue in plain language.' },
-              { num: '02', title: 'AI Analysis', desc: 'Our AI engine analyzes symptoms, estimates costs, and suggests the best repair plan.' },
-              { num: '03', title: 'Visit Workshop', desc: 'Bring your bike in — or we\'ll pick it up. Our mechanics verify and start repair.' },
-              { num: '04', title: 'Ride Happy', desc: 'Quality-checked repair with warranty. Pay only what was estimated — no surprises.' },
-            ].map((step, i, arr) => (
-              <React.Fragment key={step.num}>
-                <div className="step-card animate-on-scroll">
-                  <div className="step-number">{step.num}</div>
-                  <div className="step-content">
-                    <h3>{step.title}</h3>
-                    <p>{step.desc}</p>
-                  </div>
+              {
+                num: '01',
+                icon: '💬',
+                title: 'Describe Issue',
+                desc: 'Chat with our AI or use the form to describe what’s wrong with your bike.'
+              },
+              {
+                num: '02',
+                icon: '🧠',
+                title: 'AI Analysis',
+                desc: 'Our AI engine analyzes symptoms to provide instant diagnosis and cost estimates.'
+              },
+              {
+                num: '03',
+                icon: '🛠️',
+                title: 'Expert Repair',
+                desc: 'Book a slot. Our certified mechanics fix your bike using genuine parts.'
+              },
+              {
+                num: '04',
+                icon: '🚀',
+                title: 'Ready to Ride',
+                desc: 'Get your bike back in top condition. Pay online or at the workshop.'
+              },
+            ].map((step, i) => (
+              <div key={i} className="how-card glass-card hover-glow tilted-card animate-on-scroll">
+                <div className="how-card-header">
+                  <span className="how-number">{step.num}</span>
+                  <div className="how-icon-circle">{step.icon}</div>
                 </div>
-                {i < arr.length - 1 && <div className="step-connector"></div>}
-              </React.Fragment>
+                <h3>{step.title}</h3>
+                <p>{step.desc}</p>
+                {i < 3 && <div className="how-arrow-connector">→</div>}
+              </div>
             ))}
           </div>
         </div>

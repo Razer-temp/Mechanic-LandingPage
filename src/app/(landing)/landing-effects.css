@@ -1,0 +1,95 @@
+/* =========================================
+   LANDING PAGE EFFECTS
+   Isolated for better performance and modularity
+   ========================================= */
+
+/* Use CSS Variables to control state */
+:root {
+    --mouse-x: 50%;
+    --mouse-y: 50%;
+    --mouse-x-pct: 0.5;
+    --mouse-y-pct: 0.5;
+}
+
+/* 
+   1. HOVER GLOW EFFECT 
+   -----------------------------------------
+   Creates a radial gradient that follows the mouse cursor.
+   We use ::after to avoid conflict with glass-card's ::before.
+*/
+.hover-glow {
+    position: relative;
+    /* Ensure overflow is not hidden if we want the glow to spill out, 
+     but usually for cards we want it contained. overflow: hidden is on .glass-card */
+}
+
+.hover-glow::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y),
+            rgba(0, 200, 255, 0.15),
+            transparent 40%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 2;
+    /* Ensure it's above content slightly if needed, or use -1 for background */
+    pointer-events: none;
+    border-radius: inherit;
+    mix-blend-mode: screen;
+    /* Enhance the glow effect */
+}
+
+/* 
+   FIX: When mouse enters, we want it visible.
+   We do NOT remove the variables on mouse leave in JS relative to the glow, 
+   so the glow essentially fades out "in place" rather than snapping to center.
+*/
+.hover-glow:hover::after {
+    opacity: 1;
+}
+
+/* 
+   2. 3D TILT EFFECT 
+   -----------------------------------------
+   Optimized for performance with will-change and hardware acceleration.
+*/
+.tilt-card {
+    /* 
+     FIX: 'transform 0.1s ease-out' can cause input lag feeling (delay).
+     We'll use a very fast transition for the transform to make it feel responsive,
+     but smooth enough to filter out jitter.
+  */
+    transition: transform 0.05s linear;
+    will-change: transform;
+    transform-style: preserve-3d;
+    /* Reset transform when not hovering */
+}
+
+/* 
+   When not hovering, we want a smooth return to flat state.
+   We can override the transition for the 'mouseleave' state if we wanted,
+   but a general smooth return is good. 
+*/
+.tilt-card:not(:hover) {
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.tilt-card:hover {
+    /* 
+     Using calc to dampen the effect. 
+     Max rotation is approx +/- 4deg (0.5 * 8deg). 
+     This is subtle and premium.
+  */
+    transform:
+        perspective(1000px) rotateX(calc((var(--mouse-y-pct) - 0.5) * -8deg)) rotateY(calc((var(--mouse-x-pct) - 0.5) * 8deg));
+}
+
+/* 
+   3. MAGNETIC BUTTONS
+   -----------------------------------------
+*/
+.magnetic-btn {
+    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+}

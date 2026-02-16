@@ -271,3 +271,114 @@
     flex-shrink: 0;
     margin: 0;
 }
+
+/* ===== HOW IT WORKS — Redesigned ===== */
+.section-how {
+    background: radial-gradient(ellipse at 50% 80%, rgba(0, 200, 255, 0.02) 0%, transparent 50%);
+}
+
+.how-it-works-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.how-card {
+    padding: 32px 24px;
+    background: var(--bg-glass);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--r-md);
+    position: relative;
+    transition: all 0.4s var(--ease);
+    overflow: hidden;
+}
+
+.how-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-glow);
+}
+
+.how-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.how-number {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.03);
+    line-height: 1;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    pointer-events: none;
+}
+
+.how-icon-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(0, 200, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    border: 1px solid rgba(0, 200, 255, 0.15);
+    transition: all 0.4s var(--ease);
+}
+
+.how-card:hover .how-icon-circle {
+    background: var(--accent);
+    color: #fff;
+    transform: scale(1.1) rotate(10deg);
+    box-shadow: 0 0 20px rgba(0, 200, 255, 0.4);
+    border-color: transparent;
+}
+
+.how-card h3 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+    position: relative;
+    z-index: 1;
+}
+
+.how-card p {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+}
+
+.how-arrow-connector {
+    position: absolute;
+    top: 50%;
+    right: -20px;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    color: var(--border-light);
+    z-index: 2;
+    display: none;
+    /* Hidden by default, can enable for desktop if overlap allows */
+}
+
+/* Response */
+@media (max-width: 1024px) {
+    .how-it-works-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .how-it-works-grid {
+        grid-template-columns: 1fr;
+    }
+}
