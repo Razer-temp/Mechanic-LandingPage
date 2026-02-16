@@ -430,6 +430,9 @@ ul {
   width: 100%;
 }
 
+/* ── 3D Book Service Button ── */
+
+/* Mobile: Clean Flat Button */
 .nav-cta {
   position: relative;
   display: inline-flex !important;
@@ -438,25 +441,25 @@ ul {
   background: none !important;
   border: none !important;
   padding: 0 !important;
+  margin: 0 !important;
   cursor: pointer;
-  z-index: 1;
-  transition: all 0.3s ease !important;
   box-shadow: none !important;
-  /* Managed by layers */
+  text-decoration: none !important;
 }
 
-/* Mobile: Flat Version */
 .nav-cta .top {
   padding: 10px 24px;
   background: var(--grad-blue);
-  color: #fff;
+  color: #fff !important;
   border-radius: var(--r-md);
   font-weight: 700;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
   box-shadow: 0 4px 12px rgba(0, 200, 255, 0.15);
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .nav-cta .bottom {
@@ -464,98 +467,109 @@ ul {
 }
 
 .nav-cta:hover .top {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(0, 200, 255, 0.25);
+  box-shadow: 0 6px 18px rgba(0, 200, 255, 0.25);
 }
 
-/* Desktop-Only 3D Hyper-Premium */
+/* Desktop: Exact 3D Reference */
 @media (min-width: 1024px) {
   .nav-cta {
-    width: auto;
+    width: 150px;
     height: 48px;
-    padding: 0 !important;
-    perspective: 1000px;
   }
 
   .nav-cta .top {
-    position: relative;
     width: 100%;
     height: 100%;
-    padding: 0 32px;
-    background: var(--grad-blue);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 16px;
-    z-index: 2;
+    padding: 0;
+    background: rgba(0, 200, 255, 0.15);
+    color: #fff !important;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7mm;
+    outline: 2px solid rgba(255, 255, 255, 0.35);
+    transition: 0.2s;
+    position: relative;
     overflow: hidden;
-    transition: transform 0.2s var(--ease), background 0.2s ease;
+    box-shadow: none;
   }
 
   .nav-cta .bottom {
     display: block;
     position: absolute;
-    top: 6px;
-    left: 0;
     width: 100%;
     height: 100%;
-    background: #0088cc;
-    /* Depth Color */
-    border-radius: 16px;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    z-index: 1;
-    transition: transform 0.2s var(--ease);
-  }
-
-  /* BaseFoundation (Simulated using button::before logic) */
-  .nav-cta::before {
-    content: "";
-    position: absolute;
+    background: rgba(0, 150, 200, 0.25);
     top: 10px;
     left: 0;
-    width: 100%;
+    border-radius: 7mm;
+    outline: 2px solid rgba(255, 255, 255, 0.2);
+    z-index: -1;
+  }
+
+  /* Vertical connectors on the bottom layer */
+  .nav-cta .bottom::before {
+    position: absolute;
+    content: "";
+    width: 2px;
+    height: 9px;
+    background: rgba(255, 255, 255, 0.25);
+    bottom: 0;
+    left: 15%;
+  }
+
+  .nav-cta .bottom::after {
+    position: absolute;
+    content: "";
+    width: 2px;
+    height: 9px;
+    background: rgba(255, 255, 255, 0.25);
+    bottom: 0;
+    left: 85%;
+  }
+
+  /* Base/Foundation layer */
+  .nav-cta::before {
+    position: absolute;
+    content: "";
+    width: calc(100% + 2px);
     height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 16px;
-    filter: blur(4px);
-    z-index: 0;
-    transition: transform 0.2s var(--ease);
+    background: rgba(0, 100, 150, 0.35);
+    top: 14px;
+    left: -1px;
+    border-radius: 7mm;
+    outline: 2px solid rgba(255, 255, 255, 0.15);
+    z-index: -2;
   }
 
   /* Press Animation */
   .nav-cta:active .top {
-    transform: translateY(6px);
+    transform: translateY(10px);
   }
 
-  .nav-cta:active .bottom {
-    transform: translateY(2px);
+  /* Hover lift */
+  .nav-cta:hover .top {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 10px rgba(0, 200, 255, 0.15);
   }
 
-  /* Glint/Shine on Click/Active */
+  /* Diagonal shine sweep on click */
   .nav-cta .top::before {
-    content: "";
     position: absolute;
-    width: 40px;
+    content: "";
+    width: 15px;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    transform: skewX(-30deg);
-    left: -100px;
-    transition: 0s;
-    z-index: 3;
+    background: rgba(255, 255, 255, 0.15);
+    transform: skewX(30deg);
+    left: -20px;
+    transition: 0.25s;
   }
 
   .nav-cta:active .top::before {
-    left: 150%;
-    transition: left 0.6s ease-out;
-  }
-
-  .nav-cta .btn-icon {
-    display: inline-block !important;
-    transition: transform 0.3s var(--ease-bounce);
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
-  .nav-cta:hover .btn-icon {
-    transform: scale(1.2) rotate(10deg) !important;
+    left: calc(100% + 20px);
   }
 }
 

@@ -70,11 +70,8 @@ export function Navbar() {
 
                     <li>
                         <a href="#booking" className="nav-cta" onClick={closeMenu}>
+                            <span className="top">Book Service</span>
                             <span className="bottom"></span>
-                            <span className="top">
-                                <span className="btn-text">Book Service</span>
-                                <span className="btn-icon">✨</span>
-                            </span>
                         </a>
                     </li>
                 </ul>
