@@ -336,17 +336,19 @@ ul {
   right: 0;
   z-index: 1000;
   padding: 18px 0;
-  transition: all 0.5s var(--ease);
+  transition: all 0.4s var(--ease);
   background: transparent;
-  border-bottom: 1px solid transparent;
+  border: none !important;
+  outline: none !important;
 }
 
 .navbar.scrolled {
-  background: rgba(5, 5, 8, 0.88);
-  backdrop-filter: blur(40px) saturate(1.8);
-  -webkit-backdrop-filter: blur(40px) saturate(1.8);
-  border-bottom: none;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  background: #050508 !important;
+  /* Solid background - no transparency */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
   padding: 12px 0;
 }
 
@@ -375,7 +377,6 @@ ul {
   width: 24px;
   height: 24px;
   flex-shrink: 0;
-  filter: drop-shadow(0 0 8px rgba(0, 200, 255, 0.4));
   transition: transform var(--dur) var(--ease);
 }
 
