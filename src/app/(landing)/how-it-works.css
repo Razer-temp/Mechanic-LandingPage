@@ -89,13 +89,12 @@
     border: 1px solid var(--border-subtle);
     backdrop-filter: blur(40px) saturate(1.2);
     -webkit-backdrop-filter: blur(40px) saturate(1.2);
-    transition: all var(--dur-slow) var(--ease);
-    overflow: hidden;
+    transition: border-color var(--dur-slow) var(--ease), box-shadow var(--dur-slow) var(--ease), background var(--dur-slow) var(--ease);
+    overflow: visible;
     height: 100%;
 }
 
 .how-card-premium:hover {
-    transform: translateY(-8px);
     border-color: var(--border-accent);
     box-shadow: var(--shadow-glow-strong);
     background: var(--bg-glass-hover);
