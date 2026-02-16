@@ -10,6 +10,8 @@ import { createClient } from '@/lib/supabase/client';
 import './ai-intelligence.css';
 import './landing-effects.css';
 import clsx from 'clsx';
+import DisplayCards from '@/components/ui/display-cards';
+import { MessageSquareText, BrainCircuit, Wrench, Rocket } from 'lucide-react';
 
 export default function LandingPage() {
   // --- States for Interactions ---
@@ -614,7 +616,50 @@ export default function LandingPage() {
             <p className="section-desc">From diagnosis to repair — seamless, smart, and stress-free.</p>
           </div>
 
-          <div className="how-it-works-grid">
+          {/* Desktop View: Interactive Display Cards */}
+          <div className="hidden lg:flex justify-center py-10 scale-90 origin-top">
+            <DisplayCards cards={[
+              {
+                icon: <MessageSquareText className="size-4 text-cyan-300" />,
+                title: "1. Describe Issue",
+                description: "Chat with our AI or use the form to describe what’s wrong with your bike in plain language.",
+                date: "Step 01",
+                iconClassName: "text-cyan-500",
+                titleClassName: "text-cyan-500",
+                className: "[grid-area:stack] hover:-translate-y-10 before:absolute before:w-[100%] before:outline-1 before:rounded-xl before:outline-white/10 before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-black/50 grayscale-[100%] hover:before:opacity-0 before:transition-opacity before:duration:700 hover:grayscale-0 before:left-0 before:top-0",
+              },
+              {
+                icon: <BrainCircuit className="size-4 text-purple-300" />,
+                title: "2. AI Analysis",
+                description: "Our AI engine analyzes symptoms to provide instant diagnosis and precise cost estimates.",
+                date: "Step 02",
+                iconClassName: "text-purple-500",
+                titleClassName: "text-purple-500",
+                className: "[grid-area:stack] translate-x-12 translate-y-10 hover:-translate-y-1 before:absolute before:w-[100%] before:outline-1 before:rounded-xl before:outline-white/10 before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-black/50 grayscale-[100%] hover:before:opacity-0 before:transition-opacity before:duration:700 hover:grayscale-0 before:left-0 before:top-0",
+              },
+              {
+                icon: <Wrench className="size-4 text-pink-300" />,
+                title: "3. Expert Repair",
+                description: "Book a slot. Our certified mechanics fix your bike using genuine parts and tools.",
+                date: "Step 03",
+                iconClassName: "text-pink-500",
+                titleClassName: "text-pink-500",
+                className: "[grid-area:stack] translate-x-24 translate-y-20 hover:translate-y-10",
+              },
+              {
+                icon: <Rocket className="size-4 text-green-300" />,
+                title: "4. Ready to Ride",
+                description: "Get your bike back in top condition. Pay online or at the workshop after satisfaction.",
+                date: "Step 04",
+                iconClassName: "text-green-500",
+                titleClassName: "text-green-500",
+                className: "[grid-area:stack] translate-x-36 translate-y-32 hover:translate-y-20",
+              },
+            ]} />
+          </div>
+
+          {/* Mobile/Tablet View: Grid Layout */}
+          <div className="how-it-works-grid lg:hidden">
             {[
               {
                 num: '01',
