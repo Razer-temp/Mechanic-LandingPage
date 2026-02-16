@@ -17,12 +17,6 @@ export function Footer() {
                             <span className="logo-text">Smart<span className="accent">Bike</span> Pro</span>
                         </Link>
                         <p>AI-powered two-wheeler service center trusted by 15,000+ riders. Fast diagnostics, expert repairs, transparent pricing.</p>
-                        <div className="footer-socials">
-                            <a href="#" aria-label="Facebook" className="social-link">FB</a>
-                            <a href="#" aria-label="Instagram" className="social-link">IG</a>
-                            <a href="#" aria-label="YouTube" className="social-link">YT</a>
-                            <a href="#" aria-label="Twitter" className="social-link">X</a>
-                        </div>
                     </div>
                     <div className="footer-links">
                         <h4>Quick Links</h4>
@@ -49,7 +43,7 @@ export function Footer() {
                         <ul>
                             <li><span>Mon – Fri</span> <span>9 AM – 7 PM</span></li>
                             <li><span>Saturday</span> <span>9 AM – 7 PM</span></li>
-                            <li><span>Sunday</span> <span>10 AM – 4 PM</span></li>
+                            <li><span>Sunday</span> <span>10 AM – 8 PM</span></li>
                         </ul>
                         <div className="trust-badges">
                             <span className="badge">✅ Verified Business</span>
