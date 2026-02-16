@@ -1,0 +1,203 @@
+/* ===== HOW IT WORKS — Ultra Premium SaaS Version ===== */
+
+.how-section-premium {
+    position: relative;
+    padding: var(--section-gap) 0;
+    overflow: hidden;
+}
+
+.how-bg-glow-left {
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+    opacity: 0.05;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: -10;
+}
+
+.how-bg-glow-right {
+    position: absolute;
+    bottom: -20%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--accent-violet) 0%, transparent 70%);
+    opacity: 0.05;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: -10;
+}
+
+.how-label-premium {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+}
+
+.how-title-premium {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 7.5vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--text-bright);
+    margin-bottom: 1.5rem;
+    letter-spacing: -1.5px;
+}
+
+.how-subtitle-premium {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.75;
+}
+
+.how-grid-premium {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 24px;
+    margin-top: 60px;
+}
+
+@media (min-width: 768px) {
+    .how-grid-premium {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .how-grid-premium {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 32px;
+    }
+}
+
+.how-card-premium {
+    position: relative;
+    padding: 40px 32px;
+    border-radius: var(--r-lg);
+    background: var(--bg-glass);
+    border: 1px solid var(--border-subtle);
+    backdrop-filter: blur(40px) saturate(1.2);
+    -webkit-backdrop-filter: blur(40px) saturate(1.2);
+    transition: all var(--dur-slow) var(--ease);
+    overflow: hidden;
+    height: 100%;
+}
+
+.how-card-premium:hover {
+    transform: translateY(-8px);
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-glow-strong);
+    background: var(--bg-glass-hover);
+}
+
+.how-card-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity var(--dur-slow) var(--ease);
+    pointer-events: none;
+}
+
+.how-card-premium:hover .how-card-glow {
+    opacity: 1;
+}
+
+.how-bg-num {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-family: var(--font-heading);
+    font-size: 6rem;
+    font-weight: 900;
+    color: var(--text-bright);
+    opacity: 0.03;
+    user-select: none;
+    pointer-events: none;
+    transition: all var(--dur-slow) var(--ease);
+}
+
+@media (min-width: 1024px) {
+    .how-bg-num {
+        font-size: 8rem;
+    }
+}
+
+.how-card-premium:hover .how-bg-num {
+    opacity: 0.06;
+    color: var(--accent);
+    transform: scale(1.1);
+}
+
+.how-icon-box {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: rgba(0, 200, 255, 0.05);
+    border: 1px solid rgba(0, 200, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    margin-bottom: 32px;
+    transition: all var(--dur) var(--ease);
+}
+
+.how-card-premium:hover .how-icon-box {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 0 30px rgba(0, 200, 255, 0.3);
+    transform: scale(1.1) rotate(5deg);
+}
+
+.how-card-title {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+    transition: color var(--dur) var(--ease);
+}
+
+.how-card-premium:hover .how-card-title {
+    color: var(--accent);
+}
+
+.how-card-desc {
+    color: var(--text-secondary);
+    line-height: 1.65;
+    font-size: 0.95rem;
+    transition: color var(--dur) var(--ease);
+}
+
+.how-card-premium:hover .how-card-desc {
+    color: var(--text-primary);
+}
+
+.how-top-light {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    opacity: 0;
+    transition: opacity var(--dur-slow) var(--ease);
+    pointer-events: none;
+}
+
+.how-card-premium:hover .how-top-light {
+    opacity: 1;
+}
