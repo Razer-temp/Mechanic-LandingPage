@@ -606,50 +606,81 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ===== HOW IT WORKS ===== */}
-      <section className="section section-how" id="how-it-works">
-        <div className="container">
-          <div className="section-header animate-on-scroll">
-            <span className="section-tag">📋 Process</span>
-            <h2 className="section-title">How It <span className="gradient-text">Works</span></h2>
-            <p className="section-desc">From diagnosis to repair — seamless, smart, and stress-free.</p>
+      {/* ===== HOW IT WORKS — Ultra Premium SaaS Version ===== */}
+      <section className="relative py-24 lg:py-32 overflow-hidden" id="how-it-works">
+        {/* Option A: Large blurred radial gradients for background depth */}
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none -z-10 overflow-hidden">
+          <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-cyan-500/5 blur-[120px] rounded-full"></div>
+          <div className="absolute -bottom-[20%] -right-[10%] w-[50%] h-[50%] bg-blue-600/5 blur-[120px] rounded-full"></div>
+        </div>
+
+        <div className="container relative z-10">
+          <div className="text-center mb-16 lg:mb-24">
+            <span className="inline-block text-[11px] font-black uppercase tracking-[0.3em] text-cyan-500 mb-4 animate-on-scroll">
+              Process
+            </span>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 tracking-tight animate-on-scroll delay-100">
+              How It <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Works</span>
+            </h2>
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed animate-on-scroll delay-200">
+              From diagnosis to repair — seamless, smart, and stress-free.
+            </p>
           </div>
 
-          <div className="how-it-works-grid">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {[
               {
                 num: '01',
-                icon: <MessageSquareText className="size-6" />,
+                icon: <MessageSquareText className="size-6 transition-transform duration-500 group-hover:scale-110" />,
                 title: 'Describe Issue',
                 desc: 'Chat with our AI or use the form to describe what’s wrong with your bike.'
               },
               {
                 num: '02',
-                icon: <BrainCircuit className="size-6" />,
+                icon: <BrainCircuit className="size-6 transition-transform duration-500 group-hover:scale-110" />,
                 title: 'AI Analysis',
                 desc: 'Our AI engine analyzes symptoms to provide instant diagnosis and cost estimates.'
               },
               {
                 num: '03',
-                icon: <Wrench className="size-6" />,
+                icon: <Wrench className="size-6 transition-transform duration-500 group-hover:scale-110" />,
                 title: 'Expert Repair',
                 desc: 'Book a slot. Our certified mechanics fix your bike using genuine parts.'
               },
               {
                 num: '04',
-                icon: <Rocket className="size-6" />,
+                icon: <Rocket className="size-6 transition-transform duration-500 group-hover:scale-110" />,
                 title: 'Ready to Ride',
                 desc: 'Get your bike back in top condition. Pay online or at the workshop.'
               },
             ].map((step, i) => (
-              <div key={i} className="how-card glass-card hover-glow animate-on-scroll">
-                <div className="how-card-header">
-                  <span className="how-number">{step.num}</span>
-                  <div className="how-icon-circle text-cyan-400">{step.icon}</div>
+              <div
+                key={i}
+                style={{ transitionDelay: `${(i + 3) * 100}ms` }}
+                className="group relative p-8 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-cyan-500/40 hover:bg-white/[0.06] animate-on-scroll hover-glow tilt-card"
+              >
+                {/* Micro shadow & Soft glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 via-transparent to-blue-500/0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-2xl"></div>
+
+                {/* Massive background number */}
+                <span className="absolute top-4 right-6 text-7xl lg:text-8xl font-black text-white/[0.03] blur-[1px] select-none pointer-events-none transition-colors duration-500 group-hover:text-cyan-500/5">
+                  {step.num}
+                </span>
+
+                <div className="relative z-10">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500/10 to-blue-600/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-8 transition-all duration-500 group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] group-hover:border-cyan-400/40">
+                    {step.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-4 tracking-tight group-hover:text-cyan-500 transition-colors duration-500">
+                    {step.title}
+                  </h3>
+                  <p className="text-slate-400 leading-relaxed text-sm lg:text-[15px] group-hover:text-slate-300 transition-colors duration-500">
+                    {step.desc}
+                  </p>
                 </div>
-                <h3>{step.title}</h3>
-                <p>{step.desc}</p>
-                {i < 3 && <div className="how-arrow-connector">→</div>}
+
+                {/* Top-light reflection effect */}
+                <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
               </div>
             ))}
           </div>
