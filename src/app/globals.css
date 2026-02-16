@@ -431,16 +431,18 @@ ul {
 }
 
 .nav-cta {
-  padding: 8px 20px !important;
+  padding: 8px 24px !important;
   background: var(--grad-blue) !important;
   border-radius: var(--r-md) !important;
   color: #fff !important;
-  box-shadow: 0 2px 12px rgba(0, 200, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 200, 255, 0.15);
+  transition: all var(--dur) var(--ease-bounce) !important;
 }
 
 .nav-cta:hover {
-  box-shadow: 0 4px 20px rgba(0, 200, 255, 0.3);
-  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(0, 200, 255, 0.4), inset 0 0 12px rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px) scale(1.03);
+  color: #fff !important;
 }
 
 .nav-cta::after {
@@ -1339,22 +1341,53 @@ ul {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 11px 20px;
+  padding: 11px 24px;
   background: var(--grad-hero);
   border: none;
   border-radius: var(--r-full);
   color: #fff;
   font-family: var(--font-body);
-  font-size: 0.84rem;
+  font-size: 0.88rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 6px 24px rgba(0, 200, 255, 0.25);
-  transition: all var(--dur) var(--ease);
+  box-shadow: 0 8px 32px rgba(0, 200, 255, 0.3);
+  transition: all 0.4s var(--ease-bounce);
   animation: gentleFloat 4s ease-in-out infinite;
+  position: relative;
+  overflow: visible;
+}
+
+.chat-toggle::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: var(--r-full);
+  background: var(--grad-hero);
+  z-index: -1;
+  opacity: 0;
+  filter: blur(14px);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
 }
 
 .chat-toggle:hover {
-  transform: scale(1.04);
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 200, 255, 0.4);
+}
+
+.chat-toggle:hover::after {
+  opacity: 0.6;
+  transform: scale(1.1);
+  animation: auraRotate 3s linear infinite;
+}
+
+@keyframes auraRotate {
+  0% {
+    filter: blur(14px) hue-rotate(0deg);
+  }
+
+  100% {
+    filter: blur(14px) hue-rotate(360deg);
+  }
 }
 
 @keyframes gentleFloat {
