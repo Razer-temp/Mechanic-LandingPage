@@ -431,22 +431,101 @@ ul {
 }
 
 .nav-cta {
-  padding: 8px 24px !important;
+  position: relative;
+  padding: 10px 28px !important;
   background: var(--grad-blue) !important;
   border-radius: var(--r-md) !important;
   color: #fff !important;
-  box-shadow: 0 4px 12px rgba(0, 200, 255, 0.15);
-  transition: all var(--dur) var(--ease-bounce) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.6px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 200, 255, 0.2);
+  transition: all 0.5s var(--ease-bounce) !important;
+  z-index: 1;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-cta .btn-text {
+  position: relative;
+  z-index: 2;
+}
+
+.nav-cta .btn-icon {
+  position: relative;
+  z-index: 2;
+  font-size: 1.1rem;
+  transition: transform 0.5s var(--ease-bounce), opacity 0.3s ease;
+  transform: translateX(-10px) scale(0);
+  opacity: 0;
+}
+
+/* The Shine Sweep */
+.nav-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 150%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.4),
+      rgba(255, 255, 255, 0.1),
+      transparent);
+  transform: skewX(-25deg);
+  transition: left 0.8s var(--ease);
+  z-index: 1;
+}
+
+/* Animated Border Glow */
+.nav-cta::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, var(--accent), var(--accent-violet), var(--accent-red), var(--accent));
+  background-size: 400% 100%;
+  z-index: -1;
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  border-radius: inherit;
 }
 
 .nav-cta:hover {
-  box-shadow: 0 8px 25px rgba(0, 200, 255, 0.4), inset 0 0 12px rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px) scale(1.03);
+  transform: translateY(-3px) scale(1.06);
+  box-shadow: 0 12px 30px rgba(0, 200, 255, 0.4);
   color: #fff !important;
 }
 
-.nav-cta::after {
-  display: none !important;
+.nav-cta:hover::before {
+  left: 150%;
+}
+
+.nav-cta:hover::after {
+  opacity: 0.6;
+  animation: borderRotate 3s linear infinite;
+}
+
+.nav-cta:hover .btn-icon {
+  transform: translateX(0) scale(1);
+  opacity: 1;
+}
+
+@keyframes borderRotate {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .nav-toggle {
