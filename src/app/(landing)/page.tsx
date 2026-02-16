@@ -117,47 +117,44 @@ export default function LandingPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // --- 5. Mouse Glow Effect ---
+  // --- 5. Mouse Glow & Tilt Effect (Optimized) ---
   useEffect(() => {
+    const cards = document.querySelectorAll<HTMLElement>('.tilt-card');
+
     const handleMouseMove = (e: MouseEvent) => {
-      const cards = document.querySelectorAll('.hover-glow');
+      const card = e.currentTarget as HTMLElement;
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const xPct = x / rect.width;
+      const yPct = y / rect.height;
+
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+      card.style.setProperty('--mouse-x-pct', `${xPct}`);
+      card.style.setProperty('--mouse-y-pct', `${yPct}`);
+    };
+
+    const handleMouseLeave = (e: MouseEvent) => {
+      const card = e.currentTarget as HTMLElement;
+      card.style.removeProperty('--mouse-x');
+      card.style.removeProperty('--mouse-y');
+      card.style.removeProperty('--mouse-x-pct');
+      card.style.removeProperty('--mouse-y-pct');
+      // Reset transform is handled by CSS transition
+    };
+
+    cards.forEach(card => {
+      card.addEventListener('mousemove', handleMouseMove);
+      card.addEventListener('mouseleave', handleMouseLeave);
+    });
+
+    return () => {
       cards.forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const xPct = x / rect.width;
-        const yPct = y / rect.height;
-        (card as HTMLElement).style.setProperty('--mouse-x', `${x}px`);
-        (card as HTMLElement).style.setProperty('--mouse-y', `${y}px`);
-        (card as HTMLElement).style.setProperty('--mouse-x-pct', `${xPct}`);
-        (card as HTMLElement).style.setProperty('--mouse-y-pct', `${yPct}`);
+        card.removeEventListener('mousemove', handleMouseMove);
+        card.removeEventListener('mouseleave', handleMouseLeave);
       });
     };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
-  // --- 6. Scroll Connector Line ---
-  const connectorLineRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!connectorLineRef.current) return;
-      const rect = connectorLineRef.current.parentElement?.getBoundingClientRect();
-      if (!rect) return;
-
-      const windowHeight = window.innerHeight;
-      const elementTop = rect.top;
-      const elementHeight = rect.height;
-
-      // Calculate progress based on scroll position relative to viewport
-      let progress = (windowHeight / 2 - elementTop) / elementHeight;
-      progress = Math.max(0, Math.min(1, progress));
-
-      connectorLineRef.current.style.height = `${progress * 100}%`;
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // --- 7. AI Diagnosis Logic ---
@@ -623,9 +620,9 @@ export default function LandingPage() {
                     <p>{step.desc}</p>
                   </div>
                 </div>
+                {i < arr.length - 1 && <div className="step-connector"></div>}
               </React.Fragment>
             ))}
-            <div className="step-connector-line" ref={connectorLineRef}></div>
           </div>
         </div>
       </section>

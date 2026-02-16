@@ -1071,9 +1071,10 @@ ul {
 
 .steps-timeline {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   max-width: 960px;
   margin: 0 auto;
+  gap: 16px;
 }
 
 .step-card {
@@ -1083,7 +1084,43 @@ ul {
   background: var(--bg-glass);
   border: 1px solid var(--border-subtle);
   border-radius: var(--r-lg);
-  transition: all var(--dur-slow) var(--ease);
+  transition: transform 0.1s ease, box-shadow 0.4s ease;
+}
+
+.step-card:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-glow);
+}
+
+.step-number {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 900;
+  background: var(--grad-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 14px;
+  line-height: 1;
+}
+
+.step-content h3 {
+  font-family: var(--font-heading);
+  font-size: 0.98rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.step-content p {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+  transition: transform 0.1s ease, box-shadow 0.4s ease;
+  will-change: transform;
 }
 
 .step-card:hover {
@@ -2117,36 +2154,13 @@ ul {
 
 /* 3D Tilt Base */
 .tilt-card {
-  transition: transform 0.15s ease;
+  transition: transform 0.1s ease-out;
   will-change: transform;
   transform-style: preserve-3d;
 }
 
 .tilt-card:hover {
   transform: perspective(1000px) rotateX(calc((var(--mouse-y-pct, 0.5) - 0.5) * -8deg)) rotateY(calc((var(--mouse-x-pct, 0.5) - 0.5) * 8deg));
-}
-
-/* Connector Line for "How It Works" */
-.steps-timeline {
-  position: relative;
-}
-
-.step-connector-line {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  width: 2px;
-  background: var(--accent);
-  transform: translateX(-50%);
-  z-index: 0;
-  height: 0%;
-  transition: height 0.1s linear;
-  box-shadow: 0 0 12px var(--accent);
-}
-
-.step-card {
-  z-index: 1;
-  position: relative;
 }
 
 /* Active Nav Link Indicator */
