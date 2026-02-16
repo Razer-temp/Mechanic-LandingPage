@@ -68,12 +68,7 @@ export function Navbar() {
                     <li><a href="#how-it-works" onClick={closeMenu} className={getLinkClass('how-it-works')}>How It Works</a></li>
                     <li><a href="#reviews" onClick={closeMenu} className={getLinkClass('reviews')}>Reviews</a></li>
 
-                    <li>
-                        <a href="#booking" className="nav-cta" onClick={closeMenu}>
-                            <span className="top">Book Service</span>
-                            <span className="bottom"></span>
-                        </a>
-                    </li>
+                    <li><a href="#booking" className="nav-cta" onClick={closeMenu}>Book Service</a></li>
                 </ul>
             </div>
         </nav>
