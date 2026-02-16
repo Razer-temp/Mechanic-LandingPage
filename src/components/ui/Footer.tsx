@@ -41,8 +41,8 @@ export function Footer() {
                     <div className="footer-hours">
                         <h4>Workshop Hours</h4>
                         <ul>
-                            <li><span>Mon – Fri</span> <span>9 AM – 7 PM</span></li>
-                            <li><span>Saturday</span> <span>9 AM – 7 PM</span></li>
+                            <li><span>Mon – Fri</span> <span>9 AM – 8 PM</span></li>
+                            <li><span>Saturday</span> <span>9 AM – 8 PM</span></li>
                             <li><span>Sunday</span> <span>10 AM – 8 PM</span></li>
                         </ul>
                         <div className="trust-badges">
