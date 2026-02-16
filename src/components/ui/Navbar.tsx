@@ -63,8 +63,8 @@ export function Navbar() {
                 />
 
                 <ul className={clsx('nav-links', mobileMenuOpen && 'active')} id="navLinks">
-                    <li><a href="#services" onClick={closeMenu} className={getLinkClass('services')}>Services</a></li>
                     <li><a href="#diagnosis" onClick={closeMenu} className={getLinkClass('diagnosis')}>AI Diagnosis</a></li>
+                    <li><a href="#services" onClick={closeMenu} className={getLinkClass('services')}>Services</a></li>
                     <li><a href="#how-it-works" onClick={closeMenu} className={getLinkClass('how-it-works')}>How It Works</a></li>
                     <li><a href="#reviews" onClick={closeMenu} className={getLinkClass('reviews')}>Reviews</a></li>
 
