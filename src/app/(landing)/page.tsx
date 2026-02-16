@@ -174,6 +174,7 @@ export default function LandingPage() {
         const deviceInfo = getDeviceInfo();
         const sessionId = chatSessionId;
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const { error } = await supabase.from('ai_diagnoses' as any).insert({
           input_text: diagnosisText,
           bike_model: bikeModel || null,
@@ -209,6 +210,7 @@ export default function LandingPage() {
           const deviceInfo = getDeviceInfo();
           const sessionId = chatSessionId;
 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const { error } = await supabase.from('ai_estimates' as any).insert({
             bike_type: estBikeType,
             service_type: estServiceType,
@@ -271,7 +273,8 @@ export default function LandingPage() {
   };
 
   // --- 8. Chatbot Logic ---
-  const saveChatMessage = async (sessionId: string, role: 'user' | 'bot', content: string) => {
+  /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  const saveChatMessage = useCallback(async (sessionId: string, role: 'user' | 'bot', content: string) => {
     try {
       await supabase.from('chat_messages').insert({
         session_id: sessionId,
@@ -281,7 +284,7 @@ export default function LandingPage() {
     } catch (err) {
       console.error('Error saving chat message:', err);
     }
-  };
+  }, [supabase]);
 
   const sendChatMessage = useCallback(async () => {
     if (!chatInput.trim()) return;
@@ -366,7 +369,7 @@ export default function LandingPage() {
         saveChatMessage(currentSessionId, 'bot', botText);
       }
     }, 1200);
-  }, [chatInput, chatSessionId, supabase]);
+  }, [chatInput, chatSessionId, supabase, saveChatMessage]);
 
   useEffect(() => {
     if (chatMessagesRef.current) {

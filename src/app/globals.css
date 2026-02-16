@@ -1119,9 +1119,7 @@ ul {
   line-height: 1.65;
 }
 
-  transition: transform 0.1s ease, box-shadow 0.4s ease;
-  will-change: transform;
-}
+
 
 .step-card:hover {
   border-color: var(--border-accent);
