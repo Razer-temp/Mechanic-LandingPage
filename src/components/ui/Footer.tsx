@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Mail, Instagram, Twitter, Facebook, ArrowUpRight, Globe, Clock, ShieldCheck, Star } from 'lucide-react';
+import { Mail, Instagram, Twitter, Facebook, ArrowUpRight, Globe, Clock, ShieldCheck, Star, MessageSquare } from 'lucide-react';
 
 export function Footer() {
     const [currentTime, setCurrentTime] = useState(new Date());
@@ -41,10 +41,13 @@ export function Footer() {
                             Trusted by 15,000+ riders across India.
                         </p>
 
-                        <div className="footer-status">
-                            <span className={`status-dot ${isOnline ? 'online' : ''}`}></span>
-                            <span className="text-xs font-semibold tracking-wider">
-                                {isOnline ? 'WORKSHOP LIVE — WE ARE OPEN' : 'WORKSHOP CLOSED — OPENS AT 9 AM'}
+                        <div className={`footer-status-compact transition-all duration-500 ${isOnline ? 'online' : 'offline'}`}>
+                            <div className="status-indicator">
+                                <span className="status-dot"></span>
+                                <span className="status-pulse"></span>
+                            </div>
+                            <span className="status-text">
+                                {isOnline ? 'Workshop Open' : 'Workshop Closed'}
                             </span>
                         </div>
                     </div>
@@ -101,14 +104,23 @@ export function Footer() {
                     </div>
 
                     <div className="footer-socials">
-                        <a href="#" className="social-link instagram magnetic-btn"><Instagram className="size-4" /></a>
-                        <a href="https://x.com" className="social-link x-twitter magnetic-btn">
+                        <a href="#" className="social-link instagram magnetic-btn" aria-label="Instagram">
+                            <Instagram className="size-4" />
+                        </a>
+                        <a href="https://wa.me/919811530780" target="_blank" rel="noopener noreferrer" className="social-link whatsapp magnetic-btn" aria-label="WhatsApp">
+                            <MessageSquare className="size-4" />
+                        </a>
+                        <a href="https://x.com" className="social-link x-twitter magnetic-btn" aria-label="X (Twitter)">
                             <svg className="size-3.5" viewBox="0 0 1200 1227" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M714.163 519.284L1160.89 0H1055.03L664.877 453.553L355.139 0H0L468.492 681.821L0 1226.37H105.866L517.749 747.453L844.861 1226.37H1200L714.137 519.284H714.163ZM571.491 685.043L524.004 617.078L144.113 73.197H306.721L613.061 511.905L660.548 579.87L1055.08 1144.82H892.476L571.491 685.07V685.043Z" fill="currentColor" />
                             </svg>
                         </a>
-                        <a href="#" className="social-link facebook magnetic-btn"><Facebook className="size-4" /></a>
-                        <a href="#" className="social-link email magnetic-btn"><Mail className="size-4" /></a>
+                        <a href="#" className="social-link facebook magnetic-btn" aria-label="Facebook">
+                            <Facebook className="size-4" />
+                        </a>
+                        <a href="#" className="social-link email magnetic-btn" aria-label="Email">
+                            <Mail className="size-4" />
+                        </a>
                     </div>
 
                     <div className="flex gap-6 text-[11px] font-medium text-white/30">

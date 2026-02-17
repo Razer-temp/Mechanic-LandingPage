@@ -111,16 +111,21 @@
 
 /* Newsletter Section */
 .footer-newsletter {
-    margin-top: 15px;
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 20px;
+    border-radius: var(--r-lg);
+    border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .footer-newsletter h4 {
-    font-size: 0.85rem;
-    font-weight: 700;
+    font-size: 0.9rem;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     color: var(--text-primary);
-    margin-bottom: 12px;
+    margin-bottom: 8px;
+    display: block;
 }
 
 .newsletter-form {
@@ -206,47 +211,77 @@
     transform: translateX(5px);
 }
 
-/* Live Status Indicator */
-.footer-status {
-    margin-top: 20px;
-    padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--border-light);
-    border-radius: var(--r-md);
+/* Live Status Indicator - Compact Version */
+.footer-status-compact {
     display: flex;
     align-items: center;
     gap: 10px;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-light);
+    border-radius: 100px;
+    width: fit-content;
+    margin-top: 10px;
+    transition: all 0.3s var(--ease);
 }
 
-.status-dot {
+.footer-status-compact:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.status-indicator {
+    position: relative;
     width: 8px;
     height: 8px;
-    border-radius: 50%;
-    position: relative;
 }
 
-.status-dot.online {
-    background: var(--accent-green);
-    box-shadow: 0 0 10px var(--accent-green);
-}
-
-.status-dot.online::after {
-    content: '';
+.status-indicator .status-dot {
     position: absolute;
-    inset: -2px;
+    inset: 0;
     border-radius: 50%;
-    border: 1px solid var(--accent-green);
-    animation: statusPulse 2s infinite;
+    z-index: 2;
 }
 
-@keyframes statusPulse {
+.footer-status-compact.online .status-dot {
+    background: #10b981;
+    box-shadow: 0 0 10px #10b981;
+}
+
+.footer-status-compact.offline .status-dot {
+    background: #ef4444;
+}
+
+.status-indicator .status-pulse {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    opacity: 0;
+    z-index: 1;
+}
+
+.footer-status-compact.online .status-pulse {
+    color: #10b981;
+    animation: statusPulseRing 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.status-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+@keyframes statusPulseRing {
     0% {
-        transform: scale(1);
-        opacity: 1;
+        transform: scale(0.8);
+        opacity: 0.5;
     }
 
     100% {
-        transform: scale(2.5);
+        transform: scale(2.4);
         opacity: 0;
     }
 }
@@ -268,8 +303,8 @@
 }
 
 .social-link {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--border-light);
     border-radius: 50%;
@@ -277,34 +312,52 @@
     align-items: center;
     justify-content: center;
     color: var(--text-secondary);
-    transition: all 0.3s var(--ease);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
 }
 
 .social-link:hover {
     color: white;
-    border-color: transparent;
-    transform: translateY(-5px);
+    transform: translateY(-8px) scale(1.1);
 }
 
+/* Reference Style Glows - Intense & Circular */
 .social-link.instagram:hover {
-    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
-    box-shadow: 0 5px 15px rgba(214, 36, 159, 0.4);
+    border-color: #ff0050;
+    box-shadow: 0 0 25px rgba(255, 0, 80, 0.6), inset 0 0 10px rgba(255, 0, 80, 0.4);
+    background: rgba(255, 0, 80, 0.15);
+}
+
+.social-link.whatsapp:hover {
+    border-color: #25d366;
+    box-shadow: 0 0 25px rgba(37, 211, 102, 0.6), inset 0 0 10px rgba(37, 211, 102, 0.4);
+    background: rgba(37, 211, 102, 0.15);
 }
 
 .social-link.x-twitter:hover {
-    background: #000000;
-    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-color: #ffffff;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .social-link.facebook:hover {
-    background: #1877f2;
-    box-shadow: 0 5px 15px rgba(24, 119, 242, 0.4);
+    border-color: #1877f2;
+    box-shadow: 0 0 25px rgba(24, 119, 242, 0.6), inset 0 0 10px rgba(24, 119, 242, 0.4);
+    background: rgba(24, 119, 242, 0.15);
 }
 
 .social-link.email:hover {
-    background: #ea4335;
-    box-shadow: 0 5px 15px rgba(234, 67, 53, 0.4);
+    border-color: #ea4335;
+    box-shadow: 0 0 25px rgba(234, 67, 53, 0.6), inset 0 0 10px rgba(234, 67, 53, 0.4);
+    background: rgba(234, 67, 53, 0.15);
+}
+
+/* Mobile Persistent Glow (Optional but good for visual feedback) */
+@media (max-width: 768px) {
+    .social-link {
+        width: 48px;
+        height: 48px;
+    }
 }
 
 .copyright-text {
