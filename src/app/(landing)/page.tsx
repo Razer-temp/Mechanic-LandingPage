@@ -10,6 +10,7 @@ import { createClient } from '@/lib/supabase/client';
 import './ai-intelligence.css';
 import './landing-effects.css';
 import './how-it-works.css';
+import './footer-premium.css';
 import clsx from 'clsx';
 import { MessageSquareText, BrainCircuit, Wrench, Rocket } from 'lucide-react';
 
