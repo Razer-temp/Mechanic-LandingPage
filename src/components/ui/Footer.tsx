@@ -28,7 +28,7 @@ export function Footer() {
                 <div className="footer-main-grid">
                     {/* Brand Section */}
                     <div className="footer-col footer-brand-premium animate-on-scroll">
-                        <Link href="/" className="nav-logo">
+                        <Link href="/" className="nav-logo footer-logo-wrap">
                             <span className="logo-icon">
                                 <svg className="logo-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.77 3.77z" fill="currentColor" />
@@ -57,7 +57,6 @@ export function Footer() {
                             <li><a href="#diagnosis" className="footer-link-item"><ArrowUpRight className="size-3" /> AI Diagnosis</a></li>
                             <li><a href="#estimator" className="footer-link-item"><ArrowUpRight className="size-3" /> Cost Estimator</a></li>
                             <li><a href="#reviews" className="footer-link-item"><ArrowUpRight className="size-3" /> Testimonials</a></li>
-                            <li><Link href="/login" className="footer-link-item"><ArrowUpRight className="size-3" /> Admin Login</Link></li>
                         </ul>
                     </div>
 
@@ -102,10 +101,14 @@ export function Footer() {
                     </div>
 
                     <div className="footer-socials">
-                        <a href="#" className="social-link magnetic-btn"><Instagram className="size-4" /></a>
-                        <a href="#" className="social-link magnetic-btn"><Twitter className="size-4" /></a>
-                        <a href="#" className="social-link magnetic-btn"><Facebook className="size-4" /></a>
-                        <a href="#" className="social-link magnetic-btn"><Mail className="size-4" /></a>
+                        <a href="#" className="social-link instagram magnetic-btn"><Instagram className="size-4" /></a>
+                        <a href="https://x.com" className="social-link x-twitter magnetic-btn">
+                            <svg className="size-3.5" viewBox="0 0 1200 1227" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M714.163 519.284L1160.89 0H1055.03L664.877 453.553L355.139 0H0L468.492 681.821L0 1226.37H105.866L517.749 747.453L844.861 1226.37H1200L714.137 519.284H714.163ZM571.491 685.043L524.004 617.078L144.113 73.197H306.721L613.061 511.905L660.548 579.87L1055.08 1144.82H892.476L571.491 685.07V685.043Z" fill="currentColor" />
+                            </svg>
+                        </a>
+                        <a href="#" className="social-link facebook magnetic-btn"><Facebook className="size-4" /></a>
+                        <a href="#" className="social-link email magnetic-btn"><Mail className="size-4" /></a>
                     </div>
 
                     <div className="flex gap-6 text-[11px] font-medium text-white/30">

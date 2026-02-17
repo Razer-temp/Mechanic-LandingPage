@@ -78,6 +78,19 @@
 }
 
 /* Brand Section */
+.footer-logo-wrap {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin-bottom: 24px;
+}
+
+.footer-logo-wrap .logo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .footer-brand-premium {
     max-width: 320px;
 }
@@ -85,8 +98,8 @@
 .footer-brand-premium .logo-text {
     font-size: 1.5rem;
     font-weight: 800;
-    margin-bottom: 20px;
-    display: block;
+    margin: 0 !important;
+    display: inline-block;
 }
 
 .footer-brand-premium p {
@@ -98,7 +111,7 @@
 
 /* Newsletter Section */
 .footer-newsletter {
-    margin-top: 30px;
+    margin-top: 15px;
 }
 
 .footer-newsletter h4 {
@@ -112,12 +125,14 @@
 
 .newsletter-form {
     display: flex;
-    gap: 8px;
+    gap: 0;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--border-light);
-    padding: 6px;
+    padding: 4px;
     border-radius: var(--r-md);
     transition: all 0.3s var(--ease);
+    width: 100%;
+    max-width: 300px;
 }
 
 .newsletter-form:focus-within {
@@ -127,13 +142,16 @@
 }
 
 .newsletter-form input {
-    background: transparent;
-    border: none;
-    padding: 10px 14px;
-    color: var(--text-primary);
-    font-size: 0.85rem;
+    background: transparent !important;
+    border: none !important;
+    padding: 10px 14px !important;
+    color: var(--text-primary) !important;
+    font-size: 0.85rem !important;
     flex: 1;
-    outline: none;
+    outline: none !important;
+    min-width: 0;
+    box-shadow: none !important;
+    height: auto !important;
 }
 
 .newsletter-form .btn-send {
@@ -142,6 +160,9 @@
     border-radius: var(--r-sm);
     color: white;
     font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border: none;
 }
 
 /* Link Columns */
@@ -260,14 +281,112 @@
 }
 
 .social-link:hover {
-    background: var(--grad-blue);
     color: white;
     border-color: transparent;
     transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 200, 255, 0.3);
+}
+
+.social-link.instagram:hover {
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+    box-shadow: 0 5px 15px rgba(214, 36, 159, 0.4);
+}
+
+.social-link.x-twitter:hover {
+    background: #000000;
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.social-link.facebook:hover {
+    background: #1877f2;
+    box-shadow: 0 5px 15px rgba(24, 119, 242, 0.4);
+}
+
+.social-link.email:hover {
+    background: #ea4335;
+    box-shadow: 0 5px 15px rgba(234, 67, 53, 0.4);
 }
 
 .copyright-text {
     font-size: 0.85rem;
     color: var(--text-muted);
+}
+
+/* MOBILE FIXES */
+@media (max-width: 768px) {
+    .footer-premium {
+        padding: 60px 0 30px;
+    }
+
+    .footer-main-grid {
+        gap: 32px;
+        text-align: center;
+        margin-bottom: 50px;
+        grid-template-columns: 1fr !important;
+    }
+
+    .footer-brand-premium {
+        max-width: 100% !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-logo-wrap {
+        justify-content: center;
+    }
+
+    .footer-brand-premium p {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+    }
+
+    .footer-status {
+        justify-content: center;
+        width: fit-content;
+        margin: 0 auto 10px;
+    }
+
+    .footer-col h4::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .footer-links-list {
+        align-items: center;
+    }
+
+    .footer-link-item {
+        justify-content: center;
+    }
+
+    .footer-newsletter {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .newsletter-form {
+        max-width: 100%;
+    }
+
+    .footer-trust-badges {
+        justify-content: center;
+    }
+
+    .footer-bottom-premium {
+        flex-direction: column;
+        text-align: center;
+        padding-top: 30px;
+    }
+
+    .footer-socials {
+        justify-content: center;
+    }
+
+    .footer-bottom-premium .flex {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
 }
