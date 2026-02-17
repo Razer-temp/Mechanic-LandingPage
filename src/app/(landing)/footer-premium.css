@@ -128,6 +128,43 @@
     display: block;
 }
 
+/* Trust Badges */
+.footer-trust-badges {
+    margin-top: 30px;
+}
+
+.trust-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--r-md);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    transition: all 0.3s var(--ease);
+}
+
+.trust-badge:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+}
+
+.trust-badge.authentic .icon {
+    color: #10b981;
+    filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.4));
+}
+
+.trust-badge.rated .icon {
+    color: #f59e0b;
+    filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.4));
+}
+
 .newsletter-form {
     display: flex;
     gap: 0;
@@ -217,17 +254,95 @@
     align-items: center;
     gap: 10px;
     padding: 6px 14px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--border-light);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 100px;
     width: fit-content;
     margin-top: 10px;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
     transition: all 0.3s var(--ease);
 }
 
 .footer-status-compact:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.business-hours-popover {
+    position: absolute;
+    bottom: calc(100% + 15px);
+    left: 0;
+    width: 240px;
+    background: var(--bg-glass);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--r-xl);
+    padding: 20px;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px) scale(0.95);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.business-hours-popover::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 20px;
+    border: 8px solid transparent;
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.business-hours-popover.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.hours-header {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 10px;
+}
+
+.hours-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hours-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    padding: 2px 0;
+}
+
+.hours-row.current {
+    color: var(--accent);
+    font-weight: 800;
+    filter: drop-shadow(0 0 5px rgba(0, 200, 255, 0.3));
+}
+
+.hours-footer {
+    margin-top: 14px;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    font-style: italic;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 6px 10px;
+    border-radius: var(--r-sm);
 }
 
 .status-indicator {
@@ -322,10 +437,18 @@
 }
 
 /* Reference Style Glows - Intense & Circular */
+.social-link svg {
+    transition: all 0.4s var(--ease);
+}
+
 .social-link.instagram:hover {
     border-color: #ff0050;
     box-shadow: 0 0 25px rgba(255, 0, 80, 0.6), inset 0 0 10px rgba(255, 0, 80, 0.4);
     background: rgba(255, 0, 80, 0.15);
+}
+
+.social-link.instagram:hover svg {
+    filter: drop-shadow(0 0 8px #ff0050);
 }
 
 .social-link.whatsapp:hover {
@@ -334,10 +457,18 @@
     background: rgba(37, 211, 102, 0.15);
 }
 
+.social-link.whatsapp:hover svg {
+    filter: drop-shadow(0 0 12px #25d366);
+}
+
 .social-link.x-twitter:hover {
     border-color: #ffffff;
     box-shadow: 0 0 25px rgba(255, 255, 255, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.4);
     background: rgba(255, 255, 255, 0.15);
+}
+
+.social-link.x-twitter:hover svg {
+    filter: drop-shadow(0 0 8px #ffffff);
 }
 
 .social-link.facebook:hover {
@@ -346,10 +477,18 @@
     background: rgba(24, 119, 242, 0.15);
 }
 
+.social-link.facebook:hover svg {
+    filter: drop-shadow(0 0 8px #1877f2);
+}
+
 .social-link.email:hover {
     border-color: #ea4335;
     box-shadow: 0 0 25px rgba(234, 67, 53, 0.6), inset 0 0 10px rgba(234, 67, 53, 0.4);
     background: rgba(234, 67, 53, 0.15);
+}
+
+.social-link.email:hover svg {
+    filter: drop-shadow(0 0 8px #ea4335);
 }
 
 /* Mobile Persistent Glow (Optional but good for visual feedback) */
