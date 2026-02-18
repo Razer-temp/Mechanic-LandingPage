@@ -613,29 +613,77 @@ ul {
 .hero-badge {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 18px;
-  background: rgba(0, 212, 255, 0.08);
-  border: 1px solid rgba(0, 212, 255, 0.2);
+  gap: 12px;
+  padding: 8px 24px;
+  background: rgba(8, 8, 12, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Sophisticated subtle border */
   border-radius: var(--r-full);
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 32px;
-  letter-spacing: 0.8px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+  /* For shimmer clip */
+  box-shadow:
+    0 10px 30px -10px rgba(0, 0, 0, 0.5),
+    inset 0 0 20px rgba(0, 212, 255, 0.02);
+  transition: all 0.4s var(--ease);
+}
+
+.hero-badge:hover {
+  transform: translateY(-2px);
+  background: rgba(8, 8, 12, 0.85);
+  border-color: rgba(0, 212, 255, 0.3);
+  box-shadow:
+    0 20px 40px -12px rgba(0, 0, 0, 0.6),
+    0 0 20px rgba(0, 212, 255, 0.1);
+}
+
+/* Premium Shimmering Sweep */
+.hero-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.05),
+      transparent);
+  animation: badgeShimmer 8s infinite linear;
+}
+
+@keyframes badgeShimmer {
+  0% {
+    left: -150%;
+  }
+
+  30% {
+    left: 150%;
+  }
+
+  100% {
+    left: 150%;
+  }
 }
 
 .pulse-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--accent);
+  width: 5px;
+  height: 5px;
+  background: #00d4ff;
   border-radius: 50%;
   position: relative;
-  box-shadow: 0 0 10px var(--accent);
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
 }
 
+/* Multi-layer SaaS Sonar Ripple */
 .pulse-dot::after,
 .pulse-dot::before {
   content: '';
@@ -646,27 +694,26 @@ ul {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: var(--accent);
-  opacity: 0.6;
-  z-index: -1;
+  background: #00d4ff;
+  pointer-events: none;
 }
 
 .pulse-dot::after {
-  animation: pulseBeating 2.5s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  animation: sonarRipple 3.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
 }
 
 .pulse-dot::before {
-  animation: pulseBeating 2.5s cubic-bezier(0.24, 0, 0.38, 1) infinite 0.8s;
+  animation: sonarRipple 3.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite 1.75s;
 }
 
-@keyframes pulseBeating {
+@keyframes sonarRipple {
   0% {
     transform: translate(-50%, -50%) scale(1);
     opacity: 0.8;
   }
 
   100% {
-    transform: translate(-50%, -50%) scale(3.5);
+    transform: translate(-50%, -50%) scale(6);
     opacity: 0;
   }
 }
