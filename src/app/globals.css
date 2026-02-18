@@ -86,8 +86,6 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-padding-top: 80px;
-  overflow-x: hidden;
-  /* Prevent horizontal scroll */
 }
 
 body {
