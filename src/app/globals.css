@@ -1755,20 +1755,22 @@ ul {
     height: 100vh;
     background: rgba(5, 5, 8, 0.96);
     backdrop-filter: blur(32px);
-    /* Slightly increased blur */
     -webkit-backdrop-filter: blur(32px);
     z-index: 1001;
     flex-direction: column;
     padding: 80px 28px 28px;
     gap: 24px;
     transform: translateX(100%);
-    /* Use transform instead of right positioning */
-    transition: transform 0.4s var(--ease);
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.4s var(--ease), visibility 0.4s var(--ease);
     border-left: 1px solid var(--border-subtle);
   }
 
   .nav-links.active {
     transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
   }
 
   .nav-cta {
