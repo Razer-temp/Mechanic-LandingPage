@@ -10,9 +10,7 @@ import { createClient } from '@/lib/supabase/client';
 import './ai-intelligence.css';
 import './landing-effects.css';
 import './how-it-works.css';
-import './footer-premium.css';
-import clsx from 'clsx';
-import { MessageSquareText, BrainCircuit, Wrench, Rocket, Sparkles } from 'lucide-react';
+import { MessageSquareText, BrainCircuit, Wrench, Rocket } from 'lucide-react';
 
 export default function LandingPage() {
   // --- States for Interactions ---
@@ -401,13 +399,17 @@ export default function LandingPage() {
           <div className="hero-orb hero-orb--red"></div>
           <div className="hero-grid-overlay"></div>
           <div className="hero-particles" ref={particlesRef}></div>
+          <div className="shooting-stars-container">
+            {[...Array(20)].map((_, i) => (
+              <div key={i} className="shooting-star"></div>
+            ))}
+          </div>
         </div>
         <div className="container hero-content">
           <div className="hero-badge animate-on-scroll">
             <div className="badge-border-beam"></div>
             <span className="pulse-dot"></span>
             <span className="badge-text">
-              <Sparkles className="size-3 inline-block mr-1.5 text-cyan-400" />
               AI-Powered Workshop
             </span>
           </div>
