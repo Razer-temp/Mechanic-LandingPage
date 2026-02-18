@@ -93,10 +93,12 @@ body {
   background: var(--bg-void);
   color: var(--text-primary);
   line-height: 1.65;
-  overflow-x: hidden;
-  /* Prevent horizontal scroll */
-  position: relative;
   font-size: 15px;
+}
+
+.landing-page-wrapper {
+  overflow: clip;
+  /* Modern way to hide overflow without breaking scroll context */
 }
 
 a {
