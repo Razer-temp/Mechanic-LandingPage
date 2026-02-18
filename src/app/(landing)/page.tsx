@@ -404,7 +404,12 @@ export default function LandingPage() {
         </div>
         <div className="container hero-content">
           <div className="hero-badge animate-on-scroll">
-            <span className="pulse-dot"></span> AI-Powered Workshop
+            <div className="badge-border-beam"></div>
+            <span className="pulse-dot"></span>
+            <span className="badge-text">
+              <Sparkles className="size-3 inline-block mr-1.5 text-cyan-400" />
+              AI-Powered Workshop
+            </span>
           </div>
           <h1 className="hero-title animate-on-scroll">
             <span className="text-reveal-wrapper">
