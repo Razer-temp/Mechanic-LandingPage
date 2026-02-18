@@ -401,15 +401,15 @@ export default function LandingPage() {
           <div className="hero-orb hero-orb--red"></div>
           <div className="hero-grid-overlay"></div>
           <div className="hero-particles" ref={particlesRef}></div>
-          <div className="shooting-stars-container">
-            {[...Array(20)].map((_, i) => (
-              <div key={i} className="shooting-star"></div>
-            ))}
-          </div>
         </div>
         <div className="container hero-content">
           <div className="hero-badge animate-on-scroll">
             <div className="badge-border-beam"></div>
+            <div className="shooting-stars-container">
+              {[...Array(20)].map((_, i) => (
+                <div key={i} className="shooting-star"></div>
+              ))}
+            </div>
             <span className="pulse-dot"></span>
             <span className="badge-text">
               AI-Powered Workshop
