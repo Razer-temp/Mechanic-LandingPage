@@ -86,6 +86,8 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-padding-top: 80px;
+  overflow-x: hidden;
+  /* Prevent horizontal scroll */
 }
 
 body {
@@ -1747,22 +1749,25 @@ ul {
   .nav-links {
     position: fixed;
     top: 0;
-    right: -100%;
+    right: 0;
     width: 260px;
     height: 100vh;
     background: rgba(5, 5, 8, 0.96);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(32px);
+    /* Slightly increased blur */
+    -webkit-backdrop-filter: blur(32px);
     z-index: 1001;
     flex-direction: column;
     padding: 80px 28px 28px;
     gap: 24px;
-    transition: right 0.4s var(--ease);
+    transform: translateX(100%);
+    /* Use transform instead of right positioning */
+    transition: transform 0.4s var(--ease);
     border-left: 1px solid var(--border-subtle);
   }
 
   .nav-links.active {
-    right: 0;
+    transform: translateX(0);
   }
 
   .nav-cta {

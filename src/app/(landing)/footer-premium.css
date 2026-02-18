@@ -547,6 +547,21 @@
         margin: 0 auto 10px;
     }
 
+    .business-hours-popover {
+        left: 50% !important;
+        transform: translate(-50%, 10px) scale(0.95);
+        bottom: calc(100% + 10px);
+    }
+
+    .business-hours-popover.show {
+        transform: translate(-50%, 0) scale(1);
+    }
+
+    .business-hours-popover::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
     .footer-col h4::after {
         left: 50%;
         transform: translateX(-50%);
