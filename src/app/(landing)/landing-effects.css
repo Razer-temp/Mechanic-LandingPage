@@ -119,7 +119,7 @@
 
 @keyframes shootingStarAnim {
     0% {
-        transform: rotate(215deg) translateX(0);
+        transform: rotate(195deg) translateX(0);
         opacity: 0;
     }
 
@@ -132,8 +132,7 @@
     }
 
     100% {
-        transform: rotate(215deg) translateX(-400px);
-        /* Smaller range for badge */
+        transform: rotate(195deg) translateX(-1200px);
         opacity: 0;
     }
 }
@@ -141,70 +140,70 @@
 /* Higher density randomization for internal badge - Full Width Coverage */
 .shooting-star:nth-child(1) {
     top: 0%;
-    left: 10%;
+    left: 0%;
     --duration: 2.1s;
     --delay: 0s;
 }
 
 .shooting-star:nth-child(2) {
     top: 20%;
-    left: 30%;
+    left: 10%;
     --duration: 1.8s;
     --delay: 0.5s;
 }
 
 .shooting-star:nth-child(3) {
     top: -10%;
-    left: 50%;
+    left: 20%;
     --duration: 2.5s;
     --delay: 1.2s;
 }
 
 .shooting-star:nth-child(4) {
     top: 50%;
-    left: 70%;
+    left: 30%;
     --duration: 1.5s;
     --delay: 2s;
 }
 
 .shooting-star:nth-child(5) {
     top: 10%;
-    left: 90%;
+    left: 40%;
     --duration: 3s;
     --delay: 0.8s;
 }
 
 .shooting-star:nth-child(6) {
     top: 30%;
-    left: 110%;
+    left: 50%;
     --duration: 2.2s;
     --delay: 1.5s;
 }
 
 .shooting-star:nth-child(7) {
     top: -5%;
-    left: 20%;
+    left: 60%;
     --duration: 1.9s;
     --delay: 2.5s;
 }
 
 .shooting-star:nth-child(8) {
     top: 60%;
-    left: 40%;
+    left: 70%;
     --duration: 2.4s;
     --delay: 3s;
 }
 
 .shooting-star:nth-child(9) {
     top: 15%;
-    left: 60%;
+    left: 80%;
     --duration: 2.8s;
     --delay: 0.2s;
 }
 
 .shooting-star:nth-child(10) {
     top: 40%;
-    left: 80%;
+    left: 90%;
     --duration: 1.7s;
     --delay: 1.7s;
 }
@@ -218,63 +217,63 @@
 
 .shooting-star:nth-child(12) {
     top: 25%;
-    left: 15%;
+    left: 5%;
     --duration: 2.9s;
     --delay: 2.1s;
 }
 
 .shooting-star:nth-child(13) {
     top: -15%;
-    left: 35%;
+    left: 15%;
     --duration: 1.6s;
     --delay: 0.9s;
 }
 
 .shooting-star:nth-child(14) {
     top: 45%;
-    left: 55%;
+    left: 25%;
     --duration: 2.6s;
     --delay: 1.3s;
 }
 
 .shooting-star:nth-child(15) {
     top: 12%;
-    left: 75%;
+    left: 35%;
     --duration: 2.0s;
     --delay: 2.8s;
 }
 
 .shooting-star:nth-child(16) {
     top: 35%;
-    left: 95%;
+    left: 45%;
     --duration: 2.7s;
     --delay: 0.6s;
 }
 
 .shooting-star:nth-child(17) {
     top: -8%;
-    left: 115%;
+    left: 55%;
     --duration: 1.4s;
     --delay: 1.8s;
 }
 
 .shooting-star:nth-child(18) {
     top: 55%;
-    left: 25%;
+    left: 65%;
     --duration: 3.2s;
     --delay: 2.2s;
 }
 
 .shooting-star:nth-child(19) {
     top: 18%;
-    left: 45%;
+    left: 75%;
     --duration: 2.2s;
     --delay: 0.1s;
 }
 
 .shooting-star:nth-child(20) {
     top: 42%;
-    left: 65%;
+    left: 85%;
     --duration: 1.9s;
     --delay: 3.5s;
 }
