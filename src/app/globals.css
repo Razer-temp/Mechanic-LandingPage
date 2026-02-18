@@ -645,40 +645,6 @@ ul {
     0 0 30px rgba(0, 212, 255, 0.15);
 }
 
-/* Border Beam Effect */
-.badge-border-beam {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  /* The border width */
-  background: conic-gradient(from 0deg at 50% 50%,
-      transparent 0deg,
-      transparent 60deg,
-      #00d4ff 120deg,
-      #8b5cf6 180deg,
-      transparent 240deg,
-      transparent 360deg);
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  animation: borderBeamRotate 6s linear infinite;
-  opacity: 0.6;
-}
-
-@keyframes borderBeamRotate {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .badge-text {
   position: relative;
   z-index: 2;
