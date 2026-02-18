@@ -37,8 +37,30 @@ export default function LandingPage() {
   ]);
   const [chatInput, setChatInput] = useState('');
   const [chatSessionId, setChatSessionId] = useState<string | null>(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [showHeroHours, setShowHeroHours] = useState(false);
   const supabase = createClient();
   const chatMessagesRef = useRef<HTMLDivElement>(null);
+
+  // --- Workshop Status Logic ---
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 60000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const hours = currentTime.getHours();
+  const day = currentTime.getDay();
+  const isOnline = hours >= 9 && hours < 20;
+
+  const schedule = [
+    { day: 'Monday', hours: '9:00 AM - 8:00 PM' },
+    { day: 'Tuesday', hours: '9:00 AM - 8:00 PM' },
+    { day: 'Wednesday', hours: '9:00 AM - 8:00 PM' },
+    { day: 'Thursday', hours: '9:00 AM - 8:00 PM' },
+    { day: 'Friday', hours: '9:00 AM - 8:00 PM' },
+    { day: 'Saturday', hours: '9:00 AM - 8:00 PM' },
+    { day: 'Sunday', hours: '9:00 AM - 8:00 PM' },
+  ];
 
   // --- Refs for Animations ---
   const particlesRef = useRef<HTMLDivElement>(null);
@@ -403,8 +425,34 @@ export default function LandingPage() {
           <div className="hero-particles" ref={particlesRef}></div>
         </div>
         <div className="container hero-content">
-          <div className="hero-badge animate-on-scroll">
-            <span className="pulse-dot"></span> AI-Powered Workshop
+          <div
+            className={clsx('hero-badge animate-on-scroll', isOnline ? 'online' : 'offline')}
+            onMouseEnter={() => setShowHeroHours(true)}
+            onMouseLeave={() => setShowHeroHours(false)}
+            onClick={() => setShowHeroHours(!showHeroHours)}
+          >
+            <div className="status-indicator">
+              <span className="status-dot"></span>
+              <span className="status-pulse"></span>
+            </div>
+            {isOnline ? 'Workshop Open' : 'Workshop Closed'}
+
+            {/* Business Hours Popover */}
+            <div className={clsx('business-hours-popover', showHeroHours && 'show')}>
+              <div className="hours-header">Weekly Schedule</div>
+              <div className="hours-list">
+                {schedule.map((item, idx) => {
+                  const normalizedDay = (day + 6) % 7;
+                  return (
+                    <div key={idx} className={clsx('hours-row', normalizedDay === idx && 'current')}>
+                      <span className="day">{item.day}</span>
+                      <span className="time">{item.hours}</span>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="hours-footer">Last Order: 7:30 PM</div>
+            </div>
           </div>
           <h1 className="hero-title animate-on-scroll">
             <span className="text-reveal-wrapper">

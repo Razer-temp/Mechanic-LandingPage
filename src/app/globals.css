@@ -613,16 +613,95 @@ ul {
 .hero-badge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 18px;
-  background: rgba(0, 200, 255, 0.05);
-  border: 1px solid rgba(0, 200, 255, 0.12);
+  gap: 10px;
+  padding: 8px 20px;
+  background: rgba(10, 10, 15, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--r-full);
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
   margin-bottom: 32px;
   letter-spacing: 0.5px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+}
+
+.hero-badge:hover {
+  background: rgba(10, 10, 15, 0.6);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.hero-badge.online {
+  color: #00d4ff;
+  border-color: rgba(0, 212, 255, 0.2);
+}
+
+.hero-badge.offline {
+  color: #ff8a00;
+  border-color: rgba(255, 138, 0, 0.2);
+}
+
+.hero-badge .status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-badge.online .status-pulse {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  /* Aligned with dot */
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  background: rgba(0, 212, 255, 0.4);
+  border-radius: 50%;
+  animation: badgeStatusPulse 2s infinite;
+  z-index: 1;
+}
+
+.hero-badge.offline .status-pulse {
+  display: none;
+}
+
+@keyframes badgeStatusPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* Positioning for Hero Popover */
+.hero-badge .business-hours-popover {
+  top: calc(100% + 15px);
+  left: 0;
+  transform: translateY(10px) scale(0.95);
+  text-align: left;
+}
+
+.hero-badge .business-hours-popover.show {
+  transform: translateY(0) scale(1);
+}
+
+.hero-badge .business-hours-popover::after {
+  bottom: 100%;
+  top: auto;
+  left: 20px;
+  border-top-color: transparent;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 .pulse-dot {
