@@ -16,7 +16,7 @@ export function Footer() {
     // Simple business hours check (9 AM - 8 PM)
     const hours = currentTime.getHours();
     const day = currentTime.getDay(); // 0 = Sunday
-    const isOnline = hours >= 9 && hours < 20 && day !== 0;
+    const isOnline = hours >= 9 && hours < 20;
 
     const schedule = [
         { day: 'Monday', hours: '9:00 AM - 8:00 PM' },
@@ -25,7 +25,7 @@ export function Footer() {
         { day: 'Thursday', hours: '9:00 AM - 8:00 PM' },
         { day: 'Friday', hours: '9:00 AM - 8:00 PM' },
         { day: 'Saturday', hours: '9:00 AM - 8:00 PM' },
-        { day: 'Sunday', hours: 'Closed' },
+        { day: 'Sunday', hours: '9:00 AM - 8:00 PM' },
     ];
 
     return (
@@ -112,10 +112,10 @@ export function Footer() {
                         <h4>Stay Updated</h4>
                         <div className="footer-newsletter">
                             <p className="text-xs text-[#55556a] mb-4">Subscribe to get maintenance tips and exclusive offers.</p>
-                            <div className="newsletter-form">
-                                <input type="email" placeholder="Email address" />
-                                <button className="btn-send magnetic-btn">Join</button>
-                            </div>
+                            <form className="newsletter-form" onSubmit={(e) => { e.preventDefault(); alert('Thank you for subscribing!'); }}>
+                                <input type="email" placeholder="Email address" required />
+                                <button type="submit" className="btn-send magnetic-btn">Join</button>
+                            </form>
                         </div>
 
                         <div className="footer-trust-badges mt-8 flex gap-4">

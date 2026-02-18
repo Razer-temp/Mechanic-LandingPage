@@ -6,7 +6,8 @@
     position: relative;
     padding: 100px 0 40px;
     background: var(--bg-void);
-    overflow: hidden;
+    overflow: visible;
+    /* Prevent popover clipping */
     border-top: 1px solid var(--border-subtle);
 }
 
@@ -275,10 +276,12 @@
     bottom: calc(100% + 15px);
     left: 0;
     width: 240px;
-    background: var(--bg-glass);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(10, 10, 15, 0.95);
+    /* Fixed transparency */
+    backdrop-filter: blur(32px);
+    /* Increased blur */
+    -webkit-backdrop-filter: blur(32px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: var(--r-xl);
     padding: 20px;
     z-index: 100;
@@ -286,7 +289,7 @@
     visibility: hidden;
     transform: translateY(10px) scale(0.95);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
 }
 
 .business-hours-popover::after {
@@ -448,7 +451,8 @@
 }
 
 .social-link.instagram:hover svg {
-    filter: drop-shadow(0 0 8px #ff0050);
+    filter: drop-shadow(0 0 15px #ff0050) drop-shadow(0 0 5px #ff0050);
+    /* Intensified glow */
 }
 
 .social-link.whatsapp:hover {
@@ -458,7 +462,8 @@
 }
 
 .social-link.whatsapp:hover svg {
-    filter: drop-shadow(0 0 12px #25d366);
+    filter: drop-shadow(0 0 18px #25d366) drop-shadow(0 0 6px #25d366);
+    /* Intensified glow */
 }
 
 .social-link.x-twitter:hover {
@@ -468,7 +473,8 @@
 }
 
 .social-link.x-twitter:hover svg {
-    filter: drop-shadow(0 0 8px #ffffff);
+    filter: drop-shadow(0 0 15px #ffffff) drop-shadow(0 0 5px #ffffff);
+    /* Intensified glow */
 }
 
 .social-link.facebook:hover {
@@ -478,7 +484,8 @@
 }
 
 .social-link.facebook:hover svg {
-    filter: drop-shadow(0 0 8px #1877f2);
+    filter: drop-shadow(0 0 15px #1877f2) drop-shadow(0 0 5px #1877f2);
+    /* Intensified glow */
 }
 
 .social-link.email:hover {
@@ -488,7 +495,8 @@
 }
 
 .social-link.email:hover svg {
-    filter: drop-shadow(0 0 8px #ea4335);
+    filter: drop-shadow(0 0 15px #ea4335) drop-shadow(0 0 5px #ea4335);
+    /* Intensified glow */
 }
 
 /* Mobile Persistent Glow (Optional but good for visual feedback) */
