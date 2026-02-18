@@ -446,57 +446,57 @@
 
 .social-link.instagram:hover {
     border-color: #ff0050;
-    box-shadow: 0 0 25px rgba(255, 0, 80, 0.6), inset 0 0 10px rgba(255, 0, 80, 0.4);
-    background: rgba(255, 0, 80, 0.15);
+    box-shadow: 0 0 30px rgba(255, 0, 80, 0.7), inset 0 0 15px rgba(255, 0, 80, 0.5);
+    background: rgba(255, 0, 80, 0.2);
 }
 
 .social-link.instagram:hover svg {
-    filter: drop-shadow(0 0 15px #ff0050) drop-shadow(0 0 5px #ff0050);
-    /* Intensified glow */
+    color: #ff0050;
+    filter: drop-shadow(0 0 10px #ff0050) drop-shadow(0 0 20px #ff0050);
 }
 
 .social-link.whatsapp:hover {
     border-color: #25d366;
-    box-shadow: 0 0 25px rgba(37, 211, 102, 0.6), inset 0 0 10px rgba(37, 211, 102, 0.4);
-    background: rgba(37, 211, 102, 0.15);
+    box-shadow: 0 0 30px rgba(37, 211, 102, 0.7), inset 0 0 15px rgba(37, 211, 102, 0.5);
+    background: rgba(37, 211, 102, 0.2);
 }
 
 .social-link.whatsapp:hover svg {
-    filter: drop-shadow(0 0 18px #25d366) drop-shadow(0 0 6px #25d366);
-    /* Intensified glow */
+    color: #25d366;
+    filter: drop-shadow(0 0 10px #25d366) drop-shadow(0 0 20px #25d366);
 }
 
 .social-link.x-twitter:hover {
     border-color: #ffffff;
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.4);
-    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.7), inset 0 0 15px rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .social-link.x-twitter:hover svg {
-    filter: drop-shadow(0 0 15px #ffffff) drop-shadow(0 0 5px #ffffff);
-    /* Intensified glow */
+    color: #ffffff;
+    filter: drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 20px #ffffff);
 }
 
 .social-link.facebook:hover {
     border-color: #1877f2;
-    box-shadow: 0 0 25px rgba(24, 119, 242, 0.6), inset 0 0 10px rgba(24, 119, 242, 0.4);
-    background: rgba(24, 119, 242, 0.15);
+    box-shadow: 0 0 30px rgba(24, 119, 242, 0.7), inset 0 0 15px rgba(24, 119, 242, 0.5);
+    background: rgba(24, 119, 242, 0.2);
 }
 
 .social-link.facebook:hover svg {
-    filter: drop-shadow(0 0 15px #1877f2) drop-shadow(0 0 5px #1877f2);
-    /* Intensified glow */
+    color: #1877f2;
+    filter: drop-shadow(0 0 10px #1877f2) drop-shadow(0 0 20px #1877f2);
 }
 
 .social-link.email:hover {
     border-color: #ea4335;
-    box-shadow: 0 0 25px rgba(234, 67, 53, 0.6), inset 0 0 10px rgba(234, 67, 53, 0.4);
-    background: rgba(234, 67, 53, 0.15);
+    box-shadow: 0 0 30px rgba(234, 67, 53, 0.7), inset 0 0 15px rgba(234, 67, 53, 0.5);
+    background: rgba(234, 67, 53, 0.2);
 }
 
 .social-link.email:hover svg {
-    filter: drop-shadow(0 0 15px #ea4335) drop-shadow(0 0 5px #ea4335);
-    /* Intensified glow */
+    color: #ea4335;
+    filter: drop-shadow(0 0 10px #ea4335) drop-shadow(0 0 20px #ea4335);
 }
 
 /* Mobile Persistent Glow (Optional but good for visual feedback) */

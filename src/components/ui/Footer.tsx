@@ -72,12 +72,15 @@ export function Footer() {
                             <div className={`business-hours-popover ${showHours ? 'show' : ''}`}>
                                 <div className="hours-header">Weekly Schedule</div>
                                 <div className="hours-list">
-                                    {schedule.map((item, idx) => (
-                                        <div key={idx} className={`hours-row ${day === idx || (idx === 6 && day === 0) ? 'current' : ''}`}>
-                                            <span className="day">{item.day}</span>
-                                            <span className="time">{item.hours}</span>
-                                        </div>
-                                    ))}
+                                    {schedule.map((item, idx) => {
+                                        const normalizedDay = (day + 6) % 7; // Convert 0-6 (Sun-Sat) to 0-6 (Mon-Sun)
+                                        return (
+                                            <div key={idx} className={`hours-row ${normalizedDay === idx ? 'current' : ''}`}>
+                                                <span className="day">{item.day}</span>
+                                                <span className="time">{item.hours}</span>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                                 <div className="hours-footer">Last Order: 7:30 PM</div>
                             </div>
