@@ -12,7 +12,7 @@ import './landing-effects.css';
 import './how-it-works.css';
 import './footer-premium.css';
 import clsx from 'clsx';
-import { MessageSquareText, BrainCircuit, Wrench, Rocket } from 'lucide-react';
+import { MessageSquareText, BrainCircuit, Wrench, Rocket, Sparkles } from 'lucide-react';
 
 export default function LandingPage() {
   // --- States for Interactions ---
