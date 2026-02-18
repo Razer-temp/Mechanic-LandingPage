@@ -72,3 +72,202 @@
     transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     will-change: transform;
 }
+
+/* 
+   4. SHOOTING STARS BACKGROUND
+   -----------------------------------------
+*/
+.shooting-stars-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.shooting-star {
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 2px;
+    height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1), 0 0 0 8px rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 255, 255, 1);
+    animation: shootingStarAnim var(--duration, 4s) linear infinite;
+    animation-delay: var(--delay, 0s);
+    opacity: 0;
+}
+
+.shooting-star::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 300px;
+    height: 1px;
+    background: linear-gradient(90deg, #fff, transparent);
+}
+
+@keyframes shootingStarAnim {
+    0% {
+        transform: rotate(215deg) translateX(0);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    70% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(215deg) translateX(-1500px);
+        opacity: 0;
+    }
+}
+
+/* Randomize star properties using child selectors */
+.shooting-star:nth-child(1) {
+    top: 0;
+    left: 80%;
+    --duration: 4s;
+    --delay: 0s;
+}
+
+.shooting-star:nth-child(2) {
+    top: 0;
+    left: 40%;
+    --duration: 5s;
+    --delay: 1s;
+}
+
+.shooting-star:nth-child(3) {
+    top: 80px;
+    left: 100%;
+    --duration: 3s;
+    --delay: 2s;
+}
+
+.shooting-star:nth-child(4) {
+    top: 0;
+    left: 120%;
+    --duration: 4s;
+    --delay: 3s;
+}
+
+.shooting-star:nth-child(5) {
+    top: -20px;
+    left: 60%;
+    --duration: 6s;
+    --delay: 4.5s;
+}
+
+.shooting-star:nth-child(6) {
+    top: 150px;
+    left: 110%;
+    --duration: 4s;
+    --delay: 6s;
+}
+
+.shooting-star:nth-child(7) {
+    top: 0;
+    left: 90%;
+    --duration: 3.5s;
+    --delay: 7s;
+}
+
+.shooting-star:nth-child(8) {
+    top: 100px;
+    left: 130%;
+    --duration: 5.5s;
+    --delay: 1.5s;
+}
+
+.shooting-star:nth-child(9) {
+    top: -50px;
+    left: 30%;
+    --duration: 4.5s;
+    --delay: 2.5s;
+}
+
+.shooting-star:nth-child(10) {
+    top: 200px;
+    left: 100%;
+    --duration: 3.8s;
+    --delay: 5.5s;
+}
+
+.shooting-star:nth-child(11) {
+    top: 0;
+    left: 70%;
+    --duration: 4.2s;
+    --delay: 0.5s;
+}
+
+.shooting-star:nth-child(12) {
+    top: 50px;
+    left: 50%;
+    --duration: 5.2s;
+    --delay: 8s;
+}
+
+.shooting-star:nth-child(13) {
+    top: -100px;
+    left: 140%;
+    --duration: 3.9s;
+    --delay: 6.5s;
+}
+
+.shooting-star:nth-child(14) {
+    top: 300px;
+    left: 110%;
+    --duration: 4.7s;
+    --delay: 4s;
+}
+
+.shooting-star:nth-child(15) {
+    top: 0;
+    left: 20%;
+    --duration: 5.8s;
+    --delay: 2s;
+}
+
+.shooting-star:nth-child(16) {
+    top: 100px;
+    left: 85%;
+    --duration: 3.1s;
+    --delay: 9s;
+}
+
+.shooting-star:nth-child(17) {
+    top: -30px;
+    left: 160%;
+    --duration: 4.4s;
+    --delay: 1s;
+}
+
+.shooting-star:nth-child(18) {
+    top: 500px;
+    left: 120%;
+    --duration: 5.1s;
+    --delay: 3.5s;
+}
+
+.shooting-star:nth-child(19) {
+    top: 0;
+    left: 10%;
+    --duration: 4.9s;
+    --delay: 7.5s;
+}
+
+.shooting-star:nth-child(20) {
+    top: -150px;
+    left: 170%;
+    --duration: 3.6s;
+    --delay: 5s;
+}
