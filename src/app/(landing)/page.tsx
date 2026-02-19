@@ -30,6 +30,7 @@ export default function LandingPage() {
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingData, setBookingData] = useState({ name: '', phone: '', bike: '', service: '', serviceLocation: 'workshop', address: '' });
   const [serviceLocation, setServiceLocation] = useState('workshop');
+  const [activeTray, setActiveTray] = useState<any>(null);
 
   const [chatOpen, setChatOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState<{ type: 'bot' | 'user'; html: React.ReactNode }[]>([
@@ -103,10 +104,14 @@ export default function LandingPage() {
     return () => observer.disconnect();
   }, []);
 
-  // --- 4. Parallax ---
+  // --- 4. Parallax & Depth ---
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
+
+      // Depth variable for grid/orbs
+      document.documentElement.style.setProperty('--scroll-depth', `${scrollY * 0.1}px`);
+
       const parallaxItems = [
         { selector: '.hero-orb--blue', speed: 0.03 },
         { selector: '.hero-orb--red', speed: -0.02 },
@@ -392,14 +397,19 @@ export default function LandingPage() {
 
   return (
     <div className="landing-page-wrapper">
+      <div className="lens-flare-container">
+        <div className="lens-flare"></div>
+      </div>
+      <ActivityTicker />
+      <ServiceTray activeService={activeTray} onClose={() => setActiveTray(null)} />
       <Navbar />
 
       {/* ===== HERO ===== */}
       <header className="hero" id="hero">
         <div className="hero-bg-effects">
-          <div className="hero-orb hero-orb--blue"></div>
-          <div className="hero-orb hero-orb--red"></div>
-          <div className="hero-grid-overlay"></div>
+          <div className="hero-orb hero-orb--blue depth-orb"></div>
+          <div className="hero-orb hero-orb--red depth-orb"></div>
+          <div className="hero-grid-overlay depth-grid"></div>
           <div className="hero-particles" ref={particlesRef}></div>
         </div>
         <div className="container hero-content">
@@ -574,18 +584,51 @@ export default function LandingPage() {
           </div>
           <div className="services-grid">
             {[
-              { icon: '🔩', title: 'Engine Repair', desc: 'Complete engine overhaul, timing chain, piston repair, and head gasket replacement.', price: 'From ₹1,500*' },
-              { icon: '⚙️', title: 'Full Servicing', desc: 'Oil change, filter replacement, chain adjustment, spark plug — complete care package.', price: 'From ₹799*' },
-              { icon: '🛑', title: 'Brake Fix', desc: 'Disc & drum brake pads, brake fluid change, ABS diagnostics, and caliper servicing.', price: 'From ₹500*' },
-              { icon: '🛢️', title: 'Oil Change', desc: 'Premium synthetic & semi-synthetic engine oil with filter replacement.', price: 'From ₹350*' },
-              { icon: '🚨', title: 'Emergency Repair', desc: 'Roadside assistance, flat tire, towing service, and emergency breakdown support.', price: 'From ₹299*' },
-              { icon: '⚡', title: 'Electrical Work', desc: 'Wiring repair, headlight upgrade, battery replacement, ECU diagnostics.', price: 'From ₹400*' },
+              {
+                icon: '🔩',
+                title: 'Engine Repair',
+                desc: 'Complete engine overhaul, timing chain, piston repair, and head gasket replacement.',
+                price: 'From ₹1,500*',
+                details: {
+                  process: [
+                    { title: 'AI Compression Test', desc: 'Analyzing engine health via sensor diagnostics.' },
+                    { title: 'De-carbonization', desc: 'Removal of carbon deposits for smooth performance.' },
+                    { title: 'Precision Tuning', desc: 'Calibrating timing and fuel-air mixture.' }
+                  ],
+                  why: 'Crucial for maintaining power and fuel efficiency in older vehicles.'
+                }
+              },
+              {
+                icon: '⚙️',
+                title: 'Full Servicing',
+                desc: 'Oil change, filter replacement, chain adjustment, spark plug — complete care package.',
+                price: 'From ₹799*',
+                details: {
+                  process: [
+                    { title: '64-Point Inspection', desc: 'Comprehensive bumper-to-bumper checkup.' },
+                    { title: 'Fluid Exchange', desc: 'Brake, coolant, and engine oil refresh.' },
+                    { title: 'Road Testing', desc: 'Real-world validation by certified head mechanics.' }
+                  ],
+                  why: 'Recommended every 3000km to ensure safe and reliable riding.'
+                }
+              },
+              { icon: '🛑', title: 'Brake Fix', desc: 'Disc & drum brake pads, brake fluid change, ABS diagnostics, and caliper servicing.', price: 'From ₹500*', details: { process: [{ title: 'Pad Replacement', desc: 'High-friction ceramic or semi-metallic pads.' }], why: 'Your safety is our priority. No compromises on stopping power.' } },
+              { icon: '🛢️', title: 'Oil Change', desc: 'Premium synthetic & semi-synthetic engine oil with filter replacement.', price: 'From ₹350*', details: { process: [{ title: 'Drain and Flush', desc: 'Removing all sludge and metal micro-particles.' }], why: 'The lifeblood of your engine needs regular renewal.' } },
+              { icon: '🚨', title: 'Emergency Repair', desc: 'Roadside assistance, flat tire, towing service, and emergency breakdown support.', price: 'From ₹299*', details: { process: [{ title: 'Rapid Dispatch', desc: 'Mechanic reaches you within 30-45 mins.' }], why: 'Don\'t get stranded. We are always one call away.' } },
+              { icon: '⚡', title: 'Electrical Work', desc: 'Wiring repair, headlight upgrade, battery replacement, ECU diagnostics.', price: 'From ₹400*', details: { process: [{ title: 'Circuit Analysis', desc: 'Finding short circuits using digital multimeters.' }], why: 'Modern bikes are 40% electronics. Handle with precision.' } },
             ].map((s, i) => (
-              <div key={i} className="service-card glass-card animate-on-scroll hover-glow tilt-card">
+              <div
+                key={i}
+                className={clsx("service-card glass-card animate-on-scroll revealer hover-glow tilt-card cursor-pointer", `stagger-${i + 1}`)}
+                onClick={() => setActiveTray(s)}
+              >
                 <div className="service-icon">{s.icon}</div>
                 <h3>{s.title}</h3>
                 <p>{s.desc}</p>
-                <span className="service-price">{s.price}</span>
+                <div className="flex items-center justify-between mt-4">
+                  <span className="service-price">{s.price}</span>
+                  <span className="text-[10px] font-black uppercase text-cyan-400 tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">View Details →</span>
+                </div>
               </div>
             ))}
           </div>
@@ -611,7 +654,7 @@ export default function LandingPage() {
               { icon: '🛡️', title: 'Warranty Assured', desc: '6-month warranty on all repairs. Genuine parts with quality guarantee.' },
               { icon: '📍', title: 'Pickup & Drop', desc: 'Free pick-up and delivery within 10km radius. Hassle-free doorstep service.' },
             ].map((w, i) => (
-              <div key={i} className="why-card animate-on-scroll hover-glow tilt-card">
+              <div key={i} className={clsx("why-card animate-on-scroll revealer hover-glow tilt-card", `stagger-${i + 1}`)}>
                 <div className="why-icon-wrap"><span>{w.icon}</span></div>
                 <h3>{w.title}</h3>
                 <p>{w.desc}</p>
@@ -1057,3 +1100,82 @@ export default function LandingPage() {
     </div>
   );
 }
+
+const ActivityTicker = () => {
+  const [active, setActive] = useState(false);
+  const [currentActivity, setCurrentActivity] = useState({ name: 'Rahul', bike: 'Honda Activa', time: '2 mins ago' });
+
+  const activities = [
+    { name: 'Amit', bike: 'Royal Enfield Classic', time: '5 mins ago' },
+    { name: 'Sneha', bike: 'TVS Jupiter', time: '12 mins ago' },
+    { name: 'Rajesh', bike: 'KTM Duke 200', time: 'Just now' },
+    { name: 'Priya', bike: 'Yamaha R15', time: '18 mins ago' },
+    { name: 'Vikram', bike: 'Ather 450X', time: '25 mins ago' }
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => { randomActivity(); }, 15000);
+    const randomActivity = () => {
+      const act = activities[Math.floor(Math.random() * activities.length)];
+      setCurrentActivity(act);
+      setActive(true);
+      setTimeout(() => setActive(false), 5000);
+    };
+    setTimeout(randomActivity, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className={clsx("activity-ticker", active && "active")}>
+      <div className="ticker-icon"><Wrench size={16} /></div>
+      <div className="ticker-content">
+        <h6>Just Booked</h6>
+        <p>{currentActivity.name} ({currentActivity.bike}) • {currentActivity.time}</p>
+      </div>
+    </div>
+  );
+};
+
+const ServiceTray = ({ activeService, onClose }: { activeService: any, onClose: () => void }) => {
+  return (
+    <div className={clsx("service-tray-overlay", activeService && "active")} onClick={onClose}>
+      <div className="service-tray" onClick={e => e.stopPropagation()}>
+        <button className="tray-close" onClick={onClose}><Rocket size={20} /></button>
+
+        {activeService && (
+          <>
+            <div className="tray-header">
+              <span className="tray-tag">Our Process</span>
+              <h2 className="tray-title">{activeService.title}</h2>
+            </div>
+
+            <div className="tray-body">
+              <div className="tray-section">
+                <h4>What&apos;s Included</h4>
+                <div className="space-y-4">
+                  {activeService.details.process.map((step: any, i: number) => (
+                    <div key={i} className="process-step">
+                      <strong>{step.title}</strong>
+                      <span>{step.desc}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="tray-section">
+                <h4>Why it matters</h4>
+                <p>{activeService.details.why}</p>
+              </div>
+            </div>
+
+            <div className="pt-8 border-t border-white/5">
+              <a href="#booking" onClick={onClose} className="btn btn-primary btn-full btn-glow">
+                Book This Service — {activeService.price}
+              </a>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
