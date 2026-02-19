@@ -3,29 +3,98 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Mail, Instagram, Twitter, Facebook, ArrowUpRight, Globe, Clock, ShieldCheck, Star, MessageSquare, ChevronDown } from 'lucide-react';
+import { createClient } from '@/lib/supabase/client';
 
 export function Footer() {
+    const supabase = createClient();
     const [currentTime, setCurrentTime] = useState(new Date());
     const [showHours, setShowHours] = useState(false);
+    const [businessInfo, setBusinessInfo] = useState({
+        working_hours: '9:00 AM - 8:00 PM',
+        working_days: 'Monday - Sunday'
+    });
 
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date()), 60000);
+        fetchBusinessInfo();
         return () => clearInterval(timer);
     }, []);
 
-    // Simple business hours check (9 AM - 8 PM)
-    const hours = currentTime.getHours();
-    const day = currentTime.getDay(); // 0 = Sunday
-    const isOnline = hours >= 9 && hours < 20;
+    const fetchBusinessInfo = async () => {
+        try {
+            const { data, error } = await supabase
+                .from('admin_settings')
+                .select('value')
+                .eq('key', 'business_info')
+                .single();
+
+            if (data?.value) {
+                setBusinessInfo(data.value as { working_hours: string; working_days: string; });
+            }
+        } catch (err) {
+            console.error('Error fetching workshop hours:', err);
+        }
+    };
+
+    // Helper to parse "9:00 AM" into minutes from midnight
+    const parseTime = (timeStr: string) => {
+        if (!timeStr) return 0;
+        const [time, modifier] = timeStr.trim().split(' ');
+        let [hours, minutes] = (time || "").split(':').map(Number);
+        if (modifier === 'PM' && hours !== 12) hours += 12;
+        if (modifier === 'AM' && hours === 12) hours = 0;
+        return hours * 60 + (minutes || 0);
+    };
+
+    // Check if workshop is online
+    const getStatus = () => {
+        const now = currentTime;
+        const currentMinutes = now.getHours() * 60 + now.getMinutes();
+        const day = now.getDay(); // 0 = Sunday
+
+        const [startStr, endStr] = businessInfo.working_hours.split(' - ');
+        const startMinutes = parseTime(startStr);
+        const endMinutes = parseTime(endStr);
+
+        // Simple day check (handling ranges like "Monday - Saturday")
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const workingDaysRange = businessInfo.working_days.split(' - ');
+
+        let isOpenToday = true;
+        if (workingDaysRange.length === 2) {
+            const startDayIdx = days.indexOf(workingDaysRange[0]);
+            const endDayIdx = days.indexOf(workingDaysRange[1]);
+
+            if (startDayIdx <= endDayIdx) {
+                isOpenToday = day >= startDayIdx && day <= endDayIdx;
+            } else {
+                // E.g., "Saturday - Thursday" (off Friday)
+                isOpenToday = day >= startDayIdx || day <= endDayIdx;
+            }
+        }
+
+        const isOnline = isOpenToday && currentMinutes >= startMinutes && currentMinutes < endMinutes;
+
+        // Calculate Last Order (30 mins before closing)
+        const lastOrderMinutes = endMinutes - 30;
+        const lastOrderHours = Math.floor(lastOrderMinutes / 60);
+        const lastOrderMins = lastOrderMinutes % 60;
+        const lastOrderAmPm = lastOrderHours >= 12 ? 'PM' : 'AM';
+        const lastOrderDisplay = `${lastOrderHours % 12 || 12}:${lastOrderMins.toString().padStart(2, '0')} ${lastOrderAmPm}`;
+
+        return { isOnline, lastOrderDisplay, isOpenToday };
+    };
+
+    const { isOnline, lastOrderDisplay, isOpenToday } = getStatus();
 
     const schedule = [
-        { day: 'Monday', hours: '9:00 AM - 8:00 PM' },
-        { day: 'Tuesday', hours: '9:00 AM - 8:00 PM' },
-        { day: 'Wednesday', hours: '9:00 AM - 8:00 PM' },
-        { day: 'Thursday', hours: '9:00 AM - 8:00 PM' },
-        { day: 'Friday', hours: '9:00 AM - 8:00 PM' },
-        { day: 'Saturday', hours: '9:00 AM - 8:00 PM' },
-        { day: 'Sunday', hours: '9:00 AM - 8:00 PM' },
+        { day: 'Monday', hours: businessInfo.working_hours },
+        { day: 'Tuesday', hours: businessInfo.working_hours },
+        { day: 'Wednesday', hours: businessInfo.working_hours },
+        { day: 'Thursday', hours: businessInfo.working_hours },
+        { day: 'Friday', hours: businessInfo.working_hours },
+        { day: 'Saturday', hours: businessInfo.working_hours },
+        { day: 'Sunday', hours: businessInfo.working_days.includes('Sunday') ? businessInfo.working_hours : 'Closed' },
     ];
 
     return (
@@ -73,7 +142,8 @@ export function Footer() {
                                 <div className="hours-header">Weekly Schedule</div>
                                 <div className="hours-list">
                                     {schedule.map((item, idx) => {
-                                        const normalizedDay = (day + 6) % 7; // Convert 0-6 (Sun-Sat) to 0-6 (Mon-Sun)
+                                        const dayNum = currentTime.getDay();
+                                        const normalizedDay = (dayNum + 6) % 7;
                                         return (
                                             <div key={idx} className={`hours-row ${normalizedDay === idx ? 'current' : ''}`}>
                                                 <span className="day">{item.day}</span>
@@ -82,7 +152,7 @@ export function Footer() {
                                         );
                                     })}
                                 </div>
-                                <div className="hours-footer">Last Order: 7:30 PM</div>
+                                <div className="hours-footer">Last Order: {lastOrderDisplay}</div>
                             </div>
                         </div>
                     </div>
