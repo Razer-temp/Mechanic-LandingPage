@@ -43,6 +43,23 @@ import clsx from 'clsx';
 
 type SettingsSection = 'business' | 'security' | 'aesthetics' | 'comms' | 'mechanics' | 'data';
 
+type DaySchedule = {
+    isOpen: boolean;
+    open: string;
+    close: string;
+};
+
+type WeeklySchedule = {
+    [key: string]: DaySchedule;
+};
+
+const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+const DEFAULT_SCHEDULE: WeeklySchedule = DAYS.reduce((acc, day) => ({
+    ...acc,
+    [day]: { isOpen: day !== 'Sunday', open: '09:00', close: '20:00' }
+}), {});
+
 export default function SettingsPanel() {
     const supabase = createClient();
     const [activeSection, setActiveSection] = useState<SettingsSection>('business');
@@ -68,6 +85,8 @@ export default function SettingsPanel() {
         working_days: 'Monday - Saturday',
         upi_id: ''
     });
+
+    const [schedule, setSchedule] = useState<WeeklySchedule>(DEFAULT_SCHEDULE);
 
     // WhatsApp Templates
     const [waTemplates, setWaTemplates] = useState({
@@ -109,6 +128,9 @@ export default function SettingsPanel() {
                 }
                 if (setting.key === 'business_info') {
                     setBusinessInfo(prev => ({ ...prev, ...setting.value }));
+                    if (setting.value.schedule) {
+                        setSchedule(setting.value.schedule);
+                    }
                 }
                 if (setting.key === 'mechanics_list') {
                     setMechanics(Array.isArray(setting.value) ? setting.value : []);
@@ -175,7 +197,7 @@ export default function SettingsPanel() {
     };
 
     const handleSaveBusinessInfo = async () => {
-        await handleSaveSetting('business_info', businessInfo, 'Business info saved');
+        await handleSaveSetting('business_info', { ...businessInfo, schedule }, 'Business info saved');
     };
 
     const handleSaveTemplates = async () => {
@@ -302,9 +324,13 @@ export default function SettingsPanel() {
                                 <InputField label="UPI ID (Optional)" icon={IndianRupee} value={businessInfo.upi_id} onChange={(e: any) => setBusinessInfo(p => ({ ...p, upi_id: e.target.value }))} placeholder="yourname@upi" />
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <InputField label="Working Hours" icon={Clock} value={businessInfo.working_hours} onChange={(e: any) => setBusinessInfo(p => ({ ...p, working_hours: e.target.value }))} placeholder="9:00 AM - 7:00 PM" />
-                                <InputField label="Working Days" icon={Clock} value={businessInfo.working_days} onChange={(e: any) => setBusinessInfo(p => ({ ...p, working_days: e.target.value }))} placeholder="Monday - Saturday" />
+                            <div className="pt-4">
+                                <ScheduleEditor schedule={schedule} onChange={setSchedule} />
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-30 pointer-events-none">
+                                <InputField label="Legacy Working Hours (Auto)" icon={Clock} value={businessInfo.working_hours} onChange={() => { }} placeholder="9:00 AM - 7:00 PM" />
+                                <InputField label="Legacy Working Days (Auto)" icon={Clock} value={businessInfo.working_days} onChange={() => { }} placeholder="Monday - Saturday" />
                             </div>
 
                             <button
@@ -703,3 +729,110 @@ const InputField = ({ label, value, onChange, placeholder, type = 'text', icon: 
         />
     </div>
 );
+
+const ScheduleEditor = ({ schedule, onChange }: { schedule: WeeklySchedule, onChange: (s: WeeklySchedule) => void }) => {
+    const handleToggle = (day: string) => {
+        onChange({
+            ...schedule,
+            [day]: { ...schedule[day], isOpen: !schedule[day].isOpen }
+        });
+    };
+
+    const handleTimeChange = (day: string, type: 'open' | 'close', value: string) => {
+        onChange({
+            ...schedule,
+            [day]: { ...schedule[day], [type]: value }
+        });
+    };
+
+    const applyToAll = (day: string) => {
+        const source = schedule[day];
+        const newSchedule = { ...schedule };
+        DAYS.forEach(d => {
+            newSchedule[d] = { ...source };
+        });
+        onChange(newSchedule);
+    };
+
+    return (
+        <div className="space-y-6">
+            <div className="flex items-center justify-between gap-4 mb-4">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-[#fbbf241a] rounded-xl flex items-center justify-center text-[#fbbf24] border border-[#fbbf2433]">
+                        <Clock size={20} />
+                    </div>
+                    <div>
+                        <h5 className="text-sm font-black text-white uppercase tracking-widest">Weekly Schedule</h5>
+                        <p className="text-[10px] text-[#8888a0] font-bold">Set specific hours for each day</p>
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-[#050508] border border-white/5 rounded-2xl overflow-hidden">
+                <table className="w-full text-left">
+                    <thead>
+                        <tr className="border-b border-white/5 bg-white/[0.02]">
+                            <th className="px-6 py-4 text-[10px] font-black text-[#8888a0] uppercase tracking-widest">Day</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-[#8888a0] uppercase tracking-widest text-center">Status</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-[#8888a0] uppercase tracking-widest">Opening</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-[#8888a0] uppercase tracking-widest">Closing</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-[#8888a0] uppercase tracking-widest text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                        {DAYS.map(day => (
+                            <tr key={day} className="hover:bg-white/[0.01] transition-colors">
+                                <td className="px-6 py-4">
+                                    <span className="text-xs font-bold text-white">{day}</span>
+                                </td>
+                                <td className="px-6 py-4">
+                                    <div className="flex justify-center">
+                                        <button
+                                            onClick={() => handleToggle(day)}
+                                            className={clsx(
+                                                "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter transition-all border",
+                                                schedule[day].isOpen
+                                                    ? "bg-[#34d3991a] text-[#34d399] border-[#34d39933]"
+                                                    : "bg-[#ff2d551a] text-[#ff2d55] border-[#ff2d5533]"
+                                            )}
+                                        >
+                                            {schedule[day].isOpen ? 'Open' : 'Closed'}
+                                        </button>
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                    <input
+                                        type="time"
+                                        disabled={!schedule[day].isOpen}
+                                        value={schedule[day].open}
+                                        onChange={(e) => handleTimeChange(day, 'open', e.target.value)}
+                                        className="bg-transparent text-xs font-bold text-white outline-none focus:text-[#fbbf24] disabled:opacity-20 transition-colors"
+                                    />
+                                </td>
+                                <td className="px-6 py-4">
+                                    <input
+                                        type="time"
+                                        disabled={!schedule[day].isOpen}
+                                        value={schedule[day].close}
+                                        onChange={(e) => handleTimeChange(day, 'close', e.target.value)}
+                                        className="bg-transparent text-xs font-bold text-white outline-none focus:text-[#fbbf24] disabled:opacity-20 transition-colors"
+                                    />
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                    <button
+                                        onClick={() => applyToAll(day)}
+                                        className="text-[9px] font-black text-[#55556a] hover:text-[#fbbf24] uppercase tracking-widest transition-colors flex items-center gap-1 ml-auto"
+                                        title="Apply these hours to all days"
+                                    >
+                                        <RefreshCw size={10} />
+                                        Sync All
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+};

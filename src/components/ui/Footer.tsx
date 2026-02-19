@@ -11,7 +11,8 @@ export function Footer() {
     const [showHours, setShowHours] = useState(false);
     const [businessInfo, setBusinessInfo] = useState({
         working_hours: '9:00 AM - 8:00 PM',
-        working_days: 'Monday - Sunday'
+        working_days: 'Monday - Sunday',
+        schedule: null as any
     });
 
     useEffect(() => {
@@ -29,16 +30,24 @@ export function Footer() {
                 .single();
 
             if (data?.value) {
-                setBusinessInfo(data.value as { working_hours: string; working_days: string; });
+                setBusinessInfo(data.value as any);
             }
         } catch (err) {
             console.error('Error fetching workshop hours:', err);
         }
     };
 
-    // Helper to parse "9:00 AM" into minutes from midnight
+    // Helper to parse "09:00" or "9:00 AM" into minutes from midnight
     const parseTime = (timeStr: string) => {
         if (!timeStr) return 0;
+
+        // Handle 24h format "09:00"
+        if (timeStr.includes(':') && !timeStr.toLowerCase().includes('am') && !timeStr.toLowerCase().includes('pm')) {
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return hours * 60 + (minutes || 0);
+        }
+
+        // Handle 12h format "9:00 AM"
         const [time, modifier] = timeStr.trim().split(' ');
         let [hours, minutes] = (time || "").split(':').map(Number);
         if (modifier === 'PM' && hours !== 12) hours += 12;
@@ -53,23 +62,31 @@ export function Footer() {
         const day = now.getDay(); // 0 = Sunday
 
         const [startStr, endStr] = businessInfo.working_hours.split(' - ');
-        const startMinutes = parseTime(startStr);
-        const endMinutes = parseTime(endStr);
-
-        // Simple day check (handling ranges like "Monday - Saturday")
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const workingDaysRange = businessInfo.working_days.split(' - ');
 
         let isOpenToday = true;
-        if (workingDaysRange.length === 2) {
-            const startDayIdx = days.indexOf(workingDaysRange[0]);
-            const endDayIdx = days.indexOf(workingDaysRange[1]);
+        let startMinutes = parseTime(startStr);
+        let endMinutes = parseTime(endStr);
 
-            if (startDayIdx <= endDayIdx) {
-                isOpenToday = day >= startDayIdx && day <= endDayIdx;
-            } else {
-                // E.g., "Saturday - Thursday" (off Friday)
-                isOpenToday = day >= startDayIdx || day <= endDayIdx;
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const currentDayName = days[day];
+
+        // Use structured schedule if available
+        if (businessInfo.schedule && businessInfo.schedule[currentDayName]) {
+            const daySched = businessInfo.schedule[currentDayName];
+            isOpenToday = daySched.isOpen;
+            startMinutes = parseTime(daySched.open);
+            endMinutes = parseTime(daySched.close);
+        } else {
+            // Fallback to legacy string parsing
+            const workingDaysRange = businessInfo.working_days.split(' - ');
+            if (workingDaysRange.length === 2) {
+                const startDayIdx = days.indexOf(workingDaysRange[0]);
+                const endDayIdx = days.indexOf(workingDaysRange[1]);
+                if (startDayIdx <= endDayIdx) {
+                    isOpenToday = day >= startDayIdx && day <= endDayIdx;
+                } else {
+                    isOpenToday = day >= startDayIdx || day <= endDayIdx;
+                }
             }
         }
 
@@ -87,15 +104,27 @@ export function Footer() {
 
     const { isOnline, lastOrderDisplay, isOpenToday } = getStatus();
 
-    const schedule = [
-        { day: 'Monday', hours: businessInfo.working_hours },
-        { day: 'Tuesday', hours: businessInfo.working_hours },
-        { day: 'Wednesday', hours: businessInfo.working_hours },
-        { day: 'Thursday', hours: businessInfo.working_hours },
-        { day: 'Friday', hours: businessInfo.working_hours },
-        { day: 'Saturday', hours: businessInfo.working_hours },
-        { day: 'Sunday', hours: businessInfo.working_days.includes('Sunday') ? businessInfo.working_hours : 'Closed' },
-    ];
+    const daysOrdered = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const schedule = daysOrdered.map(day => {
+        if (businessInfo.schedule && businessInfo.schedule[day]) {
+            const s = businessInfo.schedule[day];
+            if (!s.isOpen) return { day, hours: 'Closed' };
+
+            // Format 24h to 12h for display
+            const formatTime = (t: string) => {
+                const [h, m] = t.split(':').map(Number);
+                const ampm = h >= 12 ? 'PM' : 'AM';
+                return `${h % 12 || 12}:${m.toString().padStart(2, '0')} ${ampm}`;
+            };
+            return { day, hours: `${formatTime(s.open)} - ${formatTime(s.close)}` };
+        }
+
+        // Legacy fallback
+        return {
+            day,
+            hours: day === 'Sunday' && !businessInfo.working_days.includes('Sunday') ? 'Closed' : businessInfo.working_hours
+        };
+    });
 
     return (
         <footer className="footer-premium">
