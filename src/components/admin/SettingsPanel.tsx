@@ -234,39 +234,6 @@ export default function SettingsPanel() {
         }
     };
 
-    const themes = [
-        { name: 'Cyan', color: '#00c8ff' },
-        { name: 'Emerald', color: '#34d399' },
-        { name: 'Violet', color: '#a78bfa' },
-        { name: 'Amber', color: '#fbbf24' },
-        { name: 'Rose', color: '#ff2d55' },
-        { name: 'Frost', color: '#ffffff' }
-    ];
-
-    const sections = [
-        { key: 'business' as const, label: 'Business', icon: Building2, color: '#34d399' },
-        { key: 'security' as const, label: 'Security', icon: Shield, color: '#00c8ff' },
-        { key: 'aesthetics' as const, label: 'Theme', icon: Palette, color: '#a78bfa' },
-        { key: 'comms' as const, label: 'WhatsApp', icon: MessageSquare, color: '#25d366' },
-        { key: 'mechanics' as const, label: 'Team', icon: Wrench, color: '#fbbf24' },
-        { key: 'data' as const, label: 'Data', icon: Database, color: '#ff2d55' },
-    ];
-
-    const InputField = ({ label, value, onChange, placeholder, type = 'text', icon: Icon }: any) => (
-        <div className="space-y-2">
-            <label className="text-[10px] font-black text-[#8888a0] uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
-                {Icon && <Icon size={10} className="text-[#55556a]" />}
-                {label}
-            </label>
-            <input
-                type={type}
-                value={value}
-                onChange={onChange}
-                placeholder={placeholder}
-                className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-4 px-5 text-sm text-white font-bold outline-none focus:border-[var(--admin-accent)] focus:border-opacity-40 transition-all placeholder:text-[#55556a]"
-            />
-        </div>
-    );
 
     return (
         <div className="max-w-6xl mx-auto space-y-10 animate-admin-in">
@@ -702,3 +669,37 @@ export default function SettingsPanel() {
         </div>
     );
 }
+
+const themes = [
+    { name: 'Cyan', color: '#00c8ff' },
+    { name: 'Emerald', color: '#34d399' },
+    { name: 'Violet', color: '#a78bfa' },
+    { name: 'Amber', color: '#fbbf24' },
+    { name: 'Rose', color: '#ff2d55' },
+    { name: 'Frost', color: '#ffffff' }
+];
+
+const sections = [
+    { key: 'business' as const, label: 'Business', icon: Building2, color: '#34d399' },
+    { key: 'security' as const, label: 'Security', icon: Shield, color: '#00c8ff' },
+    { key: 'aesthetics' as const, label: 'Theme', icon: Palette, color: '#a78bfa' },
+    { key: 'comms' as const, label: 'WhatsApp', icon: MessageSquare, color: '#25d366' },
+    { key: 'mechanics' as const, label: 'Team', icon: Wrench, color: '#fbbf24' },
+    { key: 'data' as const, label: 'Data', icon: Database, color: '#ff2d55' },
+];
+
+const InputField = ({ label, value, onChange, placeholder, type = 'text', icon: Icon }: any) => (
+    <div className="space-y-2">
+        <label className="text-[10px] font-black text-[#8888a0] uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+            {Icon && <Icon size={10} className="text-[#55556a]" />}
+            {label}
+        </label>
+        <input
+            type={type}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-4 px-5 text-sm text-white font-bold outline-none focus:border-[var(--admin-accent)] focus:border-opacity-40 transition-all placeholder:text-[#55556a]"
+        />
+    </div>
+);
