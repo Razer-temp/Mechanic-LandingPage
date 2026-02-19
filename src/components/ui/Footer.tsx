@@ -268,8 +268,8 @@ export function Footer() {
                     </div>
 
                     <div className="flex gap-6 text-[11px] font-medium text-white/30">
-                        <a href="#" className="hover:text-cyan-400 transition-colors">Privacy Policy</a>
-                        <a href="#" className="hover:text-cyan-400 transition-colors">Terms of Service</a>
+                        <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
+                        <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
                         <div className="flex items-center gap-1"><Globe className="size-3" /> India (EN)</div>
                     </div>
                 </div>
