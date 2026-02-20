@@ -37,10 +37,15 @@ export async function middleware(request: NextRequest) {
     // Protect admin routes
     if (request.nextUrl.pathname.startsWith('/admin')) {
         // Allow login and reset-password pages
-        if (request.nextUrl.pathname === '/admin/login' || request.nextUrl.pathname === '/admin/reset-password') {
+        if (request.nextUrl.pathname === '/admin/login') {
             if (user) {
                 return NextResponse.redirect(new URL('/admin/dashboard', request.url));
             }
+            return response;
+        }
+
+        if (request.nextUrl.pathname === '/admin/reset-password') {
+            // Must allow the page even if user is logged in (recovery link logs you in)
             return response;
         }
 
