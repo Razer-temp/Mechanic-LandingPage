@@ -54,6 +54,7 @@ export default function AdminDashboard() {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
     const [bookingFilter, setBookingFilter] = useState<'all' | 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled'>('all');
     const [accentColor, setAccentColor] = useState('#00c8ff');
+    const [userEmail, setUserEmail] = useState<string | null>(null);
 
 
 
@@ -132,6 +133,7 @@ export default function AdminDashboard() {
             if (!user || user.app_metadata?.role !== 'admin') {
                 router.push('/admin/login?error=unauthorized');
             } else {
+                setUserEmail(user.email ?? null);
                 fetchData();
             }
         };
@@ -240,9 +242,14 @@ export default function AdminDashboard() {
                 <div className="w-10 h-10 bg-gradient-to-tr from-[#00c8ff] to-[#a78bfa] rounded-xl flex items-center justify-center shadow-lg shadow-[#00c8ff22]">
                     <ShieldCheck size={20} className="text-black" />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col overflow-hidden">
                     <span className="text-lg font-black text-white leading-none tracking-tight uppercase">SmartBike</span>
                     <span className="text-[10px] font-black text-[#8888a0] uppercase tracking-[0.3em] mt-1">Terminal DX</span>
+                    {userEmail && (
+                        <span className="text-[9px] font-bold text-[#55556a] lowercase truncate mt-2 border-t border-white/5 pt-1">
+                            {userEmail}
+                        </span>
+                    )}
                 </div>
             </div>
 
@@ -364,7 +371,7 @@ export default function AdminDashboard() {
                     className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-[#ff2d55] hover:bg-[#ff2d550a] transition-all group"
                 >
                     <LogOut size={20} className="group-hover:-translate-x-1 transition-transform" />
-                    <span>Terminate</span>
+                    <span>Logout</span>
                 </button>
             </div>
         </>

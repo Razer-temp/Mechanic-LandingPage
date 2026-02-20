@@ -63,11 +63,12 @@ const DEFAULT_SCHEDULE: WeeklySchedule = DAYS.reduce((acc, day) => ({
 export default function SettingsPanel() {
     const supabase = createClient();
     const [activeSection, setActiveSection] = useState<SettingsSection>('business');
-    const [passcode, setPasscode] = useState('');
-    const [showPasscode, setShowPasscode] = useState(false);
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [saving, setSaving] = useState(false);
     const [loading, setLoading] = useState(true);
     const [saveSuccess, setSaveSuccess] = useState('');
+    const [userEmail, setUserEmail] = useState<string | null>(null);
 
     // Theme State
     const [activeTheme, setActiveTheme] = useState('#00c8ff');
@@ -104,6 +105,11 @@ export default function SettingsPanel() {
     const [dataStats, setDataStats] = useState({ bookings: 0, customers: 0, expenses: 0, serviceHistory: 0 });
 
     useEffect(() => {
+        const fetchUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            setUserEmail(user?.email ?? null);
+        };
+        fetchUser();
         fetchSettings();
         fetchDataStats();
     }, []);
@@ -115,9 +121,6 @@ export default function SettingsPanel() {
             if (error) throw error;
 
             data?.forEach((setting: any) => {
-                if (setting.key === 'passcode') {
-                    localStorage.setItem('admin_passcode', setting.value);
-                }
                 if (setting.key === 'theme_color') {
                     setActiveTheme(setting.value);
                     localStorage.setItem('admin_theme_color', setting.value);
@@ -179,14 +182,28 @@ export default function SettingsPanel() {
         setSaving(false);
     };
 
-    const handleUpdatePasscode = async () => {
-        if (passcode.length !== 4) {
-            alert('Passcode must be exactly 4 digits.');
+    const handleUpdatePassword = async () => {
+        if (!password || password !== confirmPassword) {
+            alert('Passwords do not match or are empty.');
             return;
         }
-        await handleSaveSetting('passcode', passcode, 'Passcode updated successfully');
-        localStorage.setItem('admin_passcode', passcode);
-        setPasscode('');
+        if (password.length < 6) {
+            alert('Password must be at least 6 characters.');
+            return;
+        }
+
+        setSaving(true);
+        try {
+            const { error } = await supabase.auth.updateUser({ password });
+            if (error) throw error;
+            showSaveSuccess('Password updated successfully');
+            setPassword('');
+            setConfirmPassword('');
+        } catch (err: any) {
+            console.error('Error updating password:', err);
+            alert(`Failed to update password: ${err.message}`);
+        }
+        setSaving(false);
     };
 
     const handleUpdateTheme = async (color: string) => {
@@ -354,38 +371,50 @@ export default function SettingsPanel() {
                             </div>
                             <div className="flex items-center gap-4 mb-8">
                                 <div className="w-12 h-12 bg-[#00c8ff1a] rounded-2xl flex items-center justify-center text-[#00c8ff] border border-[#00c8ff33]">
-                                    <Fingerprint size={22} />
+                                    <Lock size={22} />
                                 </div>
                                 <div>
-                                    <h4 className="text-lg font-black text-white uppercase tracking-wider">Admin Passcode</h4>
-                                    <p className="text-[10px] text-[#8888a0] font-bold">4-digit PIN to access this dashboard</p>
+                                    <h4 className="text-lg font-black text-white uppercase tracking-wider">Account Security</h4>
+                                    <p className="text-[10px] text-[#8888a0] font-bold">Update your administrative access credentials</p>
                                 </div>
                             </div>
                             <div className="space-y-6">
-                                <div className="relative">
-                                    <input
-                                        type={showPasscode ? "text" : "password"}
-                                        maxLength={4}
-                                        className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-5 px-6 text-2xl font-mono tracking-[0.5em] text-white focus:border-[#00c8ff] focus:border-opacity-50 focus:ring-4 focus:ring-[#00c8ff0a] outline-none transition-all placeholder:text-[#55556a]"
-                                        placeholder="••••"
-                                        value={passcode}
-                                        onChange={(e) => setPasscode(e.target.value.replace(/\D/g, ''))}
-                                    />
-                                    <button
-                                        onClick={() => setShowPasscode(!showPasscode)}
-                                        className="absolute right-5 top-1/2 -translate-y-1/2 text-[#8888a0] hover:text-white transition-colors"
-                                    >
-                                        {showPasscode ? <EyeOff size={20} /> : <Eye size={20} />}
-                                    </button>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-[#8888a0] uppercase tracking-widest ml-1">Current Account</label>
+                                    <div className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-4 px-6 text-sm font-bold text-[#55556a]">
+                                        {userEmail || 'Fetching account...'}
+                                    </div>
                                 </div>
-                                <p className="text-[10px] text-[#8888a0] font-bold ml-1">Enter exactly 4 digits to set a new passcode</p>
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-[#8888a0] uppercase tracking-widest ml-1">New Password</label>
+                                    <input
+                                        type="password"
+                                        className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-4 px-6 text-sm font-bold text-white focus:border-[#00c8ff] outline-none transition-all placeholder:text-[#1a1a2e]"
+                                        placeholder="Min 6 characters"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-[#8888a0] uppercase tracking-widest ml-1">Confirm New Password</label>
+                                    <input
+                                        type="password"
+                                        className="w-full bg-[#050508] border-2 border-white/10 rounded-2xl py-4 px-6 text-sm font-bold text-white focus:border-[#00c8ff] outline-none transition-all placeholder:text-[#1a1a2e]"
+                                        placeholder="Repeat new password"
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                    />
+                                </div>
+
                                 <button
-                                    onClick={handleUpdatePasscode}
-                                    disabled={saving || passcode.length < 4}
-                                    className="w-full bg-[#00c8ff] text-black font-black uppercase text-xs tracking-widest py-4 rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-[#00c8ff22] disabled:opacity-30 flex items-center justify-center gap-3"
+                                    onClick={handleUpdatePassword}
+                                    disabled={saving || !password || password !== confirmPassword}
+                                    className="w-full bg-[#00c8ff] text-black font-black uppercase text-xs tracking-widest py-4 rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-[#00c8ff22] disabled:opacity-30 flex items-center justify-center gap-3 mt-4"
                                 >
-                                    {saving ? <RefreshCw size={16} className="animate-spin" /> : <Lock size={16} />}
-                                    Update Passcode
+                                    {saving ? <RefreshCw size={16} className="animate-spin" /> : <Shield size={16} />}
+                                    Update Password
                                 </button>
                             </div>
                         </div>
