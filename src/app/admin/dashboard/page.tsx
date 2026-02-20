@@ -20,7 +20,8 @@ import {
     ChevronRight,
     Zap,
     IndianRupee,
-    BrainCircuit
+    BrainCircuit,
+    Send
 } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -32,8 +33,10 @@ import IntelligenceLogs from '@/components/admin/IntelligenceLogs';
 import SettingsPanel from '@/components/admin/SettingsPanel';
 import RevenueAnalytics from '@/components/admin/RevenueAnalytics';
 import VehicleHistory from '@/components/admin/VehicleHistory';
+import SubscribersManager from '@/components/admin/SubscribersManager';
+import BroadcastPanel from '@/components/admin/BroadcastPanel';
 
-type AdminTab = 'bookings' | 'chats' | 'customers' | 'settings' | 'fleet' | 'reports';
+type AdminTab = 'bookings' | 'chats' | 'customers' | 'settings' | 'fleet' | 'reports' | 'subscribers' | 'broadcasts';
 
 export default function AdminDashboard() {
     const router = useRouter();
@@ -282,6 +285,31 @@ export default function AdminDashboard() {
                 </button>
 
                 <div className="h-4"></div>
+                <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.3em] ml-4 mb-4 text-left">Engagement</p>
+
+                <button
+                    onClick={() => { setActiveTab('subscribers'); setShowMobileMenu(false); }}
+                    className={clsx(
+                        "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
+                        activeTab === 'subscribers' ? "bg-[#00c8ff1a] text-[#00c8ff] shadow-sm" : "text-[#55556a] hover:text-white hover:bg-white/5"
+                    )}
+                >
+                    <Users size={20} className={activeTab === 'subscribers' ? "text-[#00c8ff]" : ""} />
+                    <span>Subscribers</span>
+                </button>
+
+                <button
+                    onClick={() => { setActiveTab('broadcasts'); setShowMobileMenu(false); }}
+                    className={clsx(
+                        "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all duration-300 group",
+                        activeTab === 'broadcasts' ? "bg-[#a78bfa1a] text-[#a78bfa] shadow-sm" : "text-[#55556a] hover:text-white hover:bg-white/5"
+                    )}
+                >
+                    <Send size={20} className={activeTab === 'broadcasts' ? "text-[#a78bfa]" : ""} />
+                    <span>Broadcasts</span>
+                </button>
+
+                <div className="h-4"></div>
                 <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.3em] ml-4 mb-4 text-left">Intelligence</p>
 
                 <button
@@ -394,7 +422,9 @@ export default function AdminDashboard() {
                                 activeTab === 'chats' ? 'Neural Node Logs' :
                                     activeTab === 'customers' ? 'Market Database' :
                                         activeTab === 'fleet' ? 'Fleet Operations' :
-                                            activeTab === 'reports' ? 'Revenue Analytics' : 'System Configuration'}
+                                            activeTab === 'subscribers' ? 'Update Database' :
+                                                activeTab === 'broadcasts' ? 'Marketing Broadcasts' :
+                                                    activeTab === 'reports' ? 'Revenue Analytics' : 'System Configuration'}
                         </h2>
                         <div className="h-8 w-px bg-white/10 mx-4 hidden lg:block"></div>
                         <p className="text-[#8888a0] text-[10px] font-black uppercase tracking-[0.4em] hidden lg:block animate-pulse">
@@ -546,6 +576,10 @@ export default function AdminDashboard() {
                     {activeTab === 'reports' && (
                         <RevenueAnalytics bookings={bookings} expenses={expenses} onExpenseChange={fetchData} />
                     )}
+
+                    {activeTab === 'subscribers' && <SubscribersManager />}
+
+                    {activeTab === 'broadcasts' && <BroadcastPanel />}
                 </div>
             </main>
 

@@ -272,6 +272,66 @@ export interface Database {
                 };
                 Relationships: [];
             };
+            subscribers: {
+                Row: {
+                    id: string;
+                    email: string | null;
+                    phone: string | null;
+                    status: 'active' | 'unsubscribed';
+                    assigned_coupon: string | null;
+                    preferences: Json;
+                    created_at: string;
+                    updated_at: string;
+                };
+                Insert: {
+                    id?: string;
+                    email?: string | null;
+                    phone?: string | null;
+                    status?: 'active' | 'unsubscribed';
+                    assigned_coupon?: string | null;
+                    preferences?: Json;
+                    created_at?: string;
+                    updated_at?: string;
+                };
+                Update: {
+                    id?: string;
+                    email?: string | null;
+                    phone?: string | null;
+                    status?: 'active' | 'unsubscribed';
+                    assigned_coupon?: string | null;
+                    preferences?: Json;
+                    created_at?: string;
+                    updated_at?: string;
+                };
+                Relationships: [];
+            };
+            marketing_templates: {
+                Row: {
+                    id: string;
+                    name: string;
+                    content: string;
+                    category: string | null;
+                    created_at: string;
+                    updated_at: string;
+                };
+                Insert: {
+                    id?: string;
+                    name: string;
+                    content: string;
+                    category?: string | null;
+                    created_at?: string;
+                    updated_at?: string;
+                };
+                Update: {
+                    id?: string;
+                    name?: string;
+                    content?: string;
+                    category?: string | null;
+                    created_at?: string;
+                    updated_at?: string;
+                };
+                Relationships: [];
+            };
         };
         Views: {
             [_ in never]: never;
@@ -296,3 +356,5 @@ export type AdminSetting = Database['public']['Tables']['admin_settings']['Row']
 export type Service = Database['public']['Tables']['services']['Row'];
 export type DailyExpense = Database['public']['Tables']['daily_expenses']['Row'];
 export type ServiceHistory = Database['public']['Tables']['service_history']['Row'];
+export type Subscriber = Database['public']['Tables']['subscribers']['Row'];
+export type MarketingTemplate = Database['public']['Tables']['marketing_templates']['Row'];

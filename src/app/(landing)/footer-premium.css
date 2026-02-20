@@ -607,3 +607,275 @@
         gap: 15px;
     }
 }
+
+/* Newsletter Premium Form */
+.newsletter-form-premium {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.form-inputs-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px 16px;
+    border-radius: var(--r-md);
+    transition: all 0.3s var(--ease);
+}
+
+.input-wrap:focus-within {
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 0 15px rgba(0, 200, 255, 0.1);
+}
+
+.input-wrap .icon {
+    color: var(--text-muted);
+}
+
+.input-wrap input {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    color: var(--text-primary) !important;
+    font-size: 0.9rem !important;
+    width: 100%;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.phone-prefix {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    padding-right: 8px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-send-premium {
+    width: 100%;
+    padding: 12px;
+    background: var(--grad-blue);
+    border-radius: var(--r-md);
+    color: white;
+    font-weight: 800;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s var(--ease);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-send-premium:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 200, 255, 0.3);
+}
+
+.btn-send-premium:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Success Modal */
+.success-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.4s var(--ease);
+}
+
+.success-modal {
+    background: var(--bg-void);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--r-2xl);
+    width: 100%;
+    max-width: 440px;
+    padding: 40px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 1);
+    animation: slideUp 0.5s var(--ease-out);
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-btn:hover {
+    color: white;
+}
+
+.success-icon-wrap {
+    width: 80px;
+    height: 80px;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+}
+
+.success-icon-wrap .icon {
+    color: #10b981;
+    filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.5));
+}
+
+.success-modal h3 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 12px;
+}
+
+.success-modal p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.coupon-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px dashed rgba(0, 200, 255, 0.3);
+    border-radius: var(--r-xl);
+    padding: 24px;
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+.coupon-card::before,
+.coupon-card::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 20px;
+    height: 20px;
+    background: var(--bg-void);
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.coupon-card::before {
+    left: -12px;
+    transform: translateY(-50%);
+}
+
+.coupon-card::after {
+    right: -12px;
+    transform: translateY(-50%);
+}
+
+.coupon-label {
+    font-size: 0.7rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.coupon-code {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: 4px;
+    font-family: monospace;
+    filter: drop-shadow(0 0 10px rgba(0, 200, 255, 0.3));
+}
+
+.coupon-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 8px;
+}
+
+.modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.whatsapp-join-btn {
+    width: 100%;
+    padding: 14px;
+    background: #25d366;
+    color: white;
+    font-weight: 800;
+    border-radius: var(--r-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s var(--ease);
+}
+
+.whatsapp-join-btn:hover {
+    background: #1ebc5a;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+}
+
+.done-btn {
+    width: 100%;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    font-weight: 600;
+    border-radius: var(--r-lg);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.done-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
