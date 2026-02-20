@@ -370,7 +370,7 @@ export default function AdminDashboard() {
     return (
         <div className="flex min-h-screen bg-[#050508] text-[#eeeef2]">
             {/* Desktop Sidebar */}
-            <aside className="fixed left-0 top-0 h-full w-72 bg-[#0c0c16] border-r border-white/5 p-8 z-40 hidden xl:flex flex-col shadow-2xl">
+            <aside className="fixed left-0 top-0 h-full w-72 bg-[#0c0c16] border-r border-white/5 p-8 z-40 hidden xl:flex flex-col shadow-2xl overflow-y-auto custom-scrollbar-minimal">
                 <SidebarContent />
             </aside>
 
@@ -381,7 +381,7 @@ export default function AdminDashboard() {
                         className="fixed inset-0 bg-black/80 backdrop-blur-md z-[50] xl:hidden"
                         onClick={() => setShowMobileMenu(false)}
                     ></div>
-                    <aside className="fixed left-0 top-0 h-full w-80 bg-[#0c0c16] border-r border-white/10 p-8 z-[60] xl:hidden flex flex-col shadow-2xl animate-admin-in">
+                    <aside className="fixed left-0 top-0 h-full w-80 bg-[#0c0c16] border-r border-white/10 p-8 z-[60] xl:hidden flex flex-col shadow-2xl animate-admin-in overflow-y-auto custom-scrollbar-minimal">
                         <div className="flex justify-end mb-4">
                             <button onClick={() => setShowMobileMenu(false)} className="p-2 text-[#55556a] hover:text-white">
                                 <X size={24} />
