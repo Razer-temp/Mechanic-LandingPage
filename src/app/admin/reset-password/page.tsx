@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { ShieldCheck, Lock, AlertCircle, RefreshCw, ArrowRight, Eye, EyeOff } from 'lucide-react';
 
@@ -9,41 +9,63 @@ function ResetPasswordContent() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isCheckingSession, setIsCheckingSession] = useState(true);
+
     const router = useRouter();
+    const searchParams = useSearchParams();
     const supabase = createClient();
 
     useEffect(() => {
-        const checkSession = async () => {
-            // Give Supabase a moment to parse the hash/recovery session
+        const handleAuth = async () => {
+            const code = searchParams.get('code');
+
+            // If there's a PKCE code in the URL, exchange it for a session
+            if (code) {
+                const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+                if (exchangeError) {
+                    console.error('PKCE Exchange Error:', exchangeError);
+                    setError('Security handshake failed. Please request a new link.');
+                    setIsCheckingSession(false);
+                    return;
+                }
+            }
+
+            // Check if we have a session now (either from hash or PKCE exchange)
             const { data: { session } } = await supabase.auth.getSession();
 
             if (!session) {
-                // Wait for potential auth state change if session isn't immediately available
-                const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-                    if (session) {
+                // If no session yet, wait for one to appear (useful for hash fragments)
+                const { data: { subscription } } = supabase.auth.onAuthStateChange((event, newSession) => {
+                    if (newSession) {
                         setIsCheckingSession(false);
                         subscription.unsubscribe();
                     }
                 });
 
                 // Fail after 5 seconds if no session appears
-                setTimeout(() => {
+                const timeout = setTimeout(() => {
                     if (isCheckingSession) {
-                        setError('Recovery session not detected. Please request a new link.');
+                        setError('Recovery session not detected. Please ensure you clicked the latest link in your email.');
                         setIsCheckingSession(false);
                         subscription.unsubscribe();
                     }
                 }, 5000);
+
+                return () => {
+                    clearTimeout(timeout);
+                    subscription.unsubscribe();
+                };
             } else {
                 setIsCheckingSession(false);
             }
         };
-        checkSession();
-    }, [supabase]);
+
+        handleAuth();
+    }, [supabase, searchParams]);
 
     const handleReset = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -71,7 +93,7 @@ function ResetPasswordContent() {
                 setError(updateError.message);
                 setIsSubmitting(false);
             } else {
-                setSuccess('Neural key recalibrated. Redirecting...');
+                setSuccess('Neural key recalibrated. Redirecting to Terminal...');
                 setTimeout(() => {
                     router.push('/admin/dashboard');
                 }, 2000);
@@ -88,7 +110,7 @@ function ResetPasswordContent() {
             <div className="min-h-screen bg-[#050508] flex items-center justify-center p-6">
                 <div className="text-center">
                     <RefreshCw className="text-[#00c8ff] animate-spin mx-auto mb-4" size={32} />
-                    <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.4em]">Initializing Security Protocol...</p>
+                    <p className="text-[10px] font-black text-[#55556a] uppercase tracking-[0.4em]">Initializing Security Handshake...</p>
                 </div>
             </div>
         );
@@ -146,13 +168,20 @@ function ResetPasswordContent() {
                                 <div className="relative group">
                                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-[#55556a] group-focus-within:text-[#00c8ff] transition-colors" size={18} />
                                     <input
-                                        type={showPassword ? "text" : "password"}
+                                        type={showConfirmPassword ? "text" : "password"}
                                         placeholder="••••••••"
                                         className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-4 pl-12 pr-12 focus:border-[#00c8ff33] outline-none transition-all text-white font-bold text-sm placeholder:text-[#1a1a2e]"
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
                                         required
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-[#55556a] hover:text-[#00c8ff] transition-colors"
+                                    >
+                                        {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -160,7 +189,7 @@ function ResetPasswordContent() {
                         {error && (
                             <div className="bg-[#ff2d551a] border border-[#ff2d5533] p-4 rounded-xl flex items-center gap-3">
                                 <AlertCircle size={16} className="text-[#ff2d55] shrink-0" />
-                                <p className="text-[#ff2d55] text-[10px] font-bold tracking-wide text-left">
+                                <p className="text-[#ff2d55] text-[10px] font-bold tracking-wide text-left leading-relaxed">
                                     {error}
                                 </p>
                             </div>
