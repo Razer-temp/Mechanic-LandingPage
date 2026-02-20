@@ -127,13 +127,16 @@ export default function AdminDashboard() {
 
     // Auth Check
     useEffect(() => {
-        const isAdmin = sessionStorage.getItem('admin_auth');
-        if (isAdmin !== 'true') {
-            router.push('/admin/login');
-        } else {
-            fetchData();
-        }
-    }, [router, fetchData]);
+        const checkAuth = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user || user.app_metadata?.role !== 'admin') {
+                router.push('/admin/login?error=unauthorized');
+            } else {
+                fetchData();
+            }
+        };
+        checkAuth();
+    }, [router, supabase, fetchData]);
 
     // Deletion handler for waste data
     const handleDeleteRecord = async (table: string, id: string) => {
@@ -161,8 +164,8 @@ export default function AdminDashboard() {
         }
     };
 
-    const handleLogout = () => {
-        sessionStorage.removeItem('admin_auth');
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
         router.push('/admin/login');
     };
 
