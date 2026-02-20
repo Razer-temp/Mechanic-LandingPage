@@ -36,8 +36,8 @@ export async function middleware(request: NextRequest) {
 
     // Protect admin routes
     if (request.nextUrl.pathname.startsWith('/admin')) {
-        // Allow login page
-        if (request.nextUrl.pathname === '/admin/login') {
+        // Allow login and reset-password pages
+        if (request.nextUrl.pathname === '/admin/login' || request.nextUrl.pathname === '/admin/reset-password') {
             if (user) {
                 return NextResponse.redirect(new URL('/admin/dashboard', request.url));
             }

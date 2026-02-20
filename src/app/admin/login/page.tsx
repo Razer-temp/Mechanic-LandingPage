@@ -9,7 +9,9 @@ function LoginContent() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isResetMode, setIsResetMode] = useState(false);
     const router = useRouter();
     const searchParams = useSearchParams();
     const supabase = createClient();
@@ -32,6 +34,7 @@ function LoginContent() {
         e.preventDefault();
         setIsSubmitting(true);
         setError('');
+        setSuccess('');
 
         try {
             const { data, error: loginError } = await supabase.auth.signInWithPassword({
@@ -61,6 +64,30 @@ function LoginContent() {
         }
     };
 
+    const handleResetRequest = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setError('');
+        setSuccess('');
+
+        try {
+            const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: `${window.location.origin}/admin/reset-password`,
+            });
+
+            if (resetError) {
+                setError(resetError.message);
+            } else {
+                setSuccess('Recovery transmission sent. Check your neural inbox.');
+            }
+        } catch (err) {
+            console.error('Reset error:', err);
+            setError('System failure. Reset link could not be generated.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <div className="min-h-screen flex items-center justify-center p-6 bg-[#050508]">
             {/* Background Decorations */}
@@ -77,11 +104,13 @@ function LoginContent() {
                     <h1 className="text-4xl font-black tracking-tighter text-white mb-2 uppercase">
                         SmartBike <span className="text-[#00c8ff]">Admin</span>
                     </h1>
-                    <p className="text-[#55556a] font-black uppercase text-[10px] tracking-[0.4em]">Secure Auth Terminal</p>
+                    <p className="text-[#55556a] font-black uppercase text-[10px] tracking-[0.4em]">
+                        {isResetMode ? 'Security Recovery' : 'Secure Auth Terminal'}
+                    </p>
                 </div>
 
                 <div className="bg-[#10101e] border-2 border-white/5 rounded-[3rem] p-12 shadow-2xl">
-                    <form onSubmit={handleLogin} className="space-y-6">
+                    <form onSubmit={isResetMode ? handleResetRequest : handleLogin} className="space-y-6">
                         <div className="space-y-4">
                             <div className="space-y-1">
                                 <label className="block text-[9px] font-black text-[#55556a] uppercase tracking-widest ml-1">
@@ -100,22 +129,33 @@ function LoginContent() {
                                 </div>
                             </div>
 
-                            <div className="space-y-1">
-                                <label className="block text-[9px] font-black text-[#55556a] uppercase tracking-widest ml-1">
-                                    Access Key
-                                </label>
-                                <div className="relative group">
-                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-[#55556a] group-focus-within:text-[#00c8ff] transition-colors" size={18} />
-                                    <input
-                                        type="password"
-                                        placeholder="••••••••"
-                                        className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-4 pl-12 pr-6 focus:border-[#00c8ff33] outline-none transition-all text-white font-bold text-sm placeholder:text-[#1a1a2e]"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        required
-                                    />
+                            {!isResetMode && (
+                                <div className="space-y-1">
+                                    <div className="flex items-center justify-between ml-1">
+                                        <label className="block text-[9px] font-black text-[#55556a] uppercase tracking-widest">
+                                            Access Key
+                                        </label>
+                                        <button
+                                            type="button"
+                                            onClick={() => { setIsResetMode(true); setError(''); setSuccess(''); }}
+                                            className="text-[9px] font-black text-[#00c8ff] uppercase tracking-widest hover:underline"
+                                        >
+                                            Forgot Key?
+                                        </button>
+                                    </div>
+                                    <div className="relative group">
+                                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-[#55556a] group-focus-within:text-[#00c8ff] transition-colors" size={18} />
+                                        <input
+                                            type="password"
+                                            placeholder="••••••••"
+                                            className="w-full bg-[#050508] border-2 border-white/5 rounded-2xl py-4 pl-12 pr-6 focus:border-[#00c8ff33] outline-none transition-all text-white font-bold text-sm placeholder:text-[#1a1a2e]"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            required
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
 
                         {error && (
@@ -127,19 +167,38 @@ function LoginContent() {
                             </div>
                         )}
 
+                        {success && (
+                            <div className="bg-[#34d3991a] border border-[#34d39933] p-4 rounded-xl flex items-center gap-3">
+                                <ShieldCheck size={16} className="text-[#34d399] shrink-0" />
+                                <p className="text-[#34d399] text-[10px] font-bold tracking-wide">
+                                    {success}
+                                </p>
+                            </div>
+                        )}
+
                         <button
                             type="submit"
-                            disabled={isSubmitting || !email || !password}
+                            disabled={isSubmitting || !email || (!isResetMode && !password)}
                             className="w-full bg-[#00c8ff] text-[#050508] font-black text-xs uppercase tracking-[0.2em] py-5 rounded-2xl flex items-center justify-center gap-3 active:scale-95 transition-all shadow-xl shadow-[#00c8ff22] disabled:opacity-50 mt-4"
                         >
                             {isSubmitting ? (
                                 <div className="w-5 h-5 border-3 border-[#050508]/20 border-t-[#050508] rounded-full animate-spin"></div>
                             ) : (
                                 <>
-                                    Verify Integrity <ArrowRight size={18} strokeWidth={3} />
+                                    {isResetMode ? 'Request Link' : 'Verify Integrity'} <ArrowRight size={18} strokeWidth={3} />
                                 </>
                             )}
                         </button>
+
+                        {isResetMode && (
+                            <button
+                                type="button"
+                                onClick={() => { setIsResetMode(false); setError(''); setSuccess(''); }}
+                                className="w-full text-center text-[9px] font-black text-[#55556a] uppercase tracking-widest hover:text-white transition-colors"
+                            >
+                                Back to Terminal
+                            </button>
+                        )}
                     </form>
                 </div>
 
