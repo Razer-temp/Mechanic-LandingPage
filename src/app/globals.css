@@ -1861,12 +1861,10 @@ ul {
 
 @media (max-width: 768px) {
   :root {
-    --section-gap: 72px;
-    --nebula-1: rgba(0, 212, 255, 0.15);
-    --nebula-2: rgba(0, 114, 255, 0.2);
-    --nebula-3: rgba(111, 66, 193, 0.15);
-    --glass-card: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
+    --section-gap: 60px;
+    --nebula-1: rgba(0, 212, 255, 0.1);
+    --nebula-2: rgba(0, 114, 255, 0.15);
+    --nebula-3: rgba(111, 66, 193, 0.1);
   }
 
   .navbar,
@@ -1880,19 +1878,16 @@ ul {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 48px;
-    height: 48px;
-    z-index: 2000;
-    /* Highest priority */
+    width: 44px;
+    height: 44px;
+    z-index: 1002;
     position: relative;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 50%;
     gap: 5px;
-    margin-right: -4px;
-    transition: background 0.3s ease, border-color 0.3s ease;
-    overflow: visible !important;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
   }
 
   .nav-toggle span {
@@ -1928,23 +1923,21 @@ ul {
   .nav-overlay {
     position: fixed;
     inset: 0;
-    /* Dynamic Mesh Background */
     background:
       radial-gradient(at 0% 0%, var(--nebula-1) 0px, transparent 50%),
       radial-gradient(at 100% 0%, var(--nebula-2) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, var(--nebula-3) 0px, transparent 50%),
       linear-gradient(to bottom, #050508, #0a0a14);
-    background-size: 200% 200%;
-    animation: nebulaShift 15s ease infinite alternate;
+    background-size: 150% 150%;
+    animation: nebulaShift 20s ease infinite alternate;
 
-    /* Glass 2.0: Heavy Blur + Noise */
-    backdrop-filter: blur(100px) saturate(160%);
-    -webkit-backdrop-filter: blur(100px) saturate(160%);
+    /* Optimization: Lighter Blur */
+    backdrop-filter: blur(40px) saturate(140%);
+    -webkit-backdrop-filter: blur(40px) saturate(140%);
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
-    transform: translate(var(--px, 0), var(--py, 0)) scale(1.1);
-    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.6s, transform 0.2s ease-out;
+    will-change: opacity, visibility;
+    transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.4s;
   }
 
   /* Noise Texture Overlay */
@@ -1980,12 +1973,11 @@ ul {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 0 32px;
-    gap: 16px;
+    gap: 28px;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .nav-links.active {
@@ -1994,106 +1986,82 @@ ul {
     pointer-events: auto;
   }
 
-  .nav-item {
-    width: 100%;
-    max-width: 320px;
+  .nav-links li {
     opacity: 0;
-    transform: translateY(30px) scale(0.95);
-    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: translateY(20px);
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, opacity;
   }
 
-  .nav-links.active .nav-item {
+  .nav-links.active li {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 
-  /* Bento Glass Card Style */
-  .nav-link-card {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 20px;
-    background: var(--glass-card);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    text-decoration: none;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative;
-    overflow: hidden;
+  .nav-links.active li:nth-child(1) {
+    transition-delay: 0.1s;
   }
 
-  .nav-link-card .link-text {
+  .nav-links.active li:nth-child(2) {
+    transition-delay: 0.15s;
+  }
+
+  .nav-links.active li:nth-child(3) {
+    transition-delay: 0.2s;
+  }
+
+  .nav-links.active li:nth-child(4) {
+    transition-delay: 0.25s;
+  }
+
+  .nav-links.active li:nth-child(5) {
+    transition-delay: 0.3s;
+  }
+
+  .nav-links a:not(.nav-cta) {
     font-family: var(--font-heading);
-    font-size: 24px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    color: #fff;
     transition: all 0.3s ease;
-    z-index: 2;
+    position: relative;
   }
 
-  /* Underline Logic (Phase 7) */
-  .nav-link-card::after {
+  /* Stable Underline indicator */
+  .nav-links a:not(.nav-cta)::after {
     content: "";
     position: absolute;
-    bottom: 12px;
-    left: 50%;
+    bottom: -4px;
+    left: 0;
     width: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #00d4ff, transparent);
-    transition: all 0.5s var(--ease);
-    transform: translateX(-50%);
+    height: 3px;
+    background: #00d4ff;
+    transition: width 0.3s ease;
+    border-radius: 2px;
   }
 
-  /* Active State: Glow & Pulse */
-  .nav-link-card.active-link {
-    background: rgba(0, 212, 255, 0.05);
-    border-color: rgba(0, 212, 255, 0.3);
-    box-shadow: 0 0 30px rgba(0, 212, 255, 0.1);
-    animation: breathingGlow 3s ease-in-out infinite;
+  .nav-links a.active-link:not(.nav-cta) {
+    color: #00d4ff;
   }
 
-  .nav-link-card.active-link .link-text {
-    color: #fff;
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-  }
-
-  .nav-link-card.active-link::after {
-    width: 40px;
-  }
-
-  @keyframes breathingGlow {
-
-    0%,
-    100% {
-      box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
-      border-color: rgba(0, 212, 255, 0.2);
-    }
-
-    50% {
-      box-shadow: 0 0 40px rgba(0, 212, 255, 0.2);
-      border-color: rgba(0, 212, 255, 0.4);
-    }
-  }
-
-  .nav-cta-premium {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .nav-links a.active-link:not(.nav-cta)::after {
     width: 100%;
-    padding: 22px;
+  }
+
+  .nav-cta {
+    margin-top: 20px;
     background: linear-gradient(135deg, #00d4ff 0%, #0072ff 100%) !important;
     color: #fff !important;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 1.1rem;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0, 114, 255, 0.3);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    padding: 16px 40px !important;
+    font-weight: 700 !important;
+    border-radius: var(--r-full) !important;
+    box-shadow: 0 10px 30px rgba(0, 114, 255, 0.3);
+    transition: all 0.3s ease !important;
   }
 
-  .nav-cta-premium:active {
-    transform: scale(0.95);
+  .nav-cta:active {
+    transform: scale(0.95) !important;
   }
 
 

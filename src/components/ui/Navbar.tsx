@@ -66,16 +66,6 @@ export function Navbar() {
                     id="navToggle"
                     aria-label="Toggle menu"
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    onMouseMove={(e) => {
-                        const btn = e.currentTarget;
-                        const rect = btn.getBoundingClientRect();
-                        const x = e.clientX - rect.left - rect.width / 2;
-                        const y = e.clientY - rect.top - rect.height / 2;
-                        btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px) rotate(${mobileMenuOpen ? '90deg' : '0deg'})`;
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = mobileMenuOpen ? 'rotate(90deg)' : '';
-                    }}
                 >
                     <span></span><span></span><span></span>
                 </button>
@@ -84,48 +74,22 @@ export function Navbar() {
                     className={clsx('nav-overlay', mobileMenuOpen && 'active')}
                     onClick={() => setMobileMenuOpen(false)}
                     aria-hidden="true"
-                    onMouseMove={(e) => {
-                        const overlay = e.currentTarget;
-                        const { clientX, clientY } = e;
-                        const { width, height } = overlay.getBoundingClientRect();
-                        const x = (clientX / width - 0.5) * 20;
-                        const y = (clientY / height - 0.5) * 20;
-                        overlay.style.setProperty('--px', `${x}px`);
-                        overlay.style.setProperty('--py', `${y}px`);
-                    }}
                 />
 
                 <ul className={clsx('nav-links', mobileMenuOpen && 'active')} id="navLinks">
                     {['diagnosis', 'services', 'how-it-works', 'reviews'].map((target) => (
-                        <li key={target} className="nav-item">
+                        <li key={target}>
                             <a
                                 href={`#${target}`}
-                                onClick={(e) => {
-                                    const targetEl = e.currentTarget;
-                                    targetEl.classList.add('clicked');
-                                    setTimeout(() => {
-                                        targetEl.classList.remove('clicked');
-                                        closeMenu();
-                                    }, 400);
-                                }}
+                                onClick={closeMenu}
                                 className={getLinkClass(target)}
                             >
-                                <span className="link-text">
-                                    {target.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                                </span>
-                                <div className="link-glow" />
+                                {target.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                             </a>
                         </li>
                     ))}
-                    <li className="nav-item">
-                        <a
-                            href="#booking"
-                            className="nav-cta-premium"
-                            onClick={(e) => {
-                                e.currentTarget.classList.add('clicked');
-                                setTimeout(closeMenu, 400);
-                            }}
-                        >
+                    <li>
+                        <a href="#booking" className="nav-cta" onClick={closeMenu}>
                             Book Service
                         </a>
                     </li>
