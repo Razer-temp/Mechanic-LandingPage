@@ -1474,7 +1474,8 @@ ul {
   align-items: center;
   gap: 8px;
   padding: 11px 24px;
-  background: var(--grad-hero);
+  background: linear-gradient(270deg, #00c8ff, #a78bfa, #ff2d55, #00c8ff);
+  background-size: 400% 400%;
   border: none;
   border-radius: var(--r-full);
   color: #fff;
@@ -1484,7 +1485,7 @@ ul {
   cursor: pointer;
   box-shadow: 0 8px 32px rgba(0, 200, 255, 0.3);
   transition: all 0.4s var(--ease-bounce);
-  animation: gentleFloat 4s ease-in-out infinite;
+  animation: gentleFloat 4s ease-in-out infinite, liquidFlow 8s ease infinite;
   position: relative;
   overflow: visible;
 }
@@ -1494,12 +1495,13 @@ ul {
   position: absolute;
   inset: -4px;
   border-radius: var(--r-full);
-  background: var(--grad-hero);
+  background: linear-gradient(270deg, #00c8ff, #a78bfa, #ff2d55, #00c8ff);
+  background-size: 400% 400%;
   z-index: -1;
   opacity: 0.6;
   filter: blur(14px);
   transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
-  animation: auraRotate 3s linear infinite;
+  animation: auraRotate 3s linear infinite, liquidFlow 8s ease infinite;
 }
 
 .chat-toggle:hover {
@@ -1519,6 +1521,20 @@ ul {
 
   100% {
     filter: blur(14px) hue-rotate(360deg);
+  }
+}
+
+@keyframes liquidFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
   }
 }
 
@@ -2257,17 +2273,46 @@ ul {
     padding: 24px 20px;
   }
 
-  .floating-chat {
-    bottom: 86px;
-    right: 16px;
+  #floatingChat {
+    bottom: 120px !important;
+    right: 20px !important;
+  }
+
+  #floatingChat .chat-toggle {
+    padding: 0 !important;
+    width: 56px !important;
+    height: 56px !important;
+    min-width: 0 !important;
+    max-width: 56px !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+  }
+
+  #floatingChat .chat-toggle .chat-label {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    margin: 0 !important;
+  }
+
+  #floatingChat .chat-toggle .chat-icon {
+    font-size: 1.6rem !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .whatsapp-float {
-    right: 16px;
-    bottom: 16px;
-    width: 46px;
-    height: 46px;
-    font-size: 1.4rem;
+    right: 16px !important;
+    bottom: 16px !important;
+    width: 52px !important;
+    height: 52px !important;
+    font-size: 1.6rem !important;
   }
 }
 
@@ -2457,4 +2502,53 @@ ul {
 .nav-links a.active-link::after {
   width: 100% !important;
   background: var(--accent);
+}
+
+/* AI Mechanic - Mobile Icon-Only Override */
+@media (max-width: 768px) {
+  #floatingChat {
+    bottom: 110px !important;
+    right: 20px !important;
+    display: block !important;
+  }
+
+  #floatingChat .chat-toggle {
+    padding: 0 !important;
+    width: 54px !important;
+    height: 54px !important;
+    min-width: 54px !important;
+    max-width: 54px !important;
+    aspect-ratio: 1/1 !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    display: flex !important;
+  }
+
+  #floatingChat .chat-toggle .chat-label {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    opacity: 0 !important;
+    position: absolute !important;
+  }
+
+  #floatingChat .chat-toggle .chat-icon {
+    font-size: 1.6rem !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .whatsapp-float {
+    right: 20px !important;
+    bottom: 20px !important;
+    width: 54px !important;
+    height: 54px !important;
+    font-size: 1.6rem !important;
+  }
 }
