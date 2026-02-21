@@ -64,7 +64,8 @@ export function Navbar() {
                     aria-label="Toggle menu"
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 >
-                    <span></span><span></span><span></span>
+                    <span className="toggle-text">{mobileMenuOpen ? 'Close' : 'Menu'}</span>
+                    <span className="toggle-icon">{mobileMenuOpen ? '×' : '+'}</span>
                 </button>
 
                 <div
@@ -73,14 +74,31 @@ export function Navbar() {
                     aria-hidden="true"
                 />
 
-                <ul className={clsx('nav-links', mobileMenuOpen && 'active')} id="navLinks">
-                    <li><a href="#diagnosis" onClick={closeMenu} className={getLinkClass('diagnosis')}>AI Diagnosis</a></li>
-                    <li><a href="#services" onClick={closeMenu} className={getLinkClass('services')}>Services</a></li>
-                    <li><a href="#how-it-works" onClick={closeMenu} className={getLinkClass('how-it-works')}>How It Works</a></li>
-                    <li><a href="#reviews" onClick={closeMenu} className={getLinkClass('reviews')}>Reviews</a></li>
+                <div className={clsx('nav-links-wrapper', mobileMenuOpen && 'active')}>
+                    <ul className="nav-links" id="navLinks">
+                        <li><a href="#diagnosis" onClick={closeMenu} className={getLinkClass('diagnosis')}>AI Diagnosis</a></li>
+                        <li><a href="#services" onClick={closeMenu} className={getLinkClass('services')}>Services</a></li>
+                        <li><a href="#how-it-works" onClick={closeMenu} className={getLinkClass('how-it-works')}>How It Works</a></li>
+                        <li><a href="#reviews" onClick={closeMenu} className={getLinkClass('reviews')}>Reviews</a></li>
 
-                    <li><a href="#booking" className="nav-cta" onClick={closeMenu}>Book Service</a></li>
-                </ul>
+                        <li className="mobile-cta-li">
+                            <a href="#booking" className="nav-cta" onClick={closeMenu}>
+                                Book Service
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div className="nav-footer">
+                        <div className="nav-footer-socials">
+                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+                            <a href="https://wa.me/91XXXXXXXXXX" target="_blank" rel="noopener noreferrer">WHATSAPP</a>
+                        </div>
+                        <div className="nav-footer-meta">
+                            <span>©2025 SMARTBIKE PRO</span>
+                            <span>MUMBAI, IN</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </nav>
     );
