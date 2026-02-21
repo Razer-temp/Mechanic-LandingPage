@@ -72,6 +72,19 @@
   --dur-slow: 0.6s;
 }
 
+/* ===== RESPONSIVE UTILITIES ===== */
+@media (min-width: 769px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+}
+
 /* ===== RESET ===== */
 *,
 *::before,

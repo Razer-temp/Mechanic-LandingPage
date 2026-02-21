@@ -68,7 +68,7 @@ export function Navbar() {
                 </a>
 
                 {/* --- DESKTOP NAVIGATION (Visible > 768px) --- */}
-                <ul className="nav-links hidden md:flex" id="navLinksDesktop">
+                <ul className="nav-links desktop-only" id="navLinksDesktop">
                     {navItems.map((item) => (
                         <li key={item.id}>
                             <a
@@ -88,7 +88,7 @@ export function Navbar() {
 
                 {/* --- MOBILE NAVIGATION TOGGLE (Visible < 768px) --- */}
                 <button
-                    className={clsx('nav-toggle flex md:hidden', mobileMenuOpen && 'active')}
+                    className={clsx('nav-toggle mobile-only', mobileMenuOpen && 'active')}
                     id="navToggle"
                     aria-label="Toggle menu"
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -98,14 +98,14 @@ export function Navbar() {
 
                 {/* --- MOBILE NAVIGATION OVERLAY (v1.0 Pixel-Perfect) --- */}
                 <div
-                    className={clsx('nav-overlay-v1 md:hidden', mobileMenuOpen && 'active')}
+                    className={clsx('nav-overlay-v1 mobile-only', mobileMenuOpen && 'active')}
                     onClick={() => setMobileMenuOpen(false)}
                     aria-hidden="true"
                 >
                     <div className="nav-bloom" />
                 </div>
 
-                <div className={clsx('nav-menu-container md:hidden', mobileMenuOpen && 'active')} id="navLinksMobile">
+                <div className={clsx('nav-menu-container mobile-only', mobileMenuOpen && 'active')} id="navLinksMobile">
                     <div className="nav-links-inner">
                         {navItems.map((item, index) => (
                             <a
