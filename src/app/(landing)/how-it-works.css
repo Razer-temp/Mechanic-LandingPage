@@ -94,12 +94,6 @@
     height: 100%;
 }
 
-.how-card-premium:hover {
-    border-color: var(--border-accent);
-    box-shadow: var(--shadow-glow-strong);
-    background: var(--bg-glass-hover);
-}
-
 .how-card-glow {
     position: absolute;
     inset: 0;
@@ -107,10 +101,6 @@
     opacity: 0;
     transition: opacity var(--dur-slow) var(--ease);
     pointer-events: none;
-}
-
-.how-card-premium:hover .how-card-glow {
-    opacity: 1;
 }
 
 .how-bg-num {
@@ -133,12 +123,6 @@
     }
 }
 
-.how-card-premium:hover .how-bg-num {
-    opacity: 0.06;
-    color: var(--accent);
-    transform: scale(1.1);
-}
-
 .how-icon-box {
     width: 60px;
     height: 60px;
@@ -153,13 +137,6 @@
     transition: all var(--dur) var(--ease);
 }
 
-.how-card-premium:hover .how-icon-box {
-    background: var(--accent);
-    color: #fff;
-    box-shadow: 0 0 30px rgba(0, 200, 255, 0.3);
-    transform: scale(1.1) rotate(5deg);
-}
-
 .how-card-title {
     font-family: var(--font-heading);
     font-size: 1.25rem;
@@ -170,10 +147,6 @@
     transition: color var(--dur) var(--ease);
 }
 
-.how-card-premium:hover .how-card-title {
-    color: var(--accent);
-}
-
 .how-card-desc {
     color: var(--text-secondary);
     line-height: 1.65;
@@ -181,8 +154,37 @@
     transition: color var(--dur) var(--ease);
 }
 
-.how-card-premium:hover .how-card-desc {
-    color: var(--text-primary);
+@media (hover: hover) and (pointer: fine) {
+    .how-card-premium:hover {
+        border-color: var(--border-accent);
+        box-shadow: var(--shadow-glow-strong);
+        background: var(--bg-glass-hover);
+    }
+
+    .how-card-premium:hover .how-card-glow {
+        opacity: 1;
+    }
+
+    .how-card-premium:hover .how-bg-num {
+        opacity: 0.06;
+        color: var(--accent);
+        transform: scale(1.1);
+    }
+
+    .how-card-premium:hover .how-icon-box {
+        background: var(--accent);
+        color: #fff;
+        box-shadow: 0 0 30px rgba(0, 200, 255, 0.3);
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .how-card-premium:hover .how-card-title {
+        color: var(--accent);
+    }
+
+    .how-card-premium:hover .how-card-desc {
+        color: var(--text-primary);
+    }
 }
 
 .how-top-light {

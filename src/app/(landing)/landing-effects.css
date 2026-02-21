@@ -12,10 +12,10 @@
 }
 
 /* 
-   1. HOVER GLOW EFFECT 
+   1. HOVER GLOW EFFECT & 2. 3D TILT EFFECT
    -----------------------------------------
-   Creates a radial gradient that follows the mouse cursor.
-   We use ::after to avoid conflict with glass-card's ::before.
+   Isolating hover logic to devices with actual mice/pointers 
+   to prevent "sticky" hover states on mobile touch screens.
 */
 .hover-glow {
     position: relative;
@@ -37,31 +37,27 @@
     mix-blend-mode: screen;
 }
 
-.hover-glow:hover::after {
-    opacity: 1;
-}
-
-/* 
-   2. 3D TILT EFFECT 
-   -----------------------------------------
-   Uses !important to guarantee fast transform transition
-   wins over glass-card, why-card, animate-on-scroll etc.
-*/
 .tilt-card {
     will-change: transform;
     transform-style: preserve-3d;
 }
 
-/* Fast responsive tilt on hover */
-.tilt-card:hover {
-    transition: transform 0.08s linear !important;
-    transform:
-        perspective(1000px) rotateX(calc((var(--mouse-y-pct, 0.5) - 0.5) * -8deg)) rotateY(calc((var(--mouse-x-pct, 0.5) - 0.5) * 8deg)) translateY(-6px) !important;
-}
+@media (hover: hover) and (pointer: fine) {
+    .hover-glow:hover::after {
+        opacity: 1;
+    }
 
-/* Smooth return to flat when not hovering */
-.tilt-card:not(:hover) {
-    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1) !important;
+    /* Fast responsive tilt on hover */
+    .tilt-card:hover {
+        transition: transform 0.08s linear !important;
+        transform:
+            perspective(1000px) rotateX(calc((var(--mouse-y-pct, 0.5) - 0.5) * -8deg)) rotateY(calc((var(--mouse-x-pct, 0.5) - 0.5) * 8deg)) translateY(-6px) !important;
+    }
+
+    /* Smooth return to flat when not hovering */
+    .tilt-card:not(:hover) {
+        transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1) !important;
+    }
 }
 
 /* 
