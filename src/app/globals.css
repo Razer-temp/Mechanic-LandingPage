@@ -1872,7 +1872,9 @@ ul {
     overflow: visible !important;
   }
 
-  /* --- "Nebula Glass" UI 2.0 (Outstanding V5) --- */
+  /* --- Pixel-Perfect Navigation (v1.0) --- */
+
+  /* 9. HAMBURGER ICON ANIMATION */
   .nav-toggle {
     display: flex;
     flex-direction: column;
@@ -1881,7 +1883,6 @@ ul {
     width: 48px;
     height: 48px;
     z-index: 5000;
-    /* Priority */
     position: relative;
     background: transparent;
     border: none;
@@ -1891,17 +1892,19 @@ ul {
     overflow: visible !important;
   }
 
+  .nav-toggle.active {
+    position: fixed;
+    top: 32px;
+    right: 24px;
+  }
+
   .nav-toggle span {
     display: block;
     width: 20px;
     height: 2px;
     background: #ffffff;
     border-radius: 2px;
-    transition: all 0.3s ease;
-  }
-
-  .nav-toggle.active {
-    transform: rotate(90deg);
+    transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .nav-toggle.active span:nth-child(1) {
@@ -1918,144 +1921,264 @@ ul {
     width: 24px;
   }
 
-  .nav-overlay {
+  /* 2.1 Overlay System & 3. Background System */
+  .nav-overlay-v1 {
     position: fixed;
     inset: 0;
-    /* Static background for zero animation lag */
-    background:
-      radial-gradient(at 0% 0%, var(--nebula-1) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, var(--nebula-2) 0px, transparent 50%),
-      linear-gradient(to bottom, #050508, #0a101f);
-
-    backdrop-filter: blur(30px) saturate(120%);
-    -webkit-backdrop-filter: blur(30px) saturate(120%);
     z-index: 1000;
+    /* Layer 1: Base Gradient */
+    background:
+      radial-gradient(circle at 85% 10%, rgba(0, 120, 255, 0.18), transparent 45%),
+      radial-gradient(circle at 15% 90%, rgba(0, 255, 200, 0.12), transparent 50%),
+      linear-gradient(180deg, #0A0D14 0%, #05070B 100%);
+    /* Layer 2: Subtle Animated Ambient Shift */
+    background-size: 110% 110%;
+    animation: ambientDrift 18s linear infinite alternate;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s;
+    overflow: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s;
+    will-change: opacity, visibility;
   }
 
-  /* Noise Texture Overlay */
-  .nav-overlay::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.04;
-    pointer-events: none;
+  .nav-overlay-v1.active {
+    opacity: 1;
+    visibility: visible;
   }
 
-  @keyframes nebulaShift {
+  @keyframes ambientDrift {
     0% {
       background-position: 0% 0%;
     }
 
     100% {
-      background-position: 100% 100%;
+      background-position: 5% 5%;
     }
   }
 
-  .nav-overlay.active {
-    opacity: 1;
-    visibility: visible;
+  /* Layer 3: Noise Texture Overlay */
+  .nav-overlay-v1::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.04;
+    mix-blend-mode: overlay;
+    pointer-events: none;
   }
 
-  .nav-links {
+  /* Layer 4: Soft Bloom */
+  .nav-bloom {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 60%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 70%);
+    filter: blur(120px);
+    pointer-events: none;
+  }
+
+  /* 2.2 & 2.3 Layout Grid */
+  .nav-menu-container {
     position: fixed;
     inset: 0;
     z-index: 1001;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-    opacity: 0;
-    visibility: hidden;
+    padding: 100px 24px 32px 24px;
+    /* Respect safe areas & close icon */
     pointer-events: none;
-    transition: all 0.3s ease;
+    visibility: hidden;
   }
 
-  .nav-links.active {
-    opacity: 1;
-    visibility: visible;
+  .nav-menu-container.active {
     pointer-events: auto;
+    visibility: visible;
   }
 
-  .nav-links li {
+  .nav-links-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .nav-spacer {
+    flex-grow: 1;
+    min-height: 24px;
+  }
+
+  /* 4. TYPOGRAPHY & 5. INTERACTION */
+  .nav-link-v1 {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    position: relative;
+    /* Step 2 Initial state */
     opacity: 0;
-    transform: translateY(15px);
-    transition: all 0.3s ease;
+    transform: translateY(24px);
+    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, opacity;
   }
 
-  .nav-links.active li {
+  .nav-menu-container.active .nav-link-v1 {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: calc(var(--idx) * 60ms);
+  }
+
+  .nav-link-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.2s ease;
+  }
+
+  .nav-link-title {
+    font-family: var(--font-heading);
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: rgba(255, 255, 255, 0.92);
+    transition: font-weight 0.15s ease;
+  }
+
+  .nav-link-subtitle {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  /* Interaction Hover/Active */
+  .nav-link-v1:hover .nav-link-title,
+  .nav-link-v1.active .nav-link-title {
+    font-weight: 700;
+  }
+
+  .nav-link-v1:hover .nav-link-content,
+  .nav-link-v1.active .nav-link-content {
+    transform: translateX(2px);
+  }
+
+  /* Gradient Underline */
+  .nav-link-v1::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    /* below the subtitle */
+    left: 0;
+    width: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #00D1FF, #0066FF);
+    transition: width 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .nav-link-v1:hover::after,
+  .nav-link-v1.active::after {
+    width: 100%;
+  }
+
+  /* Background Hover Glow */
+  .nav-link-glow {
+    position: absolute;
+    top: 50%;
+    left: 40px;
+    width: 60%;
+    height: 100%;
+    transform: translateY(-50%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 1), transparent 70%);
+    opacity: 0;
+    filter: blur(40px);
+    transition: opacity 0.2s ease;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .nav-link-v1:hover .nav-link-glow,
+  .nav-link-v1.active .nav-link-glow {
+    opacity: 0.18;
+  }
+
+  /* 8. PREMIUM CTA BLOCK */
+  .nav-cta-wrapper {
+    width: 100%;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.3s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
+  }
+
+  .nav-menu-container.active .nav-cta-wrapper {
     opacity: 1;
     transform: translateY(0);
   }
 
-  .nav-links.active li:nth-child(1) {
-    transition-delay: 0.1s;
+  .premium-cta-block {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: 0px 20px 60px rgba(0, 0, 0, 0.6);
   }
 
-  .nav-links.active li:nth-child(2) {
-    transition-delay: 0.15s;
-  }
-
-  .nav-links.active li:nth-child(3) {
-    transition-delay: 0.2s;
-  }
-
-  .nav-links.active li:nth-child(4) {
-    transition-delay: 0.25s;
-  }
-
-  .nav-links.active li:nth-child(5) {
-    transition-delay: 0.3s;
-  }
-
-  .nav-links a:not(.nav-cta) {
-    font-family: var(--font-heading);
-    font-size: 36px;
-    font-weight: 700;
-    letter-spacing: -1.5px;
-    color: #fff;
-    transition: all 0.3s ease;
-    position: relative;
-  }
-
-  /* Stable Underline indicator */
-  .nav-links a:not(.nav-cta)::after {
-    content: "";
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 0;
-    height: 3px;
-    background: #00d4ff;
-    transition: width 0.3s ease;
-    border-radius: 2px;
-  }
-
-  .nav-links a.active-link:not(.nav-cta) {
-    color: #00d4ff;
-  }
-
-  .nav-links a.active-link:not(.nav-cta)::after {
-    width: 100%;
-  }
-
-  .nav-cta {
-    margin-top: 20px;
-    background: linear-gradient(135deg, #00d4ff 0%, #0072ff 100%) !important;
+  .premium-cta-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 56px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #00D1FF 0%, #0066FF 100%);
     color: #fff !important;
-    padding: 16px 40px !important;
-    font-weight: 700 !important;
-    border-radius: var(--r-full) !important;
-    box-shadow: 0 10px 30px rgba(0, 114, 255, 0.3);
-    transition: all 0.3s ease !important;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    box-shadow: 0px 8px 24px rgba(0, 102, 255, 0.4);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
   }
 
-  .nav-cta:active {
-    transform: scale(0.95) !important;
+  .premium-cta-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: lightSweep 8s linear infinite;
+  }
+
+  @keyframes lightSweep {
+    0% {
+      left: -100%;
+    }
+
+    20% {
+      left: 200%;
+    }
+
+    100% {
+      left: 200%;
+    }
+  }
+
+  .premium-cta-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 12px 32px rgba(0, 102, 255, 0.6);
+  }
+
+  .premium-cta-btn:active {
+    transform: scale(0.97);
+    transition: transform 0.1s ease;
   }
 
 

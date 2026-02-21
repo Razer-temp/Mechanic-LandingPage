@@ -1,8 +1,14 @@
 'use client';
 
 import clsx from 'clsx';
-
 import { useState, useEffect } from 'react';
+
+const navItems = [
+    { id: 'diagnosis', title: 'Diagnosis', subtitle: 'Identify issues with precision' },
+    { id: 'services', title: 'Services', subtitle: 'Comprehensive bike care' },
+    { id: 'how-it-works', title: 'How It Works', subtitle: 'Our seamless process' },
+    { id: 'reviews', title: 'Reviews', subtitle: 'What our riders say' }
+];
 
 export function Navbar() {
     const [scrolled, setScrolled] = useState(false);
@@ -71,29 +77,42 @@ export function Navbar() {
                 </button>
 
                 <div
-                    className={clsx('nav-overlay', mobileMenuOpen && 'active')}
+                    className={clsx('nav-overlay-v1', mobileMenuOpen && 'active')}
                     onClick={() => setMobileMenuOpen(false)}
                     aria-hidden="true"
-                />
+                >
+                    <div className="nav-bloom" />
+                </div>
 
-                <ul className={clsx('nav-links', mobileMenuOpen && 'active')} id="navLinks">
-                    {['diagnosis', 'services', 'how-it-works', 'reviews'].map((target) => (
-                        <li key={target}>
+                <div className={clsx('nav-menu-container', mobileMenuOpen && 'active')} id="navLinks">
+                    <div className="nav-links-inner">
+                        {navItems.map((item, index) => (
                             <a
-                                href={`#${target}`}
+                                key={item.id}
+                                href={`#${item.id}`}
                                 onClick={closeMenu}
-                                className={getLinkClass(target)}
+                                className={clsx('nav-link-v1', activeSection === item.id && 'active')}
+                                style={{ '--idx': index } as React.CSSProperties}
                             >
-                                {target.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                <div className="nav-link-content">
+                                    <span className="nav-link-title">{item.title}</span>
+                                    <span className="nav-link-subtitle">{item.subtitle}</span>
+                                </div>
+                                <div className="nav-link-glow" />
                             </a>
-                        </li>
-                    ))}
-                    <li>
-                        <a href="#booking" className="nav-cta" onClick={closeMenu}>
-                            Book Service
-                        </a>
-                    </li>
-                </ul>
+                        ))}
+                    </div>
+
+                    <div className="nav-spacer" />
+
+                    <div className="nav-cta-wrapper">
+                        <div className="premium-cta-block">
+                            <a href="#booking" className="premium-cta-btn" onClick={closeMenu}>
+                                Book Service
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </nav>
     );
