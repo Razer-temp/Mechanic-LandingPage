@@ -1878,66 +1878,61 @@ ul {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 44px;
-    height: 44px;
-    z-index: 1002;
+    width: 48px;
+    height: 48px;
+    z-index: 5000;
+    /* Priority */
     position: relative;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 50%;
-    gap: 5px;
-    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: transform;
+    background: transparent;
+    border: none;
+    padding: 0;
+    gap: 6px;
+    transition: transform 0.3s ease;
+    overflow: visible !important;
   }
 
   .nav-toggle span {
     display: block;
-    width: 18px;
+    width: 20px;
     height: 2px;
     background: #ffffff;
     border-radius: 2px;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.3s ease;
   }
 
   .nav-toggle.active {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.2);
     transform: rotate(90deg);
   }
 
   .nav-toggle.active span:nth-child(1) {
-    transform: translateY(3.5px) rotate(45deg);
-    width: 14px;
+    transform: translateY(8px) rotate(45deg);
+    width: 24px;
   }
 
   .nav-toggle.active span:nth-child(2) {
     opacity: 0;
-    transform: scale(0);
   }
 
   .nav-toggle.active span:nth-child(3) {
-    transform: translateY(-3.5px) rotate(-45deg);
-    width: 14px;
+    transform: translateY(-8px) rotate(-45deg);
+    width: 24px;
   }
 
   .nav-overlay {
     position: fixed;
     inset: 0;
+    /* Static background for zero animation lag */
     background:
       radial-gradient(at 0% 0%, var(--nebula-1) 0px, transparent 50%),
       radial-gradient(at 100% 0%, var(--nebula-2) 0px, transparent 50%),
-      linear-gradient(to bottom, #050508, #0a0a14);
-    background-size: 150% 150%;
-    animation: nebulaShift 20s ease infinite alternate;
+      linear-gradient(to bottom, #050508, #0a101f);
 
-    /* Optimization: Lighter Blur */
-    backdrop-filter: blur(40px) saturate(140%);
-    -webkit-backdrop-filter: blur(40px) saturate(140%);
+    backdrop-filter: blur(30px) saturate(120%);
+    -webkit-backdrop-filter: blur(30px) saturate(120%);
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
-    will-change: opacity, visibility;
-    transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.4s;
+    transition: opacity 0.3s ease, visibility 0.3s;
   }
 
   /* Noise Texture Overlay */
@@ -1973,11 +1968,11 @@ ul {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 28px;
+    gap: 24px;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: all 0.3s ease;
   }
 
   .nav-links.active {
@@ -1988,9 +1983,8 @@ ul {
 
   .nav-links li {
     opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: transform, opacity;
+    transform: translateY(15px);
+    transition: all 0.3s ease;
   }
 
   .nav-links.active li {
