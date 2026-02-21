@@ -427,13 +427,13 @@ export default function LandingPage() {
             AI-Powered Two-Wheeler Diagnostics &amp; Repair — Expert mechanics, instant diagnosis, and transparent pricing for your ride.
           </p>
           <div className="hero-ctas animate-on-scroll delay-500">
-            <a href="#booking" className="btn btn-primary btn-glow magnetic-btn hero-cta-clipped">
+            <a href="#booking" className="btn btn-primary btn-glow magnetic-btn">
               <span>🔧</span> Book Service
             </a>
-            <a href="#diagnosis" className="btn btn-secondary magnetic-btn hero-cta-clipped">
+            <a href="#diagnosis" className="btn btn-secondary magnetic-btn">
               <span>🤖</span> AI Bike Check
             </a>
-            <a href="tel:+919811530780" className="btn btn-outline magnetic-btn hero-cta-clipped">
+            <a href="tel:+919811530780" className="btn btn-outline magnetic-btn">
               <span>📞</span> Call Now
             </a>
           </div>
