@@ -67,8 +67,28 @@ export function Navbar() {
                     <span className="logo-text">Smart<span className="accent">Bike</span> Pro</span>
                 </a>
 
+                {/* --- DESKTOP NAVIGATION (Visible > 768px) --- */}
+                <ul className="nav-links hidden md:flex" id="navLinksDesktop">
+                    {navItems.map((item) => (
+                        <li key={item.id}>
+                            <a
+                                href={`#${item.id}`}
+                                className={clsx(activeSection === item.id && 'active-link')}
+                            >
+                                {item.title}
+                            </a>
+                        </li>
+                    ))}
+                    <li>
+                        <a href="#booking" className="nav-cta" style={{ marginLeft: '12px' }}>
+                            Book Service
+                        </a>
+                    </li>
+                </ul>
+
+                {/* --- MOBILE NAVIGATION TOGGLE (Visible < 768px) --- */}
                 <button
-                    className={clsx('nav-toggle', mobileMenuOpen && 'active')}
+                    className={clsx('nav-toggle flex md:hidden', mobileMenuOpen && 'active')}
                     id="navToggle"
                     aria-label="Toggle menu"
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -76,19 +96,20 @@ export function Navbar() {
                     <span></span><span></span><span></span>
                 </button>
 
+                {/* --- MOBILE NAVIGATION OVERLAY (v1.0 Pixel-Perfect) --- */}
                 <div
-                    className={clsx('nav-overlay-v1', mobileMenuOpen && 'active')}
+                    className={clsx('nav-overlay-v1 md:hidden', mobileMenuOpen && 'active')}
                     onClick={() => setMobileMenuOpen(false)}
                     aria-hidden="true"
                 >
                     <div className="nav-bloom" />
                 </div>
 
-                <div className={clsx('nav-menu-container', mobileMenuOpen && 'active')} id="navLinks">
+                <div className={clsx('nav-menu-container md:hidden', mobileMenuOpen && 'active')} id="navLinksMobile">
                     <div className="nav-links-inner">
                         {navItems.map((item, index) => (
                             <a
-                                key={item.id}
+                                key={`mobile-${item.id}`}
                                 href={`#${item.id}`}
                                 onClick={closeMenu}
                                 className={clsx('nav-link-v1', activeSection === item.id && 'active')}
