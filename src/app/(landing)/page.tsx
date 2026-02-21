@@ -68,7 +68,7 @@ export default function LandingPage() {
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
 
     document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
     return () => observer.disconnect();
@@ -396,14 +396,14 @@ export default function LandingPage() {
 
       {/* ===== HERO ===== */}
       <header className="hero" id="hero">
-        <div className="hero-bg-effects">
+        <div className="hero-bg-effects hero-animate-bg">
           <div className="hero-orb hero-orb--blue"></div>
           <div className="hero-orb hero-orb--red"></div>
           <div className="hero-grid-overlay"></div>
           <div className="hero-particles" ref={particlesRef}></div>
         </div>
         <div className="container hero-content">
-          <div className="hero-badge animate-on-scroll">
+          <div className="hero-badge hero-animate-slide-up" style={{ animationDelay: '250ms' }}>
             <div className="shooting-stars-container">
               {[...Array(20)].map((_, i) => (
                 <div key={i} className="shooting-star"></div>
@@ -414,39 +414,39 @@ export default function LandingPage() {
               AI-Powered Workshop
             </span>
           </div>
-          <h1 className="hero-title animate-on-scroll">
-            <span className="text-reveal-wrapper">
-              <span className="text-reveal delay-100">Smart Bike Care.</span>
+          <h1 className="hero-title">
+            <span className="text-reveal-wrapper hero-animate-slide-up-large" style={{ animationDelay: '350ms' }}>
+              <span className="text-reveal delay-100" style={{ animation: 'none', transform: 'none' }}>Smart Bike Care.</span>
             </span>
             <br />
-            <span className="text-reveal-wrapper">
-              <span className="text-reveal delay-300 gradient-text">Faster. Better.</span>
+            <span className="text-reveal-wrapper hero-animate-slide-up-large" style={{ animationDelay: '450ms' }}>
+              <span className="text-reveal delay-300 gradient-text" style={{ animation: 'none', transform: 'none' }}>Faster. Better.</span>
             </span>
           </h1>
-          <p className="hero-subtitle animate-on-scroll delay-500">
+          <p className="hero-subtitle hero-animate-slide-up" style={{ animationDelay: '600ms' }}>
             AI-Powered Two-Wheeler Diagnostics &amp; Repair — Expert mechanics, instant diagnosis, and transparent pricing for your ride.
           </p>
-          <div className="hero-ctas animate-on-scroll delay-500">
-            <a href="#booking" className="btn btn-primary btn-glow magnetic-btn">
+          <div className="hero-ctas">
+            <a href="#booking" className="btn btn-primary btn-glow magnetic-btn hero-animate-slide-up hero-animate-spring" style={{ animationDelay: '700ms' }}>
               <span>🔧</span> Book Service
             </a>
-            <a href="#diagnosis" className="btn btn-secondary magnetic-btn">
+            <a href="#diagnosis" className="btn btn-secondary magnetic-btn hero-animate-slide-up" style={{ animationDelay: '800ms' }}>
               <span>🤖</span> AI Bike Check
             </a>
-            <a href="tel:+919811530780" className="btn btn-outline magnetic-btn">
+            <a href="tel:+919811530780" className="btn btn-outline magnetic-btn hero-animate-slide-up" style={{ animationDelay: '900ms' }}>
               <span>📞</span> Call Now
             </a>
           </div>
-          <div className="hero-stats animate-on-scroll">
-            <div className="stat-item">
+          <div className="hero-stats">
+            <div className="stat-item hero-animate-slide-up" style={{ animationDelay: '900ms' }}>
               <span className="stat-number" data-target="15000">0</span>+
               <span className="stat-label">Bikes Serviced</span>
             </div>
-            <div className="stat-item">
+            <div className="stat-item hero-animate-slide-up" style={{ animationDelay: '1020ms' }}>
               <span className="stat-number" data-target="98">0</span>%
               <span className="stat-label">Happy Customers</span>
             </div>
-            <div className="stat-item">
+            <div className="stat-item hero-animate-slide-up" style={{ animationDelay: '1140ms' }}>
               <span className="stat-number" data-target="50">0</span>+
               <span className="stat-label">AI Diagnoses Daily</span>
             </div>
@@ -1010,7 +1010,11 @@ export default function LandingPage() {
       <Footer />
 
       {/* ===== FLOATING AI CHAT BUTTON ===== */}
-      <div className={clsx('floating-chat', chatOpen && 'open')} id="floatingChat">
+      <div
+        className={clsx('floating-chat hero-animate-scale-up hero-float-idle', chatOpen && 'open')}
+        id="floatingChat"
+        style={{ animationDelay: '1000ms' }}
+      >
         <button className="chat-toggle" onClick={() => setChatOpen(!chatOpen)} aria-label="Open AI Mechanic Chat">
           <span className="chat-icon">🤖</span>
           <span className="chat-label">AI Mechanic</span>
