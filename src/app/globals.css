@@ -1862,35 +1862,46 @@ ul {
 @media (max-width: 768px) {
   :root {
     --section-gap: 72px;
+    --nebula-1: rgba(0, 212, 255, 0.15);
+    --nebula-2: rgba(0, 114, 255, 0.2);
+    --nebula-3: rgba(111, 66, 193, 0.15);
   }
 
-  /* --- Premium Full Screen Mobile Menu (Animations Preserved) --- */
+  /* --- "Nebula Glass" UI 2.0 (Outstanding V5) --- */
   .nav-toggle {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    width: 32px;
-    height: 20px;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
     z-index: 1002;
     position: relative;
-    background: transparent;
-    border: none;
-    padding: 0;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    gap: 5px;
+    transition: all 0.3s ease;
   }
 
   .nav-toggle span {
     display: block;
-    width: 100%;
+    width: 18px;
     height: 2px;
     background: #ffffff;
     border-radius: 2px;
-    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-    transform-origin: center right;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .nav-toggle.active {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
   }
 
   .nav-toggle.active span:nth-child(1) {
-    transform: rotate(-45deg) translate(0, 0);
-    width: 100%;
+    transform: translateY(3.5px) rotate(45deg);
+    width: 14px;
   }
 
   .nav-toggle.active span:nth-child(2) {
@@ -1899,20 +1910,49 @@ ul {
   }
 
   .nav-toggle.active span:nth-child(3) {
-    transform: rotate(45deg) translate(0, 0);
-    width: 100%;
+    transform: translateY(-3.5px) rotate(-45deg);
+    width: 14px;
   }
 
   .nav-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(5, 5, 8, 0.92);
-    backdrop-filter: blur(28px) saturate(140%);
-    -webkit-backdrop-filter: blur(28px) saturate(140%);
+    /* Dynamic Mesh Background */
+    background:
+      radial-gradient(at 0% 0%, var(--nebula-1) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, var(--nebula-2) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, var(--nebula-3) 0px, transparent 50%),
+      linear-gradient(to bottom, #050508, #0a0a14);
+    background-size: 200% 200%;
+    animation: nebulaShift 15s ease infinite alternate;
+
+    /* Glass 2.0: Heavy Blur + Noise */
+    backdrop-filter: blur(100px) saturate(160%);
+    -webkit-backdrop-filter: blur(100px) saturate(160%);
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.4s;
+    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.6s;
+  }
+
+  /* Noise Texture Overlay */
+  .nav-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.04;
+    pointer-events: none;
+  }
+
+  @keyframes nebulaShift {
+    0% {
+      background-position: 0% 0%;
+    }
+
+    100% {
+      background-position: 100% 100%;
+    }
   }
 
   .nav-overlay.active {
@@ -1923,55 +1963,49 @@ ul {
   .nav-links {
     position: fixed;
     inset: 0;
-    background: transparent;
     z-index: 1001;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 0 28px;
-    gap: 30px;
-
+    gap: 32px;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(30px);
     pointer-events: none;
-    transition: all 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .nav-links.active {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
     pointer-events: auto;
   }
 
   .nav-links li {
     opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(40px) scale(0.9);
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .nav-links.active li {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 
-  /* Professional Stagger Delay */
   .nav-links.active li:nth-child(1) {
-    transition-delay: 0.08s;
+    transition-delay: 0.1s;
   }
 
   .nav-links.active li:nth-child(2) {
-    transition-delay: 0.16s;
+    transition-delay: 0.18s;
   }
 
   .nav-links.active li:nth-child(3) {
-    transition-delay: 0.24s;
+    transition-delay: 0.26s;
   }
 
   .nav-links.active li:nth-child(4) {
-    transition-delay: 0.32s;
+    transition-delay: 0.34s;
   }
 
   .nav-links.active li:nth-child(5) {
@@ -1980,46 +2014,35 @@ ul {
 
   .nav-links a:not(.nav-cta) {
     font-family: var(--font-heading);
-    font-size: 26px;
-    font-weight: 500;
-    letter-spacing: -0.5px;
-    color: #ffffff;
-    transition: transform 0.15s ease, opacity 0.2s ease;
-    display: inline-block;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0);
+    transition: all 0.3s ease;
   }
 
   .nav-links a:not(.nav-cta):active {
-    transform: scale(0.97);
-    opacity: 0.7;
-  }
-
-  .nav-links a:not(.nav-cta)::after {
-    display: none;
+    transform: scale(0.9);
+    color: #00d4ff;
+    text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
   }
 
   .nav-cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 999px !important;
-    padding: 16px 36px !important;
-    background: linear-gradient(135deg, #00d4ff 0%, #0072ff 100%) !important;
-    color: #ffffff !important;
-    font-family: var(--font-heading);
-    font-weight: 600 !important;
-    font-size: 1rem !important;
-    letter-spacing: 0.5px;
-    border: none !important;
-    box-shadow: 0 4px 20px rgba(0, 114, 255, 0.3);
-    transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1) !important;
-    margin-top: 10px;
+    margin-top: 15px;
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 18px 40px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 10px 40px rgba(255, 255, 255, 0.15) !important;
+    border-radius: var(--r-full) !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
   }
 
   .nav-cta:active {
-    transform: scale(0.96) !important;
+    transform: scale(0.92) translateY(2px) !important;
+    box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1) !important;
   }
-
-  /* pure white X */
 
 
   .hero-title {
