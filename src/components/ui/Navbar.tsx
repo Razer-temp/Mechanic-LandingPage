@@ -59,12 +59,7 @@ export function Navbar() {
     return (
         <nav className={clsx('navbar', scrolled && 'scrolled')} id="navbar">
             <div className="container nav-container">
-                <a
-                    href="#"
-                    className="nav-logo hero-animate-slide-down"
-                    style={{ animationDelay: '150ms' }}
-                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                >
+                <a href="#" className="nav-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                     <span className="logo-icon">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src="/logo.svg" alt="SmartBike Pro Logo" className="logo-svg w-6 h-6" />
@@ -74,23 +69,18 @@ export function Navbar() {
 
                 {/* --- DESKTOP NAVIGATION (Visible > 768px) --- */}
                 <ul className="nav-links desktop-only" id="navLinksDesktop">
-                    {navItems.map((item, index) => (
+                    {navItems.map((item) => (
                         <li key={item.id}>
                             <a
                                 href={`#${item.id}`}
-                                className={clsx(activeSection === item.id && 'active-link', 'hero-animate-slide-down')}
-                                style={{ animationDelay: `${200 + index * 50}ms` }}
+                                className={clsx(activeSection === item.id && 'active-link')}
                             >
                                 {item.title}
                             </a>
                         </li>
                     ))}
                     <li>
-                        <a
-                            href="#booking"
-                            className="nav-cta hero-animate-slide-down"
-                            style={{ animationDelay: '400ms', marginLeft: '12px' }}
-                        >
+                        <a href="#booking" className="nav-cta" style={{ marginLeft: '12px' }}>
                             Book Service
                         </a>
                     </li>
@@ -98,11 +88,10 @@ export function Navbar() {
 
                 {/* --- MOBILE NAVIGATION TOGGLE (Visible < 768px) --- */}
                 <button
-                    className={clsx('nav-toggle mobile-only hero-animate-slide-down', mobileMenuOpen && 'active')}
+                    className={clsx('nav-toggle mobile-only', mobileMenuOpen && 'active')}
                     id="navToggle"
                     aria-label="Toggle menu"
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    style={{ animationDelay: '150ms' }}
                 >
                     <span></span><span></span><span></span>
                 </button>
