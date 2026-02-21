@@ -517,8 +517,8 @@
 /* MOBILE FIXES */
 @media (max-width: 768px) {
     .footer-premium {
-        padding: 60px 0 120px;
-        /* Increased bottom padding to prevent overlap with floating chat */
+        padding: 60px 0 60px;
+        /* Balanced bottom padding */
     }
 
     .footer-main-grid {
