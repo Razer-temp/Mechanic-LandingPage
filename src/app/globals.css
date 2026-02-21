@@ -1873,15 +1873,17 @@ ul {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
     z-index: 1002;
     position: relative;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 50%;
     gap: 5px;
-    transition: all 0.3s ease;
+    margin-right: -4px;
+    /* Ensure no clipping on screen edge */
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .nav-toggle span {
@@ -1932,7 +1934,8 @@ ul {
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.6s;
+    transform: translate(var(--px, 0), var(--py, 0)) scale(1.1);
+    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.6s, transform 0.2s ease-out;
   }
 
   /* Noise Texture Overlay */
@@ -2020,28 +2023,76 @@ ul {
     color: #fff;
     text-shadow: 0 0 20px rgba(255, 255, 255, 0);
     transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 4px;
+  }
+
+  /* Interactive Active Indicator (Scroll Synced) */
+  .nav-links a:not(.nav-cta).active-link {
+    color: #00d4ff;
+  }
+
+  .nav-links a:not(.nav-cta)::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(to right, #00d4ff, #0072ff);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateX(-50%);
+    opacity: 0;
+  }
+
+  .nav-links a:not(.nav-cta).active-link::after {
+    width: 100%;
+    opacity: 1;
   }
 
   .nav-links a:not(.nav-cta):active {
-    transform: scale(0.9);
+    transform: scale(0.9) translateY(-2px);
     color: #00d4ff;
     text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
   }
 
+  /* Link Tap Expansion Animation */
+  @keyframes linkTap {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 0.5;
+      transform: scale(1.1);
+      filter: brightness(1.5);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .nav-links a.clicked {
+    animation: linkTap 0.4s ease forwards;
+  }
+
   .nav-cta {
     margin-top: 15px;
-    background: #ffffff !important;
-    color: #000000 !important;
+    background: linear-gradient(135deg, #00d4ff 0%, #0072ff 100%) !important;
+    color: #ffffff !important;
     padding: 18px 40px !important;
     font-weight: 700 !important;
-    box-shadow: 0 10px 40px rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 10px 40px rgba(0, 114, 255, 0.25) !important;
     border-radius: var(--r-full) !important;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
   }
 
   .nav-cta:active {
     transform: scale(0.92) translateY(2px) !important;
-    box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1) !important;
   }
 
 

@@ -71,15 +71,48 @@ export function Navbar() {
                     className={clsx('nav-overlay', mobileMenuOpen && 'active')}
                     onClick={() => setMobileMenuOpen(false)}
                     aria-hidden="true"
+                    onMouseMove={(e) => {
+                        const overlay = e.currentTarget;
+                        const { clientX, clientY } = e;
+                        const { width, height } = overlay.getBoundingClientRect();
+                        const x = (clientX / width - 0.5) * 20;
+                        const y = (clientY / height - 0.5) * 20;
+                        overlay.style.setProperty('--px', `${x}px`);
+                        overlay.style.setProperty('--py', `${y}px`);
+                    }}
                 />
 
                 <ul className={clsx('nav-links', mobileMenuOpen && 'active')} id="navLinks">
-                    <li><a href="#diagnosis" onClick={closeMenu} className={getLinkClass('diagnosis')}>AI Diagnosis</a></li>
-                    <li><a href="#services" onClick={closeMenu} className={getLinkClass('services')}>Services</a></li>
-                    <li><a href="#how-it-works" onClick={closeMenu} className={getLinkClass('how-it-works')}>How It Works</a></li>
-                    <li><a href="#reviews" onClick={closeMenu} className={getLinkClass('reviews')}>Reviews</a></li>
-
-                    <li><a href="#booking" className="nav-cta" onClick={closeMenu}>Book Service</a></li>
+                    {['diagnosis', 'services', 'how-it-works', 'reviews'].map((target) => (
+                        <li key={target}>
+                            <a
+                                href={`#${target}`}
+                                onClick={(e) => {
+                                    const targetEl = e.currentTarget;
+                                    targetEl.classList.add('clicked');
+                                    setTimeout(() => {
+                                        targetEl.classList.remove('clicked');
+                                        closeMenu();
+                                    }, 400);
+                                }}
+                                className={getLinkClass(target)}
+                            >
+                                {target.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                            </a>
+                        </li>
+                    ))}
+                    <li>
+                        <a
+                            href="#booking"
+                            className="nav-cta"
+                            onClick={(e) => {
+                                e.currentTarget.classList.add('clicked');
+                                setTimeout(closeMenu, 400);
+                            }}
+                        >
+                            Book Service
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
