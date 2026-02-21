@@ -391,7 +391,7 @@ export default function LandingPage() {
   }, [chatMessages]);
 
   return (
-    <div className="landing-page-wrapper touch-pan-y">
+    <div className="landing-page-wrapper">
       <Navbar />
 
       {/* ===== HERO ===== */}
