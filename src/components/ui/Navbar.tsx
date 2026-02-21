@@ -10,6 +10,17 @@ export function Navbar() {
     const [activeSection, setActiveSection] = useState('');
 
     useEffect(() => {
+        if (mobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [mobileMenuOpen]);
+
+    useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 50);
         };
