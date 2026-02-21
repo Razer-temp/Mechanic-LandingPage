@@ -22,9 +22,23 @@ export function Footer() {
     const [discountCode, setDiscountCode] = useState('BIKEPRO10');
 
     useEffect(() => {
-        const timer = setInterval(() => setCurrentTime(new Date()), 60000);
+        // Use a 10s interval for better responsiveness (e.g. updating day exactly at midnight)
+        const timer = setInterval(() => setCurrentTime(new Date()), 10000);
+
+        // Refresh time when user returns to tab (handles stale day/time after long sleep)
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                setCurrentTime(new Date());
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
         fetchBusinessInfo();
-        return () => clearInterval(timer);
+
+        return () => {
+            clearInterval(timer);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
     }, []);
 
     const fetchBusinessInfo = async () => {
