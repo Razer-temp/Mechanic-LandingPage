@@ -1865,6 +1865,13 @@ ul {
     --nebula-1: rgba(0, 212, 255, 0.15);
     --nebula-2: rgba(0, 114, 255, 0.2);
     --nebula-3: rgba(111, 66, 193, 0.15);
+    --glass-card: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+  }
+
+  .navbar,
+  .nav-container {
+    overflow: visible !important;
   }
 
   /* --- "Nebula Glass" UI 2.0 (Outstanding V5) --- */
@@ -1873,17 +1880,19 @@ ul {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 46px;
-    height: 46px;
-    z-index: 1002;
+    width: 48px;
+    height: 48px;
+    z-index: 2000;
+    /* Highest priority */
     position: relative;
     background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 50%;
     gap: 5px;
     margin-right: -4px;
-    /* Ensure no clipping on screen edge */
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: background 0.3s ease, border-color 0.3s ease;
+    overflow: visible !important;
   }
 
   .nav-toggle span {
@@ -1971,7 +1980,8 @@ ul {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 32px;
+    padding: 0 32px;
+    gap: 16px;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -1984,115 +1994,106 @@ ul {
     pointer-events: auto;
   }
 
-  .nav-links li {
+  .nav-item {
+    width: 100%;
+    max-width: 320px;
     opacity: 0;
-    transform: translateY(40px) scale(0.9);
+    transform: translateY(30px) scale(0.95);
     transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
-  .nav-links.active li {
+  .nav-links.active .nav-item {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
 
-  .nav-links.active li:nth-child(1) {
-    transition-delay: 0.1s;
-  }
-
-  .nav-links.active li:nth-child(2) {
-    transition-delay: 0.18s;
-  }
-
-  .nav-links.active li:nth-child(3) {
-    transition-delay: 0.26s;
-  }
-
-  .nav-links.active li:nth-child(4) {
-    transition-delay: 0.34s;
-  }
-
-  .nav-links.active li:nth-child(5) {
-    transition-delay: 0.45s;
-  }
-
-  .nav-links a:not(.nav-cta) {
-    font-family: var(--font-heading);
-    font-size: 32px;
-    font-weight: 700;
-    letter-spacing: -1px;
-    color: #fff;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0);
-    transition: all 0.3s ease;
+  /* Bento Glass Card Style */
+  .nav-link-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    background: var(--glass-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
-    display: inline-block;
-    padding-bottom: 4px;
+    overflow: hidden;
   }
 
-  /* Interactive Active Indicator (Scroll Synced) */
-  .nav-links a:not(.nav-cta).active-link {
-    color: #00d4ff;
+  .nav-link-card .link-text {
+    font-family: var(--font-heading);
+    font-size: 24px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease;
+    z-index: 2;
   }
 
-  .nav-links a:not(.nav-cta)::after {
+  /* Underline Logic (Phase 7) */
+  .nav-link-card::after {
     content: "";
     position: absolute;
-    bottom: 0;
+    bottom: 12px;
     left: 50%;
     width: 0;
     height: 2px;
-    background: linear-gradient(to right, #00d4ff, #0072ff);
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+    transition: all 0.5s var(--ease);
     transform: translateX(-50%);
-    opacity: 0;
   }
 
-  .nav-links a:not(.nav-cta).active-link::after {
-    width: 100%;
-    opacity: 1;
+  /* Active State: Glow & Pulse */
+  .nav-link-card.active-link {
+    background: rgba(0, 212, 255, 0.05);
+    border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.1);
+    animation: breathingGlow 3s ease-in-out infinite;
   }
 
-  .nav-links a:not(.nav-cta):active {
-    transform: scale(0.9) translateY(-2px);
-    color: #00d4ff;
-    text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+  .nav-link-card.active-link .link-text {
+    color: #fff;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
   }
 
-  /* Link Tap Expansion Animation */
-  @keyframes linkTap {
-    0% {
-      opacity: 1;
-      transform: scale(1);
+  .nav-link-card.active-link::after {
+    width: 40px;
+  }
+
+  @keyframes breathingGlow {
+
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+      border-color: rgba(0, 212, 255, 0.2);
     }
 
     50% {
-      opacity: 0.5;
-      transform: scale(1.1);
-      filter: brightness(1.5);
-    }
-
-    100% {
-      opacity: 1;
-      transform: scale(1);
+      box-shadow: 0 0 40px rgba(0, 212, 255, 0.2);
+      border-color: rgba(0, 212, 255, 0.4);
     }
   }
 
-  .nav-links a.clicked {
-    animation: linkTap 0.4s ease forwards;
-  }
-
-  .nav-cta {
-    margin-top: 15px;
+  .nav-cta-premium {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 22px;
     background: linear-gradient(135deg, #00d4ff 0%, #0072ff 100%) !important;
-    color: #ffffff !important;
-    padding: 18px 40px !important;
-    font-weight: 700 !important;
-    box-shadow: 0 10px 40px rgba(0, 114, 255, 0.25) !important;
-    border-radius: var(--r-full) !important;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    color: #fff !important;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 114, 255, 0.3);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
-  .nav-cta:active {
-    transform: scale(0.92) translateY(2px) !important;
+  .nav-cta-premium:active {
+    transform: scale(0.95);
   }
 
 

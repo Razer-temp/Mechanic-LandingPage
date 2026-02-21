@@ -35,7 +35,10 @@ export function Navbar() {
                     setActiveSection(entry.target.id);
                 }
             });
-        }, { threshold: 0.6 });
+        }, {
+            rootMargin: '-20% 0px -20% 0px',
+            threshold: 0.1
+        });
 
         const sections = document.querySelectorAll('section[id], header[id]');
         sections.forEach(section => observer.observe(section));
@@ -45,7 +48,7 @@ export function Navbar() {
 
     const closeMenu = () => setMobileMenuOpen(false);
 
-    const getLinkClass = (id: string) => clsx('', activeSection === id && 'active-link');
+    const getLinkClass = (id: string) => clsx('nav-link-card', activeSection === id && 'active-link');
 
     return (
         <nav className={clsx('navbar', scrolled && 'scrolled')} id="navbar">
@@ -63,6 +66,16 @@ export function Navbar() {
                     id="navToggle"
                     aria-label="Toggle menu"
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                    onMouseMove={(e) => {
+                        const btn = e.currentTarget;
+                        const rect = btn.getBoundingClientRect();
+                        const x = e.clientX - rect.left - rect.width / 2;
+                        const y = e.clientY - rect.top - rect.height / 2;
+                        btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px) rotate(${mobileMenuOpen ? '90deg' : '0deg'})`;
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = mobileMenuOpen ? 'rotate(90deg)' : '';
+                    }}
                 >
                     <span></span><span></span><span></span>
                 </button>
@@ -84,7 +97,7 @@ export function Navbar() {
 
                 <ul className={clsx('nav-links', mobileMenuOpen && 'active')} id="navLinks">
                     {['diagnosis', 'services', 'how-it-works', 'reviews'].map((target) => (
-                        <li key={target}>
+                        <li key={target} className="nav-item">
                             <a
                                 href={`#${target}`}
                                 onClick={(e) => {
@@ -97,14 +110,17 @@ export function Navbar() {
                                 }}
                                 className={getLinkClass(target)}
                             >
-                                {target.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                <span className="link-text">
+                                    {target.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                </span>
+                                <div className="link-glow" />
                             </a>
                         </li>
                     ))}
-                    <li>
+                    <li className="nav-item">
                         <a
                             href="#booking"
-                            className="nav-cta"
+                            className="nav-cta-premium"
                             onClick={(e) => {
                                 e.currentTarget.classList.add('clicked');
                                 setTimeout(closeMenu, 400);
