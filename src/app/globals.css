@@ -1874,10 +1874,8 @@ ul {
   .nav-overlay {
     position: fixed;
     inset: 0;
-    /* Deep fade */
-    background: rgba(5, 5, 8, 0.6);
-    backdrop-filter: blur(24px) saturate(1.4);
-    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    /* Soft dark overlay */
+    background: rgba(0, 0, 0, 0.4);
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
@@ -1895,8 +1893,10 @@ ul {
     left: 0;
     right: 0;
     bottom: 0;
-    /* Clean transparent cover since overlay handles the visual blur */
-    background: transparent;
+    /* Solid deeply frosted dark tint for legibility */
+    background: rgba(7, 7, 10, 0.95);
+    backdrop-filter: blur(32px) saturate(1.5);
+    -webkit-backdrop-filter: blur(32px) saturate(1.5);
     z-index: 1001;
     display: flex;
     flex-direction: column;
@@ -1905,11 +1905,12 @@ ul {
     padding: 0 28px;
     gap: 32px;
 
+    /* Animation: scale down instead of up to feel like a cover coming down */
     opacity: 0;
     visibility: hidden;
-    transform: scale(0.95);
+    transform: scale(1.03);
     pointer-events: none;
-    transition: all 0.3s var(--ease);
+    transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   .nav-links.active {
