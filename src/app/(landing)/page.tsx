@@ -12,7 +12,7 @@ import './landing-effects.css';
 import './how-it-works.css';
 import './footer-premium.css';
 import clsx from 'clsx';
-import { MessageSquareText, BrainCircuit, Wrench, Rocket } from 'lucide-react';
+import { MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles } from 'lucide-react';
 
 export default function LandingPage() {
   // --- States for Interactions ---
@@ -1012,14 +1012,14 @@ export default function LandingPage() {
       {/* ===== FLOATING AI CHAT BUTTON ===== */}
       <div className={clsx('floating-chat', chatOpen && 'open')} id="floatingChat">
         <button className="chat-toggle" onClick={() => setChatOpen(!chatOpen)} aria-label="Open AI Mechanic Chat">
-          <span className="chat-icon">🤖</span>
+          <span className="chat-icon"><BrainCircuit size={24} className="eye-catchy-icon" /></span>
           <span className="chat-label">AI Mechanic</span>
-          <span className="chat-close">✕</span>
+          <span className="chat-close"><X size={20} /></span>
         </button>
         <div className="chat-window glass-card" id="chatWindow">
           <div className="chat-header">
             <div className="chat-header-info">
-              <span className="chat-avatar">🤖</span>
+              <span className="chat-avatar premium-glow-icon"><Sparkles size={22} /></span>
               <div>
                 <strong>AI Mechanic</strong>
                 <span className="chat-status"><span className="pulse-dot pulse-dot--green"></span> Online</span>
