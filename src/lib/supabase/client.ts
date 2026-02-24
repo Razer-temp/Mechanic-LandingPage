@@ -10,6 +10,9 @@ export function createClient() {
 
     if (!supabaseUrl || !supabaseKey) {
         console.error('Supabase environment variables are missing!');
+        if (typeof window !== 'undefined') {
+            alert('DIAGNOSTIC: Supabase Env Vars Missing! URL: ' + !!supabaseUrl + ' Key: ' + !!supabaseKey);
+        }
     }
 
     if (!supabaseInstance) {
