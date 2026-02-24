@@ -1,5 +1,8 @@
 import { createBrowserClient } from '@supabase/ssr';
 import type { Database } from '@/types/database';
+import { SupabaseClient } from '@supabase/supabase-js';
+
+let supabaseInstance: SupabaseClient<Database> | null = null;
 
 export function createClient() {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -9,9 +12,13 @@ export function createClient() {
         console.error('CRITICAL: Supabase Environment Variables are missing!', { supabaseUrl, supabaseKey });
     }
 
-    return createBrowserClient<Database>(
-        supabaseUrl ?? '',
-        supabaseKey ?? ''
-    );
+    if (!supabaseInstance) {
+        supabaseInstance = createBrowserClient<Database>(
+            supabaseUrl ?? '',
+            supabaseKey ?? ''
+        );
+    }
+
+    return supabaseInstance;
 }
 

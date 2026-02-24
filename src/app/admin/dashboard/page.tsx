@@ -59,7 +59,9 @@ export default function AdminDashboard() {
 
 
     const notificationRef = useRef<HTMLDivElement>(null);
-    const supabase = createClient();
+    const supabase = useMemo(() => createClient(), []);
+
+    console.log('AdminDashboard Render | Loading:', loading);
 
     // Sync Global Theme Accent
     useEffect(() => {
