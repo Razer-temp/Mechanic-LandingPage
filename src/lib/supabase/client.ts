@@ -11,7 +11,6 @@ export function createClient() {
 
     if (!supabaseInstance) {
         if (isBrowser) {
-            console.log('Initializing Supabase through Proxy fetch override');
             supabaseInstance = createBrowserClient<Database>(
                 actualUrl,
                 supabaseKey,
@@ -19,7 +18,6 @@ export function createClient() {
                     global: {
                         fetch: (url, options) => {
                             const urlStr = url.toString();
-                            // Only proxy if it's a supabase request
                             const finalUrl = urlStr.startsWith(actualUrl)
                                 ? urlStr.replace(actualUrl, `${window.location.origin}/supabase-api`)
                                 : urlStr;
