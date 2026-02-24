@@ -653,34 +653,57 @@ ul {
   align-items: center;
   gap: 12px;
   padding: 10px 24px;
-  background: rgba(5, 5, 8, 0.85);
-  /* Deep Crystal Glass */
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(5, 5, 8, 0.85) 100%);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
   border-radius: var(--r-full);
   font-size: 0.72rem;
   font-weight: 800;
-  color: rgba(255, 255, 255, 0.95);
+  color: #fff;
   margin-bottom: 36px;
   letter-spacing: 2px;
   text-transform: uppercase;
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow:
-    0 10px 40px -10px rgba(0, 0, 0, 0.8),
-    0 0 20px rgba(0, 212, 255, 0.05);
-  /* Ambient back-glow */
-  transition: all 0.5s var(--ease);
+    0 8px 32px 0 rgba(0, 212, 255, 0.1),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.hero-badge::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.4), transparent 40%, rgba(167, 139, 250, 0.2) 60%, rgba(0, 212, 255, 0.1));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.hero-badge::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120px circle at left, rgba(0, 212, 255, 0.15), transparent);
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 .hero-badge:hover {
-  transform: translateY(-3px) scale(1.02);
-  background: rgba(5, 5, 8, 0.95);
-  border-color: rgba(0, 212, 255, 0.4);
+  transform: translateY(-4px) scale(1.03);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.6) 0%, rgba(5, 5, 8, 0.95) 100%);
+  border-color: rgba(0, 212, 255, 0.3);
   box-shadow:
-    0 25px 50px -15px rgba(0, 0, 0, 0.9),
-    0 0 30px rgba(0, 212, 255, 0.15);
+    0 15px 45px -10px rgba(0, 212, 255, 0.25),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.25),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.5);
 }
 
 .badge-text {
@@ -688,39 +711,40 @@ ul {
   z-index: 2;
   display: flex;
   align-items: center;
-  background: linear-gradient(90deg, #fff, rgba(255, 255, 255, 0.7), #fff);
-  background-size: 200% auto;
+  background: linear-gradient(90deg, #fff, #a78bfa, #00d4ff, #fff);
+  background-size: 300% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: textShimmer 4s linear infinite;
+  background-clip: text;
+  animation: textShimmer 5s linear infinite;
 }
 
 @keyframes textShimmer {
   to {
-    background-position: 200% center;
+    background-position: 300% center;
   }
 }
 
 .pulse-dot {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   background: #00d4ff;
   border-radius: 50%;
   position: relative;
   z-index: 2;
   box-shadow:
     0 0 10px #00d4ff,
-    0 0 20px rgba(0, 212, 255, 0.5);
-  animation: biolume 3s ease-in-out infinite alternate;
+    0 0 20px #00d4ff;
+  animation: biolume 2.5s ease-in-out infinite alternate;
 }
 
 @keyframes biolume {
   from {
-    filter: brightness(1) drop-shadow(0 0 5px #00d4ff);
+    filter: brightness(1) drop-shadow(0 0 8px #00d4ff);
   }
 
   to {
-    filter: brightness(1.8) drop-shadow(0 0 15px #00d4ff);
+    filter: brightness(1.5) drop-shadow(0 0 20px #00d4ff);
   }
 }
 
@@ -735,26 +759,26 @@ ul {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: #00d4ff;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.8), transparent);
   pointer-events: none;
 }
 
 .pulse-dot::after {
-  animation: sonarRipple 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: sonarRipple 3s cubic-bezier(0.1, 0.7, 0.3, 1) infinite;
 }
 
 .pulse-dot::before {
-  animation: sonarRipple 4s cubic-bezier(0.4, 0, 0.2, 1) infinite 2s;
+  animation: sonarRipple 3s cubic-bezier(0.1, 0.7, 0.3, 1) infinite 1.5s;
 }
 
 @keyframes sonarRipple {
   0% {
     transform: translate(-50%, -50%) scale(1);
-    opacity: 0.5;
+    opacity: 0.8;
   }
 
   100% {
-    transform: translate(-50%, -50%) scale(8);
+    transform: translate(-50%, -50%) scale(10);
     opacity: 0;
   }
 }
