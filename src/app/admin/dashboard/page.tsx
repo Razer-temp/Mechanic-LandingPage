@@ -193,15 +193,13 @@ export default function AdminDashboard() {
     };
 
     const handleLogout = async () => {
-        console.log('Starting logout process...');
         try {
-            const { error } = await supabase.auth.signOut();
-            if (error) throw error;
-            console.log('Logout successful.');
+            await supabase.auth.signOut();
             router.push('/admin/login');
         } catch (err: any) {
             console.error('Logout failed:', err);
-            alert('Logout Error: ' + (err.message || err));
+            // Force redirect even on failure to clear app state
+            router.push('/admin/login');
         }
     };
 
