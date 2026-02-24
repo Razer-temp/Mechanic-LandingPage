@@ -8,63 +8,68 @@
 
 /* ===== CSS VARIABLES ===== */
 :root {
-  /* Refined Ultra-Dark Palette */
-  --bg-void: #030305;
-  --bg-dark: #07070b;
-  --bg-surface: #0a0a12;
-  --bg-elevated: #0e0e1a;
-  --bg-glass: rgba(10, 10, 20, 0.75);
-  --bg-glass-hover: rgba(14, 14, 28, 0.65);
-  --bg-glass-strong: rgba(7, 7, 15, 0.9);
+  /* Refined Dark Palette */
+  --bg-void: #050508;
+  --bg-dark: #08080e;
+  --bg-surface: #0c0c16;
+  --bg-elevated: #10101e;
+  --bg-glass: rgba(12, 12, 28, 0.82);
+  --bg-glass-hover: rgba(16, 16, 32, 0.7);
+  --bg-glass-strong: rgba(12, 12, 28, 0.8);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-light: rgba(255, 255, 255, 0.07);
+  --border-accent: rgba(0, 200, 255, 0.15);
+  --border-glow: rgba(0, 200, 255, 0.3);
 
-  --border-subtle: rgba(255, 255, 255, 0.03);
-  --border-light: rgba(255, 255, 255, 0.06);
-  --border-accent: rgba(0, 200, 255, 0.2);
-  --border-glow: rgba(0, 200, 255, 0.4);
+  /* Refined Accent Colors */
+  --accent: #00c8ff;
+  --accent-dim: #0090c0;
+  --accent-glow: rgba(0, 200, 255, 0.12);
+  --accent-red: #ff2d55;
+  --accent-violet: #a78bfa;
+  --accent-green: #34d399;
+  --accent-amber: #fbbf24;
 
-  /* Master Class Accent Palette */
-  --accent: #00d4ff;
-  --accent-dim: #00a3cc;
-  --accent-glow: rgba(0, 212, 255, 0.15);
-  --accent-red: #ff3366;
-  --accent-violet: #8b5cf6;
-  --accent-emerald: #10b981;
-  --accent-amber: #f59e0b;
+  /* Premium Gradients */
+  --grad-hero: linear-gradient(135deg, #00c8ff 0%, #a78bfa 50%, #ff2d55 100%);
+  --grad-blue: linear-gradient(135deg, #00c8ff 0%, #0090c0 100%);
+  --grad-card: linear-gradient(160deg, rgba(0, 200, 255, 0.06) 0%, rgba(167, 139, 250, 0.04) 50%, transparent 100%);
+  --grad-shimmer: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.03) 50%, transparent 100%);
+  --grad-glow-bg: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 200, 255, 0.04), transparent 40%);
 
-  /* Cinematic Gradients */
-  --grad-hero: linear-gradient(135deg, #00d4ff 0%, #8b5cf6 50%, #ff3366 100%);
-  --grad-blue: linear-gradient(135deg, #00d4ff 0%, #0088aa 100%);
-  --grad-surface: linear-gradient(160deg, rgba(0, 212, 255, 0.08) 0%, rgba(139, 92, 246, 0.05) 50%, transparent 100%);
-  --grad-shimmer: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.05) 50%, transparent 100%);
-
-  /* Text & Typography */
-  --text-primary: #f0f0f5;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  /* Text */
+  --text-primary: #eeeef2;
+  --text-secondary: #8888a0;
+  --text-muted: #55556a;
   --text-bright: #ffffff;
 
-  --font-heading: 'Outfit', var(--font-outfit), system-ui, sans-serif;
-  --font-body: 'Inter', var(--font-inter), system-ui, sans-serif;
+  /* Typography */
+  --font-heading: var(--font-outfit), system-ui, sans-serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
 
-  /* Spacing & Layout */
-  --section-gap: 140px;
-  --max-w: 1200px;
-  --container-pad: 32px;
+  /* Spacing */
+  --section-gap: 120px;
+  --max-w: 1160px;
 
-  /* Radius System */
-  --r-sm: 8px;
-  --r-md: 12px;
-  --r-lg: 24px;
-  --r-xl: 32px;
+  /* Radius */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-xl: 30px;
   --r-full: 9999px;
 
-  /* Premium Motion Tokens */
-  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 40px rgba(0, 200, 255, 0.08);
+  --shadow-glow-strong: 0 0 60px rgba(0, 200, 255, 0.15);
+
+  /* Motion */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --dur-fast: 0.2s;
-  --dur-normal: 0.4s;
-  --dur-slow: 0.8s;
+  --dur: 0.35s;
+  --dur-slow: 0.6s;
 }
 
 /* ===== RESPONSIVE UTILITIES ===== */
@@ -168,57 +173,6 @@ ul {
   position: relative;
 }
 
-/* ===== BENTO GRID COMPONENT ===== */
-.bento-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: minmax(180px, auto);
-  gap: 20px;
-}
-
-.bento-item {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--r-lg);
-  background: var(--bg-glass);
-  backdrop-filter: blur(40px) saturate(1.5);
-  border: 1px solid var(--border-subtle);
-  transition: all var(--dur-normal) var(--ease-expo);
-}
-
-.bento-item--large {
-  grid-column: span 2;
-  grid-row: span 2;
-}
-
-.bento-item--wide {
-  grid-column: span 2;
-}
-
-.bento-item--tall {
-  grid-row: span 2;
-}
-
-@media (max-width: 1024px) {
-  .bento-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 640px) {
-  .bento-grid {
-    grid-template-columns: 1fr;
-    grid-auto-rows: auto;
-  }
-
-  .bento-item--large,
-  .bento-item--wide,
-  .bento-item--tall {
-    grid-column: span 1;
-    grid-row: span 1;
-  }
-}
-
 /* ===== PREMIUM GLASS CARD ===== */
 .glass-card {
   background: var(--bg-glass);
@@ -318,8 +272,8 @@ ul {
 .gradient-text {
   background: var(--grad-hero);
   -webkit-background-clip: text;
-  background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* ===== BUTTONS — Refined ===== */
@@ -626,39 +580,23 @@ ul {
   animation-delay: -8s;
 }
 
-/* ===== SHOOTING STARS ===== */
-.shooting-star {
-  position: absolute;
-  top: var(--star-top);
-  left: var(--star-left);
-  width: 150px;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent), transparent);
-  animation: shootingStar var(--star-dur) linear infinite;
-  animation-delay: var(--star-delay);
-  opacity: 0;
-  transform: rotate(-15deg);
-}
+@keyframes orbDrift {
 
-@keyframes shootingStar {
-  0% {
-    transform: translateX(0) scaleX(0);
-    opacity: 0;
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
   }
 
-  20% {
-    opacity: 1;
-    transform: translateX(200px) scaleX(1.5);
+  25% {
+    transform: translate(40px, -30px) scale(1.04);
   }
 
   50% {
-    opacity: 1;
-    transform: translateX(500px) scaleX(1);
+    transform: translate(-20px, 20px) scale(0.97);
   }
 
-  100% {
-    transform: translateX(1000px) scaleX(0);
-    opacity: 0;
+  75% {
+    transform: translate(30px, 10px) scale(1.02);
   }
 }
 

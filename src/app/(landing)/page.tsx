@@ -401,65 +401,58 @@ export default function LandingPage() {
           <div className="hero-orb hero-orb--red"></div>
           <div className="hero-grid-overlay"></div>
           <div className="hero-particles" ref={particlesRef}></div>
-          <div className="shooting-stars-container overflow-hidden absolute inset-0 pointer-events-none">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="shooting-star opacity-30"></div>
-            ))}
-          </div>
         </div>
-        <div className="container hero-content relative">
-          <div className="hero-badge animate-on-scroll flex items-center gap-2 mb-8 glass-card px-5 py-2 rounded-full border border-white/10 shadow-2xl mx-auto w-fit">
-            <span className="pulse-dot bg-cyan-400"></span>
-            <span className="badge-text uppercase tracking-[0.2em] font-black text-[0.65rem] bg-gradient-to-r from-white via-white/80 to-white bg-clip-text text-transparent">
+        <div className="container hero-content">
+          <div className="hero-badge animate-on-scroll">
+            <div className="shooting-stars-container">
+              {[...Array(20)].map((_, i) => (
+                <div key={i} className="shooting-star"></div>
+              ))}
+            </div>
+            <span className="pulse-dot"></span>
+            <span className="badge-text">
               AI-Powered Workshop
             </span>
           </div>
-          <h1 className="hero-title animate-on-scroll text-5xl md:text-7xl font-black mb-6 tracking-tighter leading-[0.9]">
-            <span className="block overflow-hidden">
-              <span className="inline-block translate-y-full transition-transform duration-700 delay-100 ease-expo">Smart Bike Care.</span>
+          <h1 className="hero-title animate-on-scroll">
+            <span className="text-reveal-wrapper">
+              <span className="text-reveal delay-100">Smart Bike Care.</span>
             </span>
             <br />
-            <span className="block overflow-hidden">
-              <span className="inline-block translate-y-full transition-transform duration-700 delay-300 ease-expo gradient-text pb-2">Faster. Better.</span>
+            <span className="text-reveal-wrapper">
+              <span className="text-reveal delay-300 gradient-text">Faster. Better.</span>
             </span>
           </h1>
-          <p className="hero-subtitle animate-on-scroll delay-500 text-lg md:text-xl text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed font-light">
+          <p className="hero-subtitle animate-on-scroll delay-500">
             AI-Powered Two-Wheeler Diagnostics &amp; Repair — Expert mechanics, instant diagnosis, and transparent pricing for your ride.
           </p>
-          <div className="hero-ctas animate-on-scroll delay-700 flex flex-wrap gap-4 justify-center items-center mb-16">
-            <a href="#booking" className="btn btn-primary btn-glow group relative overflow-hidden px-8 py-4 rounded-xl flex items-center gap-3">
-              <span className="relative z-10 flex items-center gap-2">
-                <Wrench className="size-5 transition-transform group-hover:rotate-45" />
-                Book Service
-              </span>
+          <div className="hero-ctas animate-on-scroll delay-500">
+            <a href="#booking" className="btn btn-primary btn-glow magnetic-btn">
+              <span>🔧</span> Book Service
             </a>
-            <a href="#diagnosis" className="btn btn-secondary glass-card px-8 py-4 rounded-xl flex items-center gap-3">
-              <Sparkles className="size-5 text-purple-400" />
-              AI Bike Check
+            <a href="#diagnosis" className="btn btn-secondary magnetic-btn">
+              <span>🤖</span> AI Bike Check
             </a>
-            <a href="tel:+919811530780" className="btn btn-outline px-8 py-4 rounded-xl hover:border-cyan-400 group">
-              <span className="group-hover:text-cyan-400 transition-colors flex items-center gap-2">
-                Call Now
-              </span>
+            <a href="tel:+919811530780" className="btn btn-outline magnetic-btn">
+              <span>📞</span> Call Now
             </a>
           </div>
-          <div className="hero-stats animate-on-scroll delay-900 grid grid-cols-3 gap-12 border-t border-white/5 pt-12">
-            {[
-              { label: 'Bikes Serviced', target: '15000', prefix: '+' },
-              { label: 'Happy Customers', target: '98', suffix: '%' },
-              { label: 'AI Diagnoses Daily', target: '50', prefix: '+' },
-            ].map((stat, i) => (
-              <div key={i} className="stat-item flex flex-col items-center">
-                <span className="stat-number text-3xl font-black text-white" data-target={stat.target}>
-                  {stat.prefix}0{stat.suffix}
-                </span>
-                <span className="stat-label text-[0.6rem] uppercase tracking-widest text-slate-500 font-bold mt-2">
-                  {stat.label}
-                </span>
-              </div>
-            ))}
+          <div className="hero-stats animate-on-scroll">
+            <div className="stat-item">
+              <span className="stat-number" data-target="15000">0</span>+
+              <span className="stat-label">Bikes Serviced</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number" data-target="98">0</span>%
+              <span className="stat-label">Happy Customers</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number" data-target="50">0</span>+
+              <span className="stat-label">AI Diagnoses Daily</span>
+            </div>
           </div>
         </div>
+
       </header>
 
       <BrandMarquee />
@@ -472,124 +465,98 @@ export default function LandingPage() {
             <h2 className="section-title">Instant AI <span className="gradient-text">Bike Diagnosis</span></h2>
             <p className="section-desc">Describe your bike&apos;s problem and our AI will analyze it in seconds — giving you potential causes, urgency level, and estimated costs.</p>
           </div>
-          <div className="diagnosis-grid grid md:grid-cols-2 gap-8">
-            <div className="diagnosis-input-card bento-item p-8 hover-glow tilt-card">
-              <h3 className="text-2xl font-black text-white mb-6 flex items-center gap-3">
-                <MessageSquareText className="size-6 text-cyan-400" />
-                Describe Your Bike Issue
-              </h3>
-              <div className="diagnosis-form space-y-6">
-                <div className="form-group flex flex-col gap-2">
-                  <label htmlFor="bikeModel" className="text-xs font-bold uppercase tracking-widest text-slate-500">Bike Model</label>
+          <div className="diagnosis-grid">
+            <div className="diagnosis-input-card glass-card animate-on-scroll hover-glow tilt-card">
+              <h3>Describe Your Bike Issue</h3>
+              <div className="diagnosis-form">
+                <div className="form-group">
+                  <label htmlFor="bikeModel">Bike Model</label>
                   <input
                     type="text"
                     id="bikeModel"
-                    className="bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-cyan-400 transition-colors"
                     placeholder="e.g., Honda Activa 6G, Royal Enfield Classic 350"
                     value={bikeModel}
                     onChange={(e) => setBikeModel(e.target.value)}
                   />
                 </div>
-                <div className="form-group flex flex-col gap-2">
-                  <label htmlFor="bikeIssue" className="text-xs font-bold uppercase tracking-widest text-slate-500">What&apos;s the problem?</label>
+                <div className="form-group">
+                  <label htmlFor="bikeIssue">What&apos;s the problem?</label>
                   <textarea
                     id="bikeIssue"
                     rows={4}
-                    className="bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-cyan-400 transition-colors resize-none"
                     placeholder="e.g., Engine makes rattling noise at high speed, hard to start in morning, brake squeaking..."
                     value={diagnosisText}
                     onChange={(e) => setDiagnosisText(e.target.value)}
                   ></textarea>
                 </div>
-                <div className="quick-issues flex flex-wrap gap-2">
+                <div className="quick-issues">
                   {['Engine won\'t start', 'Strange noise from engine', 'Brakes not working properly', 'Oil leaking', 'Battery draining fast', 'Low mileage / poor fuel efficiency'].map((issue) => (
                     <span
                       key={issue}
-                      className="text-[0.7rem] font-bold px-3 py-1.5 rounded-full bg-white/5 border border-white/5 text-slate-400 cursor-pointer hover:bg-cyan-400/10 hover:text-cyan-400 hover:border-cyan-400/30 transition-all"
+                      className="quick-chip"
                       onClick={() => setQuickIssue(issue)}
                     >
                       {issue.split(' / ')[0]}
                     </span>
                   ))}
                 </div>
-                <button className="btn btn-primary btn-glow btn-full w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2" id="diagnosisBtn" onClick={handleDiagnosis}>
-                  {isDiagnosing ? (
-                    <BrainCircuit className="size-5 animate-pulse" />
-                  ) : (
-                    <Sparkles className="size-5" />
-                  )}
-                  {isDiagnosing ? 'Analyzing Symptoms...' : 'Analyze with AI'}
+                <button className="btn btn-primary btn-glow btn-full" id="diagnosisBtn" onClick={handleDiagnosis}>
+                  <span>🔍</span> {isDiagnosing ? 'Analyzing...' : 'Analyze with AI'}
                 </button>
               </div>
             </div>
-            <div className="diagnosis-result-card bento-item p-8 hover-glow tilt-card overflow-hidden" id="diagnosisResult">
+            <div className="diagnosis-result-card glass-card animate-on-scroll hover-glow tilt-card" id="diagnosisResult">
               {isDiagnosing ? (
-                <div className="result-placeholder h-full flex flex-col items-center justify-center text-center">
-                  <div className="relative mb-6">
-                    <div className="size-24 rounded-full border-2 border-dashed border-cyan-400/30 animate-spin-slow"></div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <BrainCircuit className="size-10 text-cyan-400 animate-pulse" />
-                    </div>
-                  </div>
-                  <p className="text-slate-400 animate-pulse">Scanning bike data {bikeModel ? <>for <strong>{bikeModel}</strong></> : null}...</p>
+                <div className="result-placeholder">
+                  <div className="ai-brain-icon analyzing">🧠</div>
+                  <p>Analyzing {bikeModel ? <>for <strong>{bikeModel}</strong></> : null}...</p>
                 </div>
               ) : diagnosisResult ? (
-                <div className="diagnosis-output h-full flex flex-col">
-                  <h3 className="text-2xl font-black text-white mb-6 flex items-center gap-3">
-                    <Sparkles className="size-6 text-cyan-400" />
-                    AI Analysis Result
-                  </h3>
-                  <div className="bg-cyan-400/5 border border-cyan-400/10 rounded-2xl p-6 mb-6">
-                    <h4 className="text-cyan-400 uppercase tracking-widest text-[0.65rem] font-black mb-1">Detected Issue</h4>
-                    <p className="text-xl font-bold text-white">{diagnosisResult.title}</p>
+                <div className="diagnosis-output">
+                  <h3>🔍 AI Analysis: {diagnosisResult.title}</h3>
+                  <div className="result-section">
+                    <h4>Possible Causes</h4>
+                    <ul>{diagnosisResult.causes.map((c, i) => <li key={i}>{c}</li>)}</ul>
                   </div>
-                  <div className="space-y-6 flex-grow">
-                    <div>
-                      <h4 className="text-slate-500 uppercase tracking-widest text-[0.65rem] font-bold mb-3">Possible Causes</h4>
-                      <ul className="space-y-2">
-                        {diagnosisResult.causes.map((c, i) => (
-                          <li key={i} className="text-slate-300 text-sm flex items-start gap-2">
-                            <span className="text-cyan-400 mt-1">•</span> {c}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-white/5 p-4 rounded-xl border border-white/5">
-                        <h4 className="text-slate-500 uppercase tracking-widest text-[0.65rem] font-bold mb-1">Urgency</h4>
-                        <span className={clsx('text-xs font-black uppercase', {
-                          'text-red-400': diagnosisResult.urgency === 'high',
-                          'text-amber-400': diagnosisResult.urgency === 'medium',
-                          'text-emerald-400': diagnosisResult.urgency === 'low',
-                        })}>{diagnosisResult.urgency}</span>
-                      </div>
-                      <div className="bg-white/5 p-4 rounded-xl border border-white/5">
-                        <h4 className="text-slate-500 uppercase tracking-widest text-[0.65rem] font-bold mb-1">Est. Cost</h4>
-                        <span className="text-xs font-black text-emerald-400">{diagnosisResult.cost}</span>
-                      </div>
-                    </div>
+                  <div className="result-section">
+                    <h4>Urgency Level</h4>
+                    <span className={clsx('urgency-badge', `urgency-${diagnosisResult.urgency}`)}>{diagnosisResult.urgency.toUpperCase()}</span>
                   </div>
-                  <a href="#booking" className="btn btn-primary btn-glow w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 mt-8">
-                    <Wrench className="size-5" />
-                    Book Repair Now
+                  <div className="result-section">
+                    <h4>Estimated Cost</h4>
+                    <p style={{ fontWeight: 600, color: 'var(--accent-green)', fontSize: '1.1rem' }}>{diagnosisResult.cost}</p>
+                  </div>
+                  <div className="result-section">
+                    <h4>💡 Pro Tip</h4>
+                    <p>{diagnosisResult.tip}</p>
+                  </div>
+                  <a href="#booking" className="btn btn-primary btn-glow btn-full" style={{ marginTop: '20px' }}>
+                    <span>📅</span> Book Repair Now
                   </a>
                 </div>
               ) : diagnosisAttempted ? (
-                <div className="ai-fallback-card h-full flex flex-col justify-center text-center">
-                  <div className="text-4xl mb-6">🤔</div>
-                  <h3 className="text-xl font-bold text-white mb-2">Diagnosis Incomplete</h3>
-                  <p className="text-slate-500 text-sm mb-8">Manual inspection recommended for this specific issue.</p>
-                  <div className="bg-amber-400/5 border border-amber-400/20 rounded-2xl p-6 text-left mb-8">
-                    <p className="text-amber-400 uppercase tracking-widest text-[0.6rem] font-black mb-1">Plan</p>
-                    <p className="text-lg font-bold text-white mb-1">Expert Checkup</p>
-                    <p className="text-slate-400 text-xs">Full diagnostic checkup by professional mechanics (₹199).</p>
+                <div className="ai-fallback-card">
+                  <div className="ai-fallback-icon">🤔</div>
+                  <h3 className="ai-fallback-title">Diagnosis Update</h3>
+                  <p className="ai-fallback-text">
+                    I couldn&apos;t identify the exact issue from your description.
+                  </p>
+                  <div className="ai-fallback-highlight">
+                    <p className="ai-fallback-highlight-tag">Recommended Action</p>
+                    <p className="ai-fallback-highlight-title">Full Diagnostic Checkup (₹199)</p>
+                    <p className="ai-fallback-highlight-desc">Our experts will inspect your bike thoroughly to pinpoint the exact problem.</p>
                   </div>
-                  <a href="#booking" className="btn btn-primary btn-glow w-full py-4 rounded-xl font-bold">Book a Checkup</a>
+                  <a href="#booking" className="btn btn-primary btn-glow btn-full">
+                    <span>📅</span> Book a Checkup
+                  </a>
+                  <p className="ai-fallback-footer">
+                    OR CALL US AT <a href="tel:+919811530780" className="ai-fallback-phone">+91 98115 30780</a>
+                  </p>
                 </div>
               ) : (
-                <div className="result-placeholder h-full flex flex-col items-center justify-center text-center border-2 border-dashed border-white/5 rounded-2xl">
-                  <BrainCircuit className="size-12 text-slate-700 mb-6" />
-                  <p className="text-slate-500 text-sm max-w-xs">Enter your bike issue and click <strong>Analyze</strong> for AI diagnosis</p>
+                <div className="result-placeholder">
+                  <div className="ai-brain-icon">🧠</div>
+                  <p>Enter your bike issue and click <strong>Analyze</strong> to get AI-powered diagnosis</p>
                 </div>
               )}
             </div>
@@ -597,6 +564,7 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ===== SERVICES ===== */}
       <section className="section section-services" id="services">
         <div className="container">
           <div className="section-header animate-on-scroll">
@@ -604,33 +572,24 @@ export default function LandingPage() {
             <h2 className="section-title">Our <span className="gradient-text">Services</span></h2>
             <p className="section-desc">From routine servicing to complex engine repairs — we handle every two-wheeler need with precision and care.</p>
           </div>
-          <div className="bento-grid">
+          <div className="services-grid">
             {[
-              { icon: '⚙️', title: 'Full Servicing', desc: 'Oil change, filter replacement, chain adjustment, spark plug — complete care package.', price: 'From ₹799*', className: 'bento-item--large' },
-              { icon: '🔩', title: 'Engine Repair', desc: 'Complete engine overhaul, timing chain, piston repair, and head gasket replacement.', price: 'From ₹1,500*', className: 'bento-item--wide' },
-              { icon: '🛑', title: 'Brake Fix', desc: 'Disc & drum brake pads, brake fluid change, ABS diagnostics, and caliper servicing.', price: 'From ₹500*', className: '' },
-              { icon: '🚨', title: 'Emergency Repair', desc: 'Roadside assistance, flat tire, towing service, and breakdown support.', price: 'From ₹299*', className: 'bento-item--tall' },
-              { icon: '🛢️', title: 'Oil Change', desc: 'Premium synthetic & semi-synthetic engine oil with filter replacement.', price: 'From ₹350*', className: '' },
-              { icon: '⚡', title: 'Electrical Work', desc: 'Wiring repair, headlight upgrade, battery replacement, ECU diagnostics.', price: 'From ₹400*', className: '' },
+              { icon: '🔩', title: 'Engine Repair', desc: 'Complete engine overhaul, timing chain, piston repair, and head gasket replacement.', price: 'From ₹1,500*' },
+              { icon: '⚙️', title: 'Full Servicing', desc: 'Oil change, filter replacement, chain adjustment, spark plug — complete care package.', price: 'From ₹799*' },
+              { icon: '🛑', title: 'Brake Fix', desc: 'Disc & drum brake pads, brake fluid change, ABS diagnostics, and caliper servicing.', price: 'From ₹500*' },
+              { icon: '🛢️', title: 'Oil Change', desc: 'Premium synthetic & semi-synthetic engine oil with filter replacement.', price: 'From ₹350*' },
+              { icon: '🚨', title: 'Emergency Repair', desc: 'Roadside assistance, flat tire, towing service, and emergency breakdown support.', price: 'From ₹299*' },
+              { icon: '⚡', title: 'Electrical Work', desc: 'Wiring repair, headlight upgrade, battery replacement, ECU diagnostics.', price: 'From ₹400*' },
             ].map((s, i) => (
-              <div key={i} className={clsx('bento-item group p-8 flex flex-col justify-between hover:border-cyan-400/50 hover:shadow-2xl hover:shadow-cyan-400/10 animate-on-scroll tilt-card', s.className)}>
-                <div>
-                  <div className="text-4xl mb-6 transform transition-transform group-hover:scale-110 group-hover:rotate-12 duration-500 w-fit">{s.icon}</div>
-                  <h3 className="text-2xl font-black text-white mb-3 tracking-tight">{s.title}</h3>
-                  <p className="text-slate-400 text-sm leading-relaxed mb-6 font-light">{s.desc}</p>
-                </div>
-                <div className="flex items-center justify-between mt-auto">
-                  <span className="text-cyan-400 font-black text-lg">{s.price}</span>
-                  <div className="size-10 rounded-full bg-white/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 -translate-x-4 group-hover:translate-x-0">
-                    <Sparkles className="size-4 text-cyan-400" />
-                  </div>
-                </div>
-                {/* Subtle depth effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div key={i} className="service-card glass-card animate-on-scroll hover-glow tilt-card">
+                <div className="service-icon">{s.icon}</div>
+                <h3>{s.title}</h3>
+                <p>{s.desc}</p>
+                <span className="service-price">{s.price}</span>
               </div>
             ))}
           </div>
-          <p className="section-disclaimer animate-on-scroll mt-8 opacity-50 text-xs italic">
+          <p className="section-disclaimer animate-on-scroll">
             * Prices may vary based on vehicle model, condition, and specific parts required.
           </p>
         </div>
