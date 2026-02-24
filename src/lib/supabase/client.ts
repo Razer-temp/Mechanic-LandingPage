@@ -6,30 +6,35 @@ let supabaseInstance: SupabaseClient<Database> | null = null;
 
 export function createClient() {
     const isBrowser = typeof window !== 'undefined';
-
-    // When in browser, we use the proxy path to bypass ISP blocks
-    // When on server (middleware/SSR/ServerActions), we use the direct URL
-    const supabaseUrl = isBrowser
-        ? `${window.location.origin}/supabase-api`
-        : process.env.NEXT_PUBLIC_SUPABASE_URL;
-
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-    if (!supabaseUrl || !supabaseKey) {
-        console.error('Supabase environment variables are missing!');
-        if (isBrowser) {
-            alert('DIAGNOSTIC: Supabase Env Vars Missing! Proxy: ' + supabaseUrl);
-        }
-    }
+    const actualUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
     if (!supabaseInstance) {
-        // Only log this once to avoid noise
-        if (isBrowser) console.log('Initializing Supabase through Proxy:', supabaseUrl);
+        if (isBrowser) {
+            console.log('Initializing Supabase through Proxy fetch override');
+            supabaseInstance = createBrowserClient<Database>(
+                actualUrl,
+                supabaseKey,
+                {
+                    global: {
+                        fetch: (url, options) => {
+                            const urlStr = url.toString();
+                            // Only proxy if it's a supabase request
+                            const finalUrl = urlStr.startsWith(actualUrl)
+                                ? urlStr.replace(actualUrl, `${window.location.origin}/supabase-api`)
+                                : urlStr;
 
-        supabaseInstance = createBrowserClient<Database>(
-            supabaseUrl ?? '',
-            supabaseKey ?? ''
-        );
+                            return fetch(finalUrl, options);
+                        }
+                    }
+                }
+            );
+        } else {
+            supabaseInstance = createBrowserClient<Database>(
+                actualUrl,
+                supabaseKey
+            );
+        }
     }
 
     return supabaseInstance;
