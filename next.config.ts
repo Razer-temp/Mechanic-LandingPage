@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/supabase-api/:path*',
+        destination: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/:path*`,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
