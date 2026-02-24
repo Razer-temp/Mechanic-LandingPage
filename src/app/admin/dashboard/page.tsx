@@ -94,9 +94,11 @@ export default function AdminDashboard() {
     }, [supabase]);
 
     const fetchData = useCallback(async () => {
+        console.log('fetchData started...');
         setLoading(true);
         try {
-            const [bRes, cRes, eRes, shRes, dRes, estRes] = await Promise.all([
+            console.log('Executing Promise.all for tables...');
+            const results = await Promise.all([
                 supabase.from('bookings').select('*').order('created_at', { ascending: false }),
                 supabase.from('chat_sessions').select('*, chat_messages(*)').order('created_at', { ascending: false }),
                 supabase.from('daily_expenses').select('*').order('date', { ascending: false }),
@@ -105,6 +107,11 @@ export default function AdminDashboard() {
                 supabase.from('ai_estimates' as any).select('*').order('created_at', { ascending: false }),
             ]);
 
+            const [bRes, cRes, eRes, shRes, dRes, estRes] = results;
+            console.log('Promise.all returned.');
+
+            if (bRes.error) console.error('Bookings Error:', bRes.error);
+            if (cRes.error) console.error('Chats Error:', cRes.error);
             if (dRes.error) console.error('AI Diagnoses Fetch Error:', dRes.error);
             if (estRes.error) console.error('AI Estimates Fetch Error:', estRes.error);
 
@@ -123,7 +130,9 @@ export default function AdminDashboard() {
             if (estRes.data) setEstimates(estRes.data);
         } catch (err: any) {
             console.error('CRITICAL: Error fetching dashboard data:', err);
+            alert('Dashboard Data Fetch Failed: ' + (err.message || err));
         } finally {
+            console.log('fetchData finished (finally).');
             setLoading(false);
         }
     }, [supabase]);
@@ -131,12 +140,27 @@ export default function AdminDashboard() {
     // Auth Check
     useEffect(() => {
         const checkAuth = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user || user.app_metadata?.role !== 'admin') {
-                router.push('/admin/login?error=unauthorized');
-            } else {
-                setUserEmail(user.email ?? null);
-                fetchData();
+            console.log('checkAuth starting...');
+            try {
+                const { data: { user }, error } = await supabase.auth.getUser();
+                console.log('getUser returned:', { user: !!user, error });
+
+                if (error) {
+                    console.error('Auth User Error:', error);
+                    alert('Auth check failed: ' + error.message);
+                }
+
+                if (!user || user.app_metadata?.role !== 'admin') {
+                    console.warn('Unauthorized or No User. Role:', user?.app_metadata?.role);
+                    router.push('/admin/login?error=unauthorized');
+                } else {
+                    console.log('Authorized Admin user found:', user.email);
+                    setUserEmail(user.email ?? null);
+                    fetchData();
+                }
+            } catch (err: any) {
+                console.error('checkAuth CRITICAL ERROR:', err);
+                alert('checkAuth Error: ' + (err.message || err));
             }
         };
         checkAuth();
@@ -169,8 +193,16 @@ export default function AdminDashboard() {
     };
 
     const handleLogout = async () => {
-        await supabase.auth.signOut();
-        router.push('/admin/login');
+        console.log('Starting logout process...');
+        try {
+            const { error } = await supabase.auth.signOut();
+            if (error) throw error;
+            console.log('Logout successful.');
+            router.push('/admin/login');
+        } catch (err: any) {
+            console.error('Logout failed:', err);
+            alert('Logout Error: ' + (err.message || err));
+        }
     };
 
     const filteredBookings = useMemo(() => {
