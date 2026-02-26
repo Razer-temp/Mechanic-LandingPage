@@ -1,7 +1,8 @@
 'use client';
 
 import clsx from 'clsx';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { getLenis } from './SmoothScroll';
 
 const navItems = [
     { id: 'diagnosis', title: 'Diagnosis', subtitle: 'Identify issues with precision' },
@@ -14,12 +15,20 @@ export function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('');
+    const isClosingRef = useRef(false);
 
+    // Lock body scroll when menu is open
     useEffect(() => {
         if (mobileMenuOpen) {
             document.body.style.overflow = 'hidden';
+            // Pause Lenis while menu is open
+            const lenis = getLenis();
+            if (lenis) lenis.stop();
         } else {
             document.body.style.overflow = '';
+            // Resume Lenis when menu closes
+            const lenis = getLenis();
+            if (lenis) lenis.start();
         }
         return () => {
             document.body.style.overflow = '';
@@ -52,14 +61,46 @@ export function Navbar() {
         return () => observer.disconnect();
     }, []);
 
-    const closeMenu = () => setMobileMenuOpen(false);
+    // Smooth close → scroll for mobile nav links
+    const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+        e.preventDefault();
+        if (isClosingRef.current) return;
+        isClosingRef.current = true;
+
+        // Close menu first
+        setMobileMenuOpen(false);
+
+        // Let the close animation play, then scroll smoothly
+        requestAnimationFrame(() => {
+            setTimeout(() => {
+                const lenis = getLenis();
+                const target = document.getElementById(sectionId);
+                if (target && lenis) {
+                    lenis.scrollTo(target, { offset: -80, duration: 1.2 });
+                } else if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+                isClosingRef.current = false;
+            }, 250); // Wait for menu close CSS transition
+        });
+    }, []);
+
+    const closeMenu = useCallback(() => setMobileMenuOpen(false), []);
 
     const getLinkClass = (id: string) => clsx('nav-link-card', activeSection === id && 'active-link');
 
     return (
         <nav className={clsx('navbar', scrolled && 'scrolled')} id="navbar">
             <div className="container nav-container">
-                <a href="#" className="nav-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                <a href="#" className="nav-logo" onClick={(e) => {
+                    e.preventDefault();
+                    const lenis = getLenis();
+                    if (lenis) {
+                        lenis.scrollTo(0, { duration: 1.2 });
+                    } else {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                }}>
                     <span className="logo-icon">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src="/logo.svg" alt="SmartBike Pro Logo" className="logo-svg w-6 h-6" />
@@ -99,7 +140,7 @@ export function Navbar() {
                 {/* --- MOBILE NAVIGATION OVERLAY (v1.0 Pixel-Perfect) --- */}
                 <div
                     className={clsx('nav-overlay-v1 mobile-only', mobileMenuOpen && 'active')}
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={closeMenu}
                     aria-hidden="true"
                 >
                     <div className="nav-bloom" />
@@ -111,7 +152,7 @@ export function Navbar() {
                             <a
                                 key={`mobile-${item.id}`}
                                 href={`#${item.id}`}
-                                onClick={closeMenu}
+                                onClick={(e) => handleNavClick(e, item.id)}
                                 className={clsx('nav-link-v1', activeSection === item.id && 'active')}
                                 style={{ '--idx': index } as React.CSSProperties}
                             >
@@ -128,7 +169,7 @@ export function Navbar() {
 
                     <div className="nav-cta-wrapper">
                         <div className="premium-cta-block">
-                            <a href="#booking" className="premium-cta-btn" onClick={closeMenu}>
+                            <a href="#booking" className="premium-cta-btn" onClick={(e) => handleNavClick(e, 'booking')}>
                                 Book Service
                             </a>
                         </div>

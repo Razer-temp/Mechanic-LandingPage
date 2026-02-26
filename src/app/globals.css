@@ -2311,45 +2311,30 @@ body[style*="overflow: hidden"] .whatsapp-float {
     position: fixed;
     inset: 0;
     z-index: 1000;
-    /* Layer 1: Base Gradient */
     background:
       radial-gradient(circle at 85% 10%, rgba(0, 120, 255, 0.18), transparent 45%),
       radial-gradient(circle at 15% 90%, rgba(0, 255, 200, 0.12), transparent 50%),
       linear-gradient(180deg, #0A0D14 0%, #05070B 100%);
-    /* Layer 2: Subtle Animated Ambient Shift */
-    background-size: 110% 110%;
-    animation: ambientDrift 18s linear infinite alternate;
     opacity: 0;
     visibility: hidden;
     overflow: hidden;
-    transition: opacity 0.2s ease, visibility 0.2s;
-    will-change: opacity, visibility;
+    transition: opacity 0.25s ease-out, visibility 0s linear 0.25s;
+    transform: translateZ(0);
+    contain: layout style paint;
   }
 
   .nav-overlay-v1.active {
     opacity: 1;
     visibility: visible;
+    transition: opacity 0.25s ease-out, visibility 0s linear 0s;
   }
 
-  @keyframes ambientDrift {
-    0% {
-      background-position: 0% 0%;
-    }
-
-    100% {
-      background-position: 5% 5%;
-    }
-  }
+  /* ambientDrift removed for mobile — background-position animations cause repaints */
 
   /* Layer 3: Noise Texture Overlay */
+  /* Noise texture overlay removed on mobile for GPU performance */
   .nav-overlay-v1::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.04;
-    mix-blend-mode: overlay;
-    pointer-events: none;
+    display: none;
   }
 
   /* Layer 4: Soft Bloom */
@@ -2357,12 +2342,13 @@ body[style*="overflow: hidden"] .whatsapp-float {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) translateZ(0);
     width: 80%;
     height: 60%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 70%);
-    filter: blur(120px);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.08), transparent 70%);
+    filter: blur(60px);
     pointer-events: none;
+    contain: strict;
   }
 
   /* 2.2 & 2.3 Layout Grid */
@@ -2373,14 +2359,20 @@ body[style*="overflow: hidden"] .whatsapp-float {
     display: flex;
     flex-direction: column;
     padding: 100px 24px 32px 24px;
-    /* Respect safe areas & close icon */
     pointer-events: none;
+    opacity: 0;
+    transform: translateY(12px) translateZ(0);
+    transition: opacity 0.2s ease-out, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.25s;
     visibility: hidden;
+    contain: layout style;
   }
 
   .nav-menu-container.active {
     pointer-events: auto;
+    opacity: 1;
+    transform: translateY(0) translateZ(0);
     visibility: visible;
+    transition: opacity 0.2s ease-out, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0s;
   }
 
   .nav-links-inner {
@@ -2400,17 +2392,15 @@ body[style*="overflow: hidden"] .whatsapp-float {
     flex-direction: column;
     text-decoration: none;
     position: relative;
-    /* Step 2 Initial state */
     opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: transform, opacity;
+    transform: translateY(16px) translateZ(0);
+    transition: opacity 0.3s ease-out, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .nav-menu-container.active .nav-link-v1 {
     opacity: 1;
-    transform: translateY(0);
-    transition-delay: calc(var(--idx) * 60ms);
+    transform: translateY(0) translateZ(0);
+    transition-delay: calc(var(--idx) * 40ms);
   }
 
   .nav-link-content {
@@ -2469,48 +2459,48 @@ body[style*="overflow: hidden"] .whatsapp-float {
     width: 100%;
   }
 
-  /* Background Hover Glow */
+  /* Background Hover Glow — simplified for mobile */
   .nav-link-glow {
     position: absolute;
     top: 50%;
     left: 40px;
     width: 60%;
     height: 100%;
-    transform: translateY(-50%);
-    background: radial-gradient(circle, rgba(255, 255, 255, 1), transparent 70%);
+    transform: translateY(-50%) translateZ(0);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent 70%);
     opacity: 0;
-    filter: blur(40px);
-    transition: opacity 0.2s ease;
+    filter: blur(24px);
+    transition: opacity 0.15s ease-out;
     z-index: 1;
     pointer-events: none;
+    contain: strict;
   }
 
   .nav-link-v1:hover .nav-link-glow,
   .nav-link-v1.active .nav-link-glow {
-    opacity: 0.18;
+    opacity: 0.15;
   }
 
   /* 8. PREMIUM CTA BLOCK */
   .nav-cta-wrapper {
     width: 100%;
     opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.3s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
+    transform: translateY(16px) translateZ(0);
+    transition: opacity 0.3s ease-out 0.18s, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1) 0.18s;
   }
 
   .nav-menu-container.active .nav-cta-wrapper {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
   }
 
   .premium-cta-block {
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
     padding: 16px;
-    box-shadow: 0px 20px 60px rgba(0, 0, 0, 0.6);
+    box-shadow: 0px 12px 40px rgba(0, 0, 0, 0.5);
+    transform: translateZ(0);
   }
 
   .premium-cta-btn {
