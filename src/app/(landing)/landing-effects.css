@@ -61,12 +61,20 @@
 }
 
 /* 
-   3. MAGNETIC BUTTONS
+   3. MAGNETIC BUTTONS (Desktop Only)
    -----------------------------------------
 */
-.magnetic-btn {
-    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    will-change: transform;
+@media (hover: hover) and (pointer: fine) {
+    .magnetic-btn {
+        transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+        will-change: transform;
+    }
+
+    .magnetic-btn:hover {
+        /* Subtle pull effect using the custom properties set in JS */
+        transform: translate(calc((var(--mouse-x-pct, 0.5) - 0.5) * 30px),
+                calc((var(--mouse-y-pct, 0.5) - 0.5) * 20px)) scale(1.05);
+    }
 }
 
 /* 
@@ -272,4 +280,46 @@
     left: 85%;
     --duration: 1.9s;
     --delay: 3.5s;
+}
+
+@media (max-width: 768px) {
+
+    /* AI Chat — morph container positioned above WhatsApp */
+    .floating-chat {
+        bottom: 84px !important;
+        right: 16px !important;
+        width: 60px !important;
+        height: 60px !important;
+        transform: translateZ(0) !important;
+        /* Smooth GPU animation */
+    }
+
+    /* Open state: full-width chat panel */
+    .floating-chat.open {
+        width: calc(100vw - 32px) !important;
+        height: min(520px, 75vh) !important;
+        bottom: 16px !important;
+        right: 16px !important;
+        border-radius: 20px !important;
+    }
+
+    /* WhatsApp: compact CIRCLE on mobile */
+    .whatsapp-float {
+        bottom: 20px !important;
+        right: 16px !important;
+        width: 52px !important;
+        height: 52px !important;
+        min-width: 0 !important;
+        padding: 0 !important;
+        border-radius: 50% !important;
+        justify-content: center !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    /* Hide WhatsApp label text on mobile */
+    .whatsapp-float span,
+    .whatsapp-label {
+        display: none !important;
+    }
 }

@@ -517,8 +517,8 @@
 /* MOBILE FIXES */
 @media (max-width: 768px) {
     .footer-premium {
-        padding: 60px 0 60px;
-        /* Balanced bottom padding */
+        padding: 60px 0 32px;
+        /* Reduced from 120px — fixed buttons don't need this space */
     }
 
     .footer-main-grid {
