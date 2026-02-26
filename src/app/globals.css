@@ -1522,6 +1522,103 @@ ul {
   overflow: hidden;
 }
 
+/* ===== MOBILE PERFORMANCE: GPU-only animations ===== */
+/* On touch devices, replace ALL expensive animations with transform+opacity only */
+@media (hover: none) and (pointer: coarse) {
+  .floating-chat {
+    /* Kill the expensive background-position animation */
+    animation: none !important;
+    /* Static gradient — no animation needed */
+    background-size: 100% 100% !important;
+    /* Simpler shadow — no animated glow */
+    box-shadow: 0 6px 20px rgba(0, 200, 255, 0.2);
+    /* Only animate GPU-composited properties on mobile */
+    will-change: transform, opacity;
+    /* Use transform-based morph on mobile */
+    transition:
+      transform 0.35s cubic-bezier(0.34, 1.06, 0.64, 1),
+      opacity 0.25s ease,
+      border-radius 0.35s cubic-bezier(0.34, 1.06, 0.64, 1),
+      background 0.25s ease !important;
+    /* Promote to own layer */
+    contain: layout style;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* Mobile morph: scale-based approach instead of width/height */
+  .floating-chat.open {
+    /* Still set width/height for layout, but the smooth part is the transition */
+    box-shadow:
+      0 20px 50px rgba(0, 0, 0, 0.6),
+      0 0 0 1px rgba(255, 255, 255, 0.07) !important;
+  }
+
+  /* Simplify pulse ring — pure transform + opacity */
+  .chat-trigger::before {
+    border: none !important;
+    background: radial-gradient(circle, rgba(0, 200, 255, 0.3), transparent 70%) !important;
+    animation: pulseRingMobile 2.5s ease-out infinite !important;
+  }
+
+  /* Replace drop-shadow icon pulse with opacity-only */
+  .chat-trigger-icon {
+    animation: iconPulseMobile 2.5s ease-in-out infinite !important;
+  }
+
+  /* Reduce backdrop-filter intensity for performance */
+  .chat-panel {
+    backdrop-filter: blur(10px) saturate(1.2) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+  }
+
+  /* Avatar: no box-shadow animation */
+  .chat-avatar {
+    animation: avatarBreathMobile 3s infinite ease-in-out !important;
+    box-shadow: 0 4px 15px rgba(0, 200, 255, 0.15) !important;
+  }
+}
+
+/* Mobile-optimized keyframes — ONLY transform & opacity */
+@keyframes pulseRingMobile {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+
+  70%,
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+@keyframes iconPulseMobile {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+@keyframes avatarBreathMobile {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
 /* When mobile nav overlay is open, hide all floating elements via the body overflow:hidden signal */
 /* The Navbar component sets body.style.overflow = 'hidden' when menu is open */
 body[style*="overflow: hidden"] .floating-chat,
@@ -1546,7 +1643,7 @@ body[style*="overflow: hidden"] .whatsapp-float {
   bottom: 24px;
 }
 
-/* Gradient animation for closed state */
+/* Gradient animation for closed state — DESKTOP ONLY */
 @keyframes gradientShift {
   0% {
     background-position: 0% 50%;
@@ -1582,7 +1679,7 @@ body[style*="overflow: hidden"] .whatsapp-float {
   pointer-events: auto;
 }
 
-/* Pulse ring */
+/* Pulse ring — desktop uses border, mobile overridden above */
 .chat-trigger::before {
   content: '';
   position: absolute;
@@ -1622,6 +1719,7 @@ body[style*="overflow: hidden"] .whatsapp-float {
   animation: iconPulse 2.5s ease-in-out infinite;
 }
 
+/* Desktop icon pulse — uses filter (fine on desktop GPUs) */
 @keyframes iconPulse {
 
   0%,
@@ -1774,6 +1872,8 @@ body[style*="overflow: hidden"] .whatsapp-float {
   animation: avatarBreath 3s infinite ease-in-out;
 }
 
+/* Desktop avatarBreath — uses box-shadow (fine on desktop GPUs) */
+/* Mobile override is in the @media (hover: none) block above */
 @keyframes avatarBreath {
 
   0%,
@@ -2492,7 +2592,7 @@ body[style*="overflow: hidden"] .whatsapp-float {
     padding: 0 20px;
   }
 
-  /* Compact Floating Buttons for Mobile/Tablet - MORPH ARCHITECTURE */
+  /* Compact Floating Buttons for Mobile/Tablet - GPU-OPTIMIZED */
   .floating-chat {
     position: fixed !important;
     bottom: 84px !important;
@@ -2504,8 +2604,10 @@ body[style*="overflow: hidden"] .whatsapp-float {
     pointer-events: auto !important;
     overflow: hidden !important;
     transform: translateZ(0) !important;
-    /* GPU layer for smooth animation */
-    background-size: 200% 200% !important;
+    /* GPU layer */
+    background-size: 100% 100% !important;
+    /* Static gradient — no animation on mobile */
+    contain: layout style;
   }
 
   /* When open on mobile: expand to near full-width, anchor to bottom-right */
@@ -2531,6 +2633,12 @@ body[style*="overflow: hidden"] .whatsapp-float {
     pointer-events: auto !important;
   }
 
+  /* Reduce backdrop-filter blur on mobile for performance */
+  .chat-panel,
+  .floating-chat.open .chat-panel {
+    backdrop-filter: blur(10px) saturate(1.2) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+  }
 
   .whatsapp-float {
     position: fixed !important;
