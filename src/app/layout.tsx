@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   },
 };
 
+import { AnimatedBackground } from '@/components/ui/AnimatedBackground';
+import { SmoothScroll } from '@/components/ui/SmoothScroll';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,6 +31,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${outfit.variable} ${inter.variable}`}>
       <body className="font-body antialiased selection:bg-accent/20 selection:text-white">
+        <SmoothScroll />
+        <AnimatedBackground />
         {children}
       </body>
     </html>
