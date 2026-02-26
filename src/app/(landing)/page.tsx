@@ -37,7 +37,7 @@ export default function LandingPage() {
   ]);
   const [chatInput, setChatInput] = useState('');
   const [chatSessionId, setChatSessionId] = useState<string | null>(null);
-  const [showFloating, setShowFloating] = useState(true);
+  // showFloating removed — buttons are always visible
   const supabase = createClient();
   const chatMessagesRef = useRef<HTMLDivElement>(null);
 
@@ -111,8 +111,7 @@ export default function LandingPage() {
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
 
-      // Show buttons after user scrolls 300px from top, always keep visible after
-      setShowFloating(scrollY > 300);
+      // Floating buttons are always visible — no scroll-based hiding
 
       const parallaxItems = [
         { selector: '.hero-orb--blue', speed: 0.03 },
@@ -1018,7 +1017,7 @@ export default function LandingPage() {
 
       {/* ===== FLOATING AI CHAT BUTTON (MORPH) ===== */}
       <div
-        className={clsx('floating-chat', chatOpen && 'open', !showFloating && 'hide-floating')}
+        className={clsx('floating-chat', chatOpen && 'open')}
         id="floatingChat"
       >
         {/* The trigger — visible when chat is closed */}
@@ -1077,7 +1076,7 @@ export default function LandingPage() {
       {/* ===== WHATSAPP FLOAT ===== */}
       <a
         href="https://wa.me/919811530780?text=Hi!%20I%20need%20bike%20service."
-        className={clsx("whatsapp-float magnetic-btn", !showFloating && "hide-floating")}
+        className="whatsapp-float magnetic-btn"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
