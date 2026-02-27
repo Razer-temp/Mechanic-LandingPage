@@ -796,6 +796,133 @@ ul {
   animation: biolume 2.5s ease-in-out infinite alternate;
 }
 
+/* --- Hero 3D Dynamic Icons --- */
+.hero-3d-icon-container {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  /* Crucial for 3D depth */
+  overflow: visible;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  /* Allow mouse variables to pass through if set on parent .magnetic-btn */
+}
+
+.hero-3d-icon-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at calc(var(--mouse-x-pct, 0.5) * 100%) calc(var(--mouse-y-pct, 0.5) * 100%), rgba(255, 255, 255, 0.1), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.group:hover .hero-3d-icon-container {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.group:hover .hero-3d-icon-container::before {
+  opacity: 1;
+}
+
+/* Base style for the 3D element inside */
+.hero-3d-element {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Calculate 3D rotation based on mouse position relative to the center (0.5) */
+  /* multiply by a lower factor for subtlety */
+  transform: rotateX(calc((var(--mouse-y-pct, 0.5) - 0.5) * -40deg)) rotateY(calc((var(--mouse-x-pct, 0.5) - 0.5) * 40deg)) translateZ(20px);
+  transition: transform 0.1s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.3s ease;
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.5));
+}
+
+.group:hover .hero-3d-element {
+  /* Bring it closer to the user on hover */
+  transform: rotateX(calc((var(--mouse-y-pct, 0.5) - 0.5) * -50deg)) rotateY(calc((var(--mouse-x-pct, 0.5) - 0.5) * 50deg)) translateZ(30px) scale(1.15);
+}
+
+/* 1. Book Service (Wrench) specific styles */
+.hero-3d-element--wrench {
+  color: var(--accent);
+}
+
+.group:hover .hero-3d-element--wrench {
+  filter: drop-shadow(0 10px 15px rgba(0, 242, 254, 0.4));
+  /* Point wrench head slightly towards mouse by adding rotation */
+  transform: rotateX(calc((var(--mouse-y-pct, 0.5) - 0.5) * -50deg)) rotateY(calc((var(--mouse-x-pct, 0.5) - 0.5) * 50deg)) translateZ(30px) scale(1.15) rotateZ(calc((var(--mouse-x-pct, 0.5) - 0.5) * 45deg));
+}
+
+/* 2. AI Bike Check (Orb/Brain) specific styles */
+.hero-3d-element--ai {
+  color: var(--accent-violet);
+  border-radius: 50%;
+  /* Create an inner glowing orb effect */
+  box-shadow: inset 0 0 10px rgba(167, 139, 250, 0.5), 0 0 5px rgba(167, 139, 250, 0.3);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), transparent 60%);
+}
+
+.group:hover .hero-3d-element--ai {
+  color: var(--accent-red);
+  filter: drop-shadow(0 0 20px rgba(255, 45, 85, 0.6));
+  /* Break out slightly */
+  transform: rotateX(calc((var(--mouse-y-pct, 0.5) - 0.5) * -60deg)) rotateY(calc((var(--mouse-x-pct, 0.5) - 0.5) * 60deg)) translateZ(45px) scale(1.2);
+}
+
+/* 3. Call Now (Sonar Ring) specific styles */
+.hero-3d-element--phone {
+  color: var(--accent-green);
+}
+
+.sonar-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px solid rgba(52, 211, 153, 0.5);
+  /* emerald border */
+  opacity: 0;
+  transform: translateZ(-10px) scale(0.8);
+  transition: all 0.3s ease;
+}
+
+.sonar-ring:nth-child(2) {
+  inset: -14px;
+  border-color: rgba(52, 211, 153, 0.2);
+  transform: translateZ(-20px) scale(0.6);
+}
+
+.group:hover .hero-3d-element--phone .sonar-ring {
+  opacity: 1;
+  animation: sonarPing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.group:hover .hero-3d-element--phone .sonar-ring:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+@keyframes sonarPing {
+  0% {
+    transform: translateZ(-10px) scale(0.8);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateZ(10px) scale(1.5);
+    opacity: 0;
+  }
+}
+
 @keyframes biolume {
   from {
     filter: brightness(1) drop-shadow(0 0 8px #00d4ff);

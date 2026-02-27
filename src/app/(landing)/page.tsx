@@ -13,7 +13,7 @@ import './how-it-works.css';
 import './footer-premium.css';
 import '../animated-button.css';
 import clsx from 'clsx';
-import { MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle } from 'lucide-react';
+import { MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle, PhoneCall, Check, Target, PhoneOutgoing } from 'lucide-react';
 
 export default function LandingPage() {
   // --- States for Interactions ---
@@ -433,15 +433,38 @@ export default function LandingPage() {
           <p className="hero-subtitle animate-on-scroll delay-500">
             AI-Powered Two-Wheeler Diagnostics &amp; Repair — Expert mechanics, instant diagnosis, and transparent pricing for your ride.
           </p>
-          <div className="hero-ctas animate-on-scroll delay-500">
-            <a href="#booking" className="animated-gradient-btn bordered magnetic-btn" style={{ fontSize: '1.1rem', padding: '14px 32px' }}>
-              <span>🔧 Book Service</span>
+          <div className="hero-ctas animate-on-scroll delay-500 flex flex-wrap justify-center gap-4">
+            {/* 1. Book Service -> Check */}
+            <a href="#booking" className="animated-gradient-btn bordered group" style={{ fontSize: '1.1rem', padding: '14px 32px' }}>
+              <div className="flex items-center justify-center gap-3">
+                <div className="relative w-5 h-5 flex items-center justify-center">
+                  <Wrench className="absolute w-5 h-5 text-gray-400 group-hover:text-cyan-400 transition-all duration-500 group-hover:opacity-0 group-hover:-rotate-90 group-hover:scale-50" />
+                  <Check className="absolute w-5 h-5 text-cyan-400 opacity-0 scale-50 rotate-90 transition-all duration-500 group-hover:opacity-100 group-hover:rotate-0 group-hover:scale-100" />
+                </div>
+                <span>Book Service</span>
+              </div>
             </a>
-            <a href="#diagnosis" className="btn btn-secondary magnetic-btn">
-              <span>🤖</span> AI Bike Check
+
+            {/* 2. AI Bike Check -> Sparkles */}
+            <a href="#diagnosis" className="btn btn-secondary group border border-[rgba(167,139,250,0.2)] hover:border-[rgba(167,139,250,0.4)] transition-all duration-300">
+              <div className="flex items-center justify-center gap-2">
+                <div className="relative w-4 h-4 flex items-center justify-center">
+                  <BrainCircuit className="absolute w-4 h-4 text-gray-400 group-hover:text-fuchsia-400 transition-all duration-500 group-hover:opacity-0 group-hover:scale-50" />
+                  <Sparkles className="absolute w-4 h-4 text-fuchsia-400 opacity-0 scale-150 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100" />
+                </div>
+                <span className="text-gray-300 group-hover:text-white transition-colors duration-300">AI Bike Check</span>
+              </div>
             </a>
-            <a href="tel:+919811530780" className="btn btn-outline magnetic-btn">
-              <span>📞</span> Call Now
+
+            {/* 3. Call Now -> Message */}
+            <a href="tel:+919811530780" className="btn btn-outline group border border-[rgba(255,255,255,0.07)] hover:border-emerald-500/30 transition-all duration-300">
+              <div className="flex items-center justify-center gap-2">
+                <div className="relative w-4 h-4 flex items-center justify-center">
+                  <PhoneCall className="absolute w-4 h-4 text-gray-400 group-hover:text-emerald-400 transition-all duration-500 group-hover:opacity-0 group-hover:scale-50 group-hover:-rotate-12" />
+                  <PhoneOutgoing className="absolute w-4 h-4 text-emerald-400 opacity-0 scale-50 rotate-12 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100 group-hover:rotate-0" />
+                </div>
+                <span className="text-gray-300 group-hover:text-white transition-colors duration-300">Call Now</span>
+              </div>
             </a>
           </div>
           <div className="hero-stats animate-on-scroll">
