@@ -22,6 +22,7 @@ export const metadata: Metadata = {
 
 import { AnimatedBackground } from '@/components/ui/AnimatedBackground';
 import { SmoothScroll } from '@/components/ui/SmoothScroll';
+import { CustomCursor } from '@/components/ui/CustomCursor';
 
 export default function RootLayout({
   children,
@@ -30,7 +31,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${outfit.variable} ${inter.variable}`}>
-      <body className="font-body antialiased selection:bg-accent/20 selection:text-white">
+      <body className="font-body antialiased selection:bg-accent/20 selection:text-white md:cursor-none">
+        <CustomCursor />
         <SmoothScroll />
         <AnimatedBackground />
         {children}

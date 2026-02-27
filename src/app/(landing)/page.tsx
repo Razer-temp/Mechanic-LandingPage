@@ -11,6 +11,7 @@ import './ai-intelligence.css';
 import './landing-effects.css';
 import './how-it-works.css';
 import './footer-premium.css';
+import '../animated-button.css';
 import clsx from 'clsx';
 import { MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle } from 'lucide-react';
 
@@ -433,8 +434,8 @@ export default function LandingPage() {
             AI-Powered Two-Wheeler Diagnostics &amp; Repair — Expert mechanics, instant diagnosis, and transparent pricing for your ride.
           </p>
           <div className="hero-ctas animate-on-scroll delay-500">
-            <a href="#booking" className="btn btn-primary btn-glow magnetic-btn">
-              <span>🔧</span> Book Service
+            <a href="#booking" className="animated-gradient-btn bordered magnetic-btn" style={{ fontSize: '1.1rem', padding: '14px 32px' }}>
+              <span>🔧 Book Service</span>
             </a>
             <a href="#diagnosis" className="btn btn-secondary magnetic-btn">
               <span>🤖</span> AI Bike Check

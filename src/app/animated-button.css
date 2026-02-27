@@ -1,0 +1,234 @@
+@import "tailwindcss";
+
+@property --rg-1-x {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 0%;
+}
+
+@property --rg-1-y {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 50%;
+}
+
+@property --rg-2-x {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 20%;
+}
+
+@property --rg-2-y {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 70%;
+}
+
+@property --rg-3-x {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 70%;
+}
+
+@property --rg-3-y {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 20%;
+}
+
+@property --rg-4-x {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 50%;
+}
+
+@property --rg-4-y {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 50%;
+}
+
+.animated-gradient-btn {
+    position: relative;
+    padding: 0.75rem 2ch;
+    border-radius: 100vw;
+    border: 2px solid transparent;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 700;
+    color: #fff !important;
+    z-index: 1;
+    /* Creates stacking context for pseudo-elements */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    /* The colorful animated background */
+    background:
+        radial-gradient(circle 80px at var(--rg-1-x) var(--rg-1-y), var(--accent, #00c8ff), transparent) border-box,
+        radial-gradient(circle 100px at var(--rg-2-x) var(--rg-2-y), var(--accent-violet, #a78bfa), transparent) border-box,
+        radial-gradient(circle 120px at var(--rg-3-x) var(--rg-3-y), var(--accent-red, #ff2d55), transparent) border-box,
+        radial-gradient(circle 150px at var(--rg-4-x) var(--rg-4-y), var(--accent-green, #34d399), transparent) border-box,
+        #050508 border-box !important;
+
+    background-repeat: no-repeat !important;
+    animation: gradient-movement-premium 5s alternate infinite ease-in-out;
+}
+
+/* Pseudo element to create the solid interior for the "bordered" look */
+.animated-gradient-btn.bordered::before {
+    content: '';
+    position: absolute;
+    inset: 0px;
+    /* Covers padding box, leaves border exposed */
+    border-radius: inherit;
+    background: #050508;
+    z-index: -1;
+    transition: opacity 0.4s ease;
+}
+
+.animated-gradient-btn.bordered:hover::before,
+.animated-gradient-btn.bordered:focus-visible::before {
+    opacity: 0;
+}
+
+.animated-gradient-btn.bordered:hover,
+.animated-gradient-btn.bordered:focus-visible {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(0, 200, 255, 0.25), 0 0 20px rgba(167, 139, 250, 0.2);
+}
+
+.animated-gradient-btn.bordered:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 10px rgba(0, 200, 255, 0.15);
+}
+
+@keyframes gradient-movement-premium {
+    30% {
+        --rg-1-x: 80%;
+        --rg-1-y: 20%;
+    }
+
+    40% {
+        --rg-2-x: 100%;
+        --rg-2-y: 60%;
+    }
+
+    45% {
+        --rg-4-x: 10%;
+        --rg-4-y: 10%;
+    }
+
+    50% {
+        --rg-3-x: 50%;
+        --rg-3-y: 50%;
+    }
+
+    70% {
+        --rg-1-x: 10%;
+        --rg-2-y: 10%;
+    }
+}
+
+/* --- SPECIFIC RULES TO OVERRIDE GLOBALS.CSS FOR NAVBAR --- */
+nav .animated-gradient-btn.nav-cta,
+.nav-cta.animated-gradient-btn {
+    padding: 0 24px !important;
+    height: 42px !important;
+    font-size: 0.85rem !important;
+    border: 2px solid transparent !important;
+    overflow: hidden !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    /* Redeclare background to override the var(--grad-blue) !important in globals.css */
+    background:
+        radial-gradient(circle 80px at var(--rg-1-x) var(--rg-1-y), var(--accent, #00c8ff), transparent) border-box,
+        radial-gradient(circle 100px at var(--rg-2-x) var(--rg-2-y), var(--accent-violet, #a78bfa), transparent) border-box,
+        radial-gradient(circle 120px at var(--rg-3-x) var(--rg-3-y), var(--accent-red, #ff2d55), transparent) border-box,
+        radial-gradient(circle 150px at var(--rg-4-x) var(--rg-4-y), var(--accent-green, #34d399), transparent) border-box,
+        #050508 border-box !important;
+
+    background-repeat: no-repeat !important;
+}
+
+nav .animated-gradient-btn.nav-cta::before,
+.nav-cta.animated-gradient-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0px;
+    border-radius: inherit;
+    background: #050508;
+    z-index: -1;
+    transition: opacity 0.4s ease;
+}
+
+nav .animated-gradient-btn.nav-cta:hover::before,
+.nav-cta.animated-gradient-btn:hover::before {
+    opacity: 0;
+}
+
+nav .animated-gradient-btn.nav-cta:hover,
+.nav-cta.animated-gradient-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 200, 255, 0.25) !important;
+}
+
+nav .animated-gradient-btn.nav-cta:active,
+.nav-cta.animated-gradient-btn:active {
+    transform: translateY(1px);
+}
+
+/* Also ensure mobile premium CTA button is properly sized but uses gradient */
+.premium-cta-btn.animated-gradient-btn {
+    border: 2px solid transparent !important;
+    background:
+        radial-gradient(circle 80px at var(--rg-1-x) var(--rg-1-y), var(--accent, #00c8ff), transparent) border-box,
+        radial-gradient(circle 100px at var(--rg-2-x) var(--rg-2-y), var(--accent-violet, #a78bfa), transparent) border-box,
+        radial-gradient(circle 120px at var(--rg-3-x) var(--rg-3-y), var(--accent-red, #ff2d55), transparent) border-box,
+        radial-gradient(circle 150px at var(--rg-4-x) var(--rg-4-y), var(--accent-green, #34d399), transparent) border-box,
+        #050508 border-box !important;
+    background-repeat: no-repeat !important;
+    overflow: hidden !important;
+}
+
+.premium-cta-btn.animated-gradient-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0px;
+    border-radius: inherit;
+    background: #050508;
+    z-index: -1;
+    transition: opacity 0.4s ease;
+}
+
+.premium-cta-btn.animated-gradient-btn:hover::before,
+.premium-cta-btn.animated-gradient-btn:active::before {
+    opacity: 0;
+}
+
+/* For mobile viewing, revert to a non-animated simple gradient for performance and UI consistency */
+@media (max-width: 768px) {
+    .animated-gradient-btn {
+        animation: none !important;
+        background: linear-gradient(135deg, var(--accent, #00c8ff) 0%, var(--accent-violet, #a78bfa) 100%) !important;
+        border: none !important;
+        box-shadow: 0 4px 15px rgba(0, 200, 255, 0.25) !important;
+    }
+
+    .animated-gradient-btn::before {
+        display: none !important;
+    }
+
+    nav .animated-gradient-btn.nav-cta,
+    .nav-cta.animated-gradient-btn,
+    .premium-cta-btn.animated-gradient-btn,
+    .animated-gradient-btn.bordered {
+        background: #050508 !important;
+        border: 1px solid rgba(0, 200, 255, 0.3) !important;
+        box-shadow: 0 4px 15px rgba(0, 200, 255, 0.15) !important;
+    }
+}

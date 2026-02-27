@@ -3,6 +3,7 @@
 import clsx from 'clsx';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { getLenis } from './SmoothScroll';
+import '../../app/animated-button.css';
 
 const navItems = [
     { id: 'diagnosis', title: 'Diagnosis', subtitle: 'Identify issues with precision' },
@@ -121,7 +122,7 @@ export function Navbar() {
                         </li>
                     ))}
                     <li>
-                        <a href="#booking" className="nav-cta" style={{ marginLeft: '12px' }}>
+                        <a href="#booking" className="nav-cta animated-gradient-btn bordered" style={{ marginLeft: '12px' }}>
                             Book Service
                         </a>
                     </li>
@@ -169,7 +170,7 @@ export function Navbar() {
 
                     <div className="nav-cta-wrapper">
                         <div className="premium-cta-block">
-                            <a href="#booking" className="premium-cta-btn" onClick={(e) => handleNavClick(e, 'booking')}>
+                            <a href="#booking" className="animated-gradient-btn premium-cta-btn bordered" style={{ width: '100%' }} onClick={(e) => handleNavClick(e, 'booking')}>
                                 Book Service
                             </a>
                         </div>

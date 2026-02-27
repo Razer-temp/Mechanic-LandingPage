@@ -89,6 +89,15 @@
   }
 }
 
+/* ===== CUSTOM CURSOR ===== */
+@media (min-width: 769px) {
+
+  .md\:cursor-none,
+  .md\:cursor-none * {
+    cursor: none !important;
+  }
+}
+
 /* ===== RESET ===== */
 *,
 *::before,
