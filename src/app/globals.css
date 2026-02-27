@@ -1270,8 +1270,53 @@ ul {
 .service-icon {
   font-size: 2.2rem;
   margin-bottom: 18px;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   animation: floatGen 5s ease-in-out infinite;
+}
+
+/* Kinetic Icon Container */
+.kinetic-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 18px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.kinetic-svg {
+  width: 24px;
+  height: 24px;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.3s ease, filter 0.3s ease;
+}
+
+/* Desktop hover glow */
+.group:hover .kinetic-icon-wrap {
+  border-color: var(--neon-color, rgba(255, 255, 255, 0.2));
+  box-shadow: 0 0 15px color-mix(in srgb, var(--neon-color, transparent) 30%, transparent);
+}
+
+.group:hover .kinetic-svg {
+  color: var(--neon-color, #fff);
+  filter: drop-shadow(0 0 8px var(--neon-color, transparent));
+}
+
+/* Mobile ignition glow */
+.service-card.animate-ignition .kinetic-icon-wrap {
+  border-color: var(--neon-color, rgba(255, 255, 255, 0.2));
+  box-shadow: 0 0 15px color-mix(in srgb, var(--neon-color, transparent) 30%, transparent);
+}
+
+.service-card.animate-ignition .kinetic-svg {
+  color: var(--neon-color, #fff);
+  filter: drop-shadow(0 0 8px var(--neon-color, transparent));
 }
 
 .service-card:nth-child(2) .service-icon {
@@ -1345,50 +1390,78 @@ ul {
   background: var(--bg-glass);
   border: 1px solid var(--border-subtle);
   border-radius: var(--r-lg);
-  transition: border-color var(--dur-slow) var(--ease), box-shadow var(--dur-slow) var(--ease), background var(--dur-slow) var(--ease);
+  transition: border-color var(--dur-slow) var(--ease), box-shadow var(--dur-slow) var(--ease), background var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
   position: relative;
-  overflow: visible;
+  overflow: hidden;
+  /* Important to contain the neural background */
 }
 
-.why-card::before {
-  content: '';
+/* Base holographic grid hidden inside the card */
+.neural-bg {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0, 200, 255, 0.15), transparent);
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-position: center;
   opacity: 0;
-  transition: opacity var(--dur-slow) var(--ease);
+  z-index: 0;
+  transition: opacity 0.5s ease;
+  mask-image: radial-gradient(circle at 50% 30%, black 10%, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle at 50% 30%, black 10%, transparent 70%);
 }
 
-.why-card:hover {
-  border-color: var(--border-accent);
-  box-shadow: var(--shadow-glow);
+/* Ensure content sits above the neural background */
+.why-card>*:not(.neural-bg) {
+  position: relative;
+  z-index: 1;
 }
 
-.why-card:hover::before {
-  opacity: 1;
-}
-
+/* Shared styling for the icon container (borrows from kinetic-wrap for consistency but adapts size) */
 .why-icon-wrap {
   width: 56px;
   height: 56px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  background: rgba(0, 200, 255, 0.06);
-  border: 1px solid rgba(0, 200, 255, 0.1);
-  border-radius: var(--r-md);
-  margin-bottom: 18px;
-  transition: all var(--dur) var(--ease);
+  /* Override kinetic-wrap specifically for this section if needed, though they share the class in DOM */
+  margin: 0 auto 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.why-card:hover .why-icon-wrap {
-  background: rgba(0, 200, 255, 0.1);
-  border-color: var(--accent);
-  transform: scale(1.05);
+/* Default SVG style */
+.why-icon-wrap svg {
+  width: 28px;
+  height: 28px;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.3s ease, filter 0.3s ease, transform 0.4s ease;
+}
+
+/* Hover & Ignition States */
+.why-card:hover,
+.why-card.animate-ignition {
+  border-color: color-mix(in srgb, var(--neon-color, rgba(255, 255, 255, 0.2)) 50%, transparent);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  transform: translateY(-4px);
+}
+
+.why-card:hover .neural-bg,
+.why-card.animate-ignition .neural-bg {
+  opacity: 1;
+}
+
+.why-card:hover .why-icon-wrap,
+.why-card.animate-ignition .why-icon-wrap {
+  border-color: var(--neon-color);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--neon-color, transparent) 30%, transparent);
+}
+
+.why-card:hover .why-icon-wrap svg,
+.why-card.animate-ignition .why-icon-wrap svg {
+  color: var(--neon-color);
+  filter: drop-shadow(0 0 8px var(--neon-color));
+  transform: scale(1.1);
 }
 
 .why-card h3 {
@@ -3051,4 +3124,168 @@ body[style*="overflow: hidden"] .whatsapp-float {
 .nav-links a.active-link::after {
   width: 100% !important;
   background: var(--accent);
+}
+
+/* --- Kinetic Micro-Animations (Services Section) --- */
+/* --- True Kinetic Internal Animations --- */
+.group:hover .kinetic-piston-assembly,
+.service-card.animate-ignition .kinetic-piston-assembly {
+  animation: pumpPiston 0.4s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+
+@keyframes pumpPiston {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-4px);
+  }
+}
+
+.group:hover .kinetic-gear-large,
+.service-card.animate-ignition .kinetic-gear-large {
+  animation: spinCW 3s linear infinite;
+}
+
+.group:hover .kinetic-gear-small,
+.service-card.animate-ignition .kinetic-gear-small {
+  animation: spinCCW 1.5s linear infinite;
+}
+
+@keyframes spinCW {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinCCW {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.group:hover .kinetic-brake-disc,
+.service-card.animate-ignition .kinetic-brake-disc {
+  animation: brakeSpin 1s linear infinite;
+}
+
+@keyframes brakeSpin {
+  0% {
+    transform: rotate(0deg);
+    opacity: 0.1;
+    filter: drop-shadow(0 0 0px var(--tw-drop-shadow));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 8px currentColor);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: rotate(360deg);
+    opacity: 0.1;
+    filter: drop-shadow(0 0 0px var(--tw-drop-shadow));
+  }
+}
+
+.group:hover .kinetic-oil-drip,
+.service-card.animate-ignition .kinetic-oil-drip {
+  animation: oilDrip 1.5s ease-in infinite;
+}
+
+.group:hover .kinetic-oil-pool,
+.service-card.animate-ignition .kinetic-oil-pool {
+  animation: oilPoolFill 1.5s ease-out infinite;
+}
+
+@keyframes oilDrip {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  80% {
+    transform: translateY(8px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+}
+
+@keyframes oilPoolFill {
+  0% {
+    transform: scaleY(1);
+  }
+
+  50% {
+    transform: scaleY(1.3);
+  }
+
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+.group:hover .kinetic-beacon-flash-1,
+.service-card.animate-ignition .kinetic-beacon-flash-1 {
+  animation: beaconFlash 0.5s infinite;
+}
+
+.group:hover .kinetic-beacon-flash-2,
+.service-card.animate-ignition .kinetic-beacon-flash-2 {
+  animation: beaconFlash 0.5s 0.1s infinite;
+}
+
+.group:hover .kinetic-beacon-flash-3,
+.service-card.animate-ignition .kinetic-beacon-flash-3 {
+  animation: beaconFlash 0.5s 0.2s infinite;
+}
+
+.group:hover .kinetic-beacon-flash-4,
+.service-card.animate-ignition .kinetic-beacon-flash-4 {
+  animation: beaconFlash 0.5s 0.3s infinite;
+}
+
+@keyframes beaconFlash {
+
+  0%,
+  100% {
+    opacity: 0;
+    filter: drop-shadow(0 0 0px currentColor);
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px currentColor);
+    transform: scale(1.2);
+  }
+}
+
+.group:hover .kinetic-bolt,
+.service-card.animate-ignition .kinetic-bolt {
+  animation: boltZap 0.3s steps(2, end) infinite;
+}
+
+@keyframes boltZap {
+
+  0%,
+  100% {
+    transform: scale(1) translate(0, 0);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: scale(1.1) translate(1px, -1px);
+    opacity: 1;
+    filter: drop-shadow(0 0 8px currentColor);
+  }
 }

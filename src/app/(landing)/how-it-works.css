@@ -1,4 +1,4 @@
-/* ===== HOW IT WORKS — Ultra Premium SaaS Version ===== */
+/* ===== HOW IT WORKS — Expanding Accordion Layout ===== */
 
 .how-section-premium {
     position: relative;
@@ -61,144 +61,386 @@
     line-height: 1.75;
 }
 
-.how-grid-premium {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 24px;
+/* ===== ACCORDION CONTAINER ===== */
+.accordion-container {
+    display: flex;
+    flex-direction: column;
+    /* Stack on mobile */
+    gap: 16px;
     margin-top: 60px;
-}
-
-@media (min-width: 768px) {
-    .how-grid-premium {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    min-height: 500px;
 }
 
 @media (min-width: 1024px) {
-    .how-grid-premium {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 32px;
+    .accordion-container {
+        flex-direction: row;
+        /* Side-by-side on desktop */
+        height: 500px;
+        /* Fixed height for the accordion effect */
+        gap: 20px;
     }
 }
 
-.how-card-premium {
+/* ===== ACCORDION PANELS (Dark Frosted Glassmorphism) ===== */
+.accordion-panel {
     position: relative;
-    padding: 40px 32px;
-    border-radius: var(--r-lg);
-    background: var(--bg-glass);
-    border: 1px solid var(--border-subtle);
-    backdrop-filter: blur(40px) saturate(1.2);
-    -webkit-backdrop-filter: blur(40px) saturate(1.2);
-    transition: border-color var(--dur-slow) var(--ease), box-shadow var(--dur-slow) var(--ease), background var(--dur-slow) var(--ease);
-    overflow: visible;
-    height: 100%;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.02);
+    /* Extremely subtle white frost */
+    backdrop-filter: blur(24px);
+    /* Moderate blur */
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Very faint rim for dark theme */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    /* Soft glass shadow */
+    overflow: hidden;
+    transition: flex 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.1),
+        /* Spring physics */
+        background 0.4s ease,
+        border-color 0.4s ease,
+        box-shadow 0.4s ease,
+        transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    cursor: pointer;
+
+    /* Default state for Desktop: Let Flex handle width */
+    flex: 1;
+
+    /* Mobile styling */
+    min-height: 100px;
 }
 
-.how-card-glow {
+/* Background gradient inside panel */
+.accordion-bg {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 100%);
+    /* Clean white frosted gradient */
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.05) 100%);
     opacity: 0;
-    transition: opacity var(--dur-slow) var(--ease);
+    transition: opacity 0.6s ease;
     pointer-events: none;
+    z-index: 0;
 }
 
-.how-bg-num {
+/* Inner content wrapper */
+.accordion-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+/* ===== COLLAPSED VIEW (Just the big number) ===== */
+.accordion-collapsed-view {
     position: absolute;
-    top: 10px;
-    right: 20px;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.accordion-huge-num {
     font-family: var(--font-heading);
-    font-size: 6rem;
+    font-size: 5rem;
     font-weight: 900;
-    color: var(--text-bright);
-    opacity: 0.03;
-    user-select: none;
+    color: rgba(255, 255, 255, 0.05);
+    /* Frosted typography embedded in glass */
+    mix-blend-mode: overlay;
+    /* Make it interact with the blurred background */
+    transition: color 0.4s ease, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+}
+
+/* ===== EXPANDED VIEW (Full Details) ===== */
+.accordion-expanded-view {
+    position: absolute;
+    inset: 0;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Icon top, text bottom */
+    opacity: 0;
     pointer-events: none;
-    transition: all var(--dur-slow) var(--ease);
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 2;
 }
 
-@media (min-width: 1024px) {
-    .how-bg-num {
-        font-size: 8rem;
-    }
-}
-
-.how-icon-box {
-    width: 60px;
-    height: 60px;
-    border-radius: 16px;
-    background: rgba(0, 200, 255, 0.05);
-    border: 1px solid rgba(0, 200, 255, 0.1);
+.accordion-icon-wrap {
+    width: 72px;
+    /* Slightly larger */
+    height: 72px;
+    border-radius: 20px;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--accent);
-    margin-bottom: 32px;
-    transition: all var(--dur) var(--ease);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.how-card-title {
-    font-family: var(--font-heading);
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--text-bright);
+.accordion-icon-wrap svg {
+    width: 32px;
+    height: 32px;
+}
+
+.accordion-small-num {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--accent);
     margin-bottom: 12px;
+}
+
+.accordion-title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    /* Larger title */
+    font-weight: 800;
+    color: var(--text-bright);
+    margin-bottom: 16px;
+    line-height: 1.1;
     letter-spacing: -0.5px;
-    transition: color var(--dur) var(--ease);
+    white-space: nowrap;
 }
 
-.how-card-desc {
+.accordion-desc {
     color: var(--text-secondary);
-    line-height: 1.65;
-    font-size: 0.95rem;
-    transition: color var(--dur) var(--ease);
+    line-height: 1.6;
+    font-size: 1.1rem;
+    /* Larger text */
+    max-width: 450px;
+    /* Allow text to span wider to fill space */
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease 0.2s, transform 0.4s ease 0.2s;
 }
 
-@media (hover: hover) and (pointer: fine) {
-    .how-card-premium:hover {
-        border-color: var(--border-accent);
-        box-shadow: var(--shadow-glow-strong);
-        background: var(--bg-glass-hover);
+
+/* ========================================================== */
+/* THE MAGIC: HOVER/EXPAND BEHAVIOR (DESKTOP)                 */
+/* ========================================================== */
+
+@media (min-width: 1024px) {
+
+    /* 1. Base Setup */
+    .accordion-panel {
+        flex: 1;
+        /* Default to evenly split width */
+        min-width: 120px;
+        /* Crucial: prevent complete collapse */
     }
 
-    .how-card-premium:hover .how-card-glow {
+    /* Prevent text wrapping during the transition which causes height jumps */
+    .accordion-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .accordion-desc {
+        white-space: normal;
+        /* Allow desc to wrap */
+        min-width: 300px;
+        /* Force minimum width so it doesn't squash during transition */
+    }
+
+    /* 2. BASE STATE (No Container Hover) */
+    /* The .active panel is expanded, others are collapsed */
+    .accordion-container:not(:hover) .accordion-panel.active {
+        flex: 4;
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(0, 212, 255, 0.3);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .accordion-container:not(:hover) .accordion-panel.active .accordion-bg {
         opacity: 1;
     }
 
-    .how-card-premium:hover .how-bg-num {
-        opacity: 0.06;
-        color: var(--accent);
-        transform: scale(1.1);
+    .accordion-container:not(:hover) .accordion-panel.active .accordion-collapsed-view {
+        opacity: 0;
+        transform: scale(0.8);
     }
 
-    .how-card-premium:hover .how-icon-box {
-        background: var(--accent);
-        color: #fff;
-        box-shadow: 0 0 30px rgba(0, 200, 255, 0.3);
-        transform: scale(1.1) rotate(5deg);
+    .accordion-container:not(:hover) .accordion-panel.active .accordion-expanded-view {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
     }
 
-    .how-card-premium:hover .how-card-title {
-        color: var(--accent);
+    .accordion-container:not(:hover) .accordion-panel.active .accordion-desc {
+        opacity: 1;
+        transform: translateY(0);
     }
 
-    .how-card-premium:hover .how-card-desc {
-        color: var(--text-primary);
+    /* 3. CONTAINER HOVER STATE */
+    /* When ANY panel is hovered, ALL panels shrink and hide their contents to prepare */
+    .accordion-container:hover .accordion-panel {
+        flex: 0.8;
+        /* Shrink inactive panels slightly */
+    }
+
+    .accordion-container:hover .accordion-panel .accordion-collapsed-view {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .accordion-container:hover .accordion-panel .accordion-expanded-view {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(20px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    /* 4. SPECIFIC PANEL HOVER STATE */
+    /* The exact panel being hovered expands and shows its contents, overriding step 3 */
+    .accordion-container:hover .accordion-panel:hover {
+        /* Expand this panel widely */
+        flex: 4;
+        background: rgba(0, 212, 255, 0.05);
+        /* Very faint cyan tint active state */
+        border-color: rgba(0, 212, 255, 0.3);
+        /* Distinct cyan rim to match theme */
+        /* Deep drop shadow */
+        box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6);
+    }
+
+    .accordion-container:hover .accordion-panel:hover .accordion-bg {
+        opacity: 1;
+    }
+
+    /* Move big number to the right as an enormous structural watermark */
+    .accordion-container:hover .accordion-panel:hover .accordion-collapsed-view {
+        opacity: 1;
+        /* Keep it visible */
+        transform: scale(2.5) translateX(30%);
+        /* Push right and make massive */
+        z-index: 0;
+    }
+
+    .accordion-container:hover .accordion-panel:hover .accordion-huge-num {
+        color: rgba(255, 255, 255, 0.02);
+        /* Extremely faded white */
+    }
+
+    /* Show details MUST HAVE HIGHEST SPECIFICITY OR !IMPORTANT */
+    .accordion-container:hover .accordion-panel:hover .accordion-expanded-view {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        transform: translateY(0) !important;
+        transition: opacity 0.5s ease 0.2s, transform 0.5s cubic-bezier(0.25, 1, 0.5, 1) 0.1s;
+    }
+
+    /* Animate details elements */
+    .accordion-container:hover .accordion-panel:hover .accordion-icon-wrap {
+        transform: scale(1.1) translateY(-10px);
+        box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+    }
+
+    .accordion-container:hover .accordion-panel:hover .accordion-desc {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+
+    /* 5. DEFAULT STATE (When nothing is hovered, Panel 1 is open) */
+    .accordion-container:not(:hover) .accordion-panel.active {
+        flex: 4;
+        background: rgba(0, 212, 255, 0.05);
+        /* Very faint cyan tint active state */
+        border-color: rgba(0, 212, 255, 0.3);
+        /* Distinct cyan rim to match theme */
+        /* Deep drop shadow */
+        box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6);
+    }
+
+    .accordion-container:not(:hover) .accordion-panel.active .accordion-bg {
+        opacity: 1;
+    }
+
+    /* Move big number to the right as an enormous structural watermark */
+    .accordion-container:not(:hover) .accordion-panel.active .accordion-collapsed-view {
+        opacity: 1;
+        /* Keep it visible */
+        transform: scale(2.5) translateX(30%);
+        /* Push right and make massive */
+        z-index: 0;
+    }
+
+    .accordion-container:not(:hover) .accordion-panel.active .accordion-huge-num {
+        color: rgba(255, 255, 255, 0.02);
+        /* Extremely faded white */
+    }
+
+    .accordion-container:not(:hover) .accordion-panel.active .accordion-expanded-view {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        transform: translateY(0) !important;
+    }
+
+    .accordion-container:not(:hover) .accordion-panel.active .accordion-desc {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
     }
 }
 
-.how-top-light {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    opacity: 0;
-    transition: opacity var(--dur-slow) var(--ease);
-    pointer-events: none;
-}
 
-.how-card-premium:hover .how-top-light {
-    opacity: 1;
+/* ========================================================== */
+/* MOBILE BEHAVIOR (Standard stacking, no complex flex hover) */
+/* ========================================================== */
+
+@media (max-width: 1023px) {
+    .accordion-panel {
+        padding: 30px 24px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Hide the huge number entirely on mobile */
+    .accordion-collapsed-view {
+        display: none;
+    }
+
+    /* Permanently show the expanded view contents, but alter layout to fit */
+    .accordion-expanded-view {
+        position: relative;
+        opacity: 1;
+        pointer-events: auto;
+        transform: none;
+        padding: 0;
+    }
+
+    .accordion-icon-wrap {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 24px;
+    }
+
+    .accordion-title {
+        font-size: 1.5rem;
+        white-space: normal;
+        /* Allow wrapping */
+    }
+
+    .accordion-desc {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        max-width: 100%;
+    }
+
+    .accordion-panel:active,
+    .accordion-panel.animate-on-scroll.visible {
+        /* Simulate hover with visibility */
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(0, 212, 255, 0.2);
+    }
 }

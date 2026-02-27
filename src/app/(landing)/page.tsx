@@ -13,7 +13,8 @@ import './how-it-works.css';
 import './footer-premium.css';
 import '../animated-button.css';
 import clsx from 'clsx';
-import { MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle, PhoneCall, Check, Target, PhoneOutgoing } from 'lucide-react';
+import { MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle, PhoneCall, Check, Target, PhoneOutgoing, Search, Bot, Zap, ShieldCheck, Banknote, MapPin } from 'lucide-react';
+import { KineticPiston, KineticGears, KineticDisc, KineticDroplet, KineticWarning, KineticLightning } from '@/components/icons/KineticIcons';
 
 export default function LandingPage() {
   // --- States for Interactions ---
@@ -73,6 +74,28 @@ export default function LandingPage() {
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
     document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  // --- 3. Mobile Service Ignition ---
+  useEffect(() => {
+    // Initial check and observer setup
+    const isMobile = () => window.innerWidth < 768;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (isMobile() && entry.isIntersecting) {
+          entry.target.classList.add('animate-ignition');
+        } else {
+          entry.target.classList.remove('animate-ignition');
+        }
+      });
+    }, {
+      threshold: 0,
+      rootMargin: '-35% 0px -35% 0px'
+    });
+
+    document.querySelectorAll('.service-card, .why-card').forEach(el => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
@@ -530,8 +553,14 @@ export default function LandingPage() {
                     </span>
                   ))}
                 </div>
-                <button className="btn btn-primary btn-glow btn-full" id="diagnosisBtn" onClick={handleDiagnosis}>
-                  <span>🔍</span> {isDiagnosing ? 'Analyzing...' : 'Analyze with AI'}
+                <button className="btn btn-primary btn-glow btn-full group" id="diagnosisBtn" onClick={handleDiagnosis}>
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="relative w-5 h-5 flex items-center justify-center">
+                      <Search className="absolute w-5 h-5 group-hover:opacity-0 group-hover:scale-50 transition-all duration-500" />
+                      <Sparkles className="absolute w-5 h-5 opacity-0 scale-150 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100" />
+                    </div>
+                    <span>{isDiagnosing ? 'Analyzing...' : 'Analyze with AI'}</span>
+                  </div>
                 </button>
               </div>
             </div>
@@ -604,15 +633,17 @@ export default function LandingPage() {
           </div>
           <div className="services-grid">
             {[
-              { icon: '🔩', title: 'Engine Repair', desc: 'Complete engine overhaul, timing chain, piston repair, and head gasket replacement.', price: 'From ₹1,500*' },
-              { icon: '⚙️', title: 'Full Servicing', desc: 'Oil change, filter replacement, chain adjustment, spark plug — complete care package.', price: 'From ₹799*' },
-              { icon: '🛑', title: 'Brake Fix', desc: 'Disc & drum brake pads, brake fluid change, ABS diagnostics, and caliper servicing.', price: 'From ₹500*' },
-              { icon: '🛢️', title: 'Oil Change', desc: 'Premium synthetic & semi-synthetic engine oil with filter replacement.', price: 'From ₹350*' },
-              { icon: '🚨', title: 'Emergency Repair', desc: 'Roadside assistance, flat tire, towing service, and emergency breakdown support.', price: 'From ₹299*' },
-              { icon: '⚡', title: 'Electrical Work', desc: 'Wiring repair, headlight upgrade, battery replacement, ECU diagnostics.', price: 'From ₹400*' },
+              { icon: KineticPiston, neonColor: '#22d3ee', title: 'Engine Repair', desc: 'Complete engine overhaul, timing chain, piston repair, and head gasket replacement.', price: 'From ₹1,500*' },
+              { icon: KineticGears, neonColor: '#e879f9', title: 'Full Servicing', desc: 'Oil change, filter replacement, chain adjustment, spark plug — complete care package.', price: 'From ₹799*' },
+              { icon: KineticDisc, neonColor: '#f87171', title: 'Brake Fix', desc: 'Disc & drum brake pads, brake fluid change, ABS diagnostics, and caliper servicing.', price: 'From ₹500*' },
+              { icon: KineticDroplet, neonColor: '#fbbf24', title: 'Oil Change', desc: 'Premium synthetic & semi-synthetic engine oil with filter replacement.', price: 'From ₹350*' },
+              { icon: KineticWarning, neonColor: '#fb923c', title: 'Emergency Repair', desc: 'Roadside assistance, flat tire, towing service, and emergency breakdown support.', price: 'From ₹299*' },
+              { icon: KineticLightning, neonColor: '#facc15', title: 'Electrical Work', desc: 'Wiring repair, headlight upgrade, battery replacement, ECU diagnostics.', price: 'From ₹400*' },
             ].map((s, i) => (
-              <div key={i} className="service-card glass-card animate-on-scroll hover-glow tilt-card">
-                <div className="service-icon">{s.icon}</div>
+              <div key={i} className="service-card glass-card animate-on-scroll hover-glow tilt-card group" style={{ '--neon-color': s.neonColor } as React.CSSProperties}>
+                <div className="service-icon kinetic-icon-wrap">
+                  <s.icon className="kinetic-svg" />
+                </div>
                 <h3>{s.title}</h3>
                 <p>{s.desc}</p>
                 <span className="service-price">{s.price}</span>
@@ -634,15 +665,18 @@ export default function LandingPage() {
           </div>
           <div className="why-grid">
             {[
-              { icon: '🤖', title: 'AI Diagnostics', desc: 'Our AI engine analyzes 1000+ bike symptoms to pinpoint issues before you even visit.' },
-              { icon: '👨‍🔧', title: 'Expert Mechanics', desc: 'Certified technicians with 10+ years experience across all bike brands.' },
-              { icon: '⚡', title: 'Fast Turnaround', desc: 'Most services completed within 2-4 hours. Same-day delivery guaranteed.' },
-              { icon: '💰', title: 'Transparent Pricing', desc: 'No hidden charges. AI-powered cost estimation before you commit to any repair.' },
-              { icon: '🛡️', title: 'Warranty Assured', desc: '6-month warranty on all repairs. Genuine parts with quality guarantee.' },
-              { icon: '📍', title: 'Pickup & Drop', desc: 'Free pick-up and delivery within 10km radius. Hassle-free doorstep service.' },
+              { icon: Bot, neonColor: '#22d3ee', title: 'AI Diagnostics', desc: 'Our AI engine analyzes 1000+ bike symptoms to pinpoint issues before you even visit.' },
+              { icon: Wrench, neonColor: '#e879f9', title: 'Expert Mechanics', desc: 'Certified technicians with 10+ years experience across all bike brands.' },
+              { icon: Zap, neonColor: '#facc15', title: 'Fast Turnaround', desc: 'Most services completed within 2-4 hours. Same-day delivery guaranteed.' },
+              { icon: Banknote, neonColor: '#4ade80', title: 'Transparent Pricing', desc: 'No hidden charges. AI-powered cost estimation before you commit to any repair.' },
+              { icon: ShieldCheck, neonColor: '#60a5fa', title: 'Warranty Assured', desc: '6-month warranty on all repairs. Genuine parts with quality guarantee.' },
+              { icon: MapPin, neonColor: '#f87171', title: 'Pickup & Drop', desc: 'Free pick-up and delivery within 10km radius. Hassle-free doorstep service.' },
             ].map((w, i) => (
-              <div key={i} className="why-card animate-on-scroll hover-glow tilt-card">
-                <div className="why-icon-wrap"><span>{w.icon}</span></div>
+              <div key={i} className="why-card animate-on-scroll hover-glow tilt-card group" style={{ '--neon-color': w.neonColor } as React.CSSProperties}>
+                <div className="neural-bg"></div>
+                <div className="why-icon-wrap kinetic-icon-wrap">
+                  <w.icon className="kinetic-svg" />
+                </div>
                 <h3>{w.title}</h3>
                 <p>{w.desc}</p>
               </div>
@@ -670,60 +704,61 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="how-grid-premium">
+          <div className="accordion-container">
             {[
               {
                 num: '01',
-                icon: <MessageSquareText className="size-6 transition-transform duration-500 group-hover:scale-110" />,
+                icon: <MessageSquareText className="size-8" />,
                 title: 'Describe Issue',
-                desc: 'Chat with our AI or use the form to describe what’s wrong with your bike.'
+                desc: 'Chat with our AI or use the form to describe what’s wrong with your bike. Our smart system understands natural language.'
               },
               {
                 num: '02',
-                icon: <BrainCircuit className="size-6 transition-transform duration-500 group-hover:scale-110" />,
+                icon: <BrainCircuit className="size-8" />,
                 title: 'AI Analysis',
-                desc: 'Our AI engine analyzes symptoms to provide instant diagnosis and cost estimates.'
+                desc: 'Our AI engine analyzes symptoms to provide instant diagnosis and transparent cost estimates before any work begins.'
               },
               {
                 num: '03',
-                icon: <Wrench className="size-6 transition-transform duration-500 group-hover:scale-110" />,
+                icon: <Wrench className="size-8" />,
                 title: 'Expert Repair',
-                desc: 'Book a slot. Our certified mechanics fix your bike using genuine parts.'
+                desc: 'Book a slot. Our certified mechanics fix your bike using genuine parts, ensuring peak performance.'
               },
               {
                 num: '04',
-                icon: <Rocket className="size-6 transition-transform duration-500 group-hover:scale-110" />,
+                icon: <Rocket className="size-8" />,
                 title: 'Ready to Ride',
-                desc: 'Get your bike back in top condition. Pay online or at the workshop.'
-              },
+                desc: 'Get your bike back in top condition. Pay online or at the workshop. Delivery guaranteed within our service area.'
+              }
             ].map((step, i) => (
               <div
                 key={i}
-                style={{ transitionDelay: `${(i + 3) * 100}ms` }}
-                className="group how-card-premium animate-on-scroll hover-glow tilt-card"
+                className={clsx(
+                  "accordion-panel group",
+                  i === 0 ? "active" : "" // First panel is active/expanded by default strictly via CSS handling later if needed, but we'll use pure CSS hover for simplicity here
+                )}
+                style={{ transitionDelay: `${i * 100}ms` }}
               >
-                {/* Micro shadow & Soft glow */}
-                <div className="how-card-glow"></div>
+                <div className="accordion-bg"></div>
 
-                {/* Massive background number */}
-                <span className="how-bg-num">
-                  {step.num}
-                </span>
-
-                <div className="relative z-10">
-                  <div className="how-icon-box">
-                    {step.icon}
+                <div className="accordion-content">
+                  {/* The collapsed view element (Number) */}
+                  <div className="accordion-collapsed-view">
+                    <span className="accordion-huge-num">{step.num}</span>
                   </div>
-                  <h3 className="how-card-title">
-                    {step.title}
-                  </h3>
-                  <p className="how-card-desc">
-                    {step.desc}
-                  </p>
-                </div>
 
-                {/* Top-light reflection effect */}
-                <div className="how-top-light"></div>
+                  {/* The expanded view element (Details) */}
+                  <div className="accordion-expanded-view">
+                    <div className="accordion-icon-wrap">
+                      {step.icon}
+                    </div>
+                    <div className="accordion-text-wrap">
+                      <span className="accordion-small-num">Step {step.num}</span>
+                      <h3 className="accordion-title">{step.title}</h3>
+                      <p className="accordion-desc">{step.desc}</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

@@ -104,6 +104,12 @@
     transform-style: preserve-3d;
 }
 
+/* Mobile support: trigger scanner animation on intersection */
+:root .hover-glow.hover-glow.animate-ignition::before,
+:root .hover-glow.hover-glow.animate-ignition::after {
+    animation: scanLine 1.2s ease-in-out forwards;
+}
+
 @media (hover: hover) and (pointer: fine) {
 
     :root .hover-glow.hover-glow:hover::before,
