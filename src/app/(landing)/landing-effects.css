@@ -12,29 +12,91 @@
 }
 
 /* 
-   1. HOVER GLOW EFFECT & 2. 3D TILT EFFECT
+   1. QUANTUM ENTANGLEMENT EFFECT & 2. 3D TILT EFFECT
    -----------------------------------------
-   Isolating hover logic to devices with actual mice/pointers 
-   to prevent "sticky" hover states on mobile touch screens.
 */
 .hover-glow {
     position: relative;
     overflow: visible !important;
 }
 
-.hover-glow::after {
+/* 1. The Stationary Technical Grid */
+:root .hover-glow.hover-glow::before {
     content: '';
     position: absolute;
-    inset: -1px;
-    background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y),
-            rgba(0, 200, 255, 0.15),
-            transparent 40%);
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    z-index: 2;
-    pointer-events: none;
+    inset: 0;
+    height: 100%;
     border-radius: inherit;
-    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 1;
+
+    background-image:
+        linear-gradient(rgba(0, 212, 255, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.15) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-color: transparent;
+
+    /* Mask it to only show exactly behind where the laser has scanned */
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-size: 100% 120px;
+    mask-size: 100% 120px;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: 0 -120px;
+    mask-position: 0 -120px;
+
+    opacity: 0;
+}
+
+/* 2. The Intense Laser Line (moving down via background-position) */
+:root .hover-glow.hover-glow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    border-radius: inherit;
+
+    background-image: linear-gradient(to bottom,
+            transparent 0%,
+            rgba(0, 212, 255, 0.04) 80%,
+            rgba(0, 212, 255, 0.6) 98%,
+            rgba(0, 255, 255, 1) 100%);
+    background-size: 100% 120px;
+    background-repeat: no-repeat;
+    background-position: 0 -120px;
+    background-color: transparent;
+
+    opacity: 0;
+}
+
+@keyframes scanLine {
+    0% {
+        background-position: 0 -120px;
+        -webkit-mask-position: 0 -120px;
+        mask-position: 0 -120px;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    80% {
+        background-position: 0 calc(100% + 120px);
+        -webkit-mask-position: 0 calc(100% + 120px);
+        mask-position: 0 calc(100% + 120px);
+        opacity: 1;
+    }
+
+    100% {
+        background-position: 0 calc(100% + 120px);
+        -webkit-mask-position: 0 calc(100% + 120px);
+        mask-position: 0 calc(100% + 120px);
+        opacity: 0;
+    }
 }
 
 .tilt-card {
@@ -43,8 +105,10 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .hover-glow:hover::after {
-        opacity: 1;
+
+    :root .hover-glow.hover-glow:hover::before,
+    :root .hover-glow.hover-glow:hover::after {
+        animation: scanLine 1.2s ease-in-out forwards;
     }
 
     /* Fast responsive tilt on hover */
