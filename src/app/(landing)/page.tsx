@@ -15,6 +15,34 @@ import '../animated-button.css';
 import clsx from 'clsx';
 import { MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle, PhoneCall, Check, Target, PhoneOutgoing, Search, Bot, Zap, ShieldCheck, Banknote, MapPin } from 'lucide-react';
 import { KineticPiston, KineticGears, KineticDisc, KineticDroplet, KineticWarning, KineticLightning } from '@/components/icons/KineticIcons';
+import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+
+const HOW_STEPS = [
+  {
+    num: '01',
+    icon: <MessageSquareText className="size-8" />,
+    title: 'Describe Issue',
+    desc: 'Chat with our AI or use the form to describe what’s wrong with your bike. Our smart system understands natural language.'
+  },
+  {
+    num: '02',
+    icon: <BrainCircuit className="size-8" />,
+    title: 'AI Analysis',
+    desc: 'Our AI engine analyzes symptoms to provide instant diagnosis and transparent cost estimates before any work begins.'
+  },
+  {
+    num: '03',
+    icon: <Wrench className="size-8" />,
+    title: 'Expert Repair',
+    desc: 'Book a slot. Our certified mechanics fix your bike using genuine parts, ensuring peak performance.'
+  },
+  {
+    num: '04',
+    icon: <Rocket className="size-8" />,
+    title: 'Ready to Ride',
+    desc: 'Get your bike back in top condition. Pay online or at the workshop. Delivery guaranteed within our service area.'
+  }
+];
 
 export default function LandingPage() {
   // --- States for Interactions ---
@@ -42,6 +70,10 @@ export default function LandingPage() {
   // showFloating removed — buttons are always visible
   const supabase = createClient();
   const chatMessagesRef = useRef<HTMLDivElement>(null);
+
+  // --- States for Cyber-HUD Scroll Tracker ---
+  // (Removed due to mobile bugginess - replacing with simple timeline)
+  const mobileSectionRef = useRef<HTMLDivElement>(null);
 
   // --- Refs for Animations ---
   const particlesRef = useRef<HTMLDivElement>(null);
@@ -704,33 +736,8 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="accordion-container">
-            {[
-              {
-                num: '01',
-                icon: <MessageSquareText className="size-8" />,
-                title: 'Describe Issue',
-                desc: 'Chat with our AI or use the form to describe what’s wrong with your bike. Our smart system understands natural language.'
-              },
-              {
-                num: '02',
-                icon: <BrainCircuit className="size-8" />,
-                title: 'AI Analysis',
-                desc: 'Our AI engine analyzes symptoms to provide instant diagnosis and transparent cost estimates before any work begins.'
-              },
-              {
-                num: '03',
-                icon: <Wrench className="size-8" />,
-                title: 'Expert Repair',
-                desc: 'Book a slot. Our certified mechanics fix your bike using genuine parts, ensuring peak performance.'
-              },
-              {
-                num: '04',
-                icon: <Rocket className="size-8" />,
-                title: 'Ready to Ride',
-                desc: 'Get your bike back in top condition. Pay online or at the workshop. Delivery guaranteed within our service area.'
-              }
-            ].map((step, i) => (
+          <div className="accordion-container hidden lg:flex">
+            {HOW_STEPS.map((step, i) => (
               <div
                 key={i}
                 className={clsx(
@@ -761,6 +768,31 @@ export default function LandingPage() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* MOBILE TIMELINE EXPERIENCE (Visible only on <1024px) */}
+          <div ref={mobileSectionRef} className="block lg:hidden mobile-timeline-wrapper">
+            <div className="mobile-timeline-line"></div>
+            <div className="mobile-timeline-cards">
+              {HOW_STEPS.map((step, i) => (
+                <motion.div
+                  key={step.num}
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  className="timeline-step-card glass-card hover-glow"
+                >
+                  <div className="timeline-dot"></div>
+                  <div className="timeline-card-header">
+                    <span className="timeline-num">{step.num}</span>
+                    <div className="timeline-icon">{step.icon}</div>
+                  </div>
+                  <h3 className="timeline-title">{step.title}</h3>
+                  <p className="timeline-desc">{step.desc}</p>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

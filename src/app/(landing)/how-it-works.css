@@ -63,16 +63,24 @@
 
 /* ===== ACCORDION CONTAINER ===== */
 .accordion-container {
-    display: flex;
+    display: none;
+    /* Default to hidden for mobile */
     flex-direction: column;
-    /* Stack on mobile */
     gap: 16px;
     margin-top: 60px;
     min-height: 500px;
 }
 
+/* Hardened Mobile Hide to prevent duplicates */
+@media (max-width: 1023px) {
+    .accordion-container {
+        display: none !important;
+    }
+}
+
 @media (min-width: 1024px) {
     .accordion-container {
+        display: flex !important;
         flex-direction: row;
         /* Side-by-side on desktop */
         height: 500px;
@@ -392,55 +400,118 @@
     }
 }
 
-
 /* ========================================================== */
-/* MOBILE BEHAVIOR (Standard stacking, no complex flex hover) */
+/* MOBILE VERTICAL TIMELINE                                   */
 /* ========================================================== */
 
-@media (max-width: 1023px) {
-    .accordion-panel {
-        padding: 30px 24px;
-        display: flex;
-        flex-direction: column;
+@media (min-width: 1024px) {
+    .mobile-timeline-wrapper {
+        display: none !important;
     }
+}
 
-    /* Hide the huge number entirely on mobile */
-    .accordion-collapsed-view {
-        display: none;
-    }
+.mobile-timeline-wrapper {
+    position: relative;
+    padding: 20px 0;
+    margin-top: 40px;
+}
 
-    /* Permanently show the expanded view contents, but alter layout to fit */
-    .accordion-expanded-view {
-        position: relative;
-        opacity: 1;
-        pointer-events: auto;
-        transform: none;
-        padding: 0;
-    }
+/* The Glowing Vertical Track */
+.mobile-timeline-line {
+    position: absolute;
+    top: 30px;
+    bottom: 30px;
+    left: 24px;
+    /* Centers the line under the dots */
+    width: 2px;
+    background: linear-gradient(to bottom,
+            transparent,
+            rgba(0, 212, 255, 0.4) 10%,
+            rgba(167, 139, 250, 0.4) 90%,
+            transparent);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+    z-index: 1;
+}
 
-    .accordion-icon-wrap {
-        width: 50px;
-        height: 50px;
-        margin-bottom: 24px;
-    }
+.mobile-timeline-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    position: relative;
+    z-index: 2;
+}
 
-    .accordion-title {
-        font-size: 1.5rem;
-        white-space: normal;
-        /* Allow wrapping */
-    }
+/* Individual Step Card */
+.timeline-step-card {
+    position: relative;
+    padding: 32px 24px;
+    margin-left: 50px;
+    /* Make room for the timeline line */
+    background: rgba(13, 14, 21, 0.85);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-left: 1px solid rgba(0, 212, 255, 0.3);
+    /* Subtle left highlight */
+}
 
-    .accordion-desc {
-        opacity: 1;
-        transform: none;
-        transition: none;
-        max-width: 100%;
-    }
+/* The Glowing Dot */
+.timeline-dot {
+    position: absolute;
+    top: 40px;
+    left: -32px;
+    /* Position exactly over the timeline line */
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #00d4ff;
+    box-shadow: 0 0 10px #00d4ff, 0 0 20px rgba(0, 212, 255, 0.5);
+    border: 2px solid #08080e;
+}
 
-    .accordion-panel:active,
-    .accordion-panel.animate-on-scroll.visible {
-        /* Simulate hover with visibility */
-        background: rgba(255, 255, 255, 0.03);
-        border-color: rgba(0, 212, 255, 0.2);
-    }
+/* Header (Number + Icon) */
+.timeline-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.timeline-num {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.06);
+    /* Large faint watermark number */
+    line-height: 1;
+}
+
+.timeline-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+}
+
+.timeline-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.timeline-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-bright);
+    margin-bottom: 12px;
+}
+
+.timeline-desc {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
 }
