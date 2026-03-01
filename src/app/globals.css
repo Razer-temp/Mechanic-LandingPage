@@ -263,6 +263,80 @@ ul {
     transition: transform 0.1s;
     background: rgba(255, 255, 255, 0.02);
   }
+
+  /* ============================================ */
+  /* MOBILE PERFORMANCE MEGA-BLOCK               */
+  /* ============================================ */
+
+  /* 1. Kill expensive backdrop-filter on all glass cards */
+  .glass-card {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(12, 12, 28, 0.95) !important;
+  }
+
+  /* 2. Stop perpetual float animation on service icons */
+  .service-icon {
+    animation: none !important;
+  }
+
+  /* 3. Simplify box-shadow transitions (repaints) */
+  .why-card,
+  .service-card {
+    transition: transform 0.25s ease, opacity 0.25s ease !important;
+  }
+
+  .why-card:hover,
+  .why-card.animate-ignition {
+    box-shadow: none !important;
+  }
+
+  /* 4. Touch-action for responsive taps */
+  .btn,
+  .nav-cta,
+  .quick-chip,
+  .chat-trigger,
+  .chat-send,
+  .whatsapp-float,
+  .service-card,
+  .why-card {
+    touch-action: manipulation;
+  }
+
+  /* 5. Contain layout on heavy cards */
+  .service-card,
+  .why-card,
+  .review-card {
+    contain: layout style;
+  }
+
+  /* 6. Optimize marquee — promote to GPU layer */
+  .marquee-track {
+    will-change: transform;
+    contain: layout style;
+  }
+
+  /* 7. Reduce hero orb blur intensity */
+  .hero-orb {
+    filter: blur(80px) !important;
+    opacity: 0.2 !important;
+  }
+
+  /* 8. Disable warp stars animation */
+  .warp-star {
+    animation: none !important;
+    opacity: 0.4 !important;
+  }
+
+  /* 9. Simplify hero badge shooting stars */
+  .shooting-star:nth-child(n+7) {
+    display: none !important;
+  }
+
+  /* 10. Reduce particle animation complexity */
+  .particle {
+    will-change: transform, opacity;
+  }
 }
 
 /* Shimmer top-edge */

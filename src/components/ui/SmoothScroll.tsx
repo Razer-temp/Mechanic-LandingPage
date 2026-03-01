@@ -13,13 +13,15 @@ export function SmoothScroll() {
     const lenisRef = useRef<Lenis | null>(null);
 
     useEffect(() => {
+        // Skip Lenis on mobile — native momentum scroll is smoother & more performant
+        const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+        if (isTouchDevice) return;
+
         const lenis = new Lenis({
             duration: 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             smoothWheel: true,
             wheelMultiplier: 1,
-            // ─── Mobile touch optimizations ───
-            touchMultiplier: 1.5,
             infinite: false,
         });
 

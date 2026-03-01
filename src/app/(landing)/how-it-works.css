@@ -414,6 +414,22 @@
     position: relative;
     padding: 20px 0;
     margin-top: 40px;
+    overflow: visible;
+}
+
+/* Narrow-screen safety net */
+@media (max-width: 380px) {
+    .timeline-step-card {
+        margin-left: 42px;
+    }
+
+    .timeline-dot {
+        left: -26px;
+    }
+
+    .mobile-timeline-line {
+        left: 20px;
+    }
 }
 
 /* The Glowing Vertical Track */

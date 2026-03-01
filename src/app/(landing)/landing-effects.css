@@ -100,8 +100,17 @@
 }
 
 .tilt-card {
-    will-change: transform;
     transform-style: preserve-3d;
+}
+
+/* Mobile: disable scan-line completely — mask-position animation causes repaints */
+@media (hover: none) and (pointer: coarse) {
+
+    :root .hover-glow.hover-glow.animate-ignition::before,
+    :root .hover-glow.hover-glow.animate-ignition::after {
+        animation: none !important;
+        opacity: 0 !important;
+    }
 }
 
 /* Mobile support: trigger scanner animation on intersection */
@@ -111,6 +120,11 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
+
+    /* Promote to GPU layer only on desktop where tilt is used */
+    .tilt-card {
+        will-change: transform;
+    }
 
     :root .hover-glow.hover-glow:hover::before,
     :root .hover-glow.hover-glow:hover::after {

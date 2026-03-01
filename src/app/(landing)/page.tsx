@@ -15,7 +15,7 @@ import '../animated-button.css';
 import clsx from 'clsx';
 import { MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle, PhoneCall, Check, Target, PhoneOutgoing, Search, Bot, Zap, ShieldCheck, Banknote, MapPin } from 'lucide-react';
 import { KineticPiston, KineticGears, KineticDisc, KineticDroplet, KineticWarning, KineticLightning } from '@/components/icons/KineticIcons';
-import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const HOW_STEPS = [
   {
@@ -71,8 +71,7 @@ export default function LandingPage() {
   const supabase = createClient();
   const chatMessagesRef = useRef<HTMLDivElement>(null);
 
-  // --- States for Cyber-HUD Scroll Tracker ---
-  // (Removed due to mobile bugginess - replacing with simple timeline)
+  // --- Ref for mobile section ---
   const mobileSectionRef = useRef<HTMLDivElement>(null);
 
   // --- Refs for Animations ---
@@ -83,7 +82,10 @@ export default function LandingPage() {
     if (!particlesRef.current) return;
     const container = particlesRef.current;
     container.innerHTML = ''; // Clear
-    for (let i = 0; i < 30; i++) {
+    // Reduce particles on mobile for GPU performance
+    const isMobile = window.innerWidth < 768;
+    const count = isMobile ? 8 : 30;
+    for (let i = 0; i < count; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
       p.style.left = Math.random() * 100 + '%';
@@ -162,12 +164,12 @@ export default function LandingPage() {
 
   // --- 4. Parallax ---
   useEffect(() => {
+    // Skip parallax on mobile — it causes scroll jank
+    const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    if (isMobile) return;
+
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-
-      // Floating buttons are always visible — no scroll-based hiding
 
       const parallaxItems = [
         { selector: '.hero-orb--blue', speed: 0.03 },
