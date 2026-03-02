@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+@property --button-fill {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: transparent;
+}
+
+@property --button-fill-stop {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 0%;
+}
+
 @property --rg-1-x {
     syntax: "<percentage>";
     inherits: true;
@@ -61,41 +73,48 @@
     font-weight: 700;
     color: #fff !important;
     z-index: 1;
-    /* Creates stacking context for pseudo-elements */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-    /* The colorful animated background */
+    transition: --button-fill 0.4s, --button-fill-stop 0.4s, transform 0.3s ease, box-shadow 0.3s ease;
+    animation: gradient-movement-premium 5s alternate infinite ease-in-out;
+
     background:
+        radial-gradient(circle, var(--button-fill) var(--button-fill-stop), transparent) padding-box,
         radial-gradient(circle 80px at var(--rg-1-x) var(--rg-1-y), var(--accent, #00c8ff), transparent) border-box,
         radial-gradient(circle 100px at var(--rg-2-x) var(--rg-2-y), var(--accent-violet, #a78bfa), transparent) border-box,
         radial-gradient(circle 120px at var(--rg-3-x) var(--rg-3-y), var(--accent-red, #ff2d55), transparent) border-box,
         radial-gradient(circle 150px at var(--rg-4-x) var(--rg-4-y), var(--accent-green, #34d399), transparent) border-box,
         #050508 border-box !important;
 
+    background-position: center, center, bottom right, top left, top right, bottom left;
     background-repeat: no-repeat !important;
-    animation: gradient-movement-premium 5s alternate infinite ease-in-out;
 }
 
-/* Pseudo element to create the solid interior for the "bordered" look */
-.animated-gradient-btn.bordered::before {
-    content: '';
-    position: absolute;
-    inset: 0px;
-    /* Covers padding box, leaves border exposed */
-    border-radius: inherit;
-    background: #050508;
-    z-index: -1;
-    transition: opacity 0.4s ease;
+/* Base button is full solid gradient, hover gets slightly brighter */
+.animated-gradient-btn:hover,
+.animated-gradient-btn:focus-visible {
+    --button-fill-stop: 100%;
+    --button-fill: rgba(255, 255, 255, 0.05);
+    /* Slight white overlay */
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 200, 255, 0.25);
 }
 
-.animated-gradient-btn.bordered:hover::before,
-.animated-gradient-btn.bordered:focus-visible::before {
-    opacity: 0;
+.animated-gradient-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 10px rgba(0, 200, 255, 0.15);
 }
 
-.animated-gradient-btn.bordered:hover,
-.animated-gradient-btn.bordered:focus-visible {
+/* Bordered variant */
+.animated-gradient-btn.bordered {
+    --button-fill-stop: 100%;
+    --button-fill: #050508;
+    box-shadow: none;
+}
+
+.animated-gradient-btn.bordered:is(:hover, :focus-visible) {
+    --button-fill-stop: 0%;
+    --button-fill: transparent;
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 10px 30px rgba(0, 200, 255, 0.25), 0 0 20px rgba(167, 139, 250, 0.2);
 }
@@ -144,8 +163,8 @@ nav .animated-gradient-btn.nav-cta,
     align-items: center !important;
     justify-content: center !important;
 
-    /* Redeclare background to override the var(--grad-blue) !important in globals.css */
     background:
+        radial-gradient(circle, var(--button-fill) var(--button-fill-stop), transparent) padding-box,
         radial-gradient(circle 80px at var(--rg-1-x) var(--rg-1-y), var(--accent, #00c8ff), transparent) border-box,
         radial-gradient(circle 100px at var(--rg-2-x) var(--rg-2-y), var(--accent-violet, #a78bfa), transparent) border-box,
         radial-gradient(circle 120px at var(--rg-3-x) var(--rg-3-y), var(--accent-red, #ff2d55), transparent) border-box,
@@ -153,22 +172,6 @@ nav .animated-gradient-btn.nav-cta,
         #050508 border-box !important;
 
     background-repeat: no-repeat !important;
-}
-
-nav .animated-gradient-btn.nav-cta::before,
-.nav-cta.animated-gradient-btn::before {
-    content: '';
-    position: absolute;
-    inset: 0px;
-    border-radius: inherit;
-    background: #050508;
-    z-index: -1;
-    transition: opacity 0.4s ease;
-}
-
-nav .animated-gradient-btn.nav-cta:hover::before,
-.nav-cta.animated-gradient-btn:hover::before {
-    opacity: 0;
 }
 
 nav .animated-gradient-btn.nav-cta:hover,
@@ -186,6 +189,7 @@ nav .animated-gradient-btn.nav-cta:active,
 .premium-cta-btn.animated-gradient-btn {
     border: 2px solid transparent !important;
     background:
+        radial-gradient(circle, var(--button-fill) var(--button-fill-stop), transparent) padding-box,
         radial-gradient(circle 80px at var(--rg-1-x) var(--rg-1-y), var(--accent, #00c8ff), transparent) border-box,
         radial-gradient(circle 100px at var(--rg-2-x) var(--rg-2-y), var(--accent-violet, #a78bfa), transparent) border-box,
         radial-gradient(circle 120px at var(--rg-3-x) var(--rg-3-y), var(--accent-red, #ff2d55), transparent) border-box,
@@ -195,40 +199,75 @@ nav .animated-gradient-btn.nav-cta:active,
     overflow: hidden !important;
 }
 
-.premium-cta-btn.animated-gradient-btn::before {
-    content: '';
-    position: absolute;
-    inset: 0px;
-    border-radius: inherit;
-    background: #050508;
-    z-index: -1;
-    transition: opacity 0.4s ease;
-}
-
-.premium-cta-btn.animated-gradient-btn:hover::before,
-.premium-cta-btn.animated-gradient-btn:active::before {
-    opacity: 0;
-}
-
 /* For mobile viewing, revert to a non-animated simple gradient for performance and UI consistency */
 @media (max-width: 768px) {
+    @keyframes mobile-gradient-shift {
+        0% {
+            transform: translateX(-50%);
+        }
+
+        50% {
+            transform: translateX(0%);
+        }
+
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+
     .animated-gradient-btn {
-        animation: none !important;
-        background: linear-gradient(135deg, var(--accent, #00c8ff) 0%, var(--accent-violet, #a78bfa) 100%) !important;
-        border: none !important;
+        background: #050508 !important;
+        /* Base color inside the border */
+        border: 2px solid transparent !important;
         box-shadow: 0 4px 15px rgba(0, 200, 255, 0.25) !important;
+        overflow: hidden;
+        /* Contains the glowing pseudo-element */
+        z-index: 1;
+        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+        /* Reset any property overrides from desktop */
+        animation: none !important;
     }
 
+    /* The moving gradient border effect */
+    .animated-gradient-btn::after {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        /* Pull it into the border area */
+        z-index: -2;
+        background: linear-gradient(90deg, var(--accent, #00c8ff), var(--accent-violet, #a78bfa), var(--accent-red, #ff2d55), var(--accent, #00c8ff), var(--accent-violet, #a78bfa));
+        background-size: 200% 100%;
+        width: 200%;
+        animation: mobile-gradient-shift 4s linear infinite;
+    }
+
+    /* The inner shape that masks the gradient to make it look like a border */
     .animated-gradient-btn::before {
-        display: none !important;
+        content: '';
+        position: absolute;
+        inset: 0px;
+        /* Sits right inside the border */
+        z-index: -1;
+        background: #050508;
+        border-radius: inherit;
+        transition: opacity 0.3s ease;
     }
 
+    /* Target specific variants inside navbar or as CTA */
     nav .animated-gradient-btn.nav-cta,
     .nav-cta.animated-gradient-btn,
     .premium-cta-btn.animated-gradient-btn,
     .animated-gradient-btn.bordered {
-        background: #050508 !important;
-        border: 1px solid rgba(0, 200, 255, 0.3) !important;
         box-shadow: 0 4px 15px rgba(0, 200, 255, 0.15) !important;
+    }
+
+    /* If they tap/hover, the inner mask fades so the whole button fills with gradient */
+    .animated-gradient-btn:is(:hover, :focus-visible, :active)::before,
+    .animated-gradient-btn.bordered:is(:hover, :focus-visible, :active)::before {
+        opacity: 0;
+    }
+
+    .animated-gradient-btn:active {
+        transform: translateY(1px);
     }
 }
