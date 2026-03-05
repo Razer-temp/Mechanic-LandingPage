@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   async rewrites() {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      return [];
+    }
     return [
       {
         source: '/supabase-api/:path*',
