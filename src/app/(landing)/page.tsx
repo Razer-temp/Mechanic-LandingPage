@@ -20,24 +20,28 @@ import { motion } from 'framer-motion';
 const HOW_STEPS = [
   {
     num: '01',
+    colorBase: 'text-blue-500',
     icon: <MessageSquareText className="size-8" />,
     title: 'Describe Issue',
     desc: 'Chat with our AI or use the form to describe what’s wrong with your bike. Our smart system understands natural language.'
   },
   {
     num: '02',
+    colorBase: 'text-fuchsia-500',
     icon: <BrainCircuit className="size-8" />,
     title: 'AI Analysis',
     desc: 'Our AI engine analyzes symptoms to provide instant diagnosis and transparent cost estimates before any work begins.'
   },
   {
     num: '03',
+    colorBase: 'text-emerald-500',
     icon: <Wrench className="size-8" />,
     title: 'Expert Repair',
     desc: 'Book a slot. Our certified mechanics fix your bike using genuine parts, ensuring peak performance.'
   },
   {
     num: '04',
+    colorBase: 'text-amber-500',
     icon: <Rocket className="size-8" />,
     title: 'Ready to Ride',
     desc: 'Get your bike back in top condition. Pay online or at the workshop. Delivery guaranteed within our service area.'
@@ -138,22 +142,29 @@ export default function LandingPage() {
     const animateCounter = (el: HTMLElement, target: number) => {
       const duration = 2000;
       const start = performance.now();
-      const step = (now: number) => {
-        const progress = Math.min((now - start) / duration, 1);
-        const ease = 1 - Math.pow(1 - progress, 3);
-        el.textContent = Math.floor(ease * target).toLocaleString();
-        if (progress < 1) requestAnimationFrame(step);
+
+      const update = (currentTime: number) => {
+        const elapsed = currentTime - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const current = Math.round(target * easeOutQuart);
+
+        el.textContent = current + (target > 50 ? '+' : '');
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
       };
-      requestAnimationFrame(step);
+
+      requestAnimationFrame(update);
     };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          const el = entry.target as HTMLElement;
-          const target = parseInt(el.getAttribute('data-target') || '0');
-          animateCounter(el, target);
-          observer.unobserve(el);
+          const target = parseInt(entry.target.getAttribute('data-target') || '0');
+          animateCounter(entry.target as HTMLElement, target);
+          observer.unobserve(entry.target);
         }
       });
     }, { threshold: 0.5 });
@@ -810,7 +821,7 @@ export default function LandingPage() {
 
                   {/* The expanded view element (Details) */}
                   <div className="accordion-expanded-view">
-                    <div className="accordion-icon-wrap">
+                    <div className={clsx("accordion-icon-wrap", step.colorBase)}>
                       {step.icon}
                     </div>
                     <div className="accordion-text-wrap">
@@ -840,7 +851,7 @@ export default function LandingPage() {
                   <div className="timeline-dot"></div>
                   <div className="timeline-card-header">
                     <span className="timeline-num">{step.num}</span>
-                    <div className="timeline-icon">{step.icon}</div>
+                    <div className={clsx("timeline-icon", step.colorBase)}>{step.icon}</div>
                   </div>
                   <h3 className="timeline-title">{step.title}</h3>
                   <p className="timeline-desc">{step.desc}</p>
