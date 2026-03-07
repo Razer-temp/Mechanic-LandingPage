@@ -182,8 +182,7 @@
 .accordion-expanded-view {
     position: absolute;
     inset: 0;
-    padding: 60px 40px 40px 40px;
-    /* Extra top padding for the icon */
+    padding: 40px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -195,11 +194,10 @@
 }
 
 .accordion-icon-wrap {
-    position: absolute;
-    top: 40px;
-    left: 40px;
     width: 60px;
     height: 60px;
+    margin-bottom: auto;
+    /* Pushes the text down */
     border-radius: 16px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -295,12 +293,18 @@
         background-size: 300% 300%;
         animation: glow-shift 6s linear infinite;
 
-        /* Bulletproof Mask: Uses only the most basic, shielded syntax */
+        /* 
+           Bulletproof Mask: Uses fully wrapped variables for ALL mask properties.
+           cssnano strips `-webkit-mask-composite` when hardcoded. Shielding them prevents this. 
+        */
         --mask-rim: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        --m-comp-wk: xor;
+        --m-comp-std: exclude;
+
         -webkit-mask: var(--mask-rim);
+        -webkit-mask-composite: var(--m-comp-wk);
         mask: var(--mask-rim);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
+        mask-composite: var(--m-comp-std);
 
         opacity: 0;
         transition: opacity 0.8s ease;
