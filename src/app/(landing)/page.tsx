@@ -168,18 +168,26 @@ export default function LandingPage() {
     const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
     if (isMobile) return;
 
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
+    // Cache elements to avoid querying DOM linearly on every scroll tick
+    const items = [
+      { el: document.querySelector('.hero-orb--blue') as HTMLElement | null, speed: 0.03 },
+      { el: document.querySelector('.hero-orb--red') as HTMLElement | null, speed: -0.02 },
+      { el: document.querySelector('.hero-grid-overlay') as HTMLElement | null, speed: 0.01 },
+    ].filter(i => i.el !== null);
 
-      const parallaxItems = [
-        { selector: '.hero-orb--blue', speed: 0.03 },
-        { selector: '.hero-orb--red', speed: -0.02 },
-        { selector: '.hero-grid-overlay', speed: 0.01 },
-      ];
-      parallaxItems.forEach(({ selector, speed }) => {
-        const el = document.querySelector(selector) as HTMLElement;
-        if (el) el.style.transform = `translateY(${scrollY * speed}px)`;
-      });
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          items.forEach(({ el, speed }) => {
+            if (el) el.style.transform = `translateY(${scrollY * speed}px)`;
+          });
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -187,20 +195,33 @@ export default function LandingPage() {
 
   // --- 5. Mouse Glow & Tilt Effect (Event Delegation — works for all cards) ---
   useEffect(() => {
+    let ticking = false;
+
     const handleMouseMove = (e: MouseEvent) => {
-      const card = (e.target as HTMLElement).closest<HTMLElement>('.tilt-card, .hover-glow, .magnetic-btn');
-      if (!card) return;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const target = e.target as HTMLElement | null;
+          if (!target) {
+            ticking = false;
+            return;
+          }
+          const card = target.closest<HTMLElement>('.tilt-card, .hover-glow, .magnetic-btn');
+          if (card) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const xPct = x / rect.width;
+            const yPct = y / rect.height;
 
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const xPct = x / rect.width;
-      const yPct = y / rect.height;
-
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
-      card.style.setProperty('--mouse-x-pct', `${xPct}`);
-      card.style.setProperty('--mouse-y-pct', `${yPct}`);
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+            card.style.setProperty('--mouse-x-pct', `${xPct}`);
+            card.style.setProperty('--mouse-y-pct', `${yPct}`);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     const handleMouseOver = (e: MouseEvent) => {
