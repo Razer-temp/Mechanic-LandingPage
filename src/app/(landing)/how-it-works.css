@@ -89,30 +89,27 @@
     }
 }
 
-/* ===== ACCORDION PANELS (Dark Frosted Glassmorphism) ===== */
+/* ===== ACCORDION PANELS (True Glass & Fluid Flex) ===== */
 .accordion-panel {
     position: relative;
     border-radius: 24px;
-    background: rgba(255, 255, 255, 0.02);
-    /* Extremely subtle white frost */
-    backdrop-filter: blur(24px);
-    /* Moderate blur */
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    /* Very faint rim for dark theme */
+    background: rgba(12, 12, 28, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-    /* Soft glass shadow */
     overflow: hidden;
-    transition: flex 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.1),
-        /* Spring physics */
-        background 0.4s ease,
-        border-color 0.4s ease,
-        box-shadow 0.4s ease,
-        transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
     cursor: pointer;
 
-    /* Default state for Desktop: Let Flex handle width */
+    /* Fluid expansion physics */
     flex: 1;
+    /* Inactive panels fallback width */
+    transition:
+        flex 0.7s cubic-bezier(0.25, 1, 0.3, 1),
+        background 0.5s ease,
+        border-color 0.5s ease,
+        box-shadow 0.5s ease,
+        transform 0.4s ease;
 
     /* Mobile styling */
     min-height: 100px;
@@ -122,8 +119,8 @@
 .accordion-bg {
     position: absolute;
     inset: 0;
-    /* Clean white frosted gradient */
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.05) 100%);
+    /* Soft frosted gradient overlay */
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0) 100%);
     opacity: 0;
     transition: opacity 0.6s ease;
     pointer-events: none;
@@ -141,26 +138,45 @@
     z-index: 2;
 }
 
-/* ===== COLLAPSED VIEW (Just the big number) ===== */
+/* ===== COLLAPSED VIEW (Number & Rotated Title) ===== */
 .accordion-collapsed-view {
     position: absolute;
     inset: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 20px;
     opacity: 1;
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.25, 1, 0.3, 1);
 }
 
 .accordion-huge-num {
     font-family: var(--font-heading);
-    font-size: 5rem;
+    font-size: 3rem;
+    /* Scaled down slightly to fit sideways text */
     font-weight: 900;
-    color: rgba(255, 255, 255, 0.05);
-    /* Frosted typography embedded in glass */
-    mix-blend-mode: overlay;
-    /* Make it interact with the blurred background */
-    transition: color 0.4s ease, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    color: rgba(255, 255, 255, 0.1);
+    transition: color 0.4s ease, transform 0.6s cubic-bezier(0.25, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+.accordion-rotated-title {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+    transition: color 0.4s ease, letter-spacing 0.4s ease;
+}
+
+.accordion-panel:hover .accordion-rotated-title {
+    color: var(--text-primary);
+    letter-spacing: 6px;
+    /* Expanding text on hover */
 }
 
 /* ===== EXPANDED VIEW (Full Details) ===== */
@@ -171,47 +187,45 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* Icon top, text bottom */
     opacity: 0;
     pointer-events: none;
-    transform: translateY(20px);
-    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    /* Ignore clicks when hidden */
+    transform: translateY(20px) scale(0.95);
+    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.25, 1, 0.3, 1);
     z-index: 2;
 }
 
 .accordion-icon-wrap {
-    width: 72px;
-    /* Slightly larger */
-    height: 72px;
-    border-radius: 20px;
-    background: rgba(0, 212, 255, 0.1);
-    border: 1px solid rgba(0, 212, 255, 0.2);
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--accent);
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    color: var(--text-primary);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.5s ease, border-color 0.5s ease, color 0.5s ease;
 }
 
 .accordion-icon-wrap svg {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
 }
 
 .accordion-small-num {
     display: block;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 3px;
-    color: var(--accent);
+    color: rgba(255, 255, 255, 0.5);
     margin-bottom: 12px;
 }
 
 .accordion-title {
     font-family: var(--font-heading);
-    font-size: 2.5rem;
-    /* Larger title */
+    font-size: 2.2rem;
     font-weight: 800;
     color: var(--text-bright);
     margin-bottom: 16px;
@@ -223,80 +237,44 @@
 .accordion-desc {
     color: var(--text-secondary);
     line-height: 1.6;
-    font-size: 1.1rem;
-    /* Larger text */
-    max-width: 450px;
-    /* Allow text to span wider to fill space */
+    font-size: 1.05rem;
+    max-width: 400px;
+    /* Force minimum width to prevent awkward wrapping during transition */
+    min-width: 300px;
     opacity: 0;
     transform: translateY(10px);
-    transition: opacity 0.3s ease 0.2s, transform 0.4s ease 0.2s;
+    transition: opacity 0.3s ease 0.1s, transform 0.4s ease 0.1s;
 }
 
-
 /* ========================================================== */
-/* THE MAGIC: HOVER/EXPAND BEHAVIOR (DESKTOP)                 */
+/* THE MAGIC: FLUID FLEX INTERACTION (DESKTOP)                */
 /* ========================================================== */
 
 @media (min-width: 1024px) {
 
-    /* 1. Base Setup */
     .accordion-panel {
-        flex: 1;
-        /* Default to evenly split width */
-        min-width: 120px;
-        /* Crucial: prevent complete collapse */
+        /* Prevents flex items from becoming too narrow and breaking layout during transition */
+        min-width: 100px;
+        flex-basis: auto;
     }
 
-    /* Prevent text wrapping during the transition which causes height jumps */
+    /* Prevent text wrapping during transition */
     .accordion-title {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
-    .accordion-desc {
-        white-space: normal;
-        /* Allow desc to wrap */
-        min-width: 300px;
-        /* Force minimum width so it doesn't squash during transition */
-    }
 
-    /* 2. BASE STATE (No Container Hover) */
-    /* The .active panel is expanded, others are collapsed */
-    .accordion-container:not(:hover) .accordion-panel.active {
-        flex: 4;
-        background: rgba(255, 255, 255, 0.04);
-        border-color: rgba(0, 212, 255, 0.3);
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    }
-
-    .accordion-container:not(:hover) .accordion-panel.active .accordion-bg {
-        opacity: 1;
-    }
-
-    .accordion-container:not(:hover) .accordion-panel.active .accordion-collapsed-view {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-
-    .accordion-container:not(:hover) .accordion-panel.active .accordion-expanded-view {
-        opacity: 1;
-        pointer-events: auto;
-        transform: translateY(0);
-    }
-
-    .accordion-container:not(:hover) .accordion-panel.active .accordion-desc {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    /* 3. CONTAINER HOVER STATE */
-    /* When ANY panel is hovered, ALL panels shrink and hide their contents to prepare */
+    /* --- HOVERING THE CONTAINER --- */
+    /* When user interacts with accordion, baseline flex changes slightly */
     .accordion-container:hover .accordion-panel {
-        flex: 0.8;
-        /* Shrink inactive panels slightly */
+        flex: 1;
+        /* Normalize un-hovered panels */
+        background: rgba(12, 12, 28, 0.2);
     }
 
+    /* Reveal inactive elements slightly when hovering container */
     .accordion-container:hover .accordion-panel .accordion-collapsed-view {
         opacity: 1;
         transform: scale(1);
@@ -305,96 +283,95 @@
     .accordion-container:hover .accordion-panel .accordion-expanded-view {
         opacity: 0;
         pointer-events: none;
-        transform: translateY(20px);
-        transition: opacity 0.2s ease, transform 0.2s ease;
+        transform: translateY(20px) scale(0.95);
+        transition: opacity 0.2s ease, transform 0.3s ease;
     }
 
-    /* 4. SPECIFIC PANEL HOVER STATE */
-    /* The exact panel being hovered expands and shows its contents, overriding step 3 */
+    /* --- EXPANDED (ACTIVE / HOVERED) PANEL --- */
+    /* By default (or when hovered), one panel takes precedence */
+    .accordion-container:not(:hover) .accordion-panel.active,
     .accordion-container:hover .accordion-panel:hover {
-        /* Expand this panel widely */
-        flex: 4;
-        background: rgba(0, 212, 255, 0.05);
-        /* Very faint cyan tint active state */
-        border-color: rgba(0, 212, 255, 0.3);
-        /* Distinct cyan rim to match theme */
-        /* Deep drop shadow */
-        box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6);
+        /* Flex grow greatly to dominate space */
+        flex: 4.5;
+
+        /* Premium Background & Glowing Gradient Border Magic */
+        background: rgba(20, 20, 35, 0.6);
+        border-color: transparent;
+        /* Hide normal border, pseudo-element handles gradient */
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(255, 255, 255, 0.02);
     }
 
+    /* The glowing border via pseudo-element */
+    .accordion-panel::after {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        /* Pull into border area */
+        z-index: -1;
+        background: linear-gradient(135deg, deeppink, royalblue, rebeccapurple, lime);
+        background-size: 200% 200%;
+        animation: glow-shift 4s ease infinite;
+        opacity: 0;
+        border-radius: inherit;
+        transition: opacity 0.6s ease;
+    }
+
+    @keyframes glow-shift {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* Apply glowing borders to active/hovered panel */
+    .accordion-container:not(:hover) .accordion-panel.active::after,
+    .accordion-container:hover .accordion-panel:hover::after {
+        opacity: 0.5;
+        /* Show border, but keep it soft/glassy */
+    }
+
+    .accordion-container:not(:hover) .accordion-panel.active .accordion-bg,
     .accordion-container:hover .accordion-panel:hover .accordion-bg {
         opacity: 1;
     }
 
-    /* Move big number to the right as an enormous structural watermark */
+    /* Hide the collapsed vertical view gracefully */
+    .accordion-container:not(:hover) .accordion-panel.active .accordion-collapsed-view,
     .accordion-container:hover .accordion-panel:hover .accordion-collapsed-view {
-        opacity: 1;
-        /* Keep it visible */
-        transform: scale(2.5) translateX(30%);
-        /* Push right and make massive */
-        z-index: 0;
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+        pointer-events: none;
     }
 
-    .accordion-container:hover .accordion-panel:hover .accordion-huge-num {
-        color: rgba(255, 255, 255, 0.02);
-        /* Extremely faded white */
-    }
-
-    /* Show details MUST HAVE HIGHEST SPECIFICITY OR !IMPORTANT */
+    /* Show the expanded details */
+    .accordion-container:not(:hover) .accordion-panel.active .accordion-expanded-view,
     .accordion-container:hover .accordion-panel:hover .accordion-expanded-view {
         opacity: 1 !important;
         pointer-events: auto !important;
-        transform: translateY(0) !important;
-        transition: opacity 0.5s ease 0.2s, transform 0.5s cubic-bezier(0.25, 1, 0.5, 1) 0.1s;
+        transform: translateY(0) scale(1) !important;
+        transition: opacity 0.5s ease 0.2s, transform 0.6s cubic-bezier(0.25, 1, 0.3, 1) 0.1s;
     }
 
-    /* Animate details elements */
+    /* Floating icon parallax feeling inside */
+    .accordion-container:not(:hover) .accordion-panel.active .accordion-icon-wrap,
     .accordion-container:hover .accordion-panel:hover .accordion-icon-wrap {
-        transform: scale(1.1) translateY(-10px);
-        box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        transform: translateY(-8px) scale(1.1);
+        box-shadow: 0 15px 35px rgba(65, 105, 225, 0.3);
+        /* royalblue glow */
+        border-color: rgba(65, 105, 225, 0.6);
+        color: rgba(65, 105, 225, 1);
+        background: rgba(65, 105, 225, 0.1);
     }
 
+    .accordion-container:not(:hover) .accordion-panel.active .accordion-desc,
     .accordion-container:hover .accordion-panel:hover .accordion-desc {
-        opacity: 1 !important;
-        transform: translateY(0) !important;
-    }
-
-    /* 5. DEFAULT STATE (When nothing is hovered, Panel 1 is open) */
-    .accordion-container:not(:hover) .accordion-panel.active {
-        flex: 4;
-        background: rgba(0, 212, 255, 0.05);
-        /* Very faint cyan tint active state */
-        border-color: rgba(0, 212, 255, 0.3);
-        /* Distinct cyan rim to match theme */
-        /* Deep drop shadow */
-        box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6);
-    }
-
-    .accordion-container:not(:hover) .accordion-panel.active .accordion-bg {
-        opacity: 1;
-    }
-
-    /* Move big number to the right as an enormous structural watermark */
-    .accordion-container:not(:hover) .accordion-panel.active .accordion-collapsed-view {
-        opacity: 1;
-        /* Keep it visible */
-        transform: scale(2.5) translateX(30%);
-        /* Push right and make massive */
-        z-index: 0;
-    }
-
-    .accordion-container:not(:hover) .accordion-panel.active .accordion-huge-num {
-        color: rgba(255, 255, 255, 0.02);
-        /* Extremely faded white */
-    }
-
-    .accordion-container:not(:hover) .accordion-panel.active .accordion-expanded-view {
-        opacity: 1 !important;
-        pointer-events: auto !important;
-        transform: translateY(0) !important;
-    }
-
-    .accordion-container:not(:hover) .accordion-panel.active .accordion-desc {
         opacity: 1 !important;
         transform: translateY(0) !important;
     }

@@ -772,9 +772,10 @@ export default function LandingPage() {
                 <div className="accordion-bg"></div>
 
                 <div className="accordion-content">
-                  {/* The collapsed view element (Number) */}
+                  {/* The collapsed view element (Number & Title) */}
                   <div className="accordion-collapsed-view">
                     <span className="accordion-huge-num">{step.num}</span>
+                    <span className="accordion-rotated-title">{step.title}</span>
                   </div>
 
                   {/* The expanded view element (Details) */}
