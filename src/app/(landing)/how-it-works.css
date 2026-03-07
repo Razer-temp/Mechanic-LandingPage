@@ -182,10 +182,11 @@
 .accordion-expanded-view {
     position: absolute;
     inset: 0;
-    padding: 40px;
+    padding: 32px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 24px;
     opacity: 0;
     pointer-events: none;
     transform: translateY(20px) scale(0.95);
@@ -196,7 +197,6 @@
 .accordion-icon-wrap {
     width: 60px;
     height: 60px;
-    margin-bottom: auto;
     border-radius: 16px;
     /* Elegant, minimalistic glowing background matching icon color */
     background: color-mix(in srgb, currentColor 8%, transparent);
@@ -300,36 +300,9 @@
     .accordion-container:not(:hover) .accordion-panel.active,
     .accordion-container:hover .accordion-panel:hover {
         flex: 4.5;
-        background: rgba(15, 15, 30, 0.2);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(255, 255, 255, 0.04);
-        border-color: transparent;
-    }
-
-    /* Gradient border inline DOM element targeted via injected class */
-    .accordion-gradient-border-hack {
-        opacity: 0;
-        transition: opacity 0.8s ease;
-    }
-
-    @keyframes glow-shift {
-        0% {
-            background-position: 0% 50%;
-        }
-
-        50% {
-            background-position: 100% 50%;
-        }
-
-        100% {
-            background-position: 0% 50%;
-        }
-    }
-
-    /* Target the injected DOM node for the border glow instead of pseudo element */
-    .accordion-container:not(:hover) .accordion-panel.active .accordion-gradient-border-hack,
-    .accordion-container:hover .accordion-panel:hover .accordion-gradient-border-hack {
-        opacity: 0.5;
-        /* Soft glowing border */
+        background: color-mix(in srgb, currentColor 2%, rgba(15, 15, 30, 0.5));
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 0 40px color-mix(in srgb, currentColor 6%, transparent);
+        border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
     }
 
     .accordion-container:not(:hover) .accordion-panel.active .accordion-collapsed-view,

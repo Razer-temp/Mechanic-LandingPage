@@ -776,7 +776,8 @@ export default function LandingPage() {
                 key={i}
                 className={clsx(
                   "accordion-panel group",
-                  i === 0 ? "active" : "" // First panel is active/expanded by default strictly via CSS handling later if needed, but we'll use pure CSS hover for simplicity here
+                  i === 0 ? "active" : "", // First panel is active/expanded by default strictly via CSS handling later if needed, but we'll use pure CSS hover for simplicity here
+                  step.colorBase
                 )}
                 style={{
                   transitionDelay: `${i * 100}ms`,
@@ -786,29 +787,7 @@ export default function LandingPage() {
                   WebkitBackdropFilter: "blur(20px)",
                 }}
               >
-                {/* 
-                  MINIFIER BYPASS HACK: We render the gradient border as a real DOM node 
-                  with inline styles. This completely prevents Next.js's production cssnano 
-                  minifier from stripping the critical `mask-composite` rules used for glassmorphism.
-                */}
-                <div
-                  className="accordion-gradient-border-hack"
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    zIndex: 10,
-                    pointerEvents: "none",
-                    borderRadius: "inherit",
-                    padding: "2px",
-                    background: "linear-gradient(135deg, deeppink, royalblue, rebeccapurple, lime)",
-                    backgroundSize: "300% 300%",
-                    animation: "glow-shift 6s linear infinite", // Fixed typo: animate -> animation
-                    WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                    WebkitMaskComposite: "xor",
-                    mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                    maskComposite: "exclude",
-                  }}
-                ></div>
+                {/* Removed broken inline gradient border hack */}
 
                 <div className="accordion-bg"></div>
 
