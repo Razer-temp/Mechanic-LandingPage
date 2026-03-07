@@ -316,14 +316,19 @@
         animation: glow-shift 4s ease infinite;
 
         /*
-           CRITICAL FIX: Only use -webkit-mask properties.
-           Standard 'mask' abbreviations cause Next.js CSS minifiers (cssnano)
-           to aggressively strip the composite operators in production.
+           CRITICAL FIX: cssnano incorrectly deduplicates identical linear-gradients
+           in masks and deletes composite operators. Shielding them in variables evaluates at
+           runtime, meaning the prod minifier completely skips tampering with them.
         */
-        -webkit-mask:
-            linear-gradient(#fff 0 0) padding-box,
-            linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor !important;
+        --m-1: linear-gradient(#fff 0 0) padding-box;
+        --m-2: linear-gradient(#fff 0 0);
+        --m-wk-comp: xor;
+        --m-std-comp: exclude;
+
+        -webkit-mask: var(--m-1), var(--m-2);
+        -webkit-mask-composite: var(--m-wk-comp);
+        mask: var(--m-1), var(--m-2);
+        mask-composite: var(--m-std-comp);
 
         opacity: 0;
         transition: opacity 0.6s ease;
