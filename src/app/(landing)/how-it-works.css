@@ -280,32 +280,8 @@
         border-color: transparent;
     }
 
-    /* THE PRECISE FIX: Gradient border via pseudo-element » shielded entirely from cssnano minification */
-    .accordion-panel::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        z-index: 10;
-        pointer-events: none;
-        border-radius: inherit;
-        padding: 2px;
-        background: linear-gradient(135deg, deeppink, royalblue, rebeccapurple, lime);
-        background-size: 300% 300%;
-        animation: glow-shift 6s linear infinite;
-
-        /* 
-           Bulletproof Mask: Uses fully wrapped variables for ALL mask properties.
-           cssnano strips `-webkit-mask-composite` when hardcoded. Shielding them prevents this. 
-        */
-        --mask-rim: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        --m-comp-wk: xor;
-        --m-comp-std: exclude;
-
-        -webkit-mask: var(--mask-rim);
-        -webkit-mask-composite: var(--m-comp-wk);
-        mask: var(--mask-rim);
-        mask-composite: var(--m-comp-std);
-
+    /* Gradient border inline DOM element targeted via injected class */
+    .accordion-gradient-border-hack {
         opacity: 0;
         transition: opacity 0.8s ease;
     }
@@ -324,8 +300,9 @@
         }
     }
 
-    .accordion-container:not(:hover) .accordion-panel.active::after,
-    .accordion-container:hover .accordion-panel:hover::after {
+    /* Target the injected DOM node for the border glow instead of pseudo element */
+    .accordion-container:not(:hover) .accordion-panel.active .accordion-gradient-border-hack,
+    .accordion-container:hover .accordion-panel:hover .accordion-gradient-border-hack {
         opacity: 0.5;
         /* Soft glowing border */
     }
@@ -347,11 +324,12 @@
 
     .accordion-container:not(:hover) .accordion-panel.active .accordion-icon-wrap,
     .accordion-container:hover .accordion-panel:hover .accordion-icon-wrap {
-        transform: translateY(-5px) scale(1.1);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
-        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-8px) scale(1.1);
+        box-shadow: 0 15px 35px rgba(65, 105, 225, 0.3);
+        /* Restored royalblue glow */
+        border-color: rgba(65, 105, 225, 0.6);
+        color: rgba(65, 105, 225, 1) !important;
+        background: rgba(65, 105, 225, 0.1);
     }
 
     .accordion-container:not(:hover) .accordion-panel.active .accordion-desc,

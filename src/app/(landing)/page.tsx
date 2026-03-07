@@ -769,6 +769,30 @@ export default function LandingPage() {
                 )}
                 style={{ transitionDelay: `${i * 100}ms` }}
               >
+                {/* 
+                  MINIFIER BYPASS HACK: We render the gradient border as a real DOM node 
+                  with inline styles. This completely prevents Next.js's production cssnano 
+                  minifier from stripping the critical `mask-composite` rules used for glassmorphism.
+                */}
+                <div
+                  className="accordion-gradient-border-hack"
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    zIndex: 10,
+                    pointerEvents: "none",
+                    borderRadius: "inherit",
+                    padding: "2px",
+                    background: "linear-gradient(135deg, deeppink, royalblue, rebeccapurple, lime)",
+                    backgroundSize: "300% 300%",
+                    animation: "glow-shift 6s linear infinite", // Fixed typo: animate -> animation
+                    WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    WebkitMaskComposite: "xor",
+                    mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    maskComposite: "exclude",
+                  }}
+                ></div>
+
                 <div className="accordion-bg"></div>
 
                 <div className="accordion-content">
