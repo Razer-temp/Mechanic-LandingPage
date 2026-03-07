@@ -309,21 +309,21 @@
         z-index: 10;
         pointer-events: none;
         border-radius: inherit;
-        padding: 2px;
-        /* This defines the border thickness */
-        background: linear-gradient(135deg, deeppink, royalblue, rebeccapurple, lime);
+        border: 2px solid transparent;
+        /* This establishes the border mask geometry */
+        background: linear-gradient(135deg, deeppink, royalblue, rebeccapurple, lime) border-box;
         background-size: 200% 200%;
         animation: glow-shift 4s ease infinite;
 
-        /* Mask out the center so it exactly acts as a border over the glass */
+        /*
+           CRITICAL FIX: Only use -webkit-mask properties.
+           Standard 'mask' abbreviations cause Next.js CSS minifiers (cssnano)
+           to aggressively strip the composite operators in production.
+        */
         -webkit-mask:
-            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0) padding-box,
             linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask:
-            linear-gradient(#fff 0 0) content-box,
-            linear-gradient(#fff 0 0);
-        mask-composite: exclude;
+        -webkit-mask-composite: xor !important;
 
         opacity: 0;
         transition: opacity 0.6s ease;
