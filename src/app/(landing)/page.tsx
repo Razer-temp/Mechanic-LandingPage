@@ -767,7 +767,13 @@ export default function LandingPage() {
                   "accordion-panel group",
                   i === 0 ? "active" : "" // First panel is active/expanded by default strictly via CSS handling later if needed, but we'll use pure CSS hover for simplicity here
                 )}
-                style={{ transitionDelay: `${i * 100}ms` }}
+                style={{
+                  transitionDelay: `${i * 100}ms`,
+                  // CRITICAL: backdropFilter is stripped by cssnano in production builds.
+                  // Injecting via inline style bypasses the CSS minifier entirely.
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                }}
               >
                 {/* 
                   MINIFIER BYPASS HACK: We render the gradient border as a real DOM node 
