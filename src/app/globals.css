@@ -608,7 +608,8 @@ ul {
 }
 
 /* ── Book Service Button ── */
-.nav-cta {
+/* Ensure our animated button takes precedence over base nav-cta */
+.nav-cta:not(.animated-gradient-btn) {
   padding: 9px 22px !important;
   background: var(--grad-blue) !important;
   color: #fff !important;
@@ -623,19 +624,19 @@ ul {
   cursor: pointer;
 }
 
-.nav-cta:hover {
+.nav-cta:not(.animated-gradient-btn):hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 200, 255, 0.3);
   color: #fff !important;
 }
 
-.nav-cta:active {
+.nav-cta:not(.animated-gradient-btn):active {
   transform: translateY(1px);
   box-shadow: 0 1px 4px rgba(0, 200, 255, 0.15);
   border-bottom-width: 1px !important;
 }
 
-.nav-cta::after {
+.nav-cta:not(.animated-gradient-btn)::after {
   display: none !important;
 }
 
