@@ -93,17 +93,18 @@
 .accordion-panel {
     position: relative;
     border-radius: 24px;
-    background: rgba(12, 12, 28, 0.4);
+    background: rgba(10, 10, 20, 0.1);
+    /* Much more transparent for "True Glass" */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Faint rim for glass */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
     overflow: hidden;
     cursor: pointer;
 
     /* Fluid expansion physics */
     flex: 1;
-    /* Inactive panels fallback width */
     transition:
         flex 0.7s cubic-bezier(0.25, 1, 0.3, 1),
         background 0.5s ease,
@@ -154,7 +155,6 @@
 .accordion-huge-num {
     font-family: var(--font-heading);
     font-size: 3rem;
-    /* Scaled down slightly to fit sideways text */
     font-weight: 900;
     color: rgba(255, 255, 255, 0.1);
     transition: color 0.4s ease, transform 0.6s cubic-bezier(0.25, 1, 0.3, 1), opacity 0.4s ease;
@@ -162,9 +162,9 @@
 
 .accordion-rotated-title {
     font-family: var(--font-heading);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.4);
     text-transform: uppercase;
     letter-spacing: 4px;
     writing-mode: vertical-rl;
@@ -176,28 +176,30 @@
 .accordion-panel:hover .accordion-rotated-title {
     color: var(--text-primary);
     letter-spacing: 6px;
-    /* Expanding text on hover */
 }
 
 /* ===== EXPANDED VIEW (Full Details) ===== */
 .accordion-expanded-view {
     position: absolute;
     inset: 0;
-    padding: 40px;
+    padding: 60px 40px 40px 40px;
+    /* Extra top padding for the icon */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     opacity: 0;
     pointer-events: none;
-    /* Ignore clicks when hidden */
     transform: translateY(20px) scale(0.95);
     transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.25, 1, 0.3, 1);
     z-index: 2;
 }
 
 .accordion-icon-wrap {
-    width: 64px;
-    height: 64px;
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    width: 60px;
+    height: 60px;
     border-radius: 16px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -205,42 +207,40 @@
     align-items: center;
     justify-content: center;
     color: var(--text-primary);
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .accordion-icon-wrap svg {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
 }
 
 .accordion-small-num {
     display: block;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 3px;
-    color: rgba(255, 255, 255, 0.5);
-    margin-bottom: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 8px;
 }
 
 .accordion-title {
     font-family: var(--font-heading);
     font-size: 2.2rem;
     font-weight: 800;
-    color: var(--text-bright);
-    margin-bottom: 16px;
+    color: #fff;
+    margin-bottom: 12px;
     line-height: 1.1;
     letter-spacing: -0.5px;
     white-space: nowrap;
 }
 
 .accordion-desc {
-    color: var(--text-secondary);
+    color: rgba(255, 255, 255, 0.7);
     line-height: 1.6;
-    font-size: 1.05rem;
-    max-width: 400px;
-    /* Force minimum width to prevent awkward wrapping during transition */
-    min-width: 300px;
+    font-size: 1rem;
+    max-width: 380px;
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.3s ease 0.1s, transform 0.4s ease 0.1s;
@@ -253,28 +253,15 @@
 @media (min-width: 1024px) {
 
     .accordion-panel {
-        /* Prevents flex items from becoming too narrow and breaking layout during transition */
         min-width: 100px;
-        flex-basis: auto;
     }
-
-    /* Prevent text wrapping during transition */
-    .accordion-title {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
 
     /* --- HOVERING THE CONTAINER --- */
-    /* When user interacts with accordion, baseline flex changes slightly */
     .accordion-container:hover .accordion-panel {
-        flex: 1;
-        /* Normalize un-hovered panels */
-        background: rgba(12, 12, 28, 0.2);
+        flex: 0.8;
+        background: rgba(10, 10, 20, 0.1);
     }
 
-    /* Reveal inactive elements slightly when hovering container */
     .accordion-container:hover .accordion-panel .accordion-collapsed-view {
         opacity: 1;
         transform: scale(1);
@@ -284,24 +271,18 @@
         opacity: 0;
         pointer-events: none;
         transform: translateY(20px) scale(0.95);
-        transition: opacity 0.2s ease, transform 0.3s ease;
     }
 
     /* --- EXPANDED (ACTIVE / HOVERED) PANEL --- */
-    /* By default (or when hovered), one panel takes precedence */
     .accordion-container:not(:hover) .accordion-panel.active,
     .accordion-container:hover .accordion-panel:hover {
-        /* Flex grow greatly to dominate space */
         flex: 4.5;
-
-        /* Premium Background & Glowing Gradient Border Magic */
-        background: rgba(20, 20, 35, 0.6);
+        background: rgba(15, 15, 30, 0.2);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(255, 255, 255, 0.04);
         border-color: transparent;
-        /* Hide normal border, pseudo-element handles gradient */
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(255, 255, 255, 0.02);
     }
 
-    /* The glowing border via pseudo-element using CSS masks to prevent center bleed */
+    /* THE PRECISE FIX: Gradient border via pseudo-element » shielded entirely from cssnano minification */
     .accordion-panel::after {
         content: '';
         position: absolute;
@@ -309,29 +290,20 @@
         z-index: 10;
         pointer-events: none;
         border-radius: inherit;
-        border: 2px solid transparent;
-        /* This establishes the border mask geometry */
-        background: linear-gradient(135deg, deeppink, royalblue, rebeccapurple, lime) border-box;
-        background-size: 200% 200%;
-        animation: glow-shift 4s ease infinite;
+        padding: 2px;
+        background: linear-gradient(135deg, deeppink, royalblue, rebeccapurple, lime);
+        background-size: 300% 300%;
+        animation: glow-shift 6s linear infinite;
 
-        /*
-           CRITICAL FIX: cssnano incorrectly deduplicates identical linear-gradients
-           in masks and deletes composite operators. Shielding them in variables evaluates at
-           runtime, meaning the prod minifier completely skips tampering with them.
-        */
-        --m-1: linear-gradient(#fff 0 0) padding-box;
-        --m-2: linear-gradient(#fff 0 0);
-        --m-wk-comp: xor;
-        --m-std-comp: exclude;
-
-        -webkit-mask: var(--m-1), var(--m-2);
-        -webkit-mask-composite: var(--m-wk-comp);
-        mask: var(--m-1), var(--m-2);
-        mask-composite: var(--m-std-comp);
+        /* Bulletproof Mask: Uses only the most basic, shielded syntax */
+        --mask-rim: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask: var(--mask-rim);
+        mask: var(--mask-rim);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
 
         opacity: 0;
-        transition: opacity 0.6s ease;
+        transition: opacity 0.8s ease;
     }
 
     @keyframes glow-shift {
@@ -348,19 +320,12 @@
         }
     }
 
-    /* Apply glowing borders to active/hovered panel */
     .accordion-container:not(:hover) .accordion-panel.active::after,
     .accordion-container:hover .accordion-panel:hover::after {
         opacity: 0.5;
-        /* Show border, but keep it soft/glassy */
+        /* Soft glowing border */
     }
 
-    .accordion-container:not(:hover) .accordion-panel.active .accordion-bg,
-    .accordion-container:hover .accordion-panel:hover .accordion-bg {
-        opacity: 1;
-    }
-
-    /* Hide the collapsed vertical view gracefully */
     .accordion-container:not(:hover) .accordion-panel.active .accordion-collapsed-view,
     .accordion-container:hover .accordion-panel:hover .accordion-collapsed-view {
         opacity: 0;
@@ -368,24 +333,21 @@
         pointer-events: none;
     }
 
-    /* Show the expanded details */
     .accordion-container:not(:hover) .accordion-panel.active .accordion-expanded-view,
     .accordion-container:hover .accordion-panel:hover .accordion-expanded-view {
         opacity: 1 !important;
         pointer-events: auto !important;
         transform: translateY(0) scale(1) !important;
-        transition: opacity 0.5s ease 0.2s, transform 0.6s cubic-bezier(0.25, 1, 0.3, 1) 0.1s;
+        transition: opacity 0.6s ease 0.1s, transform 0.6s cubic-bezier(0.25, 1, 0.3, 1) 0.1s;
     }
 
-    /* Floating icon parallax feeling inside */
     .accordion-container:not(:hover) .accordion-panel.active .accordion-icon-wrap,
     .accordion-container:hover .accordion-panel:hover .accordion-icon-wrap {
-        transform: translateY(-8px) scale(1.1);
-        box-shadow: 0 15px 35px rgba(65, 105, 225, 0.3);
-        /* royalblue glow */
-        border-color: rgba(65, 105, 225, 0.6);
-        color: rgba(65, 105, 225, 1);
-        background: rgba(65, 105, 225, 0.1);
+        transform: translateY(-5px) scale(1.1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.5);
     }
 
     .accordion-container:not(:hover) .accordion-panel.active .accordion-desc,
@@ -433,7 +395,6 @@
     top: 30px;
     bottom: 30px;
     left: 24px;
-    /* Centers the line under the dots */
     width: 2px;
     background: linear-gradient(to bottom,
             transparent,
@@ -448,64 +409,61 @@
     display: flex;
     flex-direction: column;
     gap: 40px;
-    position: relative;
-    z-index: 2;
 }
 
-/* Individual Step Card */
 .timeline-step-card {
     position: relative;
-    padding: 32px 24px;
-    margin-left: 50px;
-    /* Make room for the timeline line */
-    background: rgba(13, 14, 21, 0.85);
-    border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-left: 1px solid rgba(0, 212, 255, 0.3);
-    /* Subtle left highlight */
+    margin-left: 56px;
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(10px);
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* The Glowing Dot */
+.timeline-step-card:hover {
+    transform: translateX(5px) scale(1.02);
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
 .timeline-dot {
     position: absolute;
-    top: 40px;
     left: -32px;
-    /* Position exactly over the timeline line */
-    width: 12px;
-    height: 12px;
+    top: 40px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
-    background: #00d4ff;
-    box-shadow: 0 0 10px #00d4ff, 0 0 20px rgba(0, 212, 255, 0.5);
-    border: 2px solid #08080e;
+    background: var(--accent);
+    box-shadow: 0 0 15px var(--accent);
+    z-index: 5;
+    border: 3px solid #000;
 }
 
-/* Header (Number + Icon) */
 .timeline-card-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 20px;
 }
 
 .timeline-num {
-    font-family: var(--font-heading);
     font-size: 2.5rem;
     font-weight: 900;
-    color: rgba(255, 255, 255, 0.06);
-    /* Large faint watermark number */
+    color: rgba(255, 255, 255, 0.07);
     line-height: 1;
 }
 
 .timeline-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
-    background: rgba(0, 212, 255, 0.05);
-    border: 1px solid rgba(0, 212, 255, 0.2);
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--accent);
+    color: #fff;
 }
 
 .timeline-icon svg {
@@ -514,15 +472,14 @@
 }
 
 .timeline-title {
-    font-family: var(--font-heading);
     font-size: 1.5rem;
     font-weight: 800;
-    color: var(--text-bright);
-    margin-bottom: 12px;
+    color: #fff;
+    margin-bottom: 10px;
 }
 
 .timeline-desc {
-    color: var(--text-secondary);
     font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.6);
     line-height: 1.6;
 }
