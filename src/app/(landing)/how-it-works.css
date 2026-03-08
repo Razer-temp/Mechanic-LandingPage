@@ -116,6 +116,29 @@
     min-height: 100px;
 }
 
+/* Massive Watermark Number */
+.accordion-watermark {
+    position: absolute;
+    bottom: -10%;
+    right: -5%;
+    font-size: 24rem;
+    font-weight: 900;
+    line-height: 0.8;
+    color: var(--neon-base, rgba(255, 255, 255, 0.05));
+    opacity: 0.01;
+    font-family: var(--font-heading);
+    pointer-events: none;
+    z-index: 1;
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.25, 1, 0.3, 1);
+    transform: scale(0.9) translate(10%, 10%);
+}
+
+.accordion-container:not(:hover) .accordion-panel.active .accordion-watermark,
+.accordion-container:hover .accordion-panel:hover .accordion-watermark {
+    opacity: 0.05;
+    transform: scale(1) translate(0, 0);
+}
+
 /* Background gradient inside panel */
 .accordion-bg {
     position: absolute;
@@ -233,8 +256,7 @@
 .accordion-desc {
     color: rgba(255, 255, 255, 0.7);
     line-height: 1.6;
-    font-size: 1rem;
-    max-width: 380px;
+    max-width: 500px;
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.3s ease 0.1s, transform 0.4s ease 0.1s;
@@ -242,14 +264,8 @@
     /* Space before features */
 }
 
-/* --- Premium Features List --- */
+/* --- Premium Features & Actions --- */
 .accordion-features {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: auto;
-    padding-top: 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.3s ease 0.2s, transform 0.4s ease 0.2s;
@@ -299,7 +315,7 @@
     /* --- EXPANDED (ACTIVE / HOVERED) PANEL --- */
     .accordion-container:not(:hover) .accordion-panel.active,
     .accordion-container:hover .accordion-panel:hover {
-        flex: 4.5;
+        flex: 6;
         background: color-mix(in srgb, currentColor 2%, rgba(15, 15, 30, 0.5));
         box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 0 40px color-mix(in srgb, currentColor 6%, transparent);
         border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
@@ -337,7 +353,9 @@
     }
 
     .accordion-container:not(:hover) .accordion-panel.active .accordion-features,
-    .accordion-container:hover .accordion-panel:hover .accordion-features {
+    .accordion-container:hover .accordion-panel:hover .accordion-features,
+    .accordion-container:not(:hover) .accordion-panel.active .accordion-action,
+    .accordion-container:hover .accordion-panel:hover .accordion-action {
         opacity: 1 !important;
         transform: translateY(0) !important;
     }
@@ -474,4 +492,90 @@
     font-size: 0.95rem;
     color: rgba(255, 255, 255, 0.6);
     line-height: 1.6;
+}
+
+/* =========================================
+   Simplified Action Button (Conflict-Free)
+   ========================================= */
+.hiw-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 9999px;
+    /* Base background matching the accent text color */
+    background: linear-gradient(135deg, currentColor 0%, color-mix(in srgb, currentColor 80%, black) 100%);
+    /* We don't set color: #ffffff here, because we need currentColor to remain the step's brand color! */
+    color: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    /* Soft shadow based on the accent color */
+    box-shadow: 0px 8px 24px color-mix(in srgb, currentColor 40%, transparent);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    width: max-content;
+    max-width: 100%;
+}
+
+.hiw-action-btn:hover {
+    color: inherit;
+    transform: scale(1.02);
+    /* Stronger, larger shadow on hover */
+    box-shadow: 0px 12px 32px color-mix(in srgb, currentColor 60%, transparent);
+}
+
+.hiw-action-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    /* Bright white sweep over the colored button */
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: lightSweep 8s linear infinite;
+}
+
+.hiw-action-btn:active {
+    transform: scale(0.97);
+    transition: transform 0.1s ease;
+}
+
+.hiw-action-text {
+    /* Set the white color here so it only applies to the text, not the parent's currentColor! */
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.hiw-action-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    /* Set the white color here so it only applies to the icon! */
+    color: #ffffff;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hiw-action-btn:hover .hiw-action-icon {
+    transform: translateX(5px);
+}
+
+.hiw-action-btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at center, currentColor 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.hiw-action-btn:hover::after {
+    opacity: 0.1;
 }

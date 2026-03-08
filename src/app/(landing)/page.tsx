@@ -23,28 +23,60 @@ const HOW_STEPS = [
     colorBase: 'text-blue-500',
     icon: <MessageSquareText className="size-8" />,
     title: 'Describe Issue',
-    desc: 'Chat with our AI or use the form to describe what’s wrong with your bike. Our smart system understands natural language.'
+    desc: 'Chat with our AI or use the form to describe what’s wrong with your bike. Our smart system understands natural language.',
+    features: [
+      '24/7 AI Chatbot assistance',
+      'Describe issues in your own words',
+      'Text or quick-select input',
+      'Instant system response'
+    ],
+    actionLabel: 'Try AI Chat Now',
+    actionHref: '#diagnosis'
   },
   {
     num: '02',
     colorBase: 'text-fuchsia-500',
     icon: <BrainCircuit className="size-8" />,
     title: 'AI Analysis',
-    desc: 'Our AI engine analyzes symptoms to provide instant diagnosis and transparent cost estimates before any work begins.'
+    desc: 'Our AI engine analyzes symptoms to provide instant diagnosis and transparent cost estimates before any work begins.',
+    features: [
+      'Precision problem identification',
+      'Transparent cost breakdown',
+      'Severity & urgency rating',
+      'Service recommendations'
+    ],
+    actionLabel: 'View Cost Estimator',
+    actionHref: '#estimator'
   },
   {
     num: '03',
     colorBase: 'text-emerald-500',
     icon: <Wrench className="size-8" />,
     title: 'Expert Repair',
-    desc: 'Book a slot. Our certified mechanics fix your bike using genuine parts, ensuring peak performance.'
+    desc: 'Book a slot. Our certified mechanics fix your bike using genuine parts, ensuring peak performance.',
+    features: [
+      'Certified & vetted mechanics',
+      '100% genuine OEM parts',
+      'Quality guaranteed workmanship',
+      '6-month warranty on repairs'
+    ],
+    actionLabel: 'Book Appointment',
+    actionHref: '#booking'
   },
   {
     num: '04',
     colorBase: 'text-amber-500',
     icon: <Rocket className="size-8" />,
     title: 'Ready to Ride',
-    desc: 'Get your bike back in top condition. Pay online or at the workshop. Delivery guaranteed within our service area.'
+    desc: 'Get your bike back in top condition. Pay online or at the workshop. Delivery guaranteed within our service area.',
+    features: [
+      'Comprehensive final test ride',
+      'Secure payment options',
+      'Convenient doorstep delivery',
+      'Post-service maintenance tips'
+    ],
+    actionLabel: 'Explore Services',
+    actionHref: '#services'
   }
 ];
 
@@ -776,20 +808,21 @@ export default function LandingPage() {
                 key={i}
                 className={clsx(
                   "accordion-panel group",
-                  i === 0 ? "active" : "", // First panel is active/expanded by default strictly via CSS handling later if needed, but we'll use pure CSS hover for simplicity here
-                  step.colorBase
+                  i === 0 ? "active" : ""
                 )}
                 style={{
                   transitionDelay: `${i * 100}ms`,
-                  // CRITICAL: backdropFilter is stripped by cssnano in production builds.
-                  // Injecting via inline style bypasses the CSS minifier entirely.
                   backdropFilter: "blur(20px)",
                   WebkitBackdropFilter: "blur(20px)",
-                }}
+                  '--neon-base': i === 0 ? '#3b82f6' : i === 1 ? '#d946ef' : i === 2 ? '#10b981' : '#f59e0b'
+                } as React.CSSProperties}
               >
-                {/* Removed broken inline gradient border hack */}
-
                 <div className="accordion-bg"></div>
+
+                {/* Massive Watermark Number Background */}
+                <div className="accordion-watermark">
+                  {step.num}
+                </div>
 
                 <div className="accordion-content">
                   {/* The collapsed view element (Number & Title) */}
@@ -800,13 +833,39 @@ export default function LandingPage() {
 
                   {/* The expanded view element (Details) */}
                   <div className="accordion-expanded-view">
-                    <div className={clsx("accordion-icon-wrap", step.colorBase)}>
-                      {step.icon}
+                    <div className="flex items-center gap-5">
+                      <div className={clsx("accordion-icon-wrap shadow-lg shrink-0", step.colorBase)}>
+                        {step.icon}
+                      </div>
+                      <div>
+                        <span className="accordion-small-num mb-1 block">Phase {step.num}</span>
+                        <h3 className="accordion-title m-0 p-0 leading-none">{step.title}</h3>
+                      </div>
                     </div>
-                    <div className="accordion-text-wrap">
-                      <span className="accordion-small-num">Step {step.num}</span>
-                      <h3 className="accordion-title">{step.title}</h3>
-                      <p className="accordion-desc">{step.desc}</p>
+
+                    <p className="accordion-desc text-[1.1rem] md:text-lg">{step.desc}</p>
+
+                    <div className="accordion-features grid grid-cols-2 gap-x-4 gap-y-3 mt-auto w-full max-w-[500px]">
+                      {step.features.map((feature, idx) => (
+                        <div key={idx} className="accordion-feature-item group/feat">
+                          <div className={clsx("mt-0.5 p-1 rounded-full bg-white/5 border border-white/10 transition-colors group-hover/feat:bg-white/10 shrink-0", step.colorBase)}>
+                            <Check className="w-3.5 h-3.5" />
+                          </div>
+                          <span className="text-sm font-medium text-gray-300 leading-snug group-hover/feat:text-white transition-colors">
+                            {feature}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Wrapped in a div with step.colorBase so currentColor inherits the neon color, not white text */}
+                    <div className={clsx("accordion-action mt-6 pt-6 border-t border-[rgba(255,255,255,0.06)] w-full max-w-[500px]", step.colorBase)}>
+                      <a href={step.actionHref} className="hiw-action-btn">
+                        <span className="hiw-action-text">{step.actionLabel}</span>
+                        <svg className="hiw-action-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -834,6 +893,27 @@ export default function LandingPage() {
                   </div>
                   <h3 className="timeline-title">{step.title}</h3>
                   <p className="timeline-desc">{step.desc}</p>
+
+                  <div className="mt-6 pt-5 border-t border-[rgba(255,255,255,0.06)] grid gap-3">
+                    {step.features.map((feature, idx) => (
+                      <div key={idx} className="flex items-start gap-3">
+                        <div className={clsx("mt-0.5 p-1 rounded-full bg-white/5 border border-white/10 shrink-0", step.colorBase)}>
+                          <Check className="w-3.5 h-3.5" />
+                        </div>
+                        <span className="text-sm font-medium text-gray-300 leading-snug">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Wrapped in a div with step.colorBase so currentColor inherits the neon color */}
+                  <div className={clsx("mt-6", step.colorBase)}>
+                    <a href={step.actionHref} className="hiw-action-btn">
+                      <span className="hiw-action-text truncate">{step.actionLabel}</span>
+                      <svg className="hiw-action-icon shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    </a>
+                  </div>
                 </motion.div>
               ))}
             </div>
