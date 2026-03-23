@@ -89,7 +89,17 @@ export function AnimatedBackground() {
             animationFrameId = requestAnimationFrame(render);
         };
 
-        render();
+        // Only run the heavy render loop on non-touch devices (desktop)
+        const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+        if (!isTouchDevice) {
+            render();
+        } else {
+            // For mobile, just set initial static transforms to avoid a blank layout
+            const height = window.innerHeight;
+            stars.forEach(star => {
+                star.el.style.transform = `translate3d(0, ${star.initialY % height}px, 0) scaleY(1)`;
+            });
+        }
 
         // Handle resize
         const handleResize = () => {
