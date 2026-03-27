@@ -1,0 +1,622 @@
+/* how-it-works-mockups.css */
+
+/* Two-column layout for expanded view */
+.accordion-expanded-inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    height: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+.accordion-left-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+    max-width: 50%;
+}
+
+.accordion-right-col {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 100%;
+}
+
+/* Giant Watermark Number - Upgraded to Neon Breathing Mask */
+.accordion-giant-watermark {
+    position: absolute;
+    right: -10%;
+    bottom: -15%;
+    font-family: var(--font-heading);
+    font-size: 30rem;
+    font-weight: 900;
+    line-height: 1;
+    color: transparent;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01), rgba(0, 212, 255, 0.05));
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    pointer-events: none;
+    z-index: 0;
+    user-select: none;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.3, 1), opacity 0.6s ease;
+    transform: translateX(50px);
+    opacity: 0;
+}
+
+.accordion-panel:not(.active):hover .accordion-giant-watermark,
+.accordion-panel.active .accordion-giant-watermark {
+    transform: translateX(0);
+    opacity: 1;
+    animation: breathingWatermark 4s ease-in-out infinite alternate, gradientShift 8s ease infinite;
+}
+
+@keyframes breathingWatermark {
+    0% { transform: translateX(0) scale(1); }
+    100% { transform: translateX(0) scale(1.05); }
+}
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* CTA Button - Magnetic Shine & Loop */
+.accordion-cta {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary, #fff);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+    width: fit-content;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease 0.3s, transform 0.4s ease 0.3s, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.accordion-panel.active .accordion-cta,
+.accordion-panel:hover .accordion-cta {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Sweeping Shine */
+.accordion-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: skewX(-20deg);
+    animation: sweepShine 3s infinite;
+}
+
+@keyframes sweepShine {
+    0% { left: -100%; }
+    20% { left: 200%; }
+    100% { left: 200%; }
+}
+
+/* Color-Matched Glows using parent classes */
+.accordion-panel.text-blue-500 .accordion-cta:hover {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+    border-color: rgba(59, 130, 246, 0.5);
+    background: rgba(59, 130, 246, 0.1);
+}
+.accordion-panel.text-fuchsia-500 .accordion-cta:hover {
+    box-shadow: 0 0 20px rgba(217, 70, 239, 0.4);
+    border-color: rgba(217, 70, 239, 0.5);
+    background: rgba(217, 70, 239, 0.1);
+}
+.accordion-panel.text-emerald-500 .accordion-cta:hover {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+    border-color: rgba(16, 185, 129, 0.5);
+    background: rgba(16, 185, 129, 0.1);
+}
+.accordion-panel.text-amber-500 .accordion-cta:hover {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+    border-color: rgba(245, 158, 11, 0.5);
+    background: rgba(245, 158, 11, 0.1);
+}
+
+/* Arrow Loop */
+.cta-arrow {
+    display: inline-block;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.accordion-cta:hover .cta-arrow {
+    animation: arrowLoop 1s infinite linear;
+}
+
+@keyframes arrowLoop {
+    0% { transform: translateX(0); opacity: 1; }
+    40% { transform: translateX(10px); opacity: 0; }
+    41% { transform: translateX(-10px); opacity: 0; }
+    50% { transform: translateX(-10px); opacity: 1; }
+    100% { transform: translateX(0); opacity: 1; }
+}
+
+/* Specific Mockups Styling */
+
+/* 1. Chat Mockup */
+.mockup-chat {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 320px;
+    background: rgba(10, 10, 20, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.mockup-msg {
+    padding: 12px 16px;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    max-width: 85%;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.mockup-msg.user {
+    align-self: flex-end;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+}
+
+.mockup-msg.ai {
+    align-self: flex-start;
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #93c5fd;
+    border-bottom-left-radius: 4px;
+}
+
+.accordion-panel.active .mockup-msg.user,
+.accordion-panel:hover .mockup-msg.user {
+    animation: chatPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.2s;
+}
+
+.accordion-panel.active .mockup-msg.ai,
+.accordion-panel:hover .mockup-msg.ai {
+    animation: chatExpand 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.8s;
+}
+
+.mockup-msg.ai .typing-dots span {
+    animation: typing 1.4s infinite both;
+}
+.mockup-msg.ai .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.mockup-msg.ai .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+.accordion-panel.active .mockup-msg.ai .typing-dots,
+.accordion-panel:hover .mockup-msg.ai .typing-dots {
+    display: inline-block;
+    animation: hideDots 0.1s forwards 2s;
+}
+
+.mockup-msg.ai .ai-text {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.accordion-panel.active .mockup-msg.ai .ai-text,
+.accordion-panel:hover .mockup-msg.ai .ai-text {
+    animation: showText 0.5s forwards 2s;
+}
+
+@keyframes typing {
+    0%, 80%, 100% { opacity: 0; }
+    40% { opacity: 1; }
+}
+@keyframes chatPop {
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes chatExpand {
+    0% { opacity: 0; transform: translateY(10px) scaleY(0.5); transform-origin: top; }
+    100% { opacity: 1; transform: translateY(0) scaleY(1); transform-origin: top; }
+}
+@keyframes hideDots {
+    to { display: none; opacity: 0; width: 0; }
+}
+@keyframes showText {
+    to { opacity: 1; max-height: 100px; }
+}
+
+/* 2. Scan Mockup */
+.mockup-scan {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+    gap: 12px;
+}
+
+.scan-radar-container {
+    position: relative;
+    width: 100%;
+    height: 120px;
+    border: 1px solid rgba(217, 70, 239, 0.3);
+    border-radius: 16px;
+    background: rgba(10, 10, 20, 0.5);
+    overflow: hidden;
+    margin-bottom: 12px;
+    perspective: 800px;
+}
+
+.scan-grid-3d {
+    position: absolute;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(217, 70, 239, 0.15) 0px,
+        rgba(217, 70, 239, 0.15) 1px,
+        transparent 1px,
+        transparent 30px
+    ),
+    repeating-linear-gradient(
+        90deg,
+        rgba(217, 70, 239, 0.15) 0px,
+        rgba(217, 70, 239, 0.15) 1px,
+        transparent 1px,
+        transparent 30px
+    );
+    transform: rotateX(60deg) rotateZ(0deg);
+    transform-origin: center center;
+    animation: rotateGrid 20s linear infinite;
+}
+
+@keyframes rotateGrid {
+    0% { transform: rotateX(60deg) rotateZ(0deg); }
+    100% { transform: rotateX(60deg) rotateZ(360deg); }
+}
+
+.scan-sweep {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, rgba(217, 70, 239, 0.4));
+    border-bottom: 2px solid rgb(217, 70, 239);
+    animation: scanSweep 2s infinite linear;
+    z-index: 2;
+}
+
+@keyframes scanSweep {
+    0% { top: -100%; }
+    100% { top: 100%; }
+}
+
+.scan-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    opacity: 0;
+    transform: translateX(-10px);
+}
+
+.accordion-panel.active .scan-row,
+.accordion-panel:hover .scan-row {
+    animation: rowSlide 0.5s forwards;
+}
+.accordion-panel.active .scan-row:nth-child(1),
+.accordion-panel:hover .scan-row:nth-child(1) { animation-delay: 0.4s; }
+.accordion-panel.active .scan-row:nth-child(2),
+.accordion-panel:hover .scan-row:nth-child(2) { animation-delay: 0.6s; }
+
+@keyframes rowSlide {
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.scan-row .label { color: rgba(255, 255, 255, 0.7); }
+
+/* 3. Mechanic Mockup */
+.mockup-mechanic {
+    display: flex;
+    align-items: center;
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 20px;
+    padding: 24px;
+    width: 100%;
+    max-width: 340px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.mechanic-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(52, 211, 153);
+    position: relative;
+    flex-shrink: 0;
+    filter: blur(4px) grayscale(100%);
+}
+
+.accordion-panel.active .mechanic-avatar,
+.accordion-panel:hover .mechanic-avatar {
+    animation: lockOnAvatar 1.5s forwards;
+}
+
+@keyframes lockOnAvatar {
+    0%, 10%, 20%, 30%, 40% { filter: blur(4px) grayscale(100%); transform: scale(0.95); opacity: 0.5; }
+    45% { filter: blur(2px) grayscale(50%); transform: scale(1.05); opacity: 0.8; }
+    50% { filter: blur(0px) grayscale(0%); transform: scale(1.15); box-shadow: 0 0 30px rgba(16, 185, 129, 0.8); opacity: 1; }
+    100% { filter: blur(0px) grayscale(0%); transform: scale(1); box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); opacity: 1; }
+}
+
+.mechanic-status-dot {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 16px;
+    height: 16px;
+    background: rgb(52, 211, 153);
+    border-radius: 50%;
+    border: 3px solid #111;
+    opacity: 0;
+}
+
+.accordion-panel.active .mechanic-status-dot,
+.accordion-panel:hover .mechanic-status-dot {
+    animation: badgePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.8s;
+}
+
+.mechanic-info-inner {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.mechanic-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+.mechanic-rating {
+    font-size: 0.85rem;
+    color: rgb(52, 211, 153);
+    font-weight: 500;
+}
+.badge-assigned {
+    background: rgba(16, 185, 129, 0.15);
+    color: rgb(110, 231, 183);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    width: fit-content;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.accordion-panel.active .badge-assigned,
+.accordion-panel:hover .badge-assigned {
+    animation: badgePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 1s;
+}
+@keyframes badgePop {
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* 4. Completion Mockup */
+.mockup-completion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.completion-ring {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin-bottom: 20px;
+}
+
+.completion-ring svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.ring-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.05);
+    stroke-width: 6;
+}
+
+.ring-progress {
+    fill: none;
+    stroke: rgb(245, 158, 11);
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion-panel.active .ring-progress,
+.accordion-panel:hover .ring-progress {
+    stroke-dashoffset: 0;
+}
+
+.completion-check-svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    width: 48px;
+    height: 48px;
+    color: rgb(245, 158, 11);
+    opacity: 0;
+    transition: opacity 0.2s ease 0.6s, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s;
+}
+
+.accordion-panel.active .completion-check-svg,
+.accordion-panel:hover .completion-check-svg {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.check-path {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+}
+
+.accordion-panel.active .check-path,
+.accordion-panel:hover .check-path {
+    animation: drawCheck 0.4s ease-out forwards 0.7s;
+}
+
+@keyframes drawCheck {
+    to { stroke-dashoffset: 0; }
+}
+
+/* The Glass Shockwave */
+.completion-shockwave {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    transform: translate(-50%, -50%) scale(0.5);
+    border-radius: 50%;
+    border: 2px solid rgba(245, 158, 11, 0.8);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.accordion-panel.active .completion-shockwave,
+.accordion-panel:hover .completion-shockwave {
+    animation: shockwaveRipple 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) forwards 0.7s;
+}
+
+@keyframes shockwaveRipple {
+    0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.8; border-width: 4px; }
+    100% { transform: translate(-50%, -50%) scale(2); opacity: 0; border-width: 0px; }
+}
+
+.completion-text {
+    color: rgb(251, 191, 36);
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease 0.8s, transform 0.4s ease 0.8s;
+}
+
+.accordion-panel.active .completion-text,
+.accordion-panel:hover .completion-text {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Sparks Burst */
+.sparks-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    overflow: visible;
+}
+
+.spark {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgb(245, 158, 11);
+    border-radius: 50%;
+    top: -2px;
+    left: -2px;
+    opacity: 0;
+    box-shadow: 0 0 10px rgb(245, 158, 11);
+}
+
+.accordion-panel.active .spark,
+.accordion-panel:hover .spark {
+    animation: sparkBurst 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards 0.8s;
+}
+
+@keyframes sparkBurst {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+}
+
+.spark:nth-child(1) { --tx: -50px; --ty: -50px; }
+.spark:nth-child(2) { --tx: 50px; --ty: -50px; }
+.spark:nth-child(3) { --tx: 50px; --ty: 50px; }
+.spark:nth-child(4) { --tx: -50px; --ty: 50px; }
+.spark:nth-child(5) { --tx: 0px; --ty: -65px; }
+.spark:nth-child(6) { --tx: 0px; --ty: 65px; }
+.spark:nth-child(7) { --tx: -65px; --ty: 0px; }
+.spark:nth-child(8) { --tx: 65px; --ty: 0px; }
+
+/* Mobile Adjustments */
+@media (max-width: 1023px) {
+    .timeline-mockup-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .timeline-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--text-primary, #fff);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-decoration: none;
+    }
+    
+    /* Animations are now natively triggered via IntersectionObserver in page.tsx adding '.active' directly to cards */
+}

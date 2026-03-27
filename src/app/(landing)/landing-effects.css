@@ -371,6 +371,7 @@
     /* AI Chat — morph container positioned above WhatsApp */
     .floating-chat {
         bottom: 84px !important;
+        transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease !important;
         right: 16px !important;
         /* GPU performance: ensure own compositing layer */
         transform: translateZ(0) !important;
@@ -390,6 +391,7 @@
     /* WhatsApp: compact CIRCLE on mobile */
     .whatsapp-float {
         bottom: 20px !important;
+        transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.23, 1, 0.32, 1) !important;
         right: 16px !important;
         width: 52px !important;
         height: 52px !important;

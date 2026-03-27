@@ -1,4 +1,4 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
 /* =========================================
    SMARTBIKE PRO — Premium Design System
@@ -2529,6 +2529,11 @@ body[style*="overflow: hidden"] .whatsapp-float {
   }
 }
 
+/* ===== MOBILE NAV GUARDRAIL ===== */
+.mobile-bottom-nav {
+  display: none;
+}
+
 @media (max-width: 768px) {
   :root {
     --section-gap: 60px;
@@ -2542,305 +2547,131 @@ body[style*="overflow: hidden"] .whatsapp-float {
     overflow: visible !important;
   }
 
-  /* --- Pixel-Perfect Navigation (v1.0) --- */
-
-  /* 9. HAMBURGER ICON ANIMATION */
-  .nav-toggle {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 48px;
-    height: 48px;
-    z-index: 5000;
-    position: relative;
-    background: transparent;
-    border: none;
-    padding: 0;
-    gap: 6px;
-    transition: transform 0.3s ease;
-    overflow: visible !important;
+  .footer-premium {
+    padding-bottom: 100px !important;
   }
-
-  .nav-toggle.active {
+  
+  /* --- PREMIUM DYNAMIC ISLAND BOTTOM NAV (Visible < 768px) --- */
+  .mobile-bottom-nav {
+    display: block; /* Override default hidden state */
     position: fixed;
-    top: 32px;
-    right: 24px;
-  }
-
-  .nav-toggle span {
-    display: block;
-    width: 20px;
-    height: 2px;
-    background: #ffffff;
-    border-radius: 2px;
-    transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .nav-toggle.active span:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-    width: 24px;
-  }
-
-  .nav-toggle.active span:nth-child(2) {
-    opacity: 0;
-  }
-
-  .nav-toggle.active span:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
-    width: 24px;
-  }
-
-  /* 2.1 Overlay System & 3. Background System */
-  .nav-overlay-v1 {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    background:
-      radial-gradient(circle at 85% 10%, rgba(0, 120, 255, 0.18), transparent 45%),
-      radial-gradient(circle at 15% 90%, rgba(0, 255, 200, 0.12), transparent 50%),
-      linear-gradient(180deg, #0A0D14 0%, #05070B 100%);
-    opacity: 0;
-    visibility: hidden;
-    overflow: hidden;
-    transition: opacity 0.25s ease-out, visibility 0s linear 0.25s;
-    transform: translateZ(0);
-    contain: layout style paint;
-  }
-
-  .nav-overlay-v1.active {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 0.25s ease-out, visibility 0s linear 0s;
-  }
-
-  /* ambientDrift removed for mobile — background-position animations cause repaints */
-
-  /* Layer 3: Noise Texture Overlay */
-  /* Noise texture overlay removed on mobile for GPU performance */
-  .nav-overlay-v1::before {
-    display: none;
-  }
-
-  /* Layer 4: Soft Bloom */
-  .nav-bloom {
-    position: absolute;
-    top: 50%;
+    bottom: 24px;
     left: 50%;
-    transform: translate(-50%, -50%) translateZ(0);
-    width: 80%;
-    height: 60%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.08), transparent 70%);
-    filter: blur(60px);
-    pointer-events: none;
-    contain: strict;
-  }
-
-  /* 2.2 & 2.3 Layout Grid */
-  .nav-menu-container {
-    position: fixed;
-    inset: 0;
-    z-index: 1001;
-    display: flex;
-    flex-direction: column;
-    padding: 100px 24px 32px 24px;
-    pointer-events: none;
+    transform: translateX(-50%) translateY(100px);
+    z-index: 9000;
+    width: 90%;
+    max-width: 380px;
+    background: rgba(15, 18, 25, 0.7);
+    backdrop-filter: blur(24px) saturate(1.5);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    padding: 8px 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     opacity: 0;
-    transform: translateY(12px) translateZ(0);
-    transition: opacity 0.2s ease-out, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.25s;
-    visibility: hidden;
-    contain: layout style;
+    pointer-events: none;
   }
 
-  .nav-menu-container.active {
+  /* Reveal when scrolled past hero */
+  .mobile-bottom-nav.visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
     pointer-events: auto;
-    opacity: 1;
-    transform: translateY(0) translateZ(0);
-    visibility: visible;
-    transition: opacity 0.2s ease-out, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0s;
   }
 
-  .nav-links-inner {
+  /* Hide bottom nav when AI Chat is opened */
+  body:has(.floating-chat.open) .mobile-bottom-nav {
+    transform: translateX(-50%) translateY(150px) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Push floating buttons UP when bottom nav is visible (scroll > 50px) */
+  body:has(.mobile-bottom-nav.visible) .whatsapp-float {
+    bottom: 92px !important;
+  }
+  body:has(.mobile-bottom-nav.visible) .floating-chat:not(.open) {
+    bottom: 160px !important;
+  }
+
+  .mobile-nav-inner {
     display: flex;
-    flex-direction: column;
-    gap: 28px;
-  }
-
-  .nav-spacer {
-    flex-grow: 1;
-    min-height: 24px;
-  }
-
-  /* 4. TYPOGRAPHY & 5. INTERACTION */
-  .nav-link-v1 {
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    position: relative;
-    opacity: 0;
-    transform: translateY(16px) translateZ(0);
-    transition: opacity 0.3s ease-out, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .nav-menu-container.active .nav-link-v1 {
-    opacity: 1;
-    transform: translateY(0) translateZ(0);
-    transition-delay: calc(var(--idx) * 40ms);
-  }
-
-  .nav-link-content {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    position: relative;
-    z-index: 2;
-    transition: transform 0.2s ease;
-  }
-
-  .nav-link-title {
-    font-family: var(--font-heading);
-    font-size: 34px;
-    font-weight: 600;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    color: rgba(255, 255, 255, 0.92);
-    transition: font-weight 0.15s ease;
-  }
-
-  .nav-link-subtitle {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.4;
-    color: rgba(255, 255, 255, 0.55);
-  }
-
-  /* Interaction Hover/Active */
-  .nav-link-v1:hover .nav-link-title,
-  .nav-link-v1.active .nav-link-title {
-    font-weight: 700;
-  }
-
-  .nav-link-v1:hover .nav-link-content,
-  .nav-link-v1.active .nav-link-content {
-    transform: translateX(2px);
-  }
-
-  /* Gradient Underline */
-  .nav-link-v1::after {
-    content: "";
-    position: absolute;
-    bottom: -6px;
-    /* below the subtitle */
-    left: 0;
-    width: 0;
-    height: 2px;
-    border-radius: 2px;
-    background: linear-gradient(90deg, #00D1FF, #0066FF);
-    transition: width 0.22s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .nav-link-v1:hover::after,
-  .nav-link-v1.active::after {
-    width: 100%;
-  }
-
-  /* Background Hover Glow — simplified for mobile */
-  .nav-link-glow {
-    position: absolute;
-    top: 50%;
-    left: 40px;
-    width: 60%;
-    height: 100%;
-    transform: translateY(-50%) translateZ(0);
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent 70%);
-    opacity: 0;
-    filter: blur(24px);
-    transition: opacity 0.15s ease-out;
-    z-index: 1;
-    pointer-events: none;
-    contain: strict;
-  }
-
-  .nav-link-v1:hover .nav-link-glow,
-  .nav-link-v1.active .nav-link-glow {
-    opacity: 0.15;
-  }
-
-  /* 8. PREMIUM CTA BLOCK */
-  .nav-cta-wrapper {
-    width: 100%;
-    opacity: 0;
-    transform: translateY(16px) translateZ(0);
-    transition: opacity 0.3s ease-out 0.18s, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1) 0.18s;
-  }
-
-  .nav-menu-container.active .nav-cta-wrapper {
-    opacity: 1;
-    transform: translateY(0) translateZ(0);
-  }
-
-  .premium-cta-block {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    padding: 16px;
-    box-shadow: 0px 12px 40px rgba(0, 0, 0, 0.5);
-    transform: translateZ(0);
-  }
-
-  .premium-cta-btn {
-    display: flex;
-    justify-content: center;
     align-items: center;
-    height: 56px;
-    border-radius: 18px;
-    background: linear-gradient(135deg, #00D1FF 0%, #0066FF 100%);
-    color: #fff !important;
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    box-shadow: 0px 8px 24px rgba(0, 102, 255, 0.4);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    justify-content: space-between;
+    gap: 4px;
+  }
+
+  .mobile-nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 12px;
+    border-radius: 22px;
+    color: rgba(255, 255, 255, 0.6);
     text-decoration: none;
-    position: relative;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     overflow: hidden;
   }
 
-  .premium-cta-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    animation: lightSweep 8s linear infinite;
+  .mobile-nav-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
   }
 
-  @keyframes lightSweep {
-    0% {
-      left: -100%;
-    }
-
-    20% {
-      left: 200%;
-    }
-
-    100% {
-      left: 200%;
-    }
+  .mobile-nav-label {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    animation: slideInText 0.3s forwards ease-out;
   }
 
-  .premium-cta-btn:hover {
-    transform: scale(1.02);
-    box-shadow: 0px 12px 32px rgba(0, 102, 255, 0.6);
+  @keyframes slideInText {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
   }
 
-  .premium-cta-btn:active {
-    transform: scale(0.97);
-    transition: transform 0.1s ease;
+  /* Active State (Pill Expansion) */
+  .mobile-nav-item.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 0 16px;
   }
 
+  .mobile-nav-item.active .mobile-nav-icon {
+    color: #00D1FF;
+  }
+
+  /* Divider */
+  .mobile-nav-divider {
+    width: 1px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 4px;
+  }
+
+  /* CTA Button inside Nav */
+  .mobile-nav-cta {
+    background: linear-gradient(135deg, rgba(0, 209, 255, 0.2), rgba(0, 102, 255, 0.2));
+    border: 1px solid rgba(0, 209, 255, 0.3);
+    color: #00D1FF;
+    padding: 0 14px;
+  }
+
+  .mobile-nav-cta.active {
+    background: linear-gradient(135deg, #00D1FF, #0066FF);
+    color: #fff;
+    border-color: transparent;
+  }
+
+  .mobile-nav-cta.active .mobile-nav-icon {
+    color: #fff;
+  }
 
   .hero-title {
     font-size: clamp(2rem, 9vw, 3.2rem);
@@ -2920,6 +2751,7 @@ body[style*="overflow: hidden"] .whatsapp-float {
   .floating-chat {
     position: fixed !important;
     bottom: 84px !important;
+    transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease !important;
     /* Stacked above WhatsApp */
     right: 16px !important;
     width: 60px !important;
@@ -2968,6 +2800,7 @@ body[style*="overflow: hidden"] .whatsapp-float {
     position: fixed !important;
     right: 16px !important;
     bottom: 20px !important;
+    transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.23, 1, 0.32, 1) !important;
     width: 52px !important;
     height: 52px !important;
     min-width: 0 !important;

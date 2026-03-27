@@ -10,6 +10,8 @@ import { createClient } from '@/lib/supabase/client';
 import './ai-intelligence.css';
 import './landing-effects.css';
 import './how-it-works.css';
+import './how-it-works-mockups.css';
+import './how-it-works-mobile.css';
 import './footer-premium.css';
 import '../animated-button.css';
 import clsx from 'clsx';
@@ -21,30 +23,101 @@ const HOW_STEPS = [
   {
     num: '01',
     colorBase: 'text-blue-500',
+    themeColor: '#3b82f6',
     icon: <MessageSquareText className="size-8" />,
     title: 'Describe Issue',
-    desc: 'Chat with our AI or use the form to describe what’s wrong with your bike. Our smart system understands natural language.'
+    desc: 'Chat with our AI or use the form to describe what’s wrong with your bike. Our smart system understands natural language.',
+    ctaText: 'Use AI Check',
+    ctaLink: '#diagnosis',
+    mockup: (
+      <div className="mockup-chat">
+        <div className="mockup-msg user">My bike chain keeps slipping.</div>
+        <div className="mockup-msg ai">
+          <span className="typing-dots"><span>.</span><span>.</span><span>.</span></span>
+          <span className="ai-text">Diagnosing transmission issue...</span>
+        </div>
+      </div>
+    )
   },
   {
     num: '02',
     colorBase: 'text-fuchsia-500',
+    themeColor: '#d946ef',
     icon: <BrainCircuit className="size-8" />,
     title: 'AI Analysis',
-    desc: 'Our AI engine analyzes symptoms to provide instant diagnosis and transparent cost estimates before any work begins.'
+    desc: 'Our AI engine analyzes symptoms to provide instant diagnosis and transparent cost estimates before any work begins.',
+    ctaText: 'View Diagnostics',
+    ctaLink: '#diagnosis',
+    mockup: (
+      <div className="mockup-scan">
+        <div className="scan-radar-container">
+          <div className="scan-grid-3d"></div>
+          <div className="scan-sweep"></div>
+        </div>
+        <div className="scan-data flex flex-col gap-2">
+          <div className="scan-row"><span className="label">Transmission</span><span className="value text-amber-400">84% Health</span></div>
+          <div className="scan-row"><span className="label">Engine</span><span className="value text-emerald-400">92% Health</span></div>
+        </div>
+      </div>
+    )
   },
   {
     num: '03',
     colorBase: 'text-emerald-500',
+    themeColor: '#10b981',
     icon: <Wrench className="size-8" />,
     title: 'Expert Repair',
-    desc: 'Book a slot. Our certified mechanics fix your bike using genuine parts, ensuring peak performance.'
+    desc: 'Book a slot. Our certified mechanics fix your bike using genuine parts, ensuring peak performance.',
+    ctaText: 'Meet Mechanics',
+    ctaLink: '#services',
+    mockup: (
+      <div className="mockup-mechanic">
+        <div className="mechanic-avatar">
+          <Wrench className="w-8 h-8" />
+          <div className="mechanic-status-dot"></div>
+        </div>
+        <div className="mechanic-info-inner">
+          <div className="mechanic-name">Certified Pro</div>
+          <div className="mechanic-rating">⭐ 4.9 (120+ repairs)</div>
+          <div className="badge-assigned">Assigned to bike</div>
+        </div>
+      </div>
+    )
   },
   {
     num: '04',
     colorBase: 'text-amber-500',
+    themeColor: '#f59e0b',
     icon: <Rocket className="size-8" />,
     title: 'Ready to Ride',
-    desc: 'Get your bike back in top condition. Pay online or at the workshop. Delivery guaranteed within our service area.'
+    desc: 'Get your bike back in top condition. Pay online or at the workshop. Delivery guaranteed within our service area.',
+    ctaText: 'Book Service Now',
+    ctaLink: '#booking',
+    mockup: (
+      <div className="mockup-completion">
+        <div className="completion-ring">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" className="ring-bg" />
+            <circle cx="50" cy="50" r="45" className="ring-progress" />
+          </svg>
+          <svg viewBox="0 0 100 100" className="completion-check-svg">
+            <path className="check-path" d="M30 50 L45 65 L70 35" fill="none" stroke="currentColor" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <div className="completion-shockwave"></div>
+          <div className="sparks-container">
+            <div className="spark"></div>
+            <div className="spark"></div>
+            <div className="spark"></div>
+            <div className="spark"></div>
+            <div className="spark"></div>
+            <div className="spark"></div>
+            <div className="spark"></div>
+            <div className="spark"></div>
+          </div>
+        </div>
+        <div className="completion-text">100% Ready</div>
+      </div>
+    )
   }
 ];
 
@@ -77,6 +150,29 @@ export default function LandingPage() {
 
   // --- Ref for mobile section ---
   const mobileSectionRef = useRef<HTMLDivElement>(null);
+
+  // --- Mobile Snap Deck Observer ---
+  const [activeMobileStep, setActiveMobileStep] = useState(0);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          const index = parseInt(entry.target.getAttribute('data-index') || '0');
+          setActiveMobileStep(index);
+        } else {
+          entry.target.classList.remove('active');
+        }
+      });
+    }, {
+      root: null,
+      threshold: 0.6
+    });
+
+    document.querySelectorAll('.snap-deck-card').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   // --- Refs for Animations ---
   const particlesRef = useRef<HTMLDivElement>(null);
@@ -800,13 +896,22 @@ export default function LandingPage() {
 
                   {/* The expanded view element (Details) */}
                   <div className="accordion-expanded-view">
-                    <div className={clsx("accordion-icon-wrap", step.colorBase)}>
-                      {step.icon}
-                    </div>
-                    <div className="accordion-text-wrap">
-                      <span className="accordion-small-num">Step {step.num}</span>
-                      <h3 className="accordion-title">{step.title}</h3>
-                      <p className="accordion-desc">{step.desc}</p>
+                    <div className="accordion-giant-watermark">{step.num}</div>
+                    <div className="accordion-expanded-inner">
+                      <div className="accordion-left-col">
+                        <div className={clsx("accordion-icon-wrap", step.colorBase)}>
+                          {step.icon}
+                        </div>
+                        <span className="accordion-small-num" style={{ marginTop: '16px' }}>Step {step.num}</span>
+                        <h3 className="accordion-title">{step.title}</h3>
+                        <p className="accordion-desc">{step.desc}</p>
+                        <a href={step.ctaLink} className="accordion-cta">
+                          {step.ctaText} <span className="cta-arrow">→</span>
+                        </a>
+                      </div>
+                      <div className="accordion-right-col">
+                        {step.mockup}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -814,28 +919,36 @@ export default function LandingPage() {
             ))}
           </div>
 
-          {/* MOBILE TIMELINE EXPERIENCE (Visible only on <1024px) */}
-          <div ref={mobileSectionRef} className="block lg:hidden mobile-timeline-wrapper">
-            <div className="mobile-timeline-line"></div>
-            <div className="mobile-timeline-cards">
+          {/* MOBILE SNAP-DECK EXPERIENCE (Visible only on <1024px) */}
+          <div className="block lg:hidden mobile-snap-deck-wrapper">
+            <div className="snap-deck-container">
               {HOW_STEPS.map((step, i) => (
-                <motion.div
+                <div
                   key={step.num}
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className="timeline-step-card glass-card hover-glow"
+                  data-index={i}
+                  className="snap-deck-card glass-card"
+                  style={{ '--theme-color': step.themeColor } as React.CSSProperties}
                 >
-                  <div className="timeline-dot"></div>
                   <div className="timeline-card-header">
                     <span className="timeline-num">{step.num}</span>
                     <div className={clsx("timeline-icon", step.colorBase)}>{step.icon}</div>
                   </div>
                   <h3 className="timeline-title">{step.title}</h3>
                   <p className="timeline-desc">{step.desc}</p>
-                </motion.div>
+                  <div className="timeline-mockup-wrapper">
+                    {step.mockup}
+                  </div>
+                  <a href={step.ctaLink} className="accordion-cta" style={{ marginTop: '24px' }}>
+                    {step.ctaText} <span className="cta-arrow">→</span>
+                  </a>
+                </div>
               ))}
+            </div>
+            {/* Morphing Pagination Indicator */}
+            <div className="snap-deck-pagination">
+               {HOW_STEPS.map((_, i) => (
+                  <div key={i} className={clsx("pagination-dot", activeMobileStep === i ? "active" : "")} />
+               ))}
             </div>
           </div>
         </div>

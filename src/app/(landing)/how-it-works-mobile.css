@@ -1,0 +1,177 @@
+/* how-it-works-mobile.css */
+
+/* Hide on desktop */
+@media (min-width: 1024px) {
+    .mobile-snap-deck-wrapper {
+        display: none !important;
+    }
+}
+
+.mobile-snap-deck-wrapper {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%); /* Full bleed */
+    padding: 20px 0 60px 0;
+    margin-top: 40px;
+    overflow: hidden;
+}
+
+.snap-deck-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    gap: 20px;
+    padding: 20px 50vw; /* padding to allow first/last cards to center */
+    padding-left: calc(50vw - 160px); /* Assuming card width roughly 320px */
+    padding-right: calc(50vw - 160px);
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.snap-deck-container::-webkit-scrollbar {
+    display: none;
+}
+
+.snap-deck-card {
+    scroll-snap-align: center;
+    flex: 0 0 320px;
+    max-width: 85vw;
+    position: relative;
+    padding: 30px;
+    border-radius: 24px;
+    background: rgba(20, 20, 30, 0.7) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    transform: scale(0.85);
+    opacity: 0.4;
+    filter: grayscale(80%) blur(2px);
+    
+    display: flex;
+    flex-direction: column;
+}
+
+/* When the card is active/centered via observer */
+.snap-deck-card.active {
+    transform: scale(1);
+    opacity: 1;
+    filter: grayscale(0%) blur(0px);
+    /* Dynamic Theme-Matched Background */
+    background: radial-gradient(circle at top right, color-mix(in srgb, var(--theme-color) 15%, rgba(25, 25, 35, 0.95)) 0%, rgba(10, 10, 15, 0.95) 100%) !important;
+    border: 1px solid color-mix(in srgb, var(--theme-color) 20%, rgba(255, 255, 255, 0.1)) !important;
+    border-top: 1px solid color-mix(in srgb, var(--theme-color) 50%, rgba(255, 255, 255, 0.25)) !important;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8), inset 0 0 0 1px color-mix(in srgb, var(--theme-color) 10%, rgba(255, 255, 255, 0.05));
+}
+
+.snap-deck-card .timeline-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.snap-deck-card .timeline-num {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.07);
+    line-height: 1;
+    transition: color 0.5s ease;
+}
+
+.snap-deck-card.active .timeline-num {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.snap-deck-card .timeline-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, currentColor 8%, transparent);
+    border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+    box-shadow: inset 0 0 20px color-mix(in srgb, currentColor 5%, transparent);
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.snap-deck-card.active .timeline-icon {
+    transform: scale(1.05) translateY(-4px);
+    background: color-mix(in srgb, currentColor 12%, transparent);
+    border-color: color-mix(in srgb, currentColor 40%, transparent);
+    box-shadow:
+        inset 0 0 20px color-mix(in srgb, currentColor 10%, transparent),
+        0 8px 24px color-mix(in srgb, currentColor 15%, transparent);
+}
+
+.snap-deck-card .timeline-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.snap-deck-card .timeline-desc {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.6;
+}
+
+.snap-deck-card .timeline-mockup-wrapper {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Re-trigger mockups on mobile active card */
+.snap-deck-card.active .mockup-msg.user { animation: chatPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.2s; }
+.snap-deck-card.active .mockup-msg.ai { animation: chatExpand 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.8s; }
+.snap-deck-card.active .mockup-msg.ai .typing-dots span { display: inline-block; animation: typing 1.4s infinite both; }
+.snap-deck-card.active .mockup-msg.ai .typing-dots { animation: hideDots 0.1s forwards 2s; }
+.snap-deck-card.active .mockup-msg.ai .ai-text { animation: showText 0.5s forwards 2s; }
+.snap-deck-card.active .scan-row { animation: rowSlide 0.5s forwards; }
+.snap-deck-card.active .scan-row:nth-child(1) { animation-delay: 0.4s; }
+.snap-deck-card.active .scan-row:nth-child(2) { animation-delay: 0.6s; }
+.snap-deck-card.active .mechanic-avatar { animation: lockOnAvatar 1.5s forwards; }
+.snap-deck-card.active .mechanic-status-dot { animation: badgePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.8s; }
+.snap-deck-card.active .badge-assigned { animation: badgePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 1s; }
+.snap-deck-card.active .ring-progress { stroke-dashoffset: 0; }
+.snap-deck-card.active .completion-check-svg { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.snap-deck-card.active .check-path { animation: drawCheck 0.4s ease-out forwards 0.7s; }
+.snap-deck-card.active .completion-shockwave { animation: shockwaveRipple 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) forwards 0.7s; }
+.snap-deck-card.active .completion-text { opacity: 1; transform: translateY(0); }
+.snap-deck-card.active .spark { animation: sparkBurst 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards 0.8s; }
+.snap-deck-card.active .accordion-cta { 
+    opacity: 1; 
+    transform: translateY(0); 
+    background: color-mix(in srgb, var(--theme-color) 15%, rgba(255, 255, 255, 0.02));
+    border-color: color-mix(in srgb, var(--theme-color) 40%, rgba(255, 255, 255, 0.1));
+    color: #fff;
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--theme-color) 20%, transparent);
+}
+
+/* Pagination Dots */
+.snap-deck-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+.pagination-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.pagination-dot.active {
+    width: 24px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
