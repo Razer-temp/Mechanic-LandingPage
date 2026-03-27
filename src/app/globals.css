@@ -2659,6 +2659,67 @@ body[style*="overflow: hidden"] .whatsapp-float {
     color: #00D1FF;
   }
 
+  /* --- ICON MICRO-INTERACTIONS --- */
+  
+  /* 1. Brain (Diagnosis) - Pulses with glowing shadow */
+  @keyframes pulse-brain {
+    0% { filter: drop-shadow(0 0 0 rgba(0, 209, 255, 0)); transform: scale(1); }
+    50% { filter: drop-shadow(0 0 8px rgba(0, 209, 255, 0.8)); transform: scale(1.15); }
+    100% { filter: drop-shadow(0 0 0 rgba(0, 209, 255, 0)); transform: scale(1); }
+  }
+  .mobile-nav-item[href="#diagnosis"]:active .mobile-nav-icon,
+  .mobile-nav-item[href="#diagnosis"].active .mobile-nav-icon {
+    animation: pulse-brain 0.6s ease-out;
+  }
+
+  /* 2. Wrench (Services) - Snaps 45deg back and forth */
+  @keyframes twist-wrench {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-45deg) scale(1.1); }
+    75% { transform: rotate(30deg) scale(1.1); }
+    100% { transform: rotate(0deg) scale(1); }
+  }
+  .mobile-nav-item[href="#services"]:active .mobile-nav-icon,
+  .mobile-nav-item[href="#services"].active .mobile-nav-icon {
+    animation: twist-wrench 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* 3. Sparkles (How It Works) - Pop sequential scale */
+  @keyframes pop-sparkles {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.35) rotate(15deg); filter: brightness(1.3); }
+    80% { transform: scale(0.9) rotate(-5deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+  .mobile-nav-item[href="#how-it-works"]:active .mobile-nav-icon,
+  .mobile-nav-item[href="#how-it-works"].active .mobile-nav-icon {
+    animation: pop-sparkles 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  /* 4. Message (Reviews) - Bottom-left elastic bounce */
+  @keyframes bounce-message {
+    0% { transform: scale(0.6) translateY(4px) translateX(-4px); }
+    60% { transform: scale(1.1) translateY(-2px) translateX(2px); }
+    100% { transform: scale(1) translateY(0) translateX(0); }
+  }
+  .mobile-nav-item[href="#reviews"]:active .mobile-nav-icon,
+  .mobile-nav-item[href="#reviews"].active .mobile-nav-icon {
+    animation: bounce-message 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: bottom left;
+  }
+
+  /* 5. Calendar (Booking CTA) - Shrink-pop confirmation */
+  @keyframes pop-calendar {
+    0% { transform: scale(1); }
+    40% { transform: scale(0.6); }
+    75% { transform: scale(1.25); }
+    100% { transform: scale(1); }
+  }
+  .mobile-nav-cta.active .mobile-nav-icon,
+  .mobile-nav-cta:active .mobile-nav-icon {
+    animation: pop-calendar 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
   /* Divider */
   .mobile-nav-divider {
     width: 1px;
