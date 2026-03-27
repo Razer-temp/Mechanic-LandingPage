@@ -2550,20 +2550,23 @@ body[style*="overflow: hidden"] .whatsapp-float {
   .footer-premium {
     padding-bottom: 100px !important;
   }
-  
+
   /* --- PREMIUM DYNAMIC ISLAND BOTTOM NAV (Visible < 768px) --- */
   .mobile-bottom-nav {
-    display: block; /* Override default hidden state */
+    display: block;
+    /* Override default hidden state */
     position: fixed;
     bottom: 24px;
     left: 50%;
-    transform: translateX(-50%) translateY(100px);
+    /* Combine transforms and force 3D hardware acceleration to fix iOS Safari backdrop-filter rendering bugs */
+    transform: translate3d(-50%, 100px, 0);
     z-index: 9000;
     width: 90%;
     max-width: 380px;
-    background: rgba(15, 18, 25, 0.7);
-    backdrop-filter: blur(24px) saturate(1.5);
+    background: rgba(15, 18, 25, 0.85); /* Slightly darker fallback for low-power mobile devices */
+    /* Vendor prefixes MUST come before standard properties for production minifiers */
     -webkit-backdrop-filter: blur(24px) saturate(1.5);
+    backdrop-filter: blur(24px) saturate(1.5);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 30px;
     padding: 8px 12px;
@@ -2571,18 +2574,19 @@ body[style*="overflow: hidden"] .whatsapp-float {
     transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     opacity: 0;
     pointer-events: none;
+    will-change: transform, opacity; /* Hinting browser to composite layer */
   }
 
   /* Reveal when scrolled past hero */
   .mobile-bottom-nav.visible {
-    transform: translateX(-50%) translateY(0);
+    transform: translate3d(-50%, 0, 0);
     opacity: 1;
     pointer-events: auto;
   }
 
   /* Hide bottom nav when AI Chat is opened */
   body:has(.floating-chat.open) .mobile-bottom-nav {
-    transform: translateX(-50%) translateY(150px) !important;
+    transform: translate3d(-50%, 150px, 0) !important;
     opacity: 0 !important;
     pointer-events: none !important;
   }
@@ -2591,6 +2595,7 @@ body[style*="overflow: hidden"] .whatsapp-float {
   body:has(.mobile-bottom-nav.visible) .whatsapp-float {
     bottom: 92px !important;
   }
+
   body:has(.mobile-bottom-nav.visible) .floating-chat:not(.open) {
     bottom: 160px !important;
   }
@@ -2632,8 +2637,15 @@ body[style*="overflow: hidden"] .whatsapp-float {
   }
 
   @keyframes slideInText {
-    from { opacity: 0; transform: translateX(-10px); }
-    to { opacity: 1; transform: translateX(0); }
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 
   /* Active State (Pill Expansion) */
