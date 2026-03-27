@@ -15,7 +15,7 @@ import './how-it-works-mobile.css';
 import './footer-premium.css';
 import '../animated-button.css';
 import clsx from 'clsx';
-import { MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle, PhoneCall, Check, Target, PhoneOutgoing, Search, Bot, Zap, ShieldCheck, Banknote, MapPin } from 'lucide-react';
+import { MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle, PhoneCall, Check, Target, PhoneOutgoing, Search, Bot, Zap, ShieldCheck, Banknote, MapPin, Star, Calendar } from 'lucide-react';
 import { KineticPiston, KineticGears, KineticDisc, KineticDroplet, KineticWarning, KineticLightning } from '@/components/icons/KineticIcons';
 import { motion } from 'framer-motion';
 
@@ -676,7 +676,7 @@ export default function LandingPage() {
       <section className="section section-diagnosis" id="diagnosis">
         <div className="container">
           <div className="section-header animate-on-scroll">
-            <span className="section-tag">🤖 AI-Powered</span>
+            <span className="section-tag"><BrainCircuit className="w-4 h-4" /> AI-Powered</span>
             <h2 className="section-title">Instant AI <span className="gradient-text">Bike Diagnosis</span></h2>
             <p className="section-desc">Describe your bike&apos;s problem and our AI will analyze it in seconds — giving you potential causes, urgency level, and estimated costs.</p>
           </div>
@@ -789,7 +789,7 @@ export default function LandingPage() {
       <section className="section section-services" id="services">
         <div className="container">
           <div className="section-header animate-on-scroll">
-            <span className="section-tag">🔧 What We Do</span>
+            <span className="section-tag"><Wrench className="w-4 h-4" /> What We Do</span>
             <h2 className="section-title">Our <span className="gradient-text">Services</span></h2>
             <p className="section-desc">From routine servicing to complex engine repairs — we handle every two-wheeler need with precision and care.</p>
           </div>
@@ -822,7 +822,7 @@ export default function LandingPage() {
       <section className="section section-why" id="why-us">
         <div className="container">
           <div className="section-header animate-on-scroll">
-            <span className="section-tag">💎 Why Us</span>
+            <span className="section-tag"><ShieldCheck className="w-4 h-4" /> Why Us</span>
             <h2 className="section-title">Why Choose <span className="gradient-text">SmartBike Pro</span>?</h2>
           </div>
           <div className="why-grid">
@@ -855,8 +855,8 @@ export default function LandingPage() {
 
         <div className="container relative z-10">
           <div className="text-center mb-16 lg:mb-24">
-            <span className="how-label-premium animate-on-scroll">
-              Process
+            <span className="section-tag animate-on-scroll">
+              <Sparkles className="w-4 h-4" /> Process
             </span>
             <h2 className="how-title-premium animate-on-scroll delay-100">
               How It <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Works</span>
@@ -958,7 +958,7 @@ export default function LandingPage() {
       <section className="section section-estimator" id="estimator">
         <div className="container">
           <div className="section-header animate-on-scroll">
-            <span className="section-tag">💡 Smart Tool</span>
+            <span className="section-tag"><Zap className="w-4 h-4" /> Smart Tool</span>
             <h2 className="section-title">AI <span className="gradient-text">Cost Estimator</span></h2>
             <p className="section-desc">Get an instant price range for your service — no obligation, no surprises.</p>
           </div>
@@ -1019,7 +1019,7 @@ export default function LandingPage() {
       <section className="section section-reviews" id="reviews">
         <div className="container">
           <div className="section-header animate-on-scroll">
-            <span className="section-tag">⭐ Testimonials</span>
+            <span className="section-tag"><Star className="w-4 h-4" /> Testimonials</span>
             <h2 className="section-title">What Our <span className="gradient-text">Customers Say</span></h2>
           </div>
           <div className="reviews-marquee-wrapper">
@@ -1088,9 +1088,9 @@ export default function LandingPage() {
       <section className="section section-booking" id="booking">
         <div className="container">
           <div className="section-header animate-on-scroll">
-            <span className="section-tag">📅 Book Now</span>
+            <span className="section-tag"><Calendar className="w-4 h-4" /> Book Now</span>
             <h2 className="section-title">Schedule Your <span className="gradient-text">Service</span></h2>
-            <p className="section-desc">Fill in the form and we&apos;ll confirm your slot within minutes.</p>
+            <p className="section-desc">Fill in the form and we'll confirm your slot within minutes.</p>
           </div>
           <div className="booking-card glass-card animate-on-scroll hover-glow">
             {bookingSuccess ? (
@@ -1209,7 +1209,7 @@ export default function LandingPage() {
       <section className="section section-contact" id="contact">
         <div className="container">
           <div className="section-header animate-on-scroll">
-            <span className="section-tag">📍 Visit Us</span>
+            <span className="section-tag"><MapPin className="w-4 h-4" /> Visit Us</span>
             <h2 className="section-title">Location & <span className="gradient-text">Contact</span></h2>
           </div>
           <div className="contact-grid">
