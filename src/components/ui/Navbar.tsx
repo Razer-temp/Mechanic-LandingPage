@@ -71,7 +71,7 @@ export function Navbar() {
                     <a href="#" className="nav-logo" onClick={(e) => scrollToSection(e, 'top')}>
                         <span className="logo-icon">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src="/logo.svg" alt="SmartBike Pro Logo" className="logo-svg w-6 h-6" />
+                            <img src="/logo.svg" alt="SmartBike Pro — AI Powered Bike Service Center" className="logo-svg w-6 h-6" width={24} height={24} />
                         </span>
                         <span className="logo-text">Smart<span className="accent">Bike</span> Pro</span>
                     </a>

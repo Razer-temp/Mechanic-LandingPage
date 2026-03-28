@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Sitemap: https://smartbikepro.vercel.app/sitemap.xml
+Disallow: /api/
+Disallow: /_next/

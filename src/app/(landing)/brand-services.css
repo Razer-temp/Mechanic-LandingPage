@@ -1,0 +1,437 @@
+/* ================================================================
+   BRAND SERVICES SECTION — Premium Cards
+   Fully isolated styles. Mobile styles at the bottom.
+   ================================================================ */
+
+/* --- Section Backdrop --- */
+.brand-services-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-services-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 25% 40%, rgba(167, 139, 250, 0.04) 0%, transparent 55%),
+              radial-gradient(ellipse at 75% 60%, rgba(0, 200, 255, 0.03) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+/* --- Grid Layout --- */
+.brand-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 1024px) {
+  .brand-cards-grid {
+    background: radial-gradient(circle at top center, rgba(30, 30, 45, 0.5) 0%, rgba(10, 10, 18, 0.7) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 32px;
+    padding: 40px;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05),
+                0 25px 50px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
+
+/* --- Individual Brand Card --- */
+.brand-service-card {
+  --brand-color: #00d4ff;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  height: 100%;
+  cursor: default;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  isolation: isolate;
+}
+
+/* Gradient border using ::before */
+.brand-service-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--brand-color) 30%, transparent) 0%,
+    transparent 40%,
+    transparent 60%,
+    color-mix(in srgb, var(--brand-color) 15%, transparent) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: background 0.5s ease;
+  z-index: 2;
+}
+
+/* Inner card content area */
+.brand-card-inner {
+  position: relative;
+  background: linear-gradient(
+    165deg,
+    rgba(40, 42, 55, 0.6) 0%,
+    rgba(20, 20, 28, 0.8) 100%
+  );
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1),
+              0 8px 32px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 32px 28px 28px;
+  min-height: 320px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+/* Ambient glow behind card */
+.brand-card-glow {
+  position: absolute;
+  top: -40%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+  background: radial-gradient(
+    circle at 30% 20%,
+    color-mix(in srgb, var(--brand-color) 6%, transparent) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Hover state — desktop */
+.brand-service-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+              0 0 40px color-mix(in srgb, var(--brand-color) 8%, transparent);
+}
+
+.brand-service-card:hover::before {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--brand-color) 60%, transparent) 0%,
+    color-mix(in srgb, var(--brand-color) 15%, transparent) 30%,
+    transparent 50%,
+    color-mix(in srgb, var(--brand-color) 20%, transparent) 80%,
+    color-mix(in srgb, var(--brand-color) 50%, transparent) 100%
+  );
+}
+
+.brand-service-card:hover .brand-card-glow {
+  opacity: 1;
+}
+
+/* --- Card Header (Logo + Brand Name) --- */
+.brand-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.brand-logo-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+}
+
+.brand-logo-circle img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: brightness(0) invert(1) opacity(0.5);
+  transition: filter 0.4s ease;
+}
+
+.brand-service-card:hover .brand-logo-circle {
+  border-color: color-mix(in srgb, var(--brand-color) 50%, transparent);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--brand-color) 20%, transparent);
+  transform: scale(1.05);
+}
+
+.brand-service-card:hover .brand-logo-circle img {
+  filter: brightness(1) saturate(1.2);
+}
+
+.brand-card-brand-name {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--brand-color);
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.brand-service-card:hover .brand-card-brand-name {
+  opacity: 1;
+}
+
+.brand-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary, #fff);
+  line-height: 1.3;
+}
+
+/* --- Service Tags --- */
+.brand-service-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.brand-service-tag {
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  background: color-mix(in srgb, var(--brand-color) 8%, transparent);
+  color: color-mix(in srgb, var(--brand-color) 80%, #fff);
+  border: 1px solid color-mix(in srgb, var(--brand-color) 12%, transparent);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.brand-service-card:hover .brand-service-tag {
+  background: color-mix(in srgb, var(--brand-color) 14%, transparent);
+  border-color: color-mix(in srgb, var(--brand-color) 25%, transparent);
+}
+
+/* --- Description --- */
+.brand-card-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #888);
+  line-height: 1.7;
+  flex-grow: 1;
+  margin-bottom: 20px;
+}
+
+/* --- CTA Button --- */
+.brand-card-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  color: #fff;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--brand-color) 25%, rgba(255,255,255,0.06)) 0%,
+    color-mix(in srgb, var(--brand-color) 10%, rgba(255,255,255,0.02)) 100%
+  );
+  border: 1px solid color-mix(in srgb, var(--brand-color) 20%, transparent);
+  text-decoration: none;
+  transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.brand-card-cta::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--brand-color) 15%, transparent) 50%,
+    transparent 100%
+  );
+  transition: left 0.6s ease;
+}
+
+.brand-card-cta:hover {
+  border-color: color-mix(in srgb, var(--brand-color) 50%, transparent);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--brand-color) 15%, transparent);
+  transform: translateY(-1px);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--brand-color) 35%, rgba(255,255,255,0.08)) 0%,
+    color-mix(in srgb, var(--brand-color) 15%, rgba(255,255,255,0.03)) 100%
+  );
+}
+
+.brand-card-cta:hover::after {
+  left: 100%;
+}
+
+.brand-cta-arrow {
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.brand-card-cta:hover .brand-cta-arrow {
+  transform: translateX(3px);
+}
+
+/* --- Staggered entry animation --- */
+.brand-service-card:nth-child(1) { transition-delay: 0ms; }
+.brand-service-card:nth-child(2) { transition-delay: 60ms; }
+.brand-service-card:nth-child(3) { transition-delay: 120ms; }
+.brand-service-card:nth-child(4) { transition-delay: 180ms; }
+.brand-service-card:nth-child(5) { transition-delay: 240ms; }
+.brand-service-card:nth-child(6) { transition-delay: 300ms; }
+
+
+/* ================================================================
+   MOBILE STYLES — Completely isolated
+   ================================================================ */
+@media (max-width: 767px) {
+  .brand-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 4px;
+  }
+
+  .brand-card-inner {
+    padding: 24px 20px 22px;
+    min-height: auto;
+    border-radius: 16px;
+  }
+
+  .brand-service-card {
+    border-radius: 16px;
+  }
+
+  .brand-service-card::before {
+    border-radius: 16px;
+  }
+
+  /* Mobile: always show subtle brand glow */
+  .brand-card-glow {
+    opacity: 0.5;
+  }
+
+  .brand-card-header {
+    margin-bottom: 14px;
+    gap: 12px;
+  }
+
+  .brand-logo-circle {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+  }
+
+  .brand-logo-circle img {
+    width: 28px;
+    height: 28px;
+    /* On mobile, show brand colors always */
+    filter: brightness(1) saturate(1);
+  }
+
+  .brand-card-brand-name {
+    opacity: 1;
+    font-size: 0.68rem;
+  }
+
+  .brand-card-title {
+    font-size: 1.05rem;
+  }
+
+  .brand-service-tags {
+    gap: 5px;
+    margin-bottom: 12px;
+  }
+
+  .brand-service-tag {
+    font-size: 0.68rem;
+    padding: 3px 10px;
+  }
+
+  .brand-card-desc {
+    font-size: 0.82rem;
+    margin-bottom: 16px;
+  }
+
+  .brand-card-cta {
+    padding: 12px 20px;
+    font-size: 0.8rem;
+    border-radius: 10px;
+  }
+
+  /* Mobile ignition/tap interaction */
+  .brand-service-card.animate-ignition {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
+                0 0 25px color-mix(in srgb, var(--brand-color) 8%, transparent);
+  }
+
+  .brand-service-card.animate-ignition::before {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--brand-color) 50%, transparent) 0%,
+      color-mix(in srgb, var(--brand-color) 12%, transparent) 30%,
+      transparent 50%,
+      color-mix(in srgb, var(--brand-color) 15%, transparent) 80%,
+      color-mix(in srgb, var(--brand-color) 40%, transparent) 100%
+    );
+  }
+
+  .brand-service-card.animate-ignition .brand-card-glow {
+    opacity: 1;
+  }
+
+  .brand-service-card.animate-ignition .brand-logo-circle {
+    border-color: color-mix(in srgb, var(--brand-color) 40%, transparent);
+    box-shadow: 0 0 15px color-mix(in srgb, var(--brand-color) 15%, transparent);
+  }
+
+  .brand-service-card.animate-ignition .brand-card-cta {
+    border-color: color-mix(in srgb, var(--brand-color) 40%, transparent);
+    box-shadow: 0 2px 12px color-mix(in srgb, var(--brand-color) 10%, transparent);
+  }
+
+  /* Active press state */
+  .brand-service-card:active {
+    transform: scale(0.985);
+    transition-duration: 0.1s;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .brand-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .brand-card-inner {
+    min-height: 290px;
+  }
+}

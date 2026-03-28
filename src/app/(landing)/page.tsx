@@ -13,9 +13,10 @@ import './how-it-works.css';
 import './how-it-works-mockups.css';
 import './how-it-works-mobile.css';
 import './footer-premium.css';
+import './brand-services.css';
 import '../animated-button.css';
 import clsx from 'clsx';
-import { MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle, PhoneCall, Check, Target, PhoneOutgoing, Search, Bot, Zap, ShieldCheck, Banknote, MapPin, Star, Calendar, Calculator, IndianRupee, CalendarCheck, CheckCircle, Send, MessageSquare } from 'lucide-react';
+import { MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle, PhoneCall, Check, Target, PhoneOutgoing, Search, Bot, Zap, ShieldCheck, Banknote, MapPin, Star, Calendar, Calculator, IndianRupee, CalendarCheck, CheckCircle, Send, MessageSquare, ChevronDown, Award, BadgeCheck } from 'lucide-react';
 import { KineticPiston, KineticGears, KineticDisc, KineticDroplet, KineticWarning, KineticLightning } from '@/components/icons/KineticIcons';
 import { motion } from 'framer-motion';
 
@@ -155,6 +156,7 @@ export default function LandingPage() {
   // showFloating removed — buttons are always visible
   const supabase = createClient();
   const chatMessagesRef = useRef<HTMLDivElement>(null);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
   // --- Ref for mobile section ---
   const mobileSectionRef = useRef<HTMLDivElement>(null);
@@ -616,15 +618,15 @@ export default function LandingPage() {
           </div>
           <h1 className="hero-title animate-on-scroll">
             <span className="text-reveal-wrapper">
-              <span className="text-reveal delay-100">Smart Bike Care.</span>
+              <span className="text-reveal delay-100">AI-Powered Two-Wheeler</span>
             </span>
             <br />
             <span className="text-reveal-wrapper">
-              <span className="text-reveal delay-300 gradient-text">Faster. Better.</span>
+              <span className="text-reveal delay-300 gradient-text">Service & Bike Repair Center</span>
             </span>
           </h1>
           <p className="hero-subtitle animate-on-scroll delay-500">
-            AI-Powered Two-Wheeler Diagnostics &amp; Repair — Expert mechanics, instant diagnosis, and transparent pricing for your ride.
+            India&apos;s smartest bike mechanic — AI-powered two-wheeler diagnostics, expert motorcycle repair, and transparent pricing. Book your bike service online today.
           </p>
           <div className="hero-ctas animate-on-scroll delay-500 flex flex-wrap justify-center gap-4">
             {/* 1. Book Service -> Check */}
@@ -634,7 +636,7 @@ export default function LandingPage() {
                   <Wrench className="absolute w-5 h-5 text-gray-400 group-hover:text-cyan-400 transition-all duration-500 group-hover:opacity-0 group-hover:-rotate-90 group-hover:scale-50" />
                   <Check className="absolute w-5 h-5 text-cyan-400 opacity-0 scale-50 rotate-90 transition-all duration-500 group-hover:opacity-100 group-hover:rotate-0 group-hover:scale-100" />
                 </div>
-                <span>Book Service</span>
+                <span>Book Bike Repair Service</span>
               </div>
             </a>
 
@@ -645,7 +647,7 @@ export default function LandingPage() {
                   <BrainCircuit className="absolute w-4 h-4 text-gray-400 group-hover:text-fuchsia-400 transition-all duration-500 group-hover:opacity-0 group-hover:scale-50" />
                   <Sparkles className="absolute w-4 h-4 text-fuchsia-400 opacity-0 scale-150 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100" />
                 </div>
-                <span className="text-gray-300 group-hover:text-white transition-colors duration-300">AI Bike Check</span>
+                <span className="text-gray-300 group-hover:text-white transition-colors duration-300">Get AI Bike Diagnosis</span>
               </div>
             </a>
 
@@ -685,8 +687,8 @@ export default function LandingPage() {
         <div className="container">
           <div className="section-header animate-on-scroll">
             <span className="section-tag"><BrainCircuit className="w-4 h-4" /> AI-Powered</span>
-            <h2 className="section-title">Instant AI <span className="gradient-text">Bike Diagnosis</span></h2>
-            <p className="section-desc">Describe your bike&apos;s problem and our AI will analyze it in seconds — giving you potential causes, urgency level, and estimated costs.</p>
+            <h2 className="section-title">AI Bike Diagnosis — <span className="gradient-text">Instant Symptom Analysis</span></h2>
+            <p className="section-desc">Describe your two-wheeler&apos;s problem and our AI bike mechanic will analyze it in seconds — giving you potential causes, urgency level, and estimated repair costs. No visit needed.</p>
           </div>
           <div className="diagnosis-grid">
             <div className="diagnosis-input-card glass-card animate-on-scroll hover-glow tilt-card">
@@ -760,7 +762,7 @@ export default function LandingPage() {
                     <p>{diagnosisResult.tip}</p>
                   </div>
                   <a href="#booking" className="btn btn-primary btn-glow btn-full" style={{ marginTop: '20px' }}>
-                    <span>📅</span> Book Repair Now
+                    <span>📅</span> Book Bike Engine Repair
                   </a>
                 </div>
               ) : diagnosisAttempted ? (
@@ -798,17 +800,17 @@ export default function LandingPage() {
         <div className="container">
           <div className="section-header animate-on-scroll">
             <span className="section-tag"><Wrench className="w-4 h-4" /> What We Do</span>
-            <h2 className="section-title">Our <span className="gradient-text">Services</span></h2>
-            <p className="section-desc">From routine servicing to complex engine repairs — we handle every two-wheeler need with precision and care.</p>
+            <h2 className="section-title">Two-Wheeler Repair Services — <span className="gradient-text">Engine, Brakes, Electrical & More</span></h2>
+            <p className="section-desc">From routine bike servicing to complex engine repairs — our certified bike mechanics handle every two-wheeler service need with precision. Available for doorstep bike service across India.</p>
           </div>
           <div className="services-grid">
             {[
-              { icon: KineticPiston, neonColor: '#22d3ee', title: 'Engine Repair', desc: 'Complete engine overhaul, timing chain, piston repair, and head gasket replacement.', price: 'From ₹1,500*' },
-              { icon: KineticGears, neonColor: '#e879f9', title: 'Full Servicing', desc: 'Oil change, filter replacement, chain adjustment, spark plug — complete care package.', price: 'From ₹799*' },
-              { icon: KineticDisc, neonColor: '#f87171', title: 'Brake Fix', desc: 'Disc & drum brake pads, brake fluid change, ABS diagnostics, and caliper servicing.', price: 'From ₹500*' },
-              { icon: KineticDroplet, neonColor: '#fbbf24', title: 'Oil Change', desc: 'Premium synthetic & semi-synthetic engine oil with filter replacement.', price: 'From ₹350*' },
-              { icon: KineticWarning, neonColor: '#fb923c', title: 'Emergency Repair', desc: 'Roadside assistance, flat tire, towing service, and emergency breakdown support.', price: 'From ₹299*' },
-              { icon: KineticLightning, neonColor: '#facc15', title: 'Electrical Work', desc: 'Wiring repair, headlight upgrade, battery replacement, ECU diagnostics.', price: 'From ₹400*' },
+              { icon: KineticPiston, neonColor: '#22d3ee', title: 'Engine Repair Service', desc: 'Complete engine overhaul, timing chain, piston repair, and head gasket replacement for all motorcycle models.', price: 'From ₹1,500*' },
+              { icon: KineticGears, neonColor: '#e879f9', title: 'Full Bike Servicing Package', desc: 'Oil change, filter replacement, chain adjustment, spark plug — complete two-wheeler care package.', price: 'From ₹799*' },
+              { icon: KineticDisc, neonColor: '#f87171', title: 'Brake Repair & Replacement', desc: 'Disc & drum brake pads, brake fluid change, ABS diagnostics, and caliper servicing for bikes and scooters.', price: 'From ₹500*' },
+              { icon: KineticDroplet, neonColor: '#fbbf24', title: 'Engine Oil Change Service', desc: 'Premium synthetic & semi-synthetic engine oil with filter replacement. Bike oil change near me.', price: 'From ₹350*' },
+              { icon: KineticWarning, neonColor: '#fb923c', title: 'Emergency Bike Repair & Roadside Assistance', desc: 'Emergency bike repair service, flat tire fix, towing, and 24/7 roadside breakdown support.', price: 'From ₹299*' },
+              { icon: KineticLightning, neonColor: '#facc15', title: 'Electrical Diagnostics & Repair', desc: 'Wiring repair, headlight upgrade, battery replacement, ECU diagnostics for two-wheelers.', price: 'From ₹400*' },
             ].map((s, i) => (
               <div key={i} className="service-card glass-card animate-on-scroll hover-glow tilt-card group" style={{ '--neon-color': s.neonColor } as React.CSSProperties}>
                 <div className="service-icon kinetic-icon-wrap">
@@ -831,16 +833,16 @@ export default function LandingPage() {
         <div className="container">
           <div className="section-header animate-on-scroll">
             <span className="section-tag"><ShieldCheck className="w-4 h-4" /> Why Us</span>
-            <h2 className="section-title">Why Choose <span className="gradient-text">SmartBike Pro</span>?</h2>
+            <h2 className="section-title">Why Choose SmartBike Pro for Your <span className="gradient-text">Bike Service</span>?</h2>
           </div>
           <div className="why-grid">
             {[
-              { icon: Bot, neonColor: '#22d3ee', title: 'AI Diagnostics', desc: 'Our AI engine analyzes 1000+ bike symptoms to pinpoint issues before you even visit.' },
-              { icon: Wrench, neonColor: '#e879f9', title: 'Expert Mechanics', desc: 'Certified technicians with 10+ years experience across all bike brands.' },
-              { icon: Zap, neonColor: '#facc15', title: 'Fast Turnaround', desc: 'Most services completed within 2-4 hours. Same-day delivery guaranteed.' },
-              { icon: Banknote, neonColor: '#4ade80', title: 'Transparent Pricing', desc: 'No hidden charges. AI-powered cost estimation before you commit to any repair.' },
-              { icon: ShieldCheck, neonColor: '#60a5fa', title: 'Warranty Assured', desc: '6-month warranty on all repairs. Genuine parts with quality guarantee.' },
-              { icon: MapPin, neonColor: '#f87171', title: 'Pickup & Drop', desc: 'Free pick-up and delivery within 10km radius. Hassle-free doorstep service.' },
+              { icon: Bot, neonColor: '#22d3ee', title: 'AI Bike Diagnosis', desc: 'Our AI engine analyzes 1000+ two-wheeler symptoms to pinpoint issues before you even visit the bike service center.' },
+              { icon: Wrench, neonColor: '#e879f9', title: 'Expert Bike Mechanics', desc: 'Certified bike mechanics with 10+ years experience across Honda, Hero, Royal Enfield, KTM, and all major brands.' },
+              { icon: Zap, neonColor: '#facc15', title: 'Fast Two-Wheeler Repair', desc: 'Most motorcycle repair services completed within 2-4 hours. Same-day bike service delivery guaranteed.' },
+              { icon: Banknote, neonColor: '#4ade80', title: 'Transparent Pricing', desc: 'No hidden charges. AI-powered cost estimation before you commit to any bike repair or servicing.' },
+              { icon: ShieldCheck, neonColor: '#60a5fa', title: '6-Month Repair Warranty', desc: '6-month warranty on all two-wheeler repairs. Genuine OEM parts with quality guarantee from the best bike service center in India.' },
+              { icon: MapPin, neonColor: '#f87171', title: 'Doorstep Bike Service', desc: 'Free pick-up and delivery within 10km radius. Hassle-free doorstep bike service at your home or office.' },
             ].map((w, i) => (
               <div key={i} className="why-card animate-on-scroll hover-glow tilt-card group" style={{ '--neon-color': w.neonColor } as React.CSSProperties}>
                 <div className="neural-bg"></div>
@@ -867,10 +869,10 @@ export default function LandingPage() {
               <Sparkles className="w-4 h-4" /> Process
             </span>
             <h2 className="how-title-premium animate-on-scroll delay-100">
-              How It <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Works</span>
+              How Our Bike Repair <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Process Works</span>
             </h2>
             <p className="how-subtitle-premium animate-on-scroll delay-200">
-              From diagnosis to repair — seamless, smart, and stress-free.
+              From AI bike diagnosis to expert two-wheeler repair — seamless, smart, and stress-free.
             </p>
           </div>
 
@@ -977,8 +979,8 @@ export default function LandingPage() {
         <div className="container">
           <div className="section-header animate-on-scroll">
             <span className="section-tag"><Zap className="w-4 h-4" /> Smart Tool</span>
-            <h2 className="section-title">AI <span className="gradient-text">Cost Estimator</span></h2>
-            <p className="section-desc">Get an instant price range for your service — no obligation, no surprises.</p>
+            <h2 className="section-title">AI Bike Service <span className="gradient-text">Cost Estimator</span></h2>
+            <p className="section-desc">Get an instant two-wheeler repair price range — select your bike type and service, and our AI generates accurate estimates. No obligation, no surprises.</p>
           </div>
           <div className="estimator-card glass-card animate-on-scroll hover-glow tilt-card">
             <div className="estimator-form">
@@ -1054,7 +1056,7 @@ export default function LandingPage() {
         <div className="container">
           <div className="section-header animate-on-scroll">
             <span className="section-tag"><Star className="w-4 h-4" /> Testimonials</span>
-            <h2 className="section-title">What Our <span className="gradient-text">Customers Say</span></h2>
+            <h2 className="section-title">Customer Reviews — <span className="gradient-text">Trusted Two-Wheeler Service</span></h2>
           </div>
           <div className="reviews-marquee-wrapper">
             {/* Row 1: Scroll Left */}
@@ -1123,8 +1125,8 @@ export default function LandingPage() {
         <div className="container">
           <div className="section-header animate-on-scroll">
             <span className="section-tag"><Calendar className="w-4 h-4" /> Book Now</span>
-            <h2 className="section-title">Schedule Your <span className="gradient-text">Service</span></h2>
-            <p className="section-desc">Fill in the form and we'll confirm your slot within minutes.</p>
+            <h2 className="section-title">Book Your Bike Service <span className="gradient-text">Online</span></h2>
+            <p className="section-desc">Schedule your two-wheeler service online — fill in the form and we&apos;ll confirm your slot within minutes. Doorstep bike service available.</p>
           </div>
           <div className="booking-card glass-card animate-on-scroll hover-glow">
             {bookingSuccess ? (
@@ -1257,7 +1259,7 @@ export default function LandingPage() {
                           data-hover-enter
                         />
                       </div>
-                      <span>Confirm Booking</span>
+                      <span>Schedule Two-Wheeler Servicing</span>
                     </div>
                   </button>
                 </div>
@@ -1272,7 +1274,7 @@ export default function LandingPage() {
         <div className="container">
           <div className="section-header animate-on-scroll">
             <span className="section-tag"><MapPin className="w-4 h-4" /> Visit Us</span>
-            <h2 className="section-title">Location & <span className="gradient-text">Contact</span></h2>
+            <h2 className="section-title">Bike Service Center <span className="gradient-text">Location & Contact</span></h2>
           </div>
           <div className="contact-grid">
             <div className="contact-info glass-card animate-on-scroll">
@@ -1344,9 +1346,158 @@ export default function LandingPage() {
             <div className="contact-map glass-card animate-on-scroll">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3498.885559275282!2d77.1736294!3d28.722965900000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d0173dbf9bd49%3A0x5cb504c3469666a!2sMannu%20Bike%20Repair%20Centre!5e0!3m2!1sen!2sin!4v1770802264534!5m2!1sen!2sin"
+                title="SmartBike Pro — Bike Service Center Location on Google Maps"
                 width="100%" height="100%" style={{ border: 0, borderRadius: '16px' }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade">
               </iframe>
             </div>
+          </div>
+        </div>
+      </section>
+
+
+      {/* ===== BRAND-SPECIFIC SERVICE SECTION ===== */}
+      <section className="section brand-services-section" id="brand-services">
+        <div className="container">
+          <div className="section-header animate-on-scroll">
+            <span className="section-tag"><Wrench className="w-4 h-4" /> Brand Expertise</span>
+            <h2 className="section-title">Expert Service for All Major <span className="gradient-text">Two-Wheeler Brands</span></h2>
+            <p className="section-desc">Our certified bike mechanics specialize in servicing all popular motorcycle and scooter brands across India. From Honda Activa to Royal Enfield Bullet — we know your bike.</p>
+          </div>
+          <div className="brand-cards-grid">
+            {[
+              { brand: 'Honda', color: '#CC0000', logo: '/logos/Honda_Logo.svg.png', title: 'Honda Bike Service Center', services: ['Oil Change', 'Carburetor', 'Brake Service', 'Chain Adj.'], desc: 'Certified mechanics for all Honda models — Activa, Shine, Unicorn, CB, SP125, Hornet and more.' },
+              { brand: 'Hero', color: '#E6233B', logo: '/logos/hero.png', title: 'Hero Motorcycle Service', services: ['Engine Tune', 'Clutch Repair', 'Electrical', 'Full Service'], desc: 'Expert service for Hero Splendor, HF Deluxe, Glamour, Xtreme, Xpulse and all Hero models.' },
+              { brand: 'Royal Enfield', color: '#D4A843', logo: '/logos/RE.png', title: 'Royal Enfield Service Center', services: ['Engine Overhaul', 'Timing Chain', 'Exhaust', 'Vibration Fix'], desc: 'Specialized Royal Enfield mechanics for Classic, Bullet, Meteor, Himalayan, Hunter and Continental GT.' },
+              { brand: 'KTM', color: '#FF6600', logo: '/logos/KTM-logo-768x432.png', title: 'KTM Sports Bike Service', services: ['Performance', 'Suspension', 'Brake Upgrade', 'ECU Map'], desc: 'High-performance service for KTM Duke, RC, Adventure series. Sport bike specialists.' },
+              { brand: 'Bajaj', color: '#4A9FD9', logo: '/logos/Bajaj-Logo-640x360.png', title: 'Bajaj Motorcycle Repair', services: ['Pulsar Tune', 'Chain Sprocket', 'Fuel Injection', 'Full Service'], desc: 'Complete Bajaj bike service for Pulsar, Dominar, Avenger, CT, Platina and all models.' },
+              { brand: 'TVS', color: '#5B7FD6', logo: '/logos/TVS-Motor-Company-640x240.png', title: 'TVS Scooter & Bike Service', services: ['CVT Belt', 'Brake Pads', 'Battery', 'General Tune'], desc: 'Authorized-level service for TVS Jupiter, Ntorq, Apache, Raider, iQube electric and more.' },
+            ].map((b, i) => (
+              <div
+                key={i}
+                className="brand-service-card animate-on-scroll"
+                style={{ '--brand-color': b.color } as React.CSSProperties}
+              >
+                <div className="brand-card-glow"></div>
+                <div className="brand-card-inner">
+                  <div className="brand-card-header">
+                    <div className="brand-logo-circle">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={b.logo} alt={`${b.brand} two-wheeler service and repair`} width={32} height={32} loading="lazy" />
+                    </div>
+                    <div>
+                      <div className="brand-card-brand-name">{b.brand}</div>
+                      <h3 className="brand-card-title">{b.title}</h3>
+                    </div>
+                  </div>
+                  <div className="brand-service-tags">
+                    {b.services.map((svc, j) => (
+                      <span key={j} className="brand-service-tag">{svc}</span>
+                    ))}
+                  </div>
+                  <p className="brand-card-desc">{b.desc}</p>
+                  <a href="#booking" className="brand-card-cta">
+                    <span>Book {b.brand} Service</span>
+                    <svg className="brand-cta-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== FAQ SECTION (Visible for Featured Snippets) ===== */}
+      <section className="section" id="faq">
+        <div className="container">
+          <div className="section-header animate-on-scroll">
+            <span className="section-tag"><MessageSquareText className="w-4 h-4" /> FAQs</span>
+            <h2 className="section-title">Frequently Asked <span className="gradient-text">Questions</span></h2>
+            <p className="section-desc">Everything you need to know about our AI-powered two-wheeler service, bike repair process, and pricing.</p>
+          </div>
+          <div className="animate-on-scroll" style={{ maxWidth: '800px', margin: '0 auto' }}>
+            {[
+              { q: 'How does AI bike diagnosis work?', a: 'SmartBike Pro\'s AI analyzes 1000+ bike symptoms from your description to diagnose issues, estimate repair costs, and recommend urgency level — all before your visit. Our AI bike mechanic uses real-world repair data from thousands of two-wheeler service records to provide accurate results.' },
+              { q: 'What two-wheeler brands do you service?', a: 'We service all major brands including Honda, Hero, Royal Enfield, TVS, Bajaj, Suzuki, KTM, Kawasaki, Yamaha, Jawa, and Harley-Davidson. Our bike mechanics are trained and certified across all motorcycle and scooter models available in India.' },
+              { q: 'How much does a bike service cost?', a: 'Services start from ₹299 for emergency repair, ₹350 for oil change, ₹500 for brake fix, ₹799 for full servicing, and ₹1,500 for engine repair. Use our AI cost estimator for exact pricing based on your specific bike model and service type.' },
+              { q: 'Do you offer pickup and drop for bike service?', a: 'Yes, we offer free pickup and drop within a 10km radius for doorstep bike service. Book online and our team will collect your two-wheeler and return it after servicing — completely hassle-free.' },
+              { q: 'How long does a bike service take?', a: 'Most two-wheeler services are completed within 2-4 hours. Same-day service is available for standard maintenance like oil change and brake service. Emergency bike repairs are prioritized for the fastest turnaround.' },
+              { q: 'Is there a warranty on bike repairs?', a: 'Yes. All repairs at SmartBike Pro come with a 6-month warranty. We use only genuine OEM parts from certified suppliers, ensuring your motorcycle repair is reliable and long-lasting.' },
+              { q: 'Can I book bike service online?', a: 'Yes. Use our online bike repair booking form to schedule your service, select your bike model, describe the issue, and choose your preferred slot. You\'ll receive confirmation within minutes.' },
+              { q: 'What is the contact number for SmartBike Pro?', a: 'You can call us at +91-9811530780. Our bike service center is available 7 days a week. You can also reach us via WhatsApp for quick queries and appointment booking.' },
+              { q: 'Do you repair electric scooters?', a: 'Yes. We service all electric two-wheelers including Ather, Ola, TVS iQube, Bajaj Chetak, and Hero Vida. Our EV-trained mechanics handle battery diagnostics, motor servicing, and software updates.' },
+              { q: 'How does the AI cost estimator work?', a: 'Select your bike type and service type, and our AI instantly generates a price estimate range based on real repair data from our bike service center. There\'s no obligation to proceed — it\'s completely free to use.' },
+            ].map((faq, i) => (
+              <div key={i} className="glass-card hover-glow" style={{ marginBottom: '12px', borderRadius: '12px', overflow: 'hidden' }}>
+                <button
+                  onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
+                  className="group"
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '18px 24px',
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    color: 'var(--text-primary, #fff)',
+                    fontSize: '0.95rem',
+                    fontWeight: 600,
+                    fontFamily: 'inherit',
+                    gap: '16px',
+                  }}
+                  aria-expanded={openFaqIndex === i}
+                  aria-controls={`faq-answer-${i}`}
+                >
+                  <span>{faq.q}</span>
+                  <ChevronDown
+                    className="w-5 h-5 flex-shrink-0 transition-transform duration-300"
+                    style={{ transform: openFaqIndex === i ? 'rotate(180deg)' : 'rotate(0deg)', color: 'var(--text-muted)' }}
+                  />
+                </button>
+                <div
+                  id={`faq-answer-${i}`}
+                  role="region"
+                  style={{
+                    maxHeight: openFaqIndex === i ? '300px' : '0',
+                    overflow: 'hidden',
+                    transition: 'max-height 0.4s ease, padding 0.3s ease',
+                    padding: openFaqIndex === i ? '0 24px 18px 24px' : '0 24px',
+                  }}
+                >
+                  <p style={{ color: 'var(--text-secondary, #999)', fontSize: '0.88rem', lineHeight: '1.7' }}>{faq.a}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* ===== TRUST SIGNALS SECTION ===== */}
+      <section className="section" id="trust-signals">
+        <div className="container">
+          <div className="section-header animate-on-scroll">
+            <span className="section-tag"><ShieldCheck className="w-4 h-4" /> Trust</span>
+            <h2 className="section-title">Trusted <span className="gradient-text">Two-Wheeler Service Center</span></h2>
+          </div>
+          <div className="why-grid animate-on-scroll" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
+            {[
+              { icon: Star, neonColor: '#facc15', title: '127+ Verified Reviews', desc: 'Rated 4.9/5 by real customers across India. Our two-wheeler service center is among the highest rated in the country.' },
+              { icon: ShieldCheck, neonColor: '#60a5fa', title: '6-Month Repair Warranty', desc: 'Every bike repair at SmartBike Pro comes with a comprehensive 6-month warranty covering parts and labour.' },
+              { icon: Award, neonColor: '#4ade80', title: 'Genuine OEM Parts Only', desc: 'We use only authentic, manufacturer-certified parts for all motorcycle repair and scooter service work.' },
+              { icon: BadgeCheck, neonColor: '#e879f9', title: 'Certified Bike Mechanics', desc: 'All our two-wheeler mechanics are factory-trained and certified with 10+ years of hands-on experience.' },
+            ].map((t, i) => (
+              <div key={i} className="why-card animate-on-scroll hover-glow tilt-card group" style={{ '--neon-color': t.neonColor, textAlign: 'center' } as React.CSSProperties}>
+                <div className="neural-bg"></div>
+                <div className="why-icon-wrap kinetic-icon-wrap" style={{ margin: '0 auto' }}>
+                  <t.icon className="kinetic-svg" />
+                </div>
+                <h3>{t.title}</h3>
+                <p>{t.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

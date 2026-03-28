@@ -245,10 +245,11 @@ export function Footer() {
                     <div className="footer-col animate-on-scroll delay-100">
                         <h4>Explore</h4>
                         <ul className="footer-links-list">
-                            <li><a href="#services" className="footer-link-item"><ArrowUpRight className="size-3" /> Services</a></li>
-                            <li><a href="#diagnosis" className="footer-link-item"><ArrowUpRight className="size-3" /> AI Diagnosis</a></li>
-                            <li><a href="#estimator" className="footer-link-item"><ArrowUpRight className="size-3" /> Cost Estimator</a></li>
-                            <li><a href="#reviews" className="footer-link-item"><ArrowUpRight className="size-3" /> Testimonials</a></li>
+                            <li><a href="#services" className="footer-link-item"><ArrowUpRight className="size-3" /> Two-Wheeler Repair Services</a></li>
+                            <li><a href="#diagnosis" className="footer-link-item"><ArrowUpRight className="size-3" /> AI Bike Diagnosis Tool</a></li>
+                            <li><a href="#estimator" className="footer-link-item"><ArrowUpRight className="size-3" /> Bike Service Cost Estimator</a></li>
+                            <li><a href="#reviews" className="footer-link-item"><ArrowUpRight className="size-3" /> Customer Reviews</a></li>
+                            <li><a href="#faq" className="footer-link-item"><ArrowUpRight className="size-3" /> FAQs About Bike Service</a></li>
                         </ul>
                     </div>
 
@@ -256,11 +257,12 @@ export function Footer() {
                     <div className="footer-col animate-on-scroll delay-200">
                         <h4>Solutions</h4>
                         <ul className="footer-links-list">
-                            <li><a href="#services" className="footer-link-item">Engine Diagnostics</a></li>
-                            <li><a href="#services" className="footer-link-item">Full Performance Tuning</a></li>
-                            <li><a href="#services" className="footer-link-item">Electronic Repairs</a></li>
+                            <li><a href="#services" className="footer-link-item">Engine Repair & Diagnostics</a></li>
+                            <li><a href="#services" className="footer-link-item">Full Bike Servicing Package</a></li>
+                            <li><a href="#services" className="footer-link-item">Electrical & ECU Repair</a></li>
                             <li><a href="#services" className="footer-link-item">Brake System Overhaul</a></li>
-                            <li><a href="#services" className="footer-link-item">Doorstep Pickup</a></li>
+                            <li><a href="#services" className="footer-link-item">Doorstep Bike Service & Pickup</a></li>
+                            <li><a href="#brand-services" className="footer-link-item">Brand-Specific Bike Service</a></li>
                         </ul>
                     </div>
 
