@@ -153,6 +153,30 @@
   transform: translateY(1px);
 }
 
+/* --- MOBILE-ONLY OVERRIDES FOR FULL GRADIENT CTA --- */
+@media (hover: none) and (pointer: coarse) {
+  /* Make the bordered button fully gradient-filled on mobile */
+  .animated-gradient-btn.bordered {
+    --button-fill-stop: 0% !important;
+    --button-fill: transparent !important;
+    box-shadow: 0 4px 15px rgba(255, 20, 147, 0.3);
+    /* Keep existing gradient motion, add subtle pulsing effect */
+    animation: gradient-movement-premium 5s alternate infinite ease-in-out, mobile-cta-pulse 3s infinite ease-in-out;
+  }
+
+  /* Snappy tap feedback */
+  .animated-gradient-btn.bordered:active {
+    transform: scale(0.96) !important;
+    box-shadow: 0 2px 10px rgba(255, 20, 147, 0.6) !important;
+    animation-play-state: paused;
+  }
+}
+
+@keyframes mobile-cta-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 20, 147, 0.3); }
+  50% { transform: scale(1.03); box-shadow: 0 8px 25px rgba(255, 20, 147, 0.5), 0 0 20px rgba(65, 105, 225, 0.4); }
+}
+
 /* --- SPECIFIC RULES FOR NAVBAR OVERRIDE --- */
 nav .animated-gradient-btn.nav-cta,
 .nav-cta.animated-gradient-btn {
