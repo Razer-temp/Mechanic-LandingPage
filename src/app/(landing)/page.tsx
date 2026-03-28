@@ -15,7 +15,7 @@ import './how-it-works-mobile.css';
 import './footer-premium.css';
 import '../animated-button.css';
 import clsx from 'clsx';
-import { MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle, PhoneCall, Check, Target, PhoneOutgoing, Search, Bot, Zap, ShieldCheck, Banknote, MapPin, Star, Calendar } from 'lucide-react';
+import { MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle, PhoneCall, Check, Target, PhoneOutgoing, Search, Bot, Zap, ShieldCheck, Banknote, MapPin, Star, Calendar, Calculator, IndianRupee, CalendarCheck, CheckCircle, Send, MessageSquare } from 'lucide-react';
 import { KineticPiston, KineticGears, KineticDisc, KineticDroplet, KineticWarning, KineticLightning } from '@/components/icons/KineticIcons';
 import { motion } from 'framer-motion';
 
@@ -29,6 +29,8 @@ const HOW_STEPS = [
     desc: 'Chat with our AI or use the form to describe what’s wrong with your bike. Our smart system understands natural language.',
     ctaText: 'Use AI Check',
     ctaLink: '#diagnosis',
+    ctaIconDefault: <MessageSquareText className="absolute w-4 h-4 cta-icon-exit" />,
+    ctaIconHover: <BrainCircuit className="absolute w-4 h-4 cta-icon-enter" style={{ color: '#3b82f6' }} />,
     mockup: (
       <div className="mockup-chat">
         <div className="mockup-msg user">My bike chain keeps slipping.</div>
@@ -48,6 +50,8 @@ const HOW_STEPS = [
     desc: 'Our AI engine analyzes symptoms to provide instant diagnosis and transparent cost estimates before any work begins.',
     ctaText: 'View Diagnostics',
     ctaLink: '#diagnosis',
+    ctaIconDefault: <BrainCircuit className="absolute w-4 h-4 cta-icon-exit" />,
+    ctaIconHover: <Sparkles className="absolute w-4 h-4 cta-icon-enter" style={{ color: '#d946ef' }} />,
     mockup: (
       <div className="mockup-scan">
         <div className="scan-radar-container">
@@ -70,6 +74,8 @@ const HOW_STEPS = [
     desc: 'Book a slot. Our certified mechanics fix your bike using genuine parts, ensuring peak performance.',
     ctaText: 'Meet Mechanics',
     ctaLink: '#services',
+    ctaIconDefault: <Wrench className="absolute w-4 h-4 cta-icon-exit" />,
+    ctaIconHover: <ShieldCheck className="absolute w-4 h-4 cta-icon-enter" style={{ color: '#10b981' }} />,
     mockup: (
       <div className="mockup-mechanic">
         <div className="mechanic-avatar">
@@ -93,6 +99,8 @@ const HOW_STEPS = [
     desc: 'Get your bike back in top condition. Pay online or at the workshop. Delivery guaranteed within our service area.',
     ctaText: 'Book Service Now',
     ctaLink: '#booking',
+    ctaIconDefault: <Rocket className="absolute w-4 h-4 cta-icon-exit" />,
+    ctaIconHover: <Check className="absolute w-4 h-4 cta-icon-enter" style={{ color: '#f59e0b' }} />,
     mockup: (
       <div className="mockup-completion">
         <div className="completion-ring">
@@ -906,7 +914,12 @@ export default function LandingPage() {
                         <h3 className="accordion-title">{step.title}</h3>
                         <p className="accordion-desc">{step.desc}</p>
                         <a href={step.ctaLink} className="accordion-cta">
-                          {step.ctaText} <span className="cta-arrow">→</span>
+                          <div className="relative w-4 h-4 flex items-center justify-center" style={{ perspective: '200px', flexShrink: 0 }}>
+                            {step.ctaIconDefault}
+                            {step.ctaIconHover}
+                          </div>
+                          <span>{step.ctaText}</span>
+                          <span className="cta-arrow">→</span>
                         </a>
                       </div>
                       <div className="accordion-right-col">
@@ -939,16 +952,21 @@ export default function LandingPage() {
                     {step.mockup}
                   </div>
                   <a href={step.ctaLink} className="accordion-cta" style={{ marginTop: '24px' }}>
-                    {step.ctaText} <span className="cta-arrow">→</span>
+                    <div className="relative w-4 h-4 flex items-center justify-center" style={{ perspective: '200px', flexShrink: 0 }}>
+                      {step.ctaIconDefault}
+                      {step.ctaIconHover}
+                    </div>
+                    <span>{step.ctaText}</span>
+                    <span className="cta-arrow">→</span>
                   </a>
                 </div>
               ))}
             </div>
             {/* Morphing Pagination Indicator */}
             <div className="snap-deck-pagination">
-               {HOW_STEPS.map((_, i) => (
-                  <div key={i} className={clsx("pagination-dot", activeMobileStep === i ? "active" : "")} />
-               ))}
+              {HOW_STEPS.map((_, i) => (
+                <div key={i} className={clsx("pagination-dot", activeMobileStep === i ? "active" : "")} />
+              ))}
             </div>
           </div>
         </div>
@@ -989,8 +1007,24 @@ export default function LandingPage() {
                   </select>
                 </div>
               </div>
-              <button className="btn btn-primary btn-glow btn-full" id="estimateBtn" onClick={handleEstimate}>
-                <span>💰</span> Get Estimate
+              <button className="btn btn-primary btn-glow btn-full group" id="estimateBtn" onClick={handleEstimate}>
+                <div className="flex items-center justify-center gap-2">
+                  <div className="relative w-5 h-5 flex items-center justify-center" style={{ perspective: '200px' }}>
+                    {/* Default icon: Calculator — exits with Y-axis flip + fade */}
+                    <Calculator
+                      className="absolute w-5 h-5 text-gray-300 transition-all duration-500"
+                      style={{ transitionProperty: 'opacity, transform' }}
+                      data-hover-exit
+                    />
+                    {/* Hover icon: IndianRupee — enters with Y-axis flip + gold glow */}
+                    <IndianRupee
+                      className="absolute w-5 h-5 text-yellow-400 opacity-0 transition-all duration-500"
+                      style={{ transitionProperty: 'opacity, transform' }}
+                      data-hover-enter
+                    />
+                  </div>
+                  <span>Get Estimate</span>
+                </div>
               </button>
             </div>
             <div className="estimate-result" id="estimateResult">
@@ -1104,12 +1138,26 @@ export default function LandingPage() {
                 )}
                 <a
                   href={`https://wa.me/919811530780?text=Hi!%20I%20just%20booked%20${encodeURIComponent(bookingData.service)}%20(${bookingData.serviceLocation === 'doorstep' ? 'Doorstep%20Service' : 'Workshop%20Visit'})${bookingData.serviceLocation === 'doorstep' ? `%20at%20${encodeURIComponent(bookingData.address)}` : ''}%20for%20my%20${encodeURIComponent(bookingData.bike)}.%20Name:%20${encodeURIComponent(bookingData.name)}`}
-                  className="btn btn-whatsapp"
+                  className="btn btn-whatsapp btn-whatsapp-confirm group"
                   style={{ marginTop: '24px' }}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span>💬</span> Confirm via WhatsApp
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="relative w-5 h-5 flex items-center justify-center">
+                      <MessageCircle
+                        className="absolute w-5 h-5 transition-all duration-500"
+                        style={{ transitionProperty: 'opacity, transform' }}
+                        data-hover-exit
+                      />
+                      <Send
+                        className="absolute w-5 h-5 opacity-0 transition-all duration-500"
+                        style={{ transitionProperty: 'opacity, transform' }}
+                        data-hover-enter
+                      />
+                    </div>
+                    <span>Confirm via WhatsApp</span>
+                  </div>
                 </a>
               </div>
             ) : (
@@ -1195,8 +1243,22 @@ export default function LandingPage() {
                   <textarea name="bookNotes" id="bookNotes" rows={3} placeholder="Any specific issue or request..."></textarea>
                 </div>
                 <div className="form-row form-actions">
-                  <button type="submit" className="btn btn-primary btn-glow btn-full">
-                    <span>✅</span> Confirm Booking
+                  <button type="submit" className="btn btn-primary btn-glow btn-full group" id="confirmBookingBtn">
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="relative w-5 h-5 flex items-center justify-center" style={{ perspective: '200px' }}>
+                        <CalendarCheck
+                          className="absolute w-5 h-5 text-gray-300 transition-all duration-500"
+                          style={{ transitionProperty: 'opacity, transform' }}
+                          data-hover-exit
+                        />
+                        <CheckCircle
+                          className="absolute w-5 h-5 text-emerald-400 opacity-0 transition-all duration-500"
+                          style={{ transitionProperty: 'opacity, transform' }}
+                          data-hover-enter
+                        />
+                      </div>
+                      <span>Confirm Booking</span>
+                    </div>
                   </button>
                 </div>
               </form>
@@ -1243,11 +1305,39 @@ export default function LandingPage() {
                 </div>
               </div>
               <div className="contact-buttons">
-                <a href="https://wa.me/919811530780?text=Hi!%20I%20need%20bike%20service." className="btn btn-whatsapp" target="_blank" rel="noopener noreferrer">
-                  <span>💬</span> WhatsApp Us
+                <a href="https://wa.me/919811530780?text=Hi!%20I%20need%20bike%20service." className="btn btn-whatsapp group" id="contactWhatsappBtn" target="_blank" rel="noopener noreferrer">
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="relative w-5 h-5 flex items-center justify-center">
+                      <MessageSquare
+                        className="absolute w-5 h-5 transition-all duration-500"
+                        style={{ transitionProperty: 'opacity, transform' }}
+                        data-hover-exit
+                      />
+                      <MessageSquareText
+                        className="absolute w-5 h-5 opacity-0 transition-all duration-500"
+                        style={{ transitionProperty: 'opacity, transform' }}
+                        data-hover-enter
+                      />
+                    </div>
+                    <span>WhatsApp Us</span>
+                  </div>
                 </a>
-                <a href="tel:+919811530780" className="btn btn-outline">
-                  <span>📞</span> Call Now
+                <a href="tel:+919811530780" className="btn btn-outline group" id="contactCallBtn">
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="relative w-5 h-5 flex items-center justify-center">
+                      <PhoneCall
+                        className="absolute w-5 h-5 text-gray-400 transition-all duration-500"
+                        style={{ transitionProperty: 'opacity, transform' }}
+                        data-hover-exit
+                      />
+                      <PhoneOutgoing
+                        className="absolute w-5 h-5 text-emerald-400 opacity-0 transition-all duration-500"
+                        style={{ transitionProperty: 'opacity, transform' }}
+                        data-hover-enter
+                      />
+                    </div>
+                    <span>Call Now</span>
+                  </div>
                 </a>
               </div>
             </div>

@@ -1,174 +1,334 @@
 @property --button-fill {
-    syntax: "<color>";
-    inherits: true;
-    initial-value: transparent;
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
 }
 
 @property --button-fill-stop {
-    syntax: "<percentage>";
-    inherits: true;
-    initial-value: 0%;
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 0%;
 }
 
 @property --rg-1-x {
-    syntax: "<percentage>";
-    inherits: true;
-    initial-value: 0%;
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 0%;
 }
 
 @property --rg-1-y {
-    syntax: "<percentage>";
-    inherits: true;
-    initial-value: 50%;
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 50%;
 }
 
 @property --rg-2-x {
-    syntax: "<percentage>";
-    inherits: true;
-    initial-value: 20%;
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 20%;
 }
 
 @property --rg-2-y {
-    syntax: "<percentage>";
-    inherits: true;
-    initial-value: 70%;
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 70%;
 }
 
 @property --rg-3-x {
-    syntax: "<percentage>";
-    inherits: true;
-    initial-value: 70%;
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 70%;
 }
 
 @property --rg-3-y {
-    syntax: "<percentage>";
-    inherits: true;
-    initial-value: 20%;
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 20%;
 }
 
 @property --rg-4-x {
-    syntax: "<percentage>";
-    inherits: true;
-    initial-value: 50%;
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 50%;
 }
 
 @property --rg-4-y {
-    syntax: "<percentage>";
-    inherits: true;
-    initial-value: 50%;
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 50%;
 }
 
 .animated-gradient-btn {
-    position: relative;
-    border-radius: 100vw;
-    border: 2px solid transparent;
-    transition: --button-fill 0.5s, --button-fill-stop 0.5s, transform 0.3s ease, box-shadow 0.3s ease;
-    animation: gradient-movement-premium 5s alternate infinite ease-in-out;
+  position: relative;
+  border-radius: 100vw;
+  border: 2px solid transparent;
+  transition: --button-fill 0.5s, --button-fill-stop 0.5s, transform 0.3s ease, box-shadow 0.3s ease;
+  animation: gradient-movement-premium 5s alternate infinite ease-in-out;
 
-    background:
-        radial-gradient(circle,
-            var(--button-fill) var(--button-fill-stop),
-            transparent) padding-box,
-        radial-gradient(circle 120px at var(--rg-1-x) var(--rg-1-y),
-            deeppink,
-            transparent) border-box,
-        radial-gradient(circle 150px at var(--rg-2-x) var(--rg-2-y),
-            royalblue,
-            transparent) border-box,
-        radial-gradient(circle 160px at var(--rg-3-x) var(--rg-3-y),
-            rebeccapurple,
-            transparent) border-box,
-        radial-gradient(circle 200px at var(--rg-4-x) var(--rg-4-y),
-            lime,
-            transparent) border-box,
-        #050508 border-box !important;
+  background:
+    radial-gradient(circle,
+      var(--button-fill) var(--button-fill-stop),
+      transparent) padding-box,
+    radial-gradient(circle 120px at var(--rg-1-x) var(--rg-1-y),
+      deeppink,
+      transparent) border-box,
+    radial-gradient(circle 150px at var(--rg-2-x) var(--rg-2-y),
+      royalblue,
+      transparent) border-box,
+    radial-gradient(circle 160px at var(--rg-3-x) var(--rg-3-y),
+      rebeccapurple,
+      transparent) border-box,
+    radial-gradient(circle 200px at var(--rg-4-x) var(--rg-4-y),
+      lime,
+      transparent) border-box,
+    #050508 border-box !important;
 
-    background-position: center, center, bottom right, top left, top right, bottom left;
-    background-repeat: no-repeat !important;
+  background-position: center, center, bottom right, top left, top right, bottom left;
+  background-repeat: no-repeat !important;
 
-    color: #fff !important;
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    text-decoration: none;
-    z-index: 1;
+  color: #fff !important;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  z-index: 1;
 }
 
 @keyframes gradient-movement-premium {
-    30% {
-        --rg-1-x: 70%;
-        --rg-1-y: 20%;
-    }
+  30% {
+    --rg-1-x: 70%;
+    --rg-1-y: 20%;
+  }
 
-    40% {
-        --rg-2-x: 120%;
-        --rg-2-y: 50%;
-    }
+  40% {
+    --rg-2-x: 120%;
+    --rg-2-y: 50%;
+  }
 
-    45% {
-        --rg-4-x: -10%;
-        --rg-4-y: 10%;
-    }
+  45% {
+    --rg-4-x: -10%;
+    --rg-4-y: 10%;
+  }
 
-    50% {
-        --rg-3-x: 50%;
-        --rg-3-y: 50%;
-    }
+  50% {
+    --rg-3-x: 50%;
+    --rg-3-y: 50%;
+  }
 
-    70% {
-        --rg-1-x: -10%;
-        --rg-2-y: -20%;
-    }
+  70% {
+    --rg-1-x: -10%;
+    --rg-2-y: -20%;
+  }
 }
 
 .animated-gradient-btn:hover,
 .animated-gradient-btn:focus-visible {
-    --button-fill-stop: 100%;
-    --button-fill: rgba(0, 0, 0, 0.4);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 20, 147, 0.3);
+  --button-fill-stop: 100%;
+  --button-fill: rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 20, 147, 0.3);
 }
 
 .animated-gradient-btn:active {
-    transform: translateY(1px);
+  transform: translateY(1px);
 }
 
 /* Bordered variant */
 .animated-gradient-btn.bordered {
-    --button-fill-stop: 100%;
-    --button-fill: #050508;
-    box-shadow: none;
+  --button-fill-stop: 100%;
+  --button-fill: #050508;
+  box-shadow: none;
 }
 
 .animated-gradient-btn.bordered:is(:hover, :focus-visible) {
-    --button-fill-stop: 0%;
-    --button-fill: transparent;
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 10px 30px rgba(255, 20, 147, 0.25), 0 0 20px rgba(65, 105, 225, 0.2);
+  --button-fill-stop: 0%;
+  --button-fill: transparent;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(255, 20, 147, 0.25), 0 0 20px rgba(65, 105, 225, 0.2);
 }
 
 .animated-gradient-btn.bordered:active {
-    transform: translateY(1px);
+  transform: translateY(1px);
 }
 
 /* --- SPECIFIC RULES FOR NAVBAR OVERRIDE --- */
 nav .animated-gradient-btn.nav-cta,
 .nav-cta.animated-gradient-btn {
-    padding: 0 24px !important;
-    height: 42px !important;
-    font-size: 0.85rem !important;
-    border: 2px solid transparent !important;
+  padding: 0 24px !important;
+  height: 42px !important;
+  font-size: 0.85rem !important;
+  border: 2px solid transparent !important;
 }
 
 nav .animated-gradient-btn.nav-cta:hover,
 .nav-cta.animated-gradient-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 20, 147, 0.25) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 20, 147, 0.25) !important;
 }
 
 nav .animated-gradient-btn.nav-cta:active,
 .nav-cta.animated-gradient-btn:active {
-    transform: translateY(1px);
+  transform: translateY(1px);
+}
+
+/* =====================================================
+   GET ESTIMATE BUTTON — COIN-FLIP ICON MORPH
+   Scoped strictly to #estimateBtn. No global side-effects.
+   ===================================================== */
+
+/* Default state: Calculator is visible, IndianRupee is hidden */
+#estimateBtn [data-hover-exit] {
+  opacity: 1;
+  transform: rotateY(0deg);
+  filter: drop-shadow(0 0 0px transparent);
+}
+
+#estimateBtn [data-hover-enter] {
+  opacity: 0;
+  transform: rotateY(90deg);
+  filter: drop-shadow(0 0 0px transparent);
+}
+
+/* Hover state: Calculator flips away, IndianRupee flips in with gold glow */
+#estimateBtn:hover [data-hover-exit] {
+  opacity: 0;
+  transform: rotateY(-90deg);
+}
+
+#estimateBtn:hover [data-hover-enter] {
+  opacity: 1;
+  transform: rotateY(0deg);
+  filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.75));
+}
+
+/* =====================================================
+   CONFIRM BOOKING — SCALE + ROTATE ICON MORPH
+   #confirmBookingBtn scoped. CalendarCheck → CheckCircle
+   ===================================================== */
+#confirmBookingBtn [data-hover-exit] {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+#confirmBookingBtn [data-hover-enter] {
+  opacity: 0;
+  transform: scale(0.3) rotate(-30deg);
+}
+
+#confirmBookingBtn:hover [data-hover-exit] {
+  opacity: 0;
+  transform: scale(0) rotate(30deg);
+}
+
+#confirmBookingBtn:hover [data-hover-enter] {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.8));
+}
+
+/* =====================================================
+   WHATSAPP CONFIRM BUTTON — SLIDE-SEND ICON MORPH
+   .btn-whatsapp-confirm scoped. MessageCircle → Send
+   ===================================================== */
+.btn-whatsapp-confirm [data-hover-exit] {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+.btn-whatsapp-confirm [data-hover-enter] {
+  opacity: 0;
+  transform: translateX(-8px) scale(0.7);
+}
+
+.btn-whatsapp-confirm:hover [data-hover-exit] {
+  opacity: 0;
+  transform: translateX(8px) scale(0.7);
+}
+
+.btn-whatsapp-confirm:hover [data-hover-enter] {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+}
+
+/* =====================================================
+   CONTACT WHATSAPP BUTTON — SCALE FADE ICON MORPH
+   #contactWhatsappBtn scoped. MessageSquare → MessageSquareText
+   ===================================================== */
+#contactWhatsappBtn [data-hover-exit] {
+  opacity: 1;
+  transform: scale(1);
+}
+
+#contactWhatsappBtn [data-hover-enter] {
+  opacity: 0;
+  transform: scale(0.4);
+}
+
+#contactWhatsappBtn:hover [data-hover-exit] {
+  opacity: 0;
+  transform: scale(1.5);
+}
+
+#contactWhatsappBtn:hover [data-hover-enter] {
+  opacity: 1;
+  transform: scale(1);
+  filter: drop-shadow(0 0 6px rgba(74, 222, 128, 0.7));
+}
+
+/* =====================================================
+   CONTACT CALL NOW — ROTATION ICON MORPH
+   #contactCallBtn scoped. PhoneCall → PhoneOutgoing
+   ===================================================== */
+#contactCallBtn [data-hover-exit] {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+#contactCallBtn [data-hover-enter] {
+  opacity: 0;
+  transform: scale(0.5) rotate(12deg);
+}
+
+#contactCallBtn:hover [data-hover-exit] {
+  opacity: 0;
+  transform: scale(1) rotate(-12deg);
+}
+
+#contactCallBtn:hover [data-hover-enter] {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  filter: drop-shadow(0 0 5px rgba(52, 211, 153, 0.7));
+}
+
+/* =====================================================
+   HOW IT WORKS — CTA ICON MORPH (Y-axis coin flip)
+   Applies to all 4 accordion-cta links via class names.
+   Each card's hover icon has its own inline theme color.
+   ===================================================== */
+.accordion-cta .cta-icon-exit {
+  opacity: 1;
+  transform: rotateY(0deg) scale(1);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  flex-shrink: 0;
+}
+
+.accordion-cta .cta-icon-enter {
+  opacity: 0;
+  transform: rotateY(-90deg) scale(0.8);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  flex-shrink: 0;
+}
+
+.accordion-cta:hover .cta-icon-exit {
+  opacity: 0;
+  transform: rotateY(90deg) scale(0.8);
+}
+
+.accordion-cta:hover .cta-icon-enter {
+  opacity: 1;
+  transform: rotateY(0deg) scale(1);
+  filter: drop-shadow(0 0 5px currentColor);
 }
