@@ -16,7 +16,7 @@ import './footer-premium.css';
 import './brand-services.css';
 import '../animated-button.css';
 import clsx from 'clsx';
-import { MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle, PhoneCall, Check, Target, PhoneOutgoing, Search, Bot, Zap, ShieldCheck, Banknote, MapPin, Star, Calendar, Calculator, IndianRupee, CalendarCheck, CheckCircle, Send, MessageSquare, ChevronDown, Award, BadgeCheck } from 'lucide-react';
+import { Navigation, MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle, PhoneCall, Check, Target, PhoneOutgoing, Search, Bot, Zap, ShieldCheck, Banknote, MapPin, Star, Calendar, Calculator, IndianRupee, CalendarCheck, CheckCircle, Send, MessageSquare, ChevronDown, Award, BadgeCheck } from 'lucide-react';
 import { KineticPiston, KineticGears, KineticDisc, KineticDroplet, KineticWarning, KineticLightning } from '@/components/icons/KineticIcons';
 import { motion } from 'framer-motion';
 
@@ -1269,91 +1269,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ===== CONTACT & MAP ===== */}
-      <section className="section section-contact" id="contact">
-        <div className="container">
-          <div className="section-header animate-on-scroll">
-            <span className="section-tag"><MapPin className="w-4 h-4" /> Visit Us</span>
-            <h2 className="section-title">Bike Service Center <span className="gradient-text">Location & Contact</span></h2>
-          </div>
-          <div className="contact-grid">
-            <div className="contact-info glass-card animate-on-scroll">
-              <div className="contact-item">
-                <span className="contact-icon">📍</span>
-                <div>
-                  <strong>Workshop Address</strong>
-                  <p>D-1C, Shah Alam Bandh Marg, near sai Baba Mandir<br />Block D, Adarsh Nagar Extension, Adarsh Nagar, Delhi, 110033</p>
-                </div>
-              </div>
-              <div className="contact-item">
-                <span className="contact-icon">📞</span>
-                <div>
-                  <strong>Phone</strong>
-                  <p><a href="tel:+919811530780">+91 98115 30780</a></p>
-                </div>
-              </div>
-              <div className="contact-item">
-                <span className="contact-icon">⏰</span>
-                <div>
-                  <strong>Working Hours</strong>
-                  <p>Mon–Sat: 9:00 AM – 7:00 PM<br />Sunday: 10:00 AM – 4:00 PM</p>
-                </div>
-              </div>
-              <div className="contact-item">
-                <span className="contact-icon">✉️</span>
-                <div>
-                  <strong>Email</strong>
-                  <p><a href="mailto:hello.smartbikepro@gmail.com">hello.smartbikepro@gmail.com</a></p>
-                </div>
-              </div>
-              <div className="contact-buttons">
-                <a href="https://wa.me/919811530780?text=Hi!%20I%20need%20bike%20service." className="btn btn-whatsapp group" id="contactWhatsappBtn" target="_blank" rel="noopener noreferrer">
-                  <div className="flex items-center justify-center gap-2">
-                    <div className="relative w-5 h-5 flex items-center justify-center">
-                      <MessageSquare
-                        className="absolute w-5 h-5 transition-all duration-500"
-                        style={{ transitionProperty: 'opacity, transform' }}
-                        data-hover-exit
-                      />
-                      <MessageSquareText
-                        className="absolute w-5 h-5 opacity-0 transition-all duration-500"
-                        style={{ transitionProperty: 'opacity, transform' }}
-                        data-hover-enter
-                      />
-                    </div>
-                    <span>WhatsApp Us</span>
-                  </div>
-                </a>
-                <a href="tel:+919811530780" className="btn btn-outline group" id="contactCallBtn">
-                  <div className="flex items-center justify-center gap-2">
-                    <div className="relative w-5 h-5 flex items-center justify-center">
-                      <PhoneCall
-                        className="absolute w-5 h-5 text-gray-400 transition-all duration-500"
-                        style={{ transitionProperty: 'opacity, transform' }}
-                        data-hover-exit
-                      />
-                      <PhoneOutgoing
-                        className="absolute w-5 h-5 text-emerald-400 opacity-0 transition-all duration-500"
-                        style={{ transitionProperty: 'opacity, transform' }}
-                        data-hover-enter
-                      />
-                    </div>
-                    <span>Call Now</span>
-                  </div>
-                </a>
-              </div>
-            </div>
-            <div className="contact-map glass-card animate-on-scroll">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3498.885559275282!2d77.1736294!3d28.722965900000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d0173dbf9bd49%3A0x5cb504c3469666a!2sMannu%20Bike%20Repair%20Centre!5e0!3m2!1sen!2sin!4v1770802264534!5m2!1sen!2sin"
-                title="SmartBike Pro — Bike Service Center Location on Google Maps"
-                width="100%" height="100%" style={{ border: 0, borderRadius: '16px' }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade">
-              </iframe>
-            </div>
-          </div>
-        </div>
-      </section>
-
 
       {/* ===== BRAND-SPECIFIC SERVICE SECTION ===== */}
       <section className="section brand-services-section" id="brand-services">
@@ -1498,6 +1413,99 @@ export default function LandingPage() {
                 <p>{t.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== CONTACT & MAP ===== */}
+      <section className="section section-contact" id="contact" style={{ paddingBottom: '3rem', marginTop: '-2rem' }}>
+        <div className="container">
+          <div className="section-header animate-on-scroll">
+            <span className="section-tag"><MapPin className="w-4 h-4" /> Visit Us</span>
+            <h2 className="section-title">Bike Service Center <span className="gradient-text">Location & Contact</span></h2>
+          </div>
+          <div className="contact-grid">
+            <div className="contact-info glass-card animate-on-scroll">
+              <div className="contact-item">
+                <span className="contact-icon">📍</span>
+                <div>
+                  <strong>Workshop Address</strong>
+                  <p>D-1C, Shah Alam Bandh Marg, near sai Baba Mandir<br />Block D, Adarsh Nagar Extension, Adarsh Nagar, Delhi, 110033</p>
+                </div>
+              </div>
+              <div className="contact-item">
+                <span className="contact-icon">📞</span>
+                <div>
+                  <strong>Phone</strong>
+                  <p><a href="tel:+919811530780">+91 98115 30780</a></p>
+                </div>
+              </div>
+              <div className="contact-item">
+                <span className="contact-icon">⏰</span>
+                <div>
+                  <strong>Working Hours</strong>
+                  <p>Mon–Sat: 9:00 AM – 7:00 PM<br />Sunday: 10:00 AM – 4:00 PM</p>
+                </div>
+              </div>
+              <div className="contact-item">
+                <span className="contact-icon">✉️</span>
+                <div>
+                  <strong>Email</strong>
+                  <p><a href="mailto:hello.smartbikepro@gmail.com">hello.smartbikepro@gmail.com</a></p>
+                </div>
+              </div>
+              <div className="contact-buttons" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                <a href="https://wa.me/919811530780?text=Hi!%20I%20need%20bike%20service." className="btn btn-whatsapp group" id="contactWhatsappBtn" target="_blank" rel="noopener noreferrer" style={{ width: '100%', padding: '12px 16px' }}>
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="relative w-5 h-5 flex items-center justify-center">
+                      <MessageSquare
+                        className="absolute w-5 h-5 transition-all duration-500"
+                        style={{ transitionProperty: 'opacity, transform' }}
+                        data-hover-exit
+                      />
+                      <MessageSquareText
+                        className="absolute w-5 h-5 opacity-0 transition-all duration-500"
+                        style={{ transitionProperty: 'opacity, transform' }}
+                        data-hover-enter
+                      />
+                    </div>
+                    <span>WhatsApp</span>
+                  </div>
+                </a>
+                <a href="tel:+919811530780" className="btn btn-outline group" id="contactCallBtn" style={{ width: '100%', padding: '12px 16px' }}>
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="relative w-5 h-5 flex items-center justify-center">
+                      <PhoneCall
+                        className="absolute w-5 h-5 text-gray-400 transition-all duration-500"
+                        style={{ transitionProperty: 'opacity, transform' }}
+                        data-hover-exit
+                      />
+                      <PhoneOutgoing
+                        className="absolute w-5 h-5 text-emerald-400 opacity-0 transition-all duration-500"
+                        style={{ transitionProperty: 'opacity, transform' }}
+                        data-hover-enter
+                      />
+                    </div>
+                    <span>Call Now</span>
+                  </div>
+                </a>
+                <a href="https://maps.google.com/?q=Mannu+Bike+Repair+Centre,Delhi" className="btn btn-primary btn-glow group" id="contactDirectionsBtn" target="_blank" rel="noopener noreferrer" style={{ gridColumn: '1 / -1', width: '100%', marginTop: '4px' }}>
+                  <div className="flex items-center justify-center gap-2">
+                    <Navigation className="w-5 h-5 text-gray-300 group-hover:text-white transition-colors duration-300" />
+                    <span>Get Directions</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div className="contact-map glass-card animate-on-scroll" style={{ overflow: 'hidden', padding: 0 }}>
+              <div style={{ width: '100%', height: '100%', minHeight: '300px', filter: 'invert(90%) hue-rotate(180deg) contrast(105%) opacity(0.8)' }}>
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3498.885559275282!2d77.1736294!3d28.722965900000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d0173dbf9bd49%3A0x5cb504c3469666a!2sMannu%20Bike%20Repair%20Centre!5e0!3m2!1sen!2sin!4v1770802264534!5m2!1sen!2sin"
+                  title="SmartBike Pro — Bike Service Center Location on Google Maps"
+                  width="100%" height="100%" style={{ border: 0, borderRadius: '16px' }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade">
+                </iframe>
+              </div>
+            </div>
           </div>
         </div>
       </section>
