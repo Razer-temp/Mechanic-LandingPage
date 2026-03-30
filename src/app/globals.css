@@ -3271,3 +3271,438 @@ body[style*="overflow: hidden"] .whatsapp-float {
     filter: drop-shadow(0 0 8px currentColor);
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   DESKTOP NAV DROPDOWNS — Glassmorphic Panels
+   ═══════════════════════════════════════════════════════════════ */
+
+.nav-dropdown-wrapper {
+  position: relative;
+  list-style: none;
+}
+
+.nav-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.84rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  font-family: inherit;
+  padding: 4px 0;
+  position: relative;
+  transition: color 0.25s ease;
+}
+
+.nav-dropdown-trigger:hover {
+  color: var(--text-primary);
+}
+
+/* Active indicator line for dropdown triggers */
+.nav-dropdown-trigger::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--accent);
+  transition: width var(--dur) var(--ease);
+  border-radius: 1px;
+}
+
+.nav-dropdown-trigger:hover::after {
+  width: 100%;
+}
+
+.nav-dropdown-trigger.active-link {
+  color: var(--text-primary) !important;
+}
+
+.nav-dropdown-trigger.active-link::after {
+  width: 100% !important;
+  background: var(--accent);
+}
+
+.nav-chevron {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.nav-chevron.rotated {
+  transform: rotate(180deg);
+}
+
+/* ── Dropdown Panel ── */
+.nav-dropdown-panel {
+  position: absolute;
+  top: calc(100% + 16px);
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  min-width: 260px;
+  background: rgba(10, 12, 20, 0.92);
+  backdrop-filter: blur(30px) saturate(1.6);
+  -webkit-backdrop-filter: blur(30px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 1px 0 rgba(255, 255, 255, 0.08) inset;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.25s;
+  z-index: 2000;
+}
+
+/* Hover bridge — prevents dropdown from closing when moving mouse from trigger to panel */
+.nav-dropdown-panel::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 0;
+  right: 0;
+  height: 20px;
+}
+
+.nav-dropdown-panel.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.nav-dropdown-panel--wide {
+  min-width: 300px;
+}
+
+/* ── Dropdown Item ── */
+.nav-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.15s ease;
+  color: inherit;
+}
+
+.nav-dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateX(2px);
+}
+
+.nav-dropdown-item.active {
+  background: rgba(0, 200, 255, 0.08);
+}
+
+.nav-dropdown-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.nav-dropdown-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.nav-dropdown-item:hover .nav-dropdown-icon {
+  color: var(--accent);
+  background: rgba(0, 200, 255, 0.08);
+  border-color: rgba(0, 200, 255, 0.15);
+}
+
+.nav-dropdown-item.active .nav-dropdown-icon {
+  color: var(--accent);
+  background: rgba(0, 200, 255, 0.1);
+  border-color: rgba(0, 200, 255, 0.2);
+}
+
+.nav-dropdown-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-dropdown-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.nav-dropdown-subtitle {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+  opacity: 0.7;
+}
+
+/* ── Subtle top shimmer on dropdown panel ── */
+.nav-dropdown-panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 200, 255, 0.15), rgba(167, 139, 250, 0.1), transparent);
+  border-radius: 16px 16px 0 0;
+  pointer-events: none;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE "MORE" BOTTOM SHEET — iOS-style
+   ═══════════════════════════════════════════════════════════════ */
+
+/* --- Backdrop Overlay --- */
+.mobile-sheet-backdrop {
+  display: none;
+}
+
+.mobile-more-sheet {
+  display: none;
+}
+
+/* "More" button in mobile bar */
+.mobile-nav-more-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 768px) {
+  /* More button active state */
+  .mobile-nav-more-btn.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+
+  .mobile-nav-more-btn.active .mobile-nav-icon {
+    color: #00D1FF;
+  }
+
+  /* --- Backdrop --- */
+  .mobile-sheet-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 8900;
+    background: rgba(0, 0, 0, 0);
+    pointer-events: none;
+    transition: background 0.35s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-sheet-backdrop.open {
+    background: rgba(0, 0, 0, 0.5);
+    pointer-events: auto;
+  }
+
+  /* --- Sheet Container --- */
+  .mobile-more-sheet {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 8950;
+    background: rgba(15, 18, 28, 0.97);
+    backdrop-filter: blur(30px) saturate(1.5);
+    -webkit-backdrop-filter: blur(30px) saturate(1.5);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px 24px 0 0;
+    padding: 0 20px 32px;
+    box-shadow:
+      0 -20px 60px rgba(0, 0, 0, 0.5),
+      0 -1px 0 rgba(255, 255, 255, 0.06) inset;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    max-height: 70vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .mobile-more-sheet.open {
+    transform: translateY(0);
+  }
+
+  /* Hide bottom nav when sheet is open */
+  body:has(.mobile-more-sheet.open) .mobile-bottom-nav {
+    transform: translate3d(-50%, 150px, 0) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* --- Drag Handle --- */
+  .mobile-sheet-handle-area {
+    display: flex;
+    justify-content: center;
+    padding: 12px 0 8px;
+    cursor: pointer;
+  }
+
+  .mobile-sheet-handle {
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* --- Header --- */
+  .mobile-sheet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 4px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .mobile-sheet-title {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.2px;
+  }
+
+  .mobile-sheet-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-sheet-close:active {
+    background: rgba(255, 255, 255, 0.12);
+    transform: scale(0.92);
+  }
+
+  /* --- Items Grid --- */
+  .mobile-sheet-items {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 12px;
+  }
+
+  .mobile-sheet-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 12px;
+    border-radius: 14px;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s ease, transform 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .mobile-sheet-item:active {
+    background: rgba(255, 255, 255, 0.06);
+    transform: scale(0.98);
+  }
+
+  .mobile-sheet-item.active {
+    background: rgba(0, 200, 255, 0.06);
+  }
+
+  .mobile-sheet-item-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: all 0.25s ease;
+  }
+
+  .mobile-sheet-item.active .mobile-sheet-item-icon {
+    color: #00D1FF;
+    background: rgba(0, 200, 255, 0.08);
+    border-color: rgba(0, 200, 255, 0.15);
+  }
+
+  .mobile-sheet-item-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mobile-sheet-item-title {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  .mobile-sheet-item-subtitle {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.3;
+    opacity: 0.7;
+  }
+
+  .mobile-sheet-item-arrow {
+    width: 16px;
+    height: 16px;
+    color: var(--text-muted);
+    opacity: 0.3;
+    transform: rotate(-90deg);
+    flex-shrink: 0;
+  }
+
+  .mobile-sheet-item.active .mobile-sheet-item-arrow {
+    color: #00D1FF;
+    opacity: 0.6;
+  }
+
+  /* --- More button micro-interaction --- */
+  @keyframes spin-more {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(90deg) scale(1.15); }
+    100% { transform: rotate(0deg) scale(1); }
+  }
+
+  .mobile-nav-more-btn:active .mobile-nav-icon {
+    animation: spin-more 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+}
