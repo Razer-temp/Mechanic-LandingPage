@@ -16,7 +16,11 @@ import './footer-premium.css';
 import './brand-services.css';
 import '../animated-button.css';
 import clsx from 'clsx';
-import { Navigation, MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle, PhoneCall, Check, Target, PhoneOutgoing, Search, Bot, Zap, ShieldCheck, Banknote, MapPin, Star, Calendar, Calculator, IndianRupee, CalendarCheck, CheckCircle, Send, MessageSquare, ChevronDown, Award, BadgeCheck } from 'lucide-react';
+import { Navigation, MessageSquareText, BrainCircuit, Wrench, Rocket, X, Sparkles, MessageCircle, PhoneCall, Check, Target, PhoneOutgoing, Search, Bot, Zap, ShieldCheck, Banknote, MapPin, Star, Calendar, Calculator, IndianRupee, CalendarCheck, CheckCircle, Send, MessageSquare, ChevronDown, Award, BadgeCheck, User, Phone, Clock, Bike, FileText, MapPinned, StickyNote } from 'lucide-react';
+import { DatePicker } from '@/components/ui/DatePicker';
+import { FloatingInput } from '@/components/ui/FloatingInput';
+import { FloatingTextarea } from '@/components/ui/FloatingTextarea';
+import { CustomSelect, type SelectOption } from '@/components/ui/CustomSelect';
 import { KineticPiston, KineticGears, KineticDisc, KineticDroplet, KineticWarning, KineticLightning } from '@/components/icons/KineticIcons';
 import { motion } from 'framer-motion';
 
@@ -695,24 +699,27 @@ export default function LandingPage() {
               <h3>Describe Your Bike Issue</h3>
               <div className="diagnosis-form">
                 <div className="form-group">
-                  <label htmlFor="bikeModel">Bike Model</label>
-                  <input
-                    type="text"
+                  <FloatingInput
+                    label="Bike Model"
+                    name="bikeModel"
                     id="bikeModel"
                     placeholder="e.g., Honda Activa 6G, Royal Enfield Classic 350"
                     value={bikeModel}
                     onChange={(e) => setBikeModel(e.target.value)}
+                    icon={<Bike />}
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="bikeIssue">What&apos;s the problem?</label>
-                  <textarea
+                  <FloatingTextarea
+                    label="What's the problem?"
+                    name="bikeIssue"
                     id="bikeIssue"
                     rows={4}
-                    placeholder="e.g., Engine makes rattling noise at high speed, hard to start in morning, brake squeaking..."
+                    placeholder="e.g., Engine makes rattling noise at high speed, hard to start in morning..."
                     value={diagnosisText}
                     onChange={(e) => setDiagnosisText(e.target.value)}
-                  ></textarea>
+                    icon={<FileText />}
+                  />
                 </div>
                 <div className="quick-issues">
                   {['Engine won\'t start', 'Strange noise from engine', 'Brakes not working properly', 'Oil leaking', 'Battery draining fast', 'Low mileage / poor fuel efficiency'].map((issue) => (
@@ -986,27 +993,41 @@ export default function LandingPage() {
             <div className="estimator-form">
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="estBikeType">Bike Type</label>
-                  <select id="estBikeType" value={estBikeType} onChange={(e) => setEstBikeType(e.target.value)}>
-                    <option value="">Select type...</option>
-                    <option value="scooter">Scooter (Activa, Jupiter, etc.)</option>
-                    <option value="commuter">Commuter (Splendor, Shine, etc.)</option>
-                    <option value="sport">Sport (R15, KTM, etc.)</option>
-                    <option value="cruiser">Cruiser (Bullet, Thunderbird, etc.)</option>
-                    <option value="electric">Electric (Ather, Ola, etc.)</option>
-                  </select>
+                  <CustomSelect
+                    label="Bike Type"
+                    name="estBikeType"
+                    id="estBikeType"
+                    placeholder="Select type..."
+                    value={estBikeType}
+                    onChange={(val) => setEstBikeType(val)}
+                    icon={<Bike />}
+                    options={[
+                      { value: 'scooter', label: 'Scooter (Activa, Jupiter, etc.)' },
+                      { value: 'commuter', label: 'Commuter (Splendor, Shine, etc.)' },
+                      { value: 'sport', label: 'Sport (R15, KTM, etc.)' },
+                      { value: 'cruiser', label: 'Cruiser (Bullet, Thunderbird, etc.)' },
+                      { value: 'electric', label: 'Electric (Ather, Ola, etc.)' },
+                    ]}
+                  />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="estService">Service Type</label>
-                  <select id="estService" value={estServiceType} onChange={(e) => setEstServiceType(e.target.value)}>
-                    <option value="">Select service...</option>
-                    <option value="general">General Servicing</option>
-                    <option value="engine">Engine Repair</option>
-                    <option value="brake">Brake Fix</option>
-                    <option value="oil">Oil Change</option>
-                    <option value="electrical">Electrical Work</option>
-                    <option value="emergency">Emergency Repair</option>
-                  </select>
+                  <CustomSelect
+                    label="Service Type"
+                    name="estService"
+                    id="estService"
+                    placeholder="Select service..."
+                    value={estServiceType}
+                    onChange={(val) => setEstServiceType(val)}
+                    icon={<Wrench />}
+                    options={[
+                      { value: 'general', label: 'General Servicing' },
+                      { value: 'engine', label: 'Engine Repair' },
+                      { value: 'brake', label: 'Brake Fix' },
+                      { value: 'oil', label: 'Oil Change' },
+                      { value: 'electrical', label: 'Electrical Work' },
+                      { value: 'emergency', label: 'Emergency Repair' },
+                    ]}
+                  />
                 </div>
               </div>
               <button className="btn btn-primary btn-glow btn-full group" id="estimateBtn" onClick={handleEstimate}>
@@ -1166,83 +1187,129 @@ export default function LandingPage() {
               <form className="booking-form" id="bookingForm" onSubmit={handleBookingSubmit}>
                 <div className="form-row">
                   <div className="form-group">
-                    <label htmlFor="bookName">Full Name *</label>
-                    <input type="text" name="bookName" id="bookName" placeholder="Your name" required />
+                    <FloatingInput
+                      label="Full Name"
+                      name="bookName"
+                      id="bookName"
+                      placeholder="Your name"
+                      required
+                      icon={<User />}
+                    />
                   </div>
                   <div className="form-group">
-                    <label htmlFor="bookPhone">Phone Number *</label>
-                    <input type="tel" name="bookPhone" id="bookPhone" placeholder="+91 98765 43210" required />
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="bookBike">Bike Model *</label>
-                    <input type="text" name="bookBike" id="bookBike" placeholder="e.g., Honda Activa 6G" required />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="bookService">Service Needed *</label>
-                    <select name="bookService" id="bookService" required>
-                      <option value="">Select service...</option>
-                      {serviceLocation === 'workshop' ? (
-                        <>
-                          <option value="General Servicing">General Servicing</option>
-                          <option value="Basic Service">Basic Service</option>
-                          <option value="Vehicle Inspection">Vehicle Inspection</option>
-                          <option value="Engine Repair">Engine Repair</option>
-                          <option value="Brake Fix">Brake Fix</option>
-                          <option value="Oil Change">Oil Change</option>
-                          <option value="Electrical Work">Electrical Work</option>
-                          <option value="Emergency Repair">Emergency Repair</option>
-                          <option value="Full Checkup">Full Checkup</option>
-                        </>
-                      ) : (
-                        <>
-                          <option value="General Servicing">General Servicing</option>
-                          <option value="Basic Service">Basic Service</option>
-                          <option value="Vehicle Inspection">Vehicle Inspection</option>
-                        </>
-                      )}
-                    </select>
+                    <FloatingInput
+                      label="Phone Number"
+                      name="bookPhone"
+                      id="bookPhone"
+                      type="tel"
+                      placeholder="+91 98765 43210"
+                      required
+                      icon={<Phone />}
+                    />
                   </div>
                 </div>
                 <div className="form-row">
                   <div className="form-group">
-                    <label htmlFor="serviceLocation">Service Location *</label>
-                    <select
+                    <FloatingInput
+                      label="Bike Model"
+                      name="bookBike"
+                      id="bookBike"
+                      placeholder="e.g., Honda Activa 6G"
+                      required
+                      icon={<Bike />}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <CustomSelect
+                      label="Service Needed"
+                      name="bookService"
+                      id="bookService"
+                      required
+                      placeholder="Select service..."
+                      icon={<Wrench />}
+                      options={serviceLocation === 'workshop' ? [
+                        { value: 'General Servicing', label: 'General Servicing' },
+                        { value: 'Basic Service', label: 'Basic Service' },
+                        { value: 'Vehicle Inspection', label: 'Vehicle Inspection' },
+                        { value: 'Engine Repair', label: 'Engine Repair' },
+                        { value: 'Brake Fix', label: 'Brake Fix' },
+                        { value: 'Oil Change', label: 'Oil Change' },
+                        { value: 'Electrical Work', label: 'Electrical Work' },
+                        { value: 'Emergency Repair', label: 'Emergency Repair' },
+                        { value: 'Full Checkup', label: 'Full Checkup' },
+                      ] : [
+                        { value: 'General Servicing', label: 'General Servicing' },
+                        { value: 'Basic Service', label: 'Basic Service' },
+                        { value: 'Vehicle Inspection', label: 'Vehicle Inspection' },
+                      ]}
+                    />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-group">
+                    <CustomSelect
+                      label="Service Location"
                       name="serviceLocation"
                       id="serviceLocation"
                       required
                       value={serviceLocation}
-                      onChange={(e) => setServiceLocation(e.target.value)}
-                    >
-                      <option value="workshop">Workshop Visit (In-Store)</option>
-                      <option value="doorstep">Doorstep Service (At Home)</option>
-                    </select>
+                      onChange={(val) => setServiceLocation(val)}
+                      icon={<MapPinned />}
+                      options={[
+                        { value: 'workshop', label: 'Workshop Visit (In-Store)' },
+                        { value: 'doorstep', label: 'Doorstep Service (At Home)' },
+                      ]}
+                    />
                   </div>
                   <div className="form-group">
                     <label htmlFor="bookDate">Preferred Date *</label>
-                    <input type="date" name="bookDate" id="bookDate" required defaultValue={new Date().toISOString().split('T')[0]} min={new Date().toISOString().split('T')[0]} />
+                    <DatePicker
+                      name="bookDate"
+                      id="bookDate"
+                      required
+                      defaultValue={new Date().toISOString().split('T')[0]}
+                      min={new Date().toISOString().split('T')[0]}
+                    />
                   </div>
                 </div>
                 {serviceLocation === 'doorstep' && (
                   <div className="form-group animate-fadeInUp">
-                    <label htmlFor="bookAddress">Pickup/Service Address *</label>
-                    <textarea name="bookAddress" id="bookAddress" rows={2} placeholder="Enter your full address for doorstep service" required></textarea>
+                    <FloatingTextarea
+                      label="Pickup/Service Address"
+                      name="bookAddress"
+                      id="bookAddress"
+                      rows={2}
+                      placeholder="Enter your full address for doorstep service"
+                      required
+                      icon={<MapPin />}
+                    />
                   </div>
                 )}
                 <div className="form-row">
                   <div className="form-group">
-                    <label htmlFor="bookTime">Preferred Time</label>
-                    <select name="bookTime" id="bookTime">
-                      <option value="morning">Morning (9 AM - 12 PM)</option>
-                      <option value="afternoon">Afternoon (12 PM - 4 PM)</option>
-                      <option value="evening">Evening (4 PM - 7 PM)</option>
-                    </select>
+                    <CustomSelect
+                      label="Preferred Time"
+                      name="bookTime"
+                      id="bookTime"
+                      defaultValue="morning"
+                      icon={<Clock />}
+                      options={[
+                        { value: 'morning', label: 'Morning (9 AM - 12 PM)' },
+                        { value: 'afternoon', label: 'Afternoon (12 PM - 4 PM)' },
+                        { value: 'evening', label: 'Evening (4 PM - 7 PM)' },
+                      ]}
+                    />
                   </div>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="bookNotes">Additional Notes</label>
-                  <textarea name="bookNotes" id="bookNotes" rows={3} placeholder="Any specific issue or request..."></textarea>
+                  <FloatingTextarea
+                    label="Additional Notes"
+                    name="bookNotes"
+                    id="bookNotes"
+                    rows={3}
+                    placeholder="Any specific issue or request..."
+                    icon={<StickyNote />}
+                  />
                 </div>
                 <div className="form-row form-actions">
                   <button type="submit" className="btn btn-primary btn-glow btn-full group" id="confirmBookingBtn">
@@ -1312,7 +1379,7 @@ export default function LandingPage() {
                   <p className="brand-card-desc">{b.desc}</p>
                   <a href="#booking" className="brand-card-cta">
                     <span>Book {b.brand} Service</span>
-                    <svg className="brand-cta-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    <svg className="brand-cta-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
                   </a>
                 </div>
               </div>

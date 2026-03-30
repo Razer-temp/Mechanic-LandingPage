@@ -1268,6 +1268,29 @@ ul {
   color: var(--text-primary);
 }
 
+/* Override form-group defaults when custom components are used */
+.form-group:has(.fi-wrapper)>label,
+.form-group:has(.fi-container)>label,
+.form-group:has(.cs-container)>label {
+  display: none;
+}
+
+.form-group:has(.fi-wrapper),
+.form-group:has(.fi-container),
+.form-group:has(.cs-container) {
+  margin-bottom: 20px;
+}
+
+/* Reset inherited styles on inputs inside custom containers */
+.fi-container .fi-input,
+.cs-container input[type="hidden"] {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  min-height: auto;
+  padding: 24px 14px 8px;
+}
+
 .quick-issues {
   display: flex;
   flex-wrap: wrap;
@@ -1650,6 +1673,823 @@ ul {
 
 .form-actions {
   margin-top: 10px;
+}
+
+/* ===== CUSTOM DATE PICKER ===== */
+.datepicker-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Trigger button styled to match form inputs */
+.datepicker-trigger {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-md);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  transition: all var(--dur) var(--ease);
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.datepicker-trigger:hover {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.datepicker-trigger:focus,
+.datepicker-trigger--active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 200, 255, 0.08);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.datepicker-trigger-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.datepicker-trigger:hover .datepicker-trigger-icon,
+.datepicker-trigger--active .datepicker-trigger-icon {
+  opacity: 1;
+}
+
+.datepicker-trigger-text {
+  flex: 1;
+  font-weight: 500;
+}
+
+.datepicker-trigger-chevron {
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: transform 0.3s var(--ease), color 0.3s ease;
+  transform: rotate(90deg);
+}
+
+.datepicker-trigger-chevron--open {
+  transform: rotate(-90deg);
+  color: var(--accent);
+}
+
+/* Dropdown calendar panel */
+.datepicker-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(8, 8, 18, 0.96);
+  border: 1px solid rgba(0, 200, 255, 0.12);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.65),
+    0 0 40px rgba(0, 200, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  animation: datepickerOpen 0.25s var(--ease) forwards;
+  transform-origin: top center;
+}
+
+.datepicker-dropdown--closing {
+  animation: datepickerClose 0.2s var(--ease) forwards;
+}
+
+@keyframes datepickerOpen {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.92) translateY(-6px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+@keyframes datepickerClose {
+  0% {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scaleY(0.92) translateY(-6px);
+  }
+}
+
+/* Calendar header — month nav */
+.datepicker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 0 2px;
+}
+
+.datepicker-nav-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  padding: 0;
+}
+
+.datepicker-nav-btn:hover:not(:disabled) {
+  background: rgba(0, 200, 255, 0.08);
+  border-color: rgba(0, 200, 255, 0.2);
+  color: var(--accent);
+  transform: scale(1.05);
+}
+
+.datepicker-nav-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.datepicker-nav-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.datepicker-month-label {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 6px 14px;
+  border-radius: var(--r-sm);
+  transition: all 0.25s ease;
+}
+
+.datepicker-month-label:hover {
+  background: rgba(0, 200, 255, 0.06);
+  color: var(--accent);
+}
+
+/* Weekday labels */
+.datepicker-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.datepicker-weekday {
+  text-align: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 6px 0;
+}
+
+.datepicker-weekday--sun {
+  color: rgba(251, 191, 36, 0.5);
+}
+
+/* Day grid */
+.datepicker-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+
+/* Individual day cell */
+.datepicker-day {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.datepicker-day:hover:not(:disabled):not(.datepicker-day--selected) {
+  background: rgba(0, 200, 255, 0.08);
+  color: var(--accent);
+  transform: scale(1.08);
+}
+
+.datepicker-day:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+/* Outside current month */
+.datepicker-day--outside {
+  color: rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+/* Past dates */
+.datepicker-day--past {
+  color: rgba(255, 255, 255, 0.15);
+  cursor: not-allowed;
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 255, 255, 0.08);
+}
+
+.datepicker-day--past:hover {
+  background: transparent !important;
+  transform: none !important;
+  color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Today */
+.datepicker-day--today {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.datepicker-day--today::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 11px;
+  border: 1.5px solid rgba(0, 200, 255, 0.25);
+  pointer-events: none;
+  transition: border-color 0.25s ease;
+}
+
+.datepicker-day--today:hover:not(.datepicker-day--selected)::after {
+  border-color: rgba(0, 200, 255, 0.5);
+}
+
+/* Today dot indicator */
+.datepicker-day-dot {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px rgba(0, 200, 255, 0.5);
+}
+
+.datepicker-day-num {
+  position: relative;
+  z-index: 1;
+}
+
+/* Selected state */
+.datepicker-day--selected {
+  background: linear-gradient(135deg, #00c8ff 0%, #0090c0 100%);
+  color: #fff;
+  font-weight: 700;
+  box-shadow:
+    0 4px 16px rgba(0, 200, 255, 0.3),
+    0 0 20px rgba(0, 200, 255, 0.15);
+  transform: scale(1.05);
+}
+
+.datepicker-day--selected::after {
+  display: none;
+}
+
+.datepicker-day--selected:hover {
+  background: linear-gradient(135deg, #00d4ff 0%, #00a0d0 100%) !important;
+  transform: scale(1.08) !important;
+  color: #fff !important;
+}
+
+/* Sunday indicator */
+.datepicker-day--sunday {
+  color: var(--accent-amber);
+  opacity: 0.85;
+}
+
+.datepicker-day--sunday:hover:not(.datepicker-day--selected) {
+  background: rgba(251, 191, 36, 0.08);
+  color: var(--accent-amber);
+}
+
+/* Footer legend */
+.datepicker-footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.datepicker-footer-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.datepicker-footer-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.datepicker-footer-dot--today {
+  background: var(--accent);
+  box-shadow: 0 0 6px rgba(0, 200, 255, 0.4);
+}
+
+.datepicker-footer-dot--sunday {
+  background: var(--accent-amber);
+  box-shadow: 0 0 6px rgba(251, 191, 36, 0.4);
+}
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .datepicker-dropdown {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .datepicker-day {
+    font-size: 0.8rem;
+    border-radius: 10px;
+  }
+
+  .datepicker-header {
+    margin-bottom: 12px;
+  }
+
+  .datepicker-month-label {
+    font-size: 0.85rem;
+  }
+
+  .datepicker-footer {
+    gap: 12px;
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+}
+
+/* ===== FLOATING INPUT & TEXTAREA ===== */
+
+/* Outer wrapper: holds icon + input box side by side */
+.fi-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.fi-wrapper--focused {
+  cursor: text;
+}
+
+/* Leading icon — sits OUTSIDE the bordered input */
+.fi-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--text-muted);
+  transition: color 0.3s ease;
+}
+
+.fi-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.fi-wrapper--focused .fi-icon {
+  color: var(--accent);
+}
+
+.fi-wrapper--filled:not(.fi-wrapper--focused) .fi-icon {
+  color: var(--text-secondary);
+}
+
+.fi-icon--textarea {
+  align-self: flex-start;
+  margin-top: 18px;
+}
+
+/* The bordered input box */
+.fi-container {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-md);
+  background: rgba(0, 0, 0, 0.25);
+  transition: all 0.3s var(--ease);
+  min-height: 56px;
+}
+
+.fi-container:hover {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.fi-wrapper--focused .fi-container {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(0, 200, 255, 0.08);
+  background: rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Field wrapper */
+.fi-field {
+  position: relative;
+  min-height: 56px;
+}
+
+/* Floating label */
+.fi-label {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: all 0.25s var(--ease);
+  transform-origin: left center;
+  white-space: nowrap;
+}
+
+.fi-container--textarea .fi-label:not(.fi-label--float) {
+  top: 18px;
+  transform: translateY(0);
+}
+
+.fi-label--float {
+  top: 8px;
+  transform: translateY(0) scale(0.72);
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.fi-wrapper--filled:not(.fi-wrapper--focused) .fi-label--float {
+  color: var(--text-muted);
+}
+
+/* Input element */
+.fi-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 24px 14px 8px;
+  min-height: 56px;
+  transition: none;
+}
+
+.fi-input::placeholder {
+  color: var(--text-muted);
+  font-weight: 400;
+  opacity: 0.6;
+}
+
+/* Textarea specific */
+.fi-textarea {
+  resize: vertical;
+  min-height: 90px;
+  line-height: 1.6;
+}
+
+.fi-container--textarea .fi-field {
+  min-height: 90px;
+}
+
+/* Remove default form-group styles when inside fi-container */
+.fi-container .fi-input:focus {
+  box-shadow: none;
+  border: none;
+}
+
+/* ===== CUSTOM SELECT ===== */
+.cs-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Trigger button */
+.cs-trigger {
+  width: 100%;
+  min-height: 56px;
+  padding: 8px 14px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-md);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  transition: all 0.3s var(--ease);
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.cs-trigger:hover {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.cs-trigger:focus,
+.cs-trigger--active {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(0, 200, 255, 0.08);
+  background: rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Trigger icon */
+.cs-trigger-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: color 0.3s ease;
+}
+
+.cs-trigger-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.cs-trigger--active .cs-trigger-icon,
+.cs-trigger:focus .cs-trigger-icon {
+  color: var(--accent);
+}
+
+.cs-trigger--filled:not(.cs-trigger--active) .cs-trigger-icon {
+  color: var(--text-secondary);
+}
+
+/* Trigger content with floating label */
+.cs-trigger-content {
+  flex: 1;
+  position: relative;
+  min-height: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cs-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: all 0.25s var(--ease);
+  transform-origin: left center;
+  white-space: nowrap;
+}
+
+.cs-label--float {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 1px;
+}
+
+.cs-trigger--filled:not(.cs-trigger--active) .cs-label--float {
+  color: var(--text-muted);
+}
+
+.cs-display-text {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+/* Chevron */
+.cs-chevron {
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: transform 0.3s var(--ease), color 0.3s ease;
+}
+
+.cs-chevron--open {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+/* Dropdown panel */
+.cs-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(8, 8, 18, 0.97);
+  border: 1px solid rgba(0, 200, 255, 0.12);
+  border-radius: var(--r-lg);
+  padding: 6px;
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.65),
+    0 0 30px rgba(0, 200, 255, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  animation: csDropdownOpen 0.22s var(--ease) forwards;
+  transform-origin: top center;
+  max-height: 260px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Scrollbar styling */
+.cs-dropdown::-webkit-scrollbar {
+  width: 4px;
+}
+
+.cs-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cs-dropdown::-webkit-scrollbar-thumb {
+  background: rgba(0, 200, 255, 0.15);
+  border-radius: 4px;
+}
+
+.cs-dropdown--closing {
+  animation: csDropdownClose 0.18s var(--ease) forwards;
+}
+
+@keyframes csDropdownOpen {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.92) translateY(-4px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+@keyframes csDropdownClose {
+  0% {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scaleY(0.92) translateY(-4px);
+  }
+}
+
+/* Option item */
+.cs-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.cs-option:hover,
+.cs-option--focused {
+  background: rgba(0, 200, 255, 0.06);
+}
+
+.cs-option:active {
+  transform: scale(0.98);
+}
+
+.cs-option--selected {
+  color: var(--accent);
+  font-weight: 600;
+  background: rgba(0, 200, 255, 0.08);
+}
+
+.cs-option-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+.cs-option-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.cs-option--selected .cs-option-icon {
+  color: var(--accent);
+}
+
+.cs-option-label {
+  flex: 1;
+}
+
+.cs-option-check {
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .cs-dropdown {
+    padding: 4px;
+    border-radius: 14px;
+  }
+
+  .cs-option {
+    padding: 11px 12px;
+    font-size: 0.88rem;
+    border-radius: 10px;
+  }
+
+  .fi-container {
+    min-height: 52px;
+  }
+
+  .fi-field {
+    min-height: 52px;
+  }
+
+  .fi-input {
+    min-height: 52px;
+    padding: 22px 14px 6px;
+  }
+
+  .cs-trigger {
+    min-height: 52px;
+  }
 }
 
 /* ===== CONTACT — Split ===== */
@@ -2563,7 +3403,8 @@ body[style*="overflow: hidden"] .whatsapp-float {
     z-index: 9000;
     width: 90%;
     max-width: 380px;
-    background: rgba(15, 18, 25, 0.85); /* Slightly darker fallback for low-power mobile devices */
+    background: rgba(15, 18, 25, 0.85);
+    /* Slightly darker fallback for low-power mobile devices */
     /* Vendor prefixes MUST come before standard properties for production minifiers */
     -webkit-backdrop-filter: blur(24px) saturate(1.5);
     backdrop-filter: blur(24px) saturate(1.5);
@@ -2574,7 +3415,8 @@ body[style*="overflow: hidden"] .whatsapp-float {
     transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     opacity: 0;
     pointer-events: none;
-    will-change: transform, opacity; /* Hinting browser to composite layer */
+    will-change: transform, opacity;
+    /* Hinting browser to composite layer */
   }
 
   /* Reveal when scrolled past hero */
@@ -2660,13 +3502,25 @@ body[style*="overflow: hidden"] .whatsapp-float {
   }
 
   /* --- ICON MICRO-INTERACTIONS --- */
-  
+
   /* 1. Brain (Diagnosis) - Pulses with glowing shadow */
   @keyframes pulse-brain {
-    0% { filter: drop-shadow(0 0 0 rgba(0, 209, 255, 0)); transform: scale(1); }
-    50% { filter: drop-shadow(0 0 8px rgba(0, 209, 255, 0.8)); transform: scale(1.15); }
-    100% { filter: drop-shadow(0 0 0 rgba(0, 209, 255, 0)); transform: scale(1); }
+    0% {
+      filter: drop-shadow(0 0 0 rgba(0, 209, 255, 0));
+      transform: scale(1);
+    }
+
+    50% {
+      filter: drop-shadow(0 0 8px rgba(0, 209, 255, 0.8));
+      transform: scale(1.15);
+    }
+
+    100% {
+      filter: drop-shadow(0 0 0 rgba(0, 209, 255, 0));
+      transform: scale(1);
+    }
   }
+
   .mobile-nav-item[href="#diagnosis"]:active .mobile-nav-icon,
   .mobile-nav-item[href="#diagnosis"].active .mobile-nav-icon {
     animation: pulse-brain 0.6s ease-out;
@@ -2674,11 +3528,23 @@ body[style*="overflow: hidden"] .whatsapp-float {
 
   /* 2. Wrench (Services) - Snaps 45deg back and forth */
   @keyframes twist-wrench {
-    0% { transform: rotate(0deg) scale(1); }
-    25% { transform: rotate(-45deg) scale(1.1); }
-    75% { transform: rotate(30deg) scale(1.1); }
-    100% { transform: rotate(0deg) scale(1); }
+    0% {
+      transform: rotate(0deg) scale(1);
+    }
+
+    25% {
+      transform: rotate(-45deg) scale(1.1);
+    }
+
+    75% {
+      transform: rotate(30deg) scale(1.1);
+    }
+
+    100% {
+      transform: rotate(0deg) scale(1);
+    }
   }
+
   .mobile-nav-item[href="#services"]:active .mobile-nav-icon,
   .mobile-nav-item[href="#services"].active .mobile-nav-icon {
     animation: twist-wrench 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -2686,11 +3552,24 @@ body[style*="overflow: hidden"] .whatsapp-float {
 
   /* 3. Sparkles (How It Works) - Pop sequential scale */
   @keyframes pop-sparkles {
-    0% { transform: scale(1); }
-    40% { transform: scale(1.35) rotate(15deg); filter: brightness(1.3); }
-    80% { transform: scale(0.9) rotate(-5deg); }
-    100% { transform: scale(1) rotate(0deg); }
+    0% {
+      transform: scale(1);
+    }
+
+    40% {
+      transform: scale(1.35) rotate(15deg);
+      filter: brightness(1.3);
+    }
+
+    80% {
+      transform: scale(0.9) rotate(-5deg);
+    }
+
+    100% {
+      transform: scale(1) rotate(0deg);
+    }
   }
+
   .mobile-nav-item[href="#how-it-works"]:active .mobile-nav-icon,
   .mobile-nav-item[href="#how-it-works"].active .mobile-nav-icon {
     animation: pop-sparkles 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -2698,10 +3577,19 @@ body[style*="overflow: hidden"] .whatsapp-float {
 
   /* 4. Message (Reviews) - Bottom-left elastic bounce */
   @keyframes bounce-message {
-    0% { transform: scale(0.6) translateY(4px) translateX(-4px); }
-    60% { transform: scale(1.1) translateY(-2px) translateX(2px); }
-    100% { transform: scale(1) translateY(0) translateX(0); }
+    0% {
+      transform: scale(0.6) translateY(4px) translateX(-4px);
+    }
+
+    60% {
+      transform: scale(1.1) translateY(-2px) translateX(2px);
+    }
+
+    100% {
+      transform: scale(1) translateY(0) translateX(0);
+    }
   }
+
   .mobile-nav-item[href="#reviews"]:active .mobile-nav-icon,
   .mobile-nav-item[href="#reviews"].active .mobile-nav-icon {
     animation: bounce-message 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -2710,11 +3598,23 @@ body[style*="overflow: hidden"] .whatsapp-float {
 
   /* 5. Calendar (Booking CTA) - Shrink-pop confirmation */
   @keyframes pop-calendar {
-    0% { transform: scale(1); }
-    40% { transform: scale(0.6); }
-    75% { transform: scale(1.25); }
-    100% { transform: scale(1); }
+    0% {
+      transform: scale(1);
+    }
+
+    40% {
+      transform: scale(0.6);
+    }
+
+    75% {
+      transform: scale(1.25);
+    }
+
+    100% {
+      transform: scale(1);
+    }
   }
+
   .mobile-nav-cta.active .mobile-nav-icon,
   .mobile-nav-cta:active .mobile-nav-icon {
     animation: pop-calendar 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -3495,6 +4395,7 @@ body[style*="overflow: hidden"] .whatsapp-float {
 }
 
 @media (max-width: 768px) {
+
   /* More button active state */
   .mobile-nav-more-btn.active {
     background: rgba(255, 255, 255, 0.1);
@@ -3697,9 +4598,17 @@ body[style*="overflow: hidden"] .whatsapp-float {
 
   /* --- More button micro-interaction --- */
   @keyframes spin-more {
-    0% { transform: rotate(0deg) scale(1); }
-    50% { transform: rotate(90deg) scale(1.15); }
-    100% { transform: rotate(0deg) scale(1); }
+    0% {
+      transform: rotate(0deg) scale(1);
+    }
+
+    50% {
+      transform: rotate(90deg) scale(1.15);
+    }
+
+    100% {
+      transform: rotate(0deg) scale(1);
+    }
   }
 
   .mobile-nav-more-btn:active .mobile-nav-icon {
